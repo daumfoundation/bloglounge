@@ -303,6 +303,8 @@
 <?php
 			if($is_admin) {
 ?>
+				<li class="<?php echo $value=='group'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/blog/group"><?php echo _t("그룹");?></a></span></li>
+				<li class="sep"></li>
 				<li class="<?php echo $value=='category'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/blog/category"><?php echo _t("분류");?></a></span></li>
 				<li class="sep"></li>
 <?php

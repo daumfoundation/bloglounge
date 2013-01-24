@@ -91,7 +91,7 @@
 
 	// 카테고리 ( 분류 )
 
-	$src_cattegory = $skin->cutSkinTag('category');
+	$src_category = $skin->cutSkinTag('category');
 	$categories = Category::getList();
 	if(count($categories) > 0) {
 		$sp_category = "<ul>\n";
@@ -100,11 +100,31 @@
 			}
 		$sp_category .= "</ul>\n";
 
-		$s_category = $skin->parseTag('category_list',$sp_category, $src_cattegory);
+		$s_category = $skin->parseTag('category_list',$sp_category, $src_category);
 	} else {
 		$s_category = '';
 	}
 	$skin->dress('category', $s_category);
+
+
+	// 그룹
+
+	requireComponent('Bloglounge.Data.Groups');	
+
+	$src_group = $skin->cutSkinTag('group');
+	$groups = Group::getList();
+	if(count($groups) > 0) {
+		$sp_group = "<ul>\n";
+			foreach($groups as $group) {
+				$sp_group .= "<li><a href=\"{$servicePath}/group/".func::encode($group['name'])."\">{$group['name']}</a><span class=\"count count_class_{$group['count']}\">({$group['count']})</span>\n";
+			}
+		$sp_group .= "</ul>\n";
+
+		$s_group = $skin->parseTag('group_list',$sp_group, $src_group);
+	} else {
+		$s_group = '';
+	}
+	$skin->dress('group', $s_group);
 
 	// ** 피드 목록
 	$src_feeds = $skin->cutSkinTag('feed');

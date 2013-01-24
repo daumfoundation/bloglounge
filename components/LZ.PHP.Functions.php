@@ -547,24 +547,39 @@
 			}
 		} // end rmpath
 
-		function makePaging($page, $pageCount, $totalCount, $pageCut = 5) {
+		function makePaging($page, $pageCount, $totalCount, $pageCut = 3, $pageDatas = null) {
 			$paging = array();
-			
+
 			$paging['page'] = $page;
 			$paging['pageCount'] = $pageCount;
 			$paging['totalFeeds'] = $totalCount;
 			$paging['totalPages'] = intval(($totalCount - 1) / $pageCount) + 1;
 			if ($paging['totalPages'] == 0) $paging['totalPages'] = 1;
 
-			$paging['pageCut'] = $pageCut - 1;
+			$paging['pageCut'] = $pageCut + 1;
 
-			$paging['pageStart'] = ($paging['pageCut'] * floor($page/$paging['pageCut']));
+			$paging['pageStart'] = ($page - $paging['pageCut'] < 1) ? 1 : $page - $paging['pageCut'];// //($paging['pageCut'] * floor($page/$paging['pageCut']));
 			if ($paging['pageStart'] == 0) $paging['pageStart'] = 1;
-
-			$paging['pageEnd'] = ($paging['pageStart'] + $paging['pageCut'] > $paging['totalPages']) ? $paging['totalPages'] : ($paging['pageStart'] + $paging['pageCut']);
+			$paging['pageEnd'] = ($page + $paging['pageCut'] > $paging['totalPages']) ? $paging['totalPages'] : ($page + $paging['pageCut']);
 			$paging['pagePrev'] = ($page-1 <= 1) ? 1:($page - 1);
 			$paging['pageNext'] = (($page + 1) > $paging['totalPages']) ? $paging['totalPages'] : ($page + 1);
 
+			if(empty($pageDatas)) {
+				$paging['pageDatas'] = array();
+				$pageStart = $paging['pageStart'];
+				if($pageStart > $paging['pagePrev']) $pageStart = $paging['pagePrev'];
+				$pageEnd = $paging['pageEnd'];
+				if($pageEnd < $paging['pageNext']) $pageEnd = $paging['pageNext'];
+
+				for($i=$pageStart;$i<=$pageEnd;$i++) {
+					$paging['pageDatas'][$i] = '/?page='.$i;
+				}
+
+				$paging['pageDatas'][$paging['totalPages']] = '/?page='.$paging['totalPages'];
+			} else {
+				$paging['pageDatas'] = $pageDatas;
+			}
+			
 			return $paging;
 		}		
 		
@@ -624,9 +639,9 @@
 
 			$diff = $today - $date;
 		
-			$day =  round($diff/60/60/24);
-			$hour =  round($diff/60/60);
-			$min = round($diff/60);
+			$day =  floor($diff/60/60/24);
+			$hour =  floor($diff/60/60);
+			$min = floor($diff/60);
 			$sec = $diff;
 		
 			$result = null;

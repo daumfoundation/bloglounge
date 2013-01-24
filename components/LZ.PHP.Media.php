@@ -64,7 +64,7 @@
 			$this->config[$f] = $v;
 		}
 
-		function get($item, $thumbnailSize = 150, $limit = -1) { // permalink, description
+		function get($item, $thumbnailSize = 150, $limit = -1, $resizeType = 'resize') { // permalink, description
 			$result = array();
 			$result['type'] = 'local';
 
@@ -77,7 +77,7 @@
 				}
 			}
 
-			$medias = $this->detectMediaAndSave( stripslashes($item['description']), $item['id'], $thumbnailSize, $limit );
+			$medias = $this->detectMediaAndSave( stripslashes($item['description']), $item['id'], $thumbnailSize, $limit, $resizeType );
 			if(count($medias['images']) == 0 && count($medias['movies']) == 0) {
 				return false;
 			} 
@@ -137,8 +137,6 @@
 			$y = 0;
 			$org_x = 0;
 			$org_y = 0;
-
-			$imageDes = imagecreatetruecolor($w, $h);
 			
 			switch($resizeType) {	
 				case 'crop':
@@ -179,6 +177,8 @@
 				break;
 			}
 
+			$imageDes = imagecreatetruecolor($w, $h);
+
 			if(!imagecopyresampled(
 			  $imageDes, $imageSrc,             // destination, source
 			  $x, $y, $org_x, $org_y,           // dstX, dstY, srcX, srcY
@@ -215,7 +215,7 @@
 			return array('filename'=>$result, 'source'=>$imageURL, 'width'=>$org_w, 'height'=>$org_h);
 		}
 
-		function detectMediaAndSave($content, $uniqueId, $thumbnailSize, $limit = -1) {
+		function detectMediaAndSave($content, $uniqueId, $thumbnailSize, $limit = -1, $resizeType = 'resize') {
 			$result = array();
 			$result['images'] = array();
 			$result['movies'] = array();
@@ -229,20 +229,20 @@
 					for($i=0;$i<$limit;$i++) {
 						$item = $images[$i];
 						$this->set('filename','i_' . md5($uniqueId . mktime() . $i));
-						$datas = $this->getThumbnail($item[0], $thumbnailSize, $thumbnailSize);
+						$datas = $this->getThumbnail($item[0], $thumbnailSize, $thumbnailSize, '', '', $resizeType);
 						array_push($result['images'], $datas);
 					}
 				}
 			}
-
+			/* // movie api 서버문제로 ..
 			if($movies = $this->detectMovieIMGsrc($content)) {
 				foreach($movies as $movie) {
 					$this->set('filename', 'm_' . $uniqueId . md5(mktime() . $movie['url']));
-					$datas = $this->getThumbnail($movie['url'], $thumbnailSize, $thumbnailSize);
+					$datas = $this->getThumbnail($movie['url'], $thumbnailSize, $thumbnailSize, '', '', $resizeType);
 					$datas['via'] = $movie['via'];
 					array_push($result['movies'], $datas);
 				}
-			}
+			}*/
 
 			return $result;
 		}

@@ -8,7 +8,7 @@
 	Class Feed {
 		var $updated=0;
 
-		function add($feedURL, $visibility = 'y', $filter = '', $filterType = 'tag') {
+		function add($feedURL, $visibility = 'y', $filter = '', $filterType = 'tag', $group = '0') {
 			global $database, $db, $session;
 			if (empty($feedURL) || empty($session['id'])) {
 				return false;
@@ -32,9 +32,12 @@
 				$feedInfo[$key] = $db->escape($value);
 			}
 
-			if (!$db->execute('INSERT INTO '.$database['prefix'].'Feeds (owner, xmlURL, xmlType, blogURL, title, description, language, lastUpdate, created, visibility, filter, filterType, logo) VALUES ("'.$session['id'].'", "'.$feedInfo['xmlURL'].'", "'.$feedInfo['xmlType'].'", "'.$feedInfo['blogURL'].'", "'.$feedInfo['title'].'", "'.$feedInfo['description'].'", "'.$feedInfo['language'].'", 0, UNIX_TIMESTAMP(), "'.$db->escape($visibility).'","'.$db->escape($filter).'", "'.$filterType.'", "'.$feedInfo['logo'].'")')) {
+			if (!$db->execute('INSERT INTO '.$database['prefix'].'Feeds (owner, `group`, xmlURL, xmlType, blogURL, title, description, language, lastUpdate, created, visibility, filter, filterType, logo) VALUES ("'.$session['id'].'", "'.$group.'", "'.$feedInfo['xmlURL'].'", "'.$feedInfo['xmlType'].'", "'.$feedInfo['blogURL'].'", "'.$feedInfo['title'].'", "'.$feedInfo['description'].'", "'.$feedInfo['language'].'", 0, UNIX_TIMESTAMP(), "'.$db->escape($visibility).'","'.$db->escape($filter).'", "'.$filterType.'", "'.$feedInfo['logo'].'")')) {
 				return false;
 			}	
+			
+			requireComponent('Bloglounge.Data.Groups');
+			Group::rebuildCount($group);
 			
 			return $db->insertId();
 		}
@@ -46,10 +49,13 @@
 			}
 			
 			$feedVisibilityChanged = false;
+			
+			$old_group = '';
+			$new_group = '';
 
 			$modStack = array();
 			foreach ($arguments as $key=>$value) {
-				if (!Validator::enum($key, 'xmlURL,blogURL,title,description,language,lastUpdate,filter,filterType,autoUpdate,allowRedistribute,author,visibility,feedCount,everytimeUpdate,logo,isVerified')) 
+				if (!Validator::enum($key, 'group, xmlURL,blogURL,title,description,language,lastUpdate,filter,filterType,autoUpdate,allowRedistribute,author,visibility,feedCount,everytimeUpdate,logo,isVerified')) 
 					continue;
 				if ($key == 'filter') {
 					$filterArray = func::array_trim((explode(',', $value)));
@@ -57,12 +63,19 @@
 					;
 				} else if($key == 'visibility') {
 					$feedVisibilityChanged = $value;
+				} else if($key == 'group') {
+					$group = Feed::get($feedId, 'group');
+					if($group != $value) {
+						$old_group = $group;
+					} 
+					
+					$new_group = $value;
 				}
 
 				if (!Validator::enum(strtolower($value), 'unix_timestamp(),time(),date()')) {
 					$value = '"'.$db->escape($value).'"';
 				}
-				array_push($modStack, $key.'='.$value);
+				array_push($modStack, '`'.$key.'`='.$value);
 			}
 
 			if (!count($modStack)) 
@@ -73,7 +86,18 @@
 			}
 
 			$modQuery = implode(',', $modStack);
-			return ($db->execute('UPDATE '.$database['prefix'].'Feeds SET '.$modQuery.' WHERE id='.$feedId))?true:false;
+			$result = ($db->execute('UPDATE '.$database['prefix'].'Feeds SET '.$modQuery.' WHERE id='.$feedId))?true:false;
+			
+			requireComponent('Bloglounge.Data.Groups');
+
+			if(!empty($old_group)) {
+				Group::rebuildCount($old_group);
+			}
+			if(!empty($new_group)) {
+				Group::rebuildCount($new_group);
+			}
+
+			return $result;
 		}
 
 		function delete($feedId) {
@@ -84,10 +108,17 @@
 			if (!$db->execute("DELETE FROM {$database['prefix']}DeleteHistory WHERE feed='$feedId'"))
 				return false;
 
+			$old_group = Feed::get($feedId,'group');
+
 			requireComponent('Bloglounge.Data.FeedItems');
-			FeedItem::deleteByFeedId($feedId);
-	
-			return ($db->execute('DELETE FROM '.$database['prefix'].'Feeds WHERE id='.$feedId))?true:false;
+			FeedItem::deleteByFeedId($feedId);	
+
+			$result = ($db->execute('DELETE FROM '.$database['prefix'].'Feeds WHERE id='.$feedId))?true:false;
+			
+			requireComponent('Bloglounge.Data.Groups');
+			Group::rebuildCount($old_group);
+
+			return $result;
 		}
 
 		function get($feedId, $field) {
@@ -95,8 +126,7 @@
 			if (empty($feedId) || !preg_match("/^[0-9]+$/", $feedId)) {
 				return false;
 			}
-			
-			$result = $db->queryCell('SELECT '.$field.' FROM '.$database['prefix'].'Feeds WHERE id='.$feedId);
+			$result = $db->queryCell('SELECT `'.$field.'` FROM '.$database['prefix'].'Feeds WHERE id='.$feedId);
 			return $result;
 		}
 
@@ -253,7 +283,7 @@
 			$feed['title'] = (empty($feed['title']))?_t('제목없음'):$db->escape($db->lessen(UTF8::correct($feed['title'])));
 			$feed['description'] = $db->escape($db->lessen(UTF8::correct(func::stripHTML($feed['description']))));
 			$feed['language'] = $db->escape($db->lessen(UTF8::correct($feed['language']), 255));
-			
+
 			return array(0, $feed, $xml, $xmlType);
 		}
 
@@ -475,7 +505,7 @@
 						$notinStr = ' owner NOT IN ('.implode(',', $notin).') AND ';
 				}
 
-				if ($feedURL = $db->queryCell("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE {$notinStr} lastUpdate < ".(gmmktime()-($updateCycle*60))." ORDER BY lastUpdate ASC LIMIT 1")) {
+				if ($feedURL = $db->queryCell("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE {$notinStr} lastUpdate < ".(gmmktime()-round($updateCycle*60))." ORDER BY lastUpdate ASC LIMIT 1")) {
 					$result = $this->updateFeed($feedURL);
 					return array(!$result[0],$result[1],$result[2],$feedURL); // status, title, updated, feedUrl
 				}
@@ -500,7 +530,7 @@
 						$notinStr = ' owner NOT IN ('.implode(',', $notin).') AND ';
 				}
 
-				if ($feedURL = $db->queryCell("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE {$notinStr} lastUpdate < ".(gmmktime()-($updateCycle*60))." ORDER BY RAND() LIMIT 1")) {
+				if ($feedURL = $db->queryCell("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE {$notinStr} lastUpdate < ".(gmmktime()-round($updateCycle*60))." ORDER BY RAND() LIMIT 1")) {
 					$result = $this->updateFeed($feedURL);
 					return array($result[0],$result[1],$result[2],$feedURL); // status, title, updated, feedUrl
 				}
@@ -709,6 +739,9 @@
 			
 			$result = false;
 			if($isRebuildData) {
+				requireComponent('Bloglounge.Data.Groups');
+				GroupCategory::buildGroupCategory($id, $feedId, $item['tags']);
+
 				Tag::buildTagIndex($id, $item['tags'], $oldTags);
 					
 
@@ -971,7 +1004,7 @@
 				$pageQuery = 'LIMIT '.$pageStart.','.$pageCount;
 			}
 
-			$feeds = $db->queryAll('SELECT id, owner, blogURL, title, description, lastUpdate, created, feedCount, logo, visibility, isVerified FROM '.$database['prefix'].'Feeds '.$sQuery.' ORDER BY '.$feedListPageOrder.' DESC ' . $pageQuery);
+			$feeds = $db->queryAll('SELECT id, owner, `group`, blogURL, title, description, lastUpdate, created, feedCount, logo, visibility, isVerified FROM '.$database['prefix'].'Feeds '.$sQuery.' ORDER BY '.$feedListPageOrder.' DESC ' . $pageQuery);
 
 			return array($feeds, $totalFeeds);	
 		}
@@ -999,7 +1032,7 @@
 				$pageQuery = 'LIMIT '.$pageStart.','.$pageCount;
 			}
 
-			$feeds = $db->queryAll('SELECT id, owner, blogURL, title, description, lastUpdate, created, feedCount, logo, visibility, isVerified FROM '.$database['prefix'].'Feeds '.$sQuery.' ORDER BY '.$feedListPageOrder.' DESC ' . $pageQuery);
+			$feeds = $db->queryAll('SELECT id, owner, `group`, blogURL, title, description, lastUpdate, created, feedCount, logo, visibility, isVerified FROM '.$database['prefix'].'Feeds '.$sQuery.' ORDER BY '.$feedListPageOrder.' DESC ' . $pageQuery);
 
 			return array($feeds, $totalFeeds);	
 		}

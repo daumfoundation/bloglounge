@@ -34,6 +34,8 @@
 		  type: "POST",
 		  url: _path +'/service/design/setting.php',
 		  data: "postList="+$('#postList').val()+
+				"&postListDivision="+$('#postListDivision').val()+
+				"&postListDirection="+$('#postListDirection').val()+
 				"&postTitleLength="+$('#postTitleLength').val()+
 				"&postDescLength="+$('#postDescLength').val()+
 				"&postNewLife="+$('#postNewLife').val()+
@@ -328,7 +330,47 @@
 			echo _f('등록된 글을 페이지당 %1개씩 보여줍니다', $arg);
 ?>
 		</dd>
+	</dl>	
+	<dl class="normal">
+		<dt></dt>
+		<dd>
+<?php
+			ob_start();
+?> 
+		<select id="postListDivision">
+<?php
+			for ($i=1; $i <= 10; $i++) {
+?>
+			<option value="<?php echo $i;?>" <?php if ($i == $skinConfig->postListDivision) {?> selected="selected"<?php } ?>><?php echo $i;?></option>
+<?php
+		}
+?>
+		</select>
+<?php
+			$arg = ob_get_contents();
+			ob_end_clean();
+			echo _f('등록된 글을 1/%1만큼씩 분리해서 보여줍니다', $arg);
+?>
+		</dd>
 	</dl>
+	<dl class="normal">
+		<dt></dt>
+		<dd>
+<?php
+			ob_start();
+?> 
+		<select id="postListDirection">
+			<option value="vertical" <?php if ('vertical' == $skinConfig->postListDirection) {?> selected="selected"<?php } ?>><?php echo _t('순서대로');?></option>
+			<option value="horizontal" <?php if ('horizontal' == $skinConfig->postListDirection) {?> selected="selected"<?php } ?>><?php echo _t('분리된 순으로');?></option>
+		</select>
+<?php
+			$arg = ob_get_contents();
+			ob_end_clean();
+			echo _f('등록된 글을 %1 보여줍니다', $arg);
+?>
+		</dd>
+	</dl>
+
 
 	<dl class="normal">
 		<dt></dt>

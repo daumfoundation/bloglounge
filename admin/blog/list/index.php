@@ -15,6 +15,8 @@
 	$msg = '';
 	if (isset($_POST['id']) || !empty($_POST['id'])) {
 		$toEdit = array();
+
+		$toEdit['group'] = $_POST['group'];
 		$toEdit['title'] = htmlspecialchars($_POST['title']);
 		$toEdit['xmlURL'] = $_POST['xmlURL'];
 
@@ -89,6 +91,9 @@
 	$paging = Func::makePaging($page, $pageCount, $totalFeeds);
 
 	$config = new Settings;
+		
+	requireComponent('Bloglounge.Data.Groups');
+	$groups = Group::getGroupsAll();
 	
 ?>	
 	<script type="text/javascript">
@@ -315,6 +320,21 @@
 				<form method="post" action="">
 					<input type="hidden" name="id" value="<?php echo $read;?>"/>	
 					<dl>
+						<dt><?php echo _t('그룹');?></dt>
+						<dd>
+							<select name="group">
+								<option value="0"><?php echo _t('없음');?></option>
+<?php
+							foreach($groups as $group) {
+?>
+								<option value="<?php echo $group['id'];?>"<?php echo $readFeed['group']==$group['id']?' selected="selected"':'';?>><?php echo $group['name'];?></option>
+<?php
+							}
+?>
+							</select>
+						</dd>
+					</dl>
+					<dl>
 						<dt><?php echo _t('블로그명');?></dt>
 						<dd>
 							<input type="text" name="title" value="<?php echo UTF8::clear($readFeed['title']);?>" class="input faderInput"/>
@@ -426,12 +446,19 @@
 
 <div class="wrap">
 <?php 
-	$headers = array(array('title'=>_t('등록일'),'class'=>'bloglist_date','width'=>'100px'),
-					array('title'=>_t('블로그'),'class'=>'bloglist_title','width'=>'280px'),
-					array('title'=>_t('최근 업데이트'),'class'=>'bloglist_update','width'=>'450px'),
+	$headers = array(array('title'=>_t('등록일'),'class'=>'bloglist_date','width'=>'100px'),	
+					array('title'=>_t('그룹'),'class'=>'bloglist_group','width'=>'90px'),
+					array('title'=>_t('블로그'),'class'=>'bloglist_title','width'=>'260px'),
+					array('title'=>_t('최근 업데이트'),'class'=>'bloglist_update','width'=>'360px'),
 					array('title'=>_t('수집'),'class'=>'bloglist_count','width'=>'60px'),
 					array('title'=>_t('실행'),'class'=>'bloglist_execute','width'=>'auto'));
 	$datas = array();
+
+	$group_names = array();		
+	$group_names[0] = '';
+	foreach($groups as $group) {
+		$group_names[$group['id']] = $group['name'];
+	}
 
 	if(count($feeds)>0) {
 		foreach($feeds as $feed) {		
@@ -449,26 +476,24 @@
 			
 			// 블로그 등록날짜
 			array_push($data['datas'], array('class'=>'bloglist_date','data'=> $noVerifier ? _t('미인증') : date('y.m.d H:i:s', $feed['created']) ));
-			
+			array_push($data['datas'], array('class'=>'bloglist_group','data'=> empty($group_names[$feed['group']])?'<span class="empty">'._t('그룹없음').'</span>':UTF8::lessen($group_names[$feed['group']],10) ));
+
 			// 블로그 제목
 			ob_start();
 ?>
-			<div class="ftool">
+			
 <?php
 			if($noVerifier) {
 ?>
-				<a href="#" class="microbutton" onclick="verifyFeed(<?php echo $feed['id'];?>); return false;"><span><?php echo _t('인증하기');?></span></a>
-<?php
-			} else {
-?>
-				<a href="#" class="microbutton" onclick="updateFeed(<?php echo $feed['id'];?>); return false;"><span><?php echo _t('업데이트');?></span></a>
+				<div class="ftool"> <a href="#" class="microbutton" onclick="verifyFeed(<?php echo $feed['id'];?>); return false;"><span><?php echo _t('인증하기');?></span></a></div>
 <?php
 			}
 ?>
-			</div>
-			<div class="ftitle">
+	
+			<div class="ftitle<?php if(!$noVerifier) {?> noftool<?php } ?>">
 				<a href="<?php echo $service['path'];?>/admin/blog/list?read=<?php echo $feed['id'];?>"><?php echo UTF8::lessenAsEm(stripcslashes($feed['title']), 25);?></a> <?php echo ($isNew?' <img src="'.$service['path'].'/images/admin/icon_new.gif" alt="new" align="absmiddle"/>':'');?>
 			</div>
+
 			<div class="clear"></div>
 <?php
 			$content = ob_get_contents();
@@ -480,7 +505,7 @@
 			ob_start();
 			if(!empty($lastPost)) {
 ?>
-					<a href="<?php echo $service['path'];?>/admin/blog/entrylist/?read=<?php echo $lastPost['id'];?>"><?php echo UTF8::lessenAsEm(stripcslashes(func::stripHTML($lastPost['title'])),40);?></a> <span class="date"> : <?php echo date('y.m.d H:i:s', $feed['lastUpdate']);?> (<?php echo $stringDate;?>) </span>
+					<a href="<?php echo $service['path'];?>/admin/blog/entrylist/?read=<?php echo $lastPost['id'];?>"><?php echo UTF8::lessenAsEm(stripcslashes(func::stripHTML($lastPost['title'])),20);?></a> <span class="date"> : <?php echo date('y.m.d H:i:s', $feed['lastUpdate']);?> (<?php echo $stringDate;?>) </span>
 <?php
 			} else {
 ?>
@@ -499,6 +524,9 @@
 			// 블로그 실행
 			ob_start();
 ?>
+				<div class="updates">
+					<a href="#" onclick="updateFeed(<?php echo $feed['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_update.gif" alt="<?php echo _t('업데이트');?>" /></a>
+				</div>
 				<div class="tools">
 					<a href="#" onclick="changeVisibility(<?php echo $feed['id'];?>, 'n'); return false;"><img id="lockImage<?php echo $feed['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_lock_<?php echo $feed['visibility']=='n'?'on':'off';?>.gif" alt="비공개" /></a><a href="#" onclick="changeVisibility(<?php echo $feed['id'];?>, 'y'); return false;"><img id="unlockImage<?php echo $feed['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_unlock_<?php echo $feed['visibility']=='y'?'on':'off';?>.gif" alt="공개" /></a>
 				</div>

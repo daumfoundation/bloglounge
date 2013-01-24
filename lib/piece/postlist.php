@@ -51,10 +51,33 @@
 
 			requireComponent('LZ.PHP.Media');
 
+			$postCutCount = $skinConfig->postListDivision;
+			$s_posts = '';
 			$s_posts_rep = '';
 			$src_post_rep = $skin->cutSkinTag('post_rep');
+
+
 			if (count($posts)>0) {
 				$index = 0;
+				$lastIndex = round(count($posts) / $postCutCount);
+
+				if($skinConfig->postListDirection == 'horizontal') {
+					$new_posts = array();
+				
+					for($start=0;$start<$postCutCount;$start++) {
+						for($i=$start;$i<count($posts);$i+=$postCutCount) {
+							if(isset($posts[$i])) {
+								array_push($new_posts, $posts[$i]);
+							}
+						}
+					}
+
+					unset($posts);
+					$posts = $new_posts;
+				}
+
+				if(count($posts) % $postCutCount != 0) $lastIndex ++;
+
 				foreach($posts as $item) {
 					$index ++;
 					$item = $event->on('Data.post', $item);
@@ -89,11 +112,12 @@
 						$sp_posts = $skin->parseTag('post_logo_exist', 'post_logo_nonexistence', $sp_posts);
 					}
 
-					$sp_posts = $skin->parseTag('post_position', ($index==1?'firstItem':($index==count($posts)?'lastItem':'')), $sp_posts);
+					$sp_posts = $skin->parseTag('post_position', ($index==1?'firstItem':($index==$lastIndex?'lastItem':'')), $sp_posts);
 
 					$sp_posts = $skin->parseTag('post_id', $item['id'], $sp_posts);
 
-					$sp_posts = $skin->parseTag('post_url',  $service['path'].'/go/'.$item['id'], $sp_posts);			
+					$sp_posts = $skin->parseTag('post_url',  $service['path'].(Validator::getBool($config->directView)?'/read/':'/go/').$item['id'], $sp_posts);	
+					$sp_posts = $skin->parseTag('post_link_target',  (Validator::getBool($config->directView)?'_self':'_blank'), $sp_posts);					
 					$sp_posts = $skin->parseTag('post_permalink',  htmlspecialchars($item['permalink']), $sp_posts);
 
 					$sp_posts = $skin->parseTag('post_visibility', (($item['visibility'] == 'n' || $item['feedVisibility'] == 'n') ? 'hidden' : 'visible' ), $sp_posts);
@@ -183,18 +207,26 @@
 					}
 					$s_posts_rep .= $event->on('Text.post', $sp_posts);
 					$sp_posts = '';
+
+					if($lastIndex <= $index) {
+						$s_posts .= $skin->dressOn('post_rep', $src_post_rep, $s_posts_rep, $src_posts);		
+						$s_posts_rep = '';
+						$index = 0;
+					}
 				}
 			} else { // if query failed (or no article)
 				$s_posts_rep = '';	
 				$src_posts = '';
 			}
-
-			$src_posts = $skin->dressOn('post_rep', $src_post_rep, $s_posts_rep, $src_posts);
+			
+			if(!empty($s_posts_rep)) {
+				$s_posts .= $skin->dressOn('post_rep', $src_post_rep, $s_posts_rep, $src_posts);
+			}
 
 	} else {			
-		$src_posts = '';
+		$s_posts = '';
 	}		
 
-	$skin->dress('postlist', $src_posts);
+	$skin->dress('postlist', $s_posts);
 
 ?>

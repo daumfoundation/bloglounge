@@ -23,6 +23,7 @@ function login($userid, $userpw, $saveId = false) {
 			setcookie('BLOGLOUNGE_LOGINID', $loginid, time() + 31536000, $service['path'] . '/', '.'.$_SERVER['HTTP_HOST']);
 		}
 		$event->on('Auth.login', $input);
+
 		return true;
 	} 
 	return false;

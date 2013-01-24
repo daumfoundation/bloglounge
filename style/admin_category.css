@@ -13,3 +13,20 @@
 	.categorybox ul		{ list-style:none; margin:0; padding:0; }
 		.categorybox ul li { margin-bottom:5px; }
 		.categorybox ul li.lastChild { margin-bottom:0; }
+
+.category_lists { float:left; width:300px; margin-right:25px; }
+
+.group_datas { float:left; width:675px;}
+	.group_datas .messagebox { margin-bottom:20px; }
+
+.groupbox { background:#f6f6f6; border:1px solid #ddd; padding:8px; margin-bottom:14px; font-size:11px; color:#888; line-height:16px;  }
+	.groupbox .title { font-weight:bold; color:#666; }
+
+	.groupbox a { color:#666; text-decoration:none; }
+	.groupbox a:hover { text-decoration:underline; }
+
+	.groupbox ul		{ list-style:none; margin:0; padding:0; }
+		.groupbox ul li { margin-bottom:5px; }
+		.groupbox ul li.lastChild { margin-bottom:0; }
+		
+.group_lists { float:left; width:300px; margin-right:25px; }

@@ -88,6 +88,16 @@
 				$src_condMessage = $skin->dressOn('cond_search_category', $src_condSearchCategory, $s_condSearchCategory, $src_condMessage);
 				$src_condMessage = $event->on('Text.searchCategory', $src_condMessage);
 				$condMessage = true;
+			}else if ($searchType=='group') {
+				$src_condSearchGroup = $skin->cutSkinTag('cond_search_group');	
+				
+				$s_condSearchGroup = $skin->parseTag('search_group', $searchKeyword, $src_condSearchGroup);
+				$s_condSearchGroup = $skin->parseTag('search_count', $totalFeedItems, $s_condSearchGroup);
+//				$s_condSearchGroup = $skin->parseTag('search_rss', $servicePath.'/rss/group/'.$searchKeyword, $s_condSearchGroup);
+
+				$src_condMessage = $skin->dressOn('cond_search_group', $src_condSearchGroup, $s_condSearchGroup, $src_condMessage);
+				$src_condMessage = $event->on('Text.searchGroup', $src_condMessage);
+				$condMessage = true;
 			}
 		} else {
 			if($accessInfo['controller'] == 'focus') {

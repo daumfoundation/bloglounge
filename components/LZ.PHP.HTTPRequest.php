@@ -58,7 +58,7 @@
 				fwrite($socket, "\r\n");
 				if ($this->content !== false)
 					fwrite($socket, $this->content);
-
+echo $this->content;
 				for (; $trial < 5; $trial++) {
 					if (!$line = fgets($socket)) {
 						fclose($socket);

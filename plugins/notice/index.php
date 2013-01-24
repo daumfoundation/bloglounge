@@ -37,12 +37,19 @@
 	}
 
 	function getNoticeMenuText($name, $config) {
-
-		return array('class'=>'notice', 'text'=>_t('공지사항'), 'link'=>'notice');
+		if(isAdmin()) {
+			return array('class'=>'notice', 'text'=>_t('공지사항'), 'link'=>'notice');
+		}
+		return null;
 	}
 
 	function getNoticePage($input, $config) {
 		global $database, $db, $event, $service;
+		if(!isAdmin()) {
+?>
+<?php
+			return $input;
+		} 
 
 		$blogId = isset($config['blog'])?$config['blog']:0;
 		$tag = isset($config['tag'])?$config['tag']:'';

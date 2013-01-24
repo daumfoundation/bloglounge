@@ -14,7 +14,7 @@
 	} else {
 		$arg = array();
 		foreach ($_POST as $key=>$value) {
-			if (!Validator::enum($key, 'postList,postTitleLength,postDescLength,postNewLife,feedList,feedOrder,feedTitleLength,boomList,boomTitleLength,feedListPage,feedListPageOrder,feedListPageTitleLength,feedListRecentFeedList,focusList,focusTitleLength,focusDescLength,tagCloudOrder,tagCloudLimit'))
+			if (!Validator::enum($key, 'postList,postListDivision,postListDirection,postTitleLength,postDescLength,postNewLife,feedList,feedOrder,feedTitleLength,boomList,boomTitleLength,feedListPage,feedListPageOrder,feedListPageTitleLength,feedListRecentFeedList,focusList,focusTitleLength,focusDescLength,tagCloudOrder,tagCloudLimit'))
 				continue;
 			$arg[$key] = $value;
 		}

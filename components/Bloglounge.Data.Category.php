@@ -386,15 +386,8 @@
 					$count = $result;
 				} 		
 				
-				
-				$countOnLogin = $count;
-
-				if($result = $db->queryCell('SELECT count(DISTINCT cr.item) AS count FROM '.$database['prefix'].'CategoryRelations cr LEFT JOIN '.$database['prefix'].'FeedItems fi ON (fi.id = cr.item) WHERE cr.category = ' . $categoryId . ' AND fi.visibility != "d"')) {
-					$countOnLogin = $result;
-				} 
-				
-				
-				$db->execute('UPDATE '.$database['prefix'].'Categories SET count = '.$count.', countOnLogin = '.$countOnLogin.' WHERE id= ' . $categoryId);
+					
+				$db->execute('UPDATE '.$database['prefix'].'Categories SET count = '.$count.' WHERE id= ' . $categoryId);
 			}
 		}
 		

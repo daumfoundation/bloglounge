@@ -83,6 +83,8 @@
 			
 			$db->execute("DELETE FROM {$database['prefix']}CategoryRelations WHERE item = {$itemId}"); // clear CategoryRelations
 			
+			requireComponent('Bloglounge.Data.Groups');
+
 			$db->execute("DELETE FROM {$database['prefix']}TagRelations WHERE item = {$itemId}"); // clear TagRelations
 			if ($db->execute('DELETE FROM '.$database['prefix'].'FeedItems WHERE id='.$itemId)) {
 				if (Validator::getBool(Settings::get('useRssOut'))) {
@@ -107,6 +109,7 @@
 
 			requireComponent('LZ.PHP.Media');
 			requireComponent('Bloglounge.Data.Category');
+			requireComponent('Bloglounge.Data.Groups');
 
 			$result = $db->queryAll("SELECT id FROM {$database['prefix']}FeedItems WHERE feed='$feedId'");
 			if($result) {
@@ -190,10 +193,10 @@
 
 			$item['id'] = $itemId; // for uniqueId
 
-			list($thumbnailLimit, $thumbnailSize) = Settings::gets('thumbnailLimit, thumbnailSize');
+			list($thumbnailLimit, $thumbnailSize, $thumbnailType) = Settings::gets('thumbnailLimit, thumbnailSize, thumbnailType');
 			if($thumbnailLimit == 0) return false;
 
-			if (!$result = $media->get($item, $thumbnailSize, $thumbnailLimit))
+			if (!$result = $media->get($item, $thumbnailSize, $thumbnailLimit, $thumbnailType))
 				return false;
 
 			foreach($result['movies'] as $m_item) {
@@ -227,6 +230,28 @@
 		}
 
 		/** gets **/
+
+		function getPageFromWritten($written) {
+			if(!isAdmin()) {
+				$filter = ' WHERE  (i.visibility = "y") AND (i.feedVisibility = "y") AND (i.written > ' . $written. ')';
+			} else {
+				$filter = ' WHERE  (i.visibility != "d") AND (i.written > ' . $written. ')';
+			}
+
+			return FeedItem::getFeedItemCount($filter) + 1;
+		}
+
+		function getIdListFromPage($page, $filter, $count = 5) {
+			global $db, $database;	
+			
+			$page = $page - 2;
+			if($page < 0) $page = 0;
+
+			$written = $db->queryCell('SELECT i.written FROM ' . $database['prefix'] . 'FeedItems AS i ' . $filter . ' ORDER BY i.written DESC LIMIT ' . $page . ',1');
+			$result = $db->queryAll('SELECT i.id FROM ' . $database['prefix'] . 'FeedItems AS i ' . $filter . ' AND i.written <= ' . $written . ' ORDER BY i.written DESC LIMIT ' . ($count+2));	
+			
+			return $result;
+		}
 
 		function getPredictionPage($id, $pageCount, $searchType='', $searchKeyword='',$searchExtraValue='', $viewDelete = false, $owner = 0) {
 			global $db, $database;
@@ -329,7 +354,32 @@
 
 					$sQuery =  ' WHERE i.description LIKE "%'.$keyword.'%"';				
 			} else if ($searchType=='focus'){		
-					$sQuery =  ' WHERE i.focus = "'.$searchKeyword.'"';				
+					$sQuery =  ' WHERE i.focus = "'.$searchKeyword.'"';		
+			} else if ($searchType=='group') {
+				requireComponent('Bloglounge.Data.Groups');	
+				
+				if(!empty($searchExtraValue)) {
+					$tagId = $db->pick('SELECT id FROM '.$database['prefix'].'Tags WHERE name="'.$db->escape(urldecode($searchExtraValue)).'"');
+					if($tagId) {
+						$tagId = $tagId[0];
+						$sQuery = ' LEFT JOIN '.$database['prefix'].'TagRelations r ON (r.item = i.id AND r.type = "group_category") ';
+					}
+				}
+
+				if(!is_numeric($searchKeyword)) {
+					$group = Group::getByName($searchKeyword);
+					$searchKeyword = $group['id'];
+				}
+				
+				if($searchKeyword) {	
+					$feedIds = Group::getFeedIdList($searchKeyword);
+					$sQuery .= ' WHERE i.feed IN (' . implode(',',$feedIds) .')';
+
+					if($tagId) {
+						$sQuery .= ' AND r.tag="'.$tagId.'"';
+					}
+				}
+
 			} else if ($searchType=='category') {
 				requireComponent('Bloglounge.Data.Category');
 				if(is_numeric($searchKeyword)) {

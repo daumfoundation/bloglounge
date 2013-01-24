@@ -33,7 +33,7 @@
 				foreach ($this->case[$event] as $plugin=>$func) {
 					include_once(ROOT . '/plugins/'.$plugin.'/index.php');		
 					if (function_exists($func)) {
-						$this->pluginURL = $service['path'] . '/plugins/'.$input['plugin'];
+						$this->pluginURL = $service['path'] . '/plugins/'.$plugin;
 						$input = call_user_func($func, $input, Plugin::getConfig($plugin));
 					}
 				}

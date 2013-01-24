@@ -55,17 +55,18 @@
 							"&feeditemsOnRss="+$('#feeditemsOnRss').val()+
 							"&restrictBoom="+($('#restrictBoom').attr('checked')?'y':'n')+
 							"&rankBy="+$('#rankBy').val()+
-							"&rankPeriod="+$('#rankPeriod').val()+
 							"&rankLife="+$('#rankLife').val()+
 							"&boomDownReactor="+$('#boomDownReactor').val()+
 							"&boomDownReactLimit="+$('#boomDownReactLimit').val() +
 							"&thumbnailLimit="+$('#thumbnailLimit').val()+		
 							"&thumbnailSize="+$('#thumbnailSize').val()+		
+							"&thumbnailType="+($('#thumbnailType').attr('checked')?'resizeBaseWidth':'resize')+		
 							"&updateProcess="+$('#updateProcess').val()+
 							"&summarySave="+($('#summarySave').attr('checked')?'y':'n')+
 			 			    "&useVerifier="+($('#useVerifier').attr('checked')?'y':'n')+
 							"&verifierType="+$('#verifierType').val()+
-							"&verifier="+$('#verifier').val(),
+							"&verifier="+$('#verifier').val()+
+							"&directView="+($('#directView').attr('checked')?'y':'n'),
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();
@@ -82,6 +83,11 @@
 		}
 
 		function checkVerifier() {
+			if($("#directView").attr('checked') && !$('#useVerifier').attr('checked')) {
+				alert("<?php echo _t('블로그 글을 바로 보기 위해서는 인증시스템은 필수사항입니다.');?>");
+				return false;
+			}
+
 			if($('#useVerifier').attr('checked')) {
 				$('#verifierType').removeAttr( 'disabled' );
 				if($('#verifierType').val() == 'random') {
@@ -93,6 +99,13 @@
 				$('#verifierType').attr( 'disabled', 'disabled' );
 				$('#verifier').attr( 'disabled', 'disabled' );
 			}
+
+			return true;
+		}
+
+		function checkDirectView() {
+			$('#useVerifier').attr('checked','true');
+			checkVerifier();
 		}
 </script>
 
@@ -157,7 +170,8 @@
 				$updateCycle = $config->updateCycle;
 				$archivePeriod = $config->archivePeriod;
 				$thumbnailLimit = $config->thumbnailLimit;
-				$thumbnailSize = $config->thumbnailSize;
+				$thumbnailSize = $config->thumbnailSize;	
+				$thumbnailType = $config->thumbnailType;
 				$updateProcess = $config->updateProcess;
 				$summarySave = $config->summarySave;
 ?>	
@@ -209,10 +223,16 @@
 
 		</dd>
 	</dl>	
+	<dl class="normal">
+		<dt></dt>
+		<dd>
+			<input type="checkbox" <?php if ($thumbnailType == 'resizeBaseWidth') { ?>checked="checked"<?php } ?> name="thumbnailType" id="thumbnailType" value="y" /><label for="thumbnailType">&nbsp;<?php echo _t('미리보기 이미지의 높이를 자동조절합니다.');?></label>
+		</dd>
+	</dl>	
 	<dl class="normal comments ">
 		<dt></dt>
-		<dd class="text">
-			<?php echo _t('저장되는 썸네일의 크기는 너비와 높이가 같은 정사각형으로 저장됩니다.');?>
+		<dd class="text checkbox_hint">
+			<?php echo _t('이 옵션을 지정하지 않으면 저장되는 썸네일의 크기는 너비와 높이가 같은 정사각형으로 저장됩니다.');?>
 		</dd>
 	</dl>
 
@@ -243,7 +263,9 @@
 <?php
 			ob_start();
 ?>
-				<select name="updateCycle" id="updateCycle">					
+				<select name="updateCycle" id="updateCycle">		
+					<option value="0.25" <?php if ($updateCycle == '0.25') { ?>selected="selected"<?php } ?>><?php echo _f('%1초 이상', 15);?></option>				
+					<option value="0.5" <?php if ($updateCycle == '0.5') { ?>selected="selected"<?php } ?>><?php echo _f('%1초 이상', 30);?></option>
 					<option value="1" <?php if ($updateCycle == '1') { ?>selected="selected"<?php } ?>><?php echo _f('%1분 이상', 1);?></option>
 					<option value="5" <?php if ($updateCycle == '5') { ?>selected="selected"<?php } ?>><?php echo _f('%1분 이상', 5);?></option>
 					<option value="10" <?php if ($updateCycle == '10') { ?>selected="selected"<?php } ?>><?php echo _f('%1분 이상', 10);?></option>
@@ -301,13 +323,25 @@
 		<dd class="text checkbox_hint">
 			<?php echo _t('이 설정을 선택하면 용량 절약을 위해 본문내용을 최대 1000자만큼만 저장합니다.');?>
 		</dd>
-	</dl>
+	</dl>	
 	<dl class="normal">
 		<dt><?php echo _t('정책');?></dt>
 		<dd>
+			<input type="checkbox" <?php if (Validator::getBool($config->directView)) { ?>checked="checked"<?php } ?> name="directView" id="directView" value="y" onclick="checkDirectView();" /><label for="directView">&nbsp;<?php echo _t('블로그라운지에서 블로그의 글을 바로 볼 수 있도록 합니다.');?></label>
+		</dd>
+	</dl>
+	<dl class="normal comments">
+		<dt></dt>
+		<dd class="text checkbox_hint">
+			<?php echo _t('이 설정을 선택하면 블로그라운지에서 바로 블로그의 글을 보실 수 있습니다. 인증시스템은 필수로 사용되게 됩니다.');?>
+		</dd>
+	</dl>		
+	<dl class="normal">
+		<dt></dt>
+		<dd>
 			<input type="checkbox" <?php if (Validator::getBool($config->restrictJoin)) { ?>checked="checked"<?php } ?> name="restrictJoin" id="restrictJoin" value="y" /><label for="restrictJoin">&nbsp;<?php echo _t('운영자가 승인해야 회원가입을 가능하게 합니다.');?></label>
 		</dd>
-	</dl>	
+	</dl>
 	<dl class="normal comments">
 		<dt></dt>
 		<dd class="text checkbox_hint">
@@ -317,7 +351,7 @@
 	<dl class="normal">
 		<dt></dt>
 		<dd>
-			<input type="checkbox" <?php if (Validator::getBool($config->useVerifier)) { ?>checked="checked"<?php } ?> name="useVerifier" id="useVerifier" value="y" onclick="checkVerifier();" /><label for="useVerifier">&nbsp;<?php echo _t('인증시스템을 사용합니다.');?></label>
+			<input type="checkbox" <?php if (Validator::getBool($config->useVerifier)) { ?>checked="checked"<?php } ?> name="useVerifier" id="useVerifier" value="y" onclick="return checkVerifier();" /><label for="useVerifier">&nbsp;<?php echo _t('인증시스템을 사용합니다.');?></label>
 		</dd>
 	</dl>	
 	<dl class="normal comments">
@@ -399,7 +433,7 @@
 	<dl class="normal">
 		<dt><?php echo _t('인기글');?></dt>
 		<dd>
-			<input type="checkbox" name="restrictBoom" id="restrictBoom" value="y" <?php if (Validator::getBool($config->restrictBoom)) {?>checked="checked"<?}?>/>&nbsp;<label for="restrictBoom"><?php echo _t('로그인 한 사람만 추천, 반대 기능을 사용할 수 있습니다.');?></label>
+			<input type="checkbox" name="restrictBoom" id="restrictBoom" value="y" <?php if (Validator::getBool($config->restrictBoom)) {?>checked="checked"<?}?>/>&nbsp;<label for="restrictBoom"><?php echo _t('로그인 한 사람만 추천, 반대 기능을 사용할 수 있도록 합니다.');?></label>
 		</dd>
 	</dl>	
 	<dl class="normal">
@@ -428,7 +462,6 @@
 		<dd>
 <?php
 		$rankBy = $config->rankBy;
-		$rankPeriod = $config->rankPeriod;
 		$rankLife = $config->rankLife;
 		ob_start();
 ?>

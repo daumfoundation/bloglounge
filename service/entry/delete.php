@@ -29,8 +29,13 @@
 				
 				if(isAdmin() || $feed['owner'] == getLoggedId()) {
 					FeedItem::edit($id,'visibility', 'd');
-					Feed::edit($feed['id'],array('feedCount'=>$feed['feedCount']-1));				
+					Feed::edit($feed['id'],array('feedCount'=>$feed['feedCount']-1));		
+
+					requireComponent('Bloglounge.Data.Groups');
+
 					if(!empty($feed['category'])) Catregory::rebuildCount($feed['category']);
+					if(!empty($feed['group'])) Group::rebuildCount($feed['group']);
+
 					if($admin_mode) {
 						include_once( ROOT . '/lib/admin.php' );
 						addAppMessage(_t('선택하신 글을 휴지통으로 옮겼습니다.'));

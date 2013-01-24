@@ -10,18 +10,19 @@
 	$feedURL = isset($_GET['feedURL'])?$_GET['feedURL']:'';
 	$feedId = isset($_GET['feedId'])?$_GET['feedId']:'';
 
-	$verifyMode = $_GET['verifyMode'] == 'true' && !empty($feedURL) ? true : false;
+	$verifyMode = isset($_GET['verifyMode']) && $_GET['verifyMode'] == 'true' && !empty($feedURL) ? true : false;
 
 	if(isset($_POST['feedURL']) && !empty($_POST['feedURL'])) { 
 		
 		if($userInformation['is_accepted'] == 'y') {
+			$group = isset($_POST['group']) ? $_POST['group'] : '0';
 			$visibility = isset($_POST['isVisible']) ? 'y' : 'n';
 			$filterType = isset($_POST['useFilter']) ? $_POST['useFilter'] : 'tag';
 			$filter = $filterType&&isset($_POST['feedFilter'])?$_POST['feedFilter']:'';
 			
-			$id = $event->on('Add.addFeed', array($_POST['feedURL'], $visibility, $filter, $filterType));
+			$id = $event->on('Add.addFeed', array($_POST['feedURL'], $visibility, $filter, $filterType, $group));
 			if($id === false || !is_numeric($id) || empty($id)) {
-				$id = Feed::add($_POST['feedURL'], $visibility, $filter, $filterType);	
+				$id = Feed::add($_POST['feedURL'], $visibility, $filter, $filterType, $group);	
 			}
 
 			addAppMessage(_t('블로그를 추가했습니다.'));
@@ -186,6 +187,10 @@
 			$result = feed::getFeedItems($xml);
 		}
 
+		requireComponent('Bloglounge.Data.Groups');
+
+		$groups = Group::getGroupsAll();
+
 		if(count($result)>0) {
 ?>
 			<dl>
@@ -197,27 +202,79 @@
 <?php
 		}
 ?>
-			<div class="options_wrap">
-					<p>
-						<?php if (empty($config->filter)) { ?><input type="radio" name="useFilter" value="none" id="useFilter_no" checked="checked" />&nbsp;<label for="useFilter_no"><?php echo _t('모든 글을 수집합니다.');?></label><br /><?php } ?>
-						<input type="radio" name="useFilter" value="tag" id="useFilter_yes_tag" <?php if (!empty($config->filter)) { ?>checked="checked"<?php } ?>/>&nbsp;<label for="useFilter_yes_tag"><?php echo _t('지정한 단어가 태그에 포함하는 글만 수집합니다.');?></label><br />
-						<input type="radio" name="useFilter" value="title" id="useFilter_yes_title" <?php if (!empty($config->filter)) { ?>checked="checked"<?php } ?>/>&nbsp;<label for="useFilter_yes_title"><?php echo _t('지정한 단어가 제목에 포함하는 글만 수집합니다.');?></label><br />
-						<input type="radio" name="useFilter" value="tag+title" id="useFilter_yes_tag_title" <?php if (!empty($config->filter)) { ?>checked="checked"<?php } ?>/>&nbsp;<label for="useFilter_yes_tag_title"><?php echo _t('지정한 단어가 제목 또는 태그에 포함하는 글만 수집합니다.');?></label>
+			<div class="clear"></div>
 
-						<div><?php if (empty($config->filter)) { ?><input type="text" id="feedFilter" name="feedFilter" class="input faderInput" onfocus="if(document.getElementsByName('useFilter')[0].checked) document.getElementsByName('useFilter')[1].checked=true;" /><div class="help"><?php echo _t('각 단어의 구분은 쉼표(,)로 합니다.');?></div><?php } else { echo $config->filter;?> <div class="help"><?php echo _t('관리자가 설정한 수집 태그 필터 설정이 우선권을 갖습니다.');?></div><?php } ?></div>
-					</p>
-					<p>
-						<input type="checkbox" name="isVisible" id="isVisible" checked="true" /> <label for="isVisible"><?php echo _t('블로그공개');?></label>
-						<div class="help">
-							<?php echo _t('블로그를 외부에 공개합니다. 비공개시 해당블로그의 글도 모두 비공개 처리됩니다.');?>
-						</div>
-					</p>
+			<div class="options_wrap">		
+					<dl>
+						<dt><?php echo _t('그룹');?></dt>
+						<dd>
+							<select name="group">
+								<option value="0"><?php echo _t('지정안함');?></option>
+<?php	
+								foreach($groups as $group) {
+?>
+									<option value="<?php echo $group['id'];?>"><?php echo $group['name'];?></option>
+<?php
+								}
+?>
+							</select>
+						</dd>
+					</dl>
+					<dl>
+						<dt><?php echo _t('필터옵션');?></dt>
+						<dd>
+							<?php if (empty($config->filter)) { ?><input type="radio" name="useFilter" value="none" id="useFilter_no" checked="checked" />&nbsp;<label for="useFilter_no"><?php echo _t('모든 글을 수집합니다.');?></label><br /><?php } ?>
+							<input type="radio" name="useFilter" value="tag" id="useFilter_yes_tag" <?php if (!empty($config->filter)) { ?>checked="checked"<?php } ?>/>&nbsp;<label for="useFilter_yes_tag"><?php echo _t('지정한 단어가 태그에 포함하는 글만 수집합니다.');?></label><br />
+							<input type="radio" name="useFilter" value="title" id="useFilter_yes_title" <?php if (!empty($config->filter)) { ?>checked="checked"<?php } ?>/>&nbsp;<label for="useFilter_yes_title"><?php echo _t('지정한 단어가 제목에 포함하는 글만 수집합니다.');?></label><br />
+							<input type="radio" name="useFilter" value="tag+title" id="useFilter_yes_tag_title" <?php if (!empty($config->filter)) { ?>checked="checked"<?php } ?>/>&nbsp;<label for="useFilter_yes_tag_title"><?php echo _t('지정한 단어가 제목 또는 태그에 포함하는 글만 수집합니다.');?></label>
+						</dd>
+					</dl>					
+					<dl>
+						<dt><?php echo _t('필터');?></dt>
+						<dd>
+							<?php if (empty($config->filter)) { ?><input type="text" id="feedFilter" name="feedFilter" class="input faderInput" onfocus="if(document.getElementsByName('useFilter')[0].checked) document.getElementsByName('useFilter')[1].checked=true;" /><div class="help"><?php echo _t('각 단어의 구분은 쉼표(,)로 합니다.');?></div><?php } else { echo $config->filter;?> <div class="help"><?php echo _t('관리자가 설정한 수집 태그 필터 설정이 우선권을 갖습니다.');?></div><?php } ?>
+						</dd>
+					</dl>	
+
+					<dl>
+						<dt><?php echo _t('옵션');?></dt>
+						<dd>
+							<input type="checkbox" name="isVisible" id="isVisible" checked="true" /> <label for="isVisible"><?php echo _t('블로그공개');?></label>
+							<div class="help">
+								<?php echo _t('블로그를 외부에 공개합니다. 비공개시 해당블로그의 글도 모두 비공개 처리됩니다.');?>
+							</div>
+						</dd>
+					</dl>
+
+					<div class="clear"></div>
 			</div>
-
-			<br />			
-
-			<span class="normalbutton"><input type="submit" value="<?php echo _t('추가');?>" /></span>
-
+			
+<?php
+			if(!isAdmin() && Validator::getBool($config->useVerifier)) {
+?>
+			<div class="options_wrap">
+				<h4><?php echo _t('주의사항');?></h4>
+				<ol class="notice">
+					<li><?php echo _t('블로그 추가를 완료하기 위해서는 인증단계를 거쳐야 합니다.');?></li>
+					<li><?php echo _t('현재 블로그의 글을 페이지의 이동없이 이곳에서 바로 볼 수 있도록 설정되어있습니다.');?></li>
+				</ol>
+			</div>
+<?php
+			}
+?>
+<?php
+			if(!isAdmin() && Validator::getBool($config->useVerifier)) {
+?>
+			<br />
+			<span class="normalbutton"><input type="submit" value="<?php echo _t('인증하기');?>" /></span>
+<?php
+			} else {
+?>
+			<br />
+			<span class="normalbutton"><input type="submit" value="<?php echo _t('블로그 추가');?>" /></span>
+<?php
+			}
+?>
 		</form>
 <?php
 		}

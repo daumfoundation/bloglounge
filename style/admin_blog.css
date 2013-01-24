@@ -8,9 +8,14 @@ body.entry_view { background:#ffffff; }
 	
 	.bloglist .headers .bloglist_title { font-weight:bold; }
 
+	.bloglist .bloglist_group { text-align:center; }
+		.bloglist .datas .bloglist_group { font-size:11px; }
+		.bloglist .bloglist_group .empty { font-size:11px; color:#999; }
+
 	.bloglist .bloglist_title { padding-left:6px;  padding-right:6px;  }
-		.bloglist .bloglist_title .ftool { float:left; width:68px; padding-top:4px; }
-		.bloglist .bloglist_title .ftitle { float:left; width:206px; text-align:left; overflow:hidden; padding-top:8px; font-weight:bold;}
+		.bloglist .bloglist_title .ftool { float:left; width:68px; padding-top:2px; }
+		.bloglist .bloglist_title .ftitle { float:left; width:190px; text-align:left; overflow:hidden; padding-top:6px; font-weight:bold;}
+		.bloglist .bloglist_title .noftool { padding-top:0px; }
 
 	.bloglist .bloglist_count { text-align:center; }
 	.bloglist .bloglist_update { padding-left:6px;}
@@ -19,6 +24,7 @@ body.entry_view { background:#ffffff; }
 	.bloglist .bloglist_update .empty { font-size:11px; color:#999; }
 
 	.bloglist .bloglist_execute { text-align:center; padding-left:10px; padding-right:10px; }
+			.bloglist .bloglist_execute .updates { float:left; margin-right:5px; }
 			.bloglist .bloglist_execute .tools { float:left; }
 			.bloglist .bloglist_execute .deletes { float:right; }
 

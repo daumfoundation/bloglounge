@@ -142,15 +142,22 @@
 		$session['id'] = $_SESSION['_app_id_'] = $userid;
 		if (isSessionAuthorized(session_id()))
 			return true;
+
 		for ($i = 0; $i < 100; $i++) {
 			$sid = makeSessionId();
+
 			$db->execute("INSERT INTO {$database['prefix']}SessionsData(id, address, updated) VALUES('$sid', '{$_SERVER['REMOTE_IP']}', UNIX_TIMESTAMP())");
 			if (!$db->affectedRows())
 				return false;
 			$db->execute("INSERT INTO {$database['prefix']}Sessions(id, address, userid, created, updated) VALUES('$sid', '{$_SERVER['REMOTE_IP']}', $userid, UNIX_TIMESTAMP(), UNIX_TIMESTAMP())");
 			if ($db->affectedRows()) {
-				session_id($sid);
-				header('Set-Cookie: S20_BLOGLOUNGE_SESSION='.$sid.'; path=/; domain='.((substr(strtolower($_SERVER['HTTP_HOST']), 0, 4) == 'www.') ? substr($_SERVER['HTTP_HOST'], 3) : $_SERVER['HTTP_HOST']));
+				session_id($sid);	
+
+				$domain = ((substr(strtolower($_SERVER['HTTP_HOST']), 0, 4) == 'www.') ? substr($_SERVER['HTTP_HOST'], 3) : $_SERVER['HTTP_HOST']);
+				$port = strpos($domain, ':'); 
+				if ( $port !== false ) $domain = substr($domain, 0, $port); 
+
+				header('Set-Cookie: S20_BLOGLOUNGE_SESSION='.$sid.'; path=/; domain='.$domain);
 				return true;
 			}
 		}
