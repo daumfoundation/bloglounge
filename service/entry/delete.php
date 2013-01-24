@@ -22,6 +22,8 @@
 			$ids = explode(',', $id);
 
 			foreach($ids as $id) {
+				if(empty($id)) continue;
+
 				$feedItem = FeedItem::getAll($id);
 				$feed = Feed::getAll($feedItem['feed']);
 				

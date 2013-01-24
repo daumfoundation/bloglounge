@@ -60,7 +60,6 @@
 
 	include ROOT. '/lib/piece/adminHeader.php';
 
-
 	$pageCount = 15; // 페이지갯수
 	$page = isset($_GET['page']) ? $_GET['page'] : 1;
 	if(!isset($page) || empty($page)) $page = 1;

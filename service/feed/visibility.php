@@ -21,7 +21,9 @@
 		} else {
 			$ids = explode(',', $id);
 
-			foreach($ids as $id) {
+			foreach($ids as $id) {		
+				if(empty($id)) continue;
+
 				$feed = Feed::getAll($id);
 				if(isAdmin() || $feed['owner'] == getLoggedId()) {
 					Feed::edit($id,array('visibility'=>$value));

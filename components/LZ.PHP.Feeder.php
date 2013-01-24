@@ -315,7 +315,7 @@
 					$item=array('permalink'=>rawurldecode($link));
 					$item['author']=$xmls->getValue("/feed/entry[$i]/author/name");
 					$item['title']=$xmls->getValue("/feed/entry[$i]/title");
-					if (!$item['description']=$xmls->getValue("/feed/entry[$i]/content"))
+					if (!$item['description']=htmlspecialchars_decode($xmls->getValue("/feed/entry[$i]/content")))
 						$item['description']=htmlspecialchars_decode($xmls->getValue("/feed/entry[$i]/summary"));
 					$item['tags']=array();
 					for ($j=1;$tag=$xmls->getValue("/feed/entry[$i]/dc:subject[$j]");$j++) {
@@ -860,11 +860,11 @@
 		function getFeedsByOwner($owner, $page, $pageCount = 15, $searchQuery = '', $feedListPageOrder = 'created') {
 			global $db, $database;
 			
-			if(!isAdmin()) {
-				$sQuery = 'WHERE visibility = "y" AND owner = ' . $owner;
-			} else {
+			//if(!isAdmin()) {
+			//	$sQuery = 'WHERE visibility = "y" AND owner = ' . $owner;
+			//} else {
 				$sQuery = 'WHERE owner = ' . $owner;
-			}
+			//}
 
 			if(!empty($searchQuery)) {
 				$sQuery .= ' AND ' . $searchQuery;

@@ -26,7 +26,6 @@
 		$response['error'] = 1;
 		$response['message'] = 'illegal id';
 	}
-
 	$itemId = $_POST['itemId'];
 
 	switch($_POST['direction']) {
