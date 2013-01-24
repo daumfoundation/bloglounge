@@ -1,0 +1,86 @@
+/* modal basic */
+
+#modalOverlay {
+	  background-color:#000;
+}
+
+.modalContainer {
+	  left:50%;
+	  top:15%;
+}
+
+.modalContainer a.modalCloseImg {
+	display:none; 
+}
+
+a.modalClose { 
+	text-decoration:none; 
+}
+
+.modal {
+	display:none;
+}
+
+.modalWrap {
+	background:#ffffff;
+	border:1px solid #bbb;
+}
+
+.modalTitle {
+	 background-color:#555;
+	 text-align:left;
+	 padding:6px; padding-left:10px; padding-right:10px;
+	 color:#ffffff;
+	 font:bold 13px Gulim;
+}
+
+.modalDataWrap {
+	 border:3px solid #00a89c; 
+	 margin:4px;
+	 padding:8px;
+}
+
+.modalInput {
+}
+
+.makeModal {
+	display:none;
+}
+
+.modalShadow1 {
+	background-color:#000;
+	font-size:0;
+	position: absolute;
+	width:100%;
+	line-height:1px;
+
+	opacity:.10;
+	filter: alpha(opacity=10); 
+	-moz-opacity: 0.10;
+}
+
+.modalShadow2 {
+	background-color:#000;
+	font-size:0;
+	position: absolute;
+	width:100%;
+	line-height:2px;
+
+	opacity:.05;
+	filter: alpha(opacity=5); 
+	-moz-opacity: 0.05;
+}
+
+/* adminModal */
+
+.adminModal {
+	position:absolute;
+	z-index:99;
+	border:10px solid #efefef;
+	background-color:#ffffff;
+	display:none;
+}
+
+.adminModalFrame { 
+	border:0;
+}

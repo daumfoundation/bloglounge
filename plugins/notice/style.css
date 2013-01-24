@@ -1,0 +1,17 @@
+.notice_wrap { margin-top:10px; }
+	.notice_wrap .noticelist .list_item { height:44px; }
+	.notice_wrap .noticelist_select { text-align:center; }
+	.notice_wrap .noticelist_date { font-size:11px; color:#999; text-align:center; line-height:15px; }
+	.notice_wrap .noticelist_title { padding-left:5px; padding-right:5px; font-size:11px; color:#888; }
+		.notice_wrap .noticelist_title .title { font-size:12px; font-weight:bold; margin-bottom:5px; color:#555; }
+		.notice_wrap .noticelist_title .empty { font-size:11px; color:#999; }
+
+	.notice_wrap .select { float:left; padding-left:15px; }
+	.notice_wrap .action { float:left; padding-left:10px; font-size:11px; padding-top:4px; }	
+		.notice_wrap .action .sep { color:#d0d0d0; }
+		.notice_wrap .action a { color:#707070; text-decoration:none; }
+		.notice_wrap .action a:hover { text-decoration:underline; }		
+
+	.notice_wrap .noticelist_execute { text-align:center; }
+		.notice_wrap .noticelist_execute .tools { float:left; padding-left:5px; }
+		.notice_wrap .noticelist_execute .delete { float:right; padding-right:5px; }

@@ -1,0 +1,39 @@
+body { margin:0; padding:10px; font:12px Gulim,Dotum; }
+
+img { border:0; }
+.clear { clear:both; }
+
+/* layout */
+
+#export_iframe_wrap {}
+
+#export_iframe_wrap ul { list-style:none; margin:0; padding:0; }
+#export_iframe_wrap ul li { height:40px; margin-bottom:10px; overflow:hidden; position:relative; width:100%; border-bottom:1px solid #eee; padding-bottom:6px; }
+
+#export_iframe_wrap ul li .thumbnail { width:40px; margin-right:10px;}
+	#export_iframe_wrap ul li .thumbnail img { width:40px; }
+#export_iframe_wrap ul li .data { overflow:hidden; width:100%; margin-left:50px; position:absolute; left:0px; top:0px; }
+
+#export_iframe_wrap ul li.thumbnail_nonexistence .data { margin-left:0; }
+
+#export_iframe_wrap ul li h3 { font-size:12px; font-weight:bold; margin:0; padding:0; margin-bottom:4px; margin-top:4px; height:13px; overflow:hidden; }
+	#export_iframe_wrap ul li h3 a { color:#3b7cb2; text-decoration:none; }
+	#export_iframe_wrap ul li h3 a:hover { text-decoration:underline; }
+
+#export_iframe_wrap ul li p {  margin:0; padding:0; color:#999; height:13px; line-height:14px; }
+
+#export_iframe_wrap .paging { text-align:center; margin-top:30px; margin-bottom:15px; color:#999999; font-size:13px; }
+	#export_iframe_wrap .paging a { color:#777; text-decoration:none; margin-right:5px; font-weight:bold; border:1px solid #eee; padding:5px; }
+	#export_iframe_wrap .paging a:visited { color:#999; }
+	#export_iframe_wrap .paging a:hover { background:#f8f8f8; }
+
+	#export_iframe_wrap .paging a.page_prev { border:0; color:#666; }
+		#export_iframe_wrap .paging a.page_prev:hover { color:#aaa; background:none; }
+	#export_iframe_wrap .paging a.page_next { margin-right:0; border:0; color:#666; }
+		#export_iframe_wrap .paging a.page_next:hover { color:#aaa; background:none; }
+	
+	#export_iframe_wrap .paging a.page_disable { color:#ccc; }
+
+	#export_iframe_wrap .paging a.num { text-decoration:none; color:#999999; margin-left:2px; margin-right:2px; }
+	#export_iframe_wrap .paging a.selected { color:#4698dd; border:0; }
+

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<welcome type="bloglounge" version="1.0">
+	<information>
+		<name>기본</name>
+		<description>기본 인사말 언어팩입니다</description>
+		<author>
+			<name>ITcanus</name>
+			<homepage>http://www.itcanus.net/</homepage>
+			<email>ncloud@daumfoundation.org</email>
+		</author>
+		<license>자유롭게 수정 및 재배포 가능합니다</license>
+	</information>
+	<common>
+		<item><![CDATA[ 안녕하세요. ]]></item>
+		<item><![CDATA[ 반갑습니다. ]]></item>
+		<item><![CDATA[ 즐거운 하루입니다. ]]></item>
+	</common>
+	<daybreak>
+		<item><![CDATA[ 안녕하세요. ]]></item>
+	</daybreak>
+	<morning>
+		<item><![CDATA[ 좋은 아침 입니다. ]]></item>
+	</morning>
+	<afternoon>
+		<item><![CDATA[ 식사는 하셨나요? ]]></item>
+	</afternoon>
+	<evening>
+		<item><![CDATA[ 좋은날 되셨나요? ]]></item>
+	</evening>
+	<night>
+		<item><![CDATA[ 즐거운 밤되세요. ]]></item>
+	</night>
+</welcome>

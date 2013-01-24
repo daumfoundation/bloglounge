@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>[##_title_##]</title>
+<link rel="alternate" type="application/rss+xml" title="[##_title_##]" href="[##_rss_url_##]" />
+<link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+<link rel="shortcut icon" href="[##_index_url_##]/images/favicon.ico" />
+</head>
+<body>
+	<div id="wrap">		
+		<div id="header">
+			<s_logo_image>
+			<div id="logo_image" class="[##_logo_image_exist_##]">
+				<a href="[##_base_url_##]"><img src="[##_logo_url_##]" alt="logo" /></a>
+			</div>
+			</s_logo_image>
+			<div id="logo_text" class="[##_logo_image_exist_##]">
+				<a href="[##_base_url_##]">[##_title_##]</a>
+			</div>
+			<div id="login_text"><div class="left"><div class="right">
+					<div class="data">
+						<s_guest>
+							<a href="[##_login_url_##]" onclick="[##_login_onclick_##]"><span class="strong">로그인</span></a><span class="sep">|</span><a href="[##_join_url_##]" onclick="[##_join_onclick_##]">회원가입</a>
+						</s_guest>
+						<s_member>
+							<a href="[##_admin_url_##]"><span class="strong">관리</span></a><span class="sep">|</span><a href="[##_logout_url_##]">로그아웃</a><s_admin></s_admin>
+						</s_member>
+					</div>
+			</div></div></div>
+			<div class="clear"></div>
+		</div> <!-- header close -->
+		
+		[##_magazine_focus_##]
+
+		<div id="container">
+			<table id="main_table" cellpadding="0" cellspacing="0">
+				<tr>
+					<td id="left_sidebar">
+						<div class="top_margin">&nbsp;</div>
+						<s_notice>
+							<div class="notices sidebar_item">
+								<h3><img src="./images/title_notice.gif" alt="공지사항" /></h3>
+								<ul>					
+									<s_notice_rep>
+									<li><a href="[##_notice_url_##]" target="_blank">[##_notice_title_##]</a></li>
+									</s_notice_rep>					
+								</ul>
+							</div><!-- notice close -->
+						</s_notice>			
+						<s_feed>
+						<div class="recentblog sidebar_item">
+							<h3>
+								<div class="left"><img src="./images/title_blog.gif" alt="블로그목록" /></div>
+								<div class="right"><a href="[##_feedlist_url_##]"><img src="./images/bt_more.gif" alt="더보기" /></a></div>
+								<div class="clear"></div>
+							</h3>
+							<ul>
+								<s_feed_rep>
+								<li><a href="[##_feed_link_url_##]">[##_feed_title_##]</a></li>
+								</s_feed_rep>
+							</ul>
+						</div>
+						</s_feed> <!-- recentblog close -->
+					</td> <!-- left_sidebar close -->
+					<td id="main">
+						<div id="main_top">
+							<div class="tab_menu">
+								<ul class="position_[##_position_##]">
+									<li class="position_value_index"><span><span><span><a href="[##_base_url_##]">최신글</a></span></span></span></li>
+									<li class="position_value_focus"><span><span><span><a href="[##_base_url_##]focus">포커스</a></span></span></span></li>
+								</ul>
+								<div class="clear"></div>
+							</div>
+							<div class="search_wrap">
+								<s_search>
+									<input type="hidden" name="type" value="all" />
+									<input type="text" name="keyword" id="keyword" class="input" value="[##_search_keyword_##]" />
+									<input type="image" src="./images/bt_search.gif" align="top" />
+								</s_search>
+							</div>
+							<div class="rss_wrap">
+								<a href="[##_rss_url_##]" target="_blank"><img src="./images/bt_rss.gif" alt="RSS" align="absmiddle" /></a>
+							</div>
+
+							<div class="clear"></div>
+						</div> <!-- main_top close -->
+						<div id="main_data">					
+
+							<s_content>
+								<!-- 에러페이지, 사용자 정의 페이지를 위한 .. -->
+							</s_content>
+
+							<s_cond_message>
+							<div class="message_wrap">
+								<s_cond_search_all>
+								<div class="search_message_wrap">
+									<div class="message">
+										<span class="text">[##_search_all_##]</span>에 대한 검색결과<span class="count">[##_search_count_##]</span>건		
+									</div>
+								</div>
+								</s_cond_search_all>
+								<s_cond_search_tag>
+								<div class="search_message_wrap">
+									<div class="message">
+										<span class="text">[##_search_tag_##]</span>에 대한 검색결과 <span class="count">[##_search_count_##]</span>건
+									</div>
+								</div>
+								</s_cond_search_tag>
+								<s_cond_search_blogurl>
+								<div class="search_message_wrap">
+									<div class="search_blog">
+										<s_cond_search_bloglogo><div class="thumbnail"><img src="[##_search_bloglogo_##]" alt="블로그 로고" /></div></s_cond_search_bloglogo>
+										<div class="data">
+											<h3>[##_search_blogtitle_##]</h3>
+											<div class="address">
+												<a href="[##_search_blogurl_##]" target="_blank">[##_search_blogurl_##]</a>
+											</div>
+											<div class="desc">
+												[##_search_blogdescription_##]
+											</div>
+										</div>
+										<div class="clear"></div>
+									</div>
+									<div class="message">
+										블로그 <span class="text">"[##_search_blogtitle_##]"</span>에 대한 검색결과 <span class="count">[##_search_blogcount_##]</span>건
+									</div>
+								</div>
+								</s_cond_search_blogurl>
+								<s_cond_search_date>	
+								<div class="search_message_wrap">		
+									<div class="message">
+										<span class="text">[##_search_date:Y년 m월 d일: ~ Y년 m월 d일_##]</span>에 대한 검색결과 <span class="count">[##_search_count_##]</span>건
+									</div>
+								</div>
+								</s_cond_search_date>
+								<s_cond_search_category>
+								<div class="search_message_wrap">
+									<div class="message">
+										<span class="text">[##_search_category_##]</span>에 대한 검색결과 <span class="count">[##_search_count_##]</span>건 <a href="[##_search_rss_##]" target="_blank"><img src="./images/bt_rss.gif" alt="RSS" align="absmiddle" /></a>	
+									</div>
+								</div>
+								</s_cond_search_category>
+								<s_cond_search_empty>
+								<div class="search_message_wrap">
+									<div class="message">
+										<div class="empty">검색결과가 없습니다.</div>
+									</div>
+								</div>
+								</s_cond_search_empty>
+								<s_cond_empty>
+								<div class="search_message_wrap">
+									<div class="message">
+										<div class="empty">수집된 글이 없습니다.</div>
+									</div>
+								</div>
+								</s_cond_empty>
+							</div>
+							</s_cond_message>
+
+							<s_postlist>
+								<div class="postlist_wrap">								
+									<ul class="postlist">
+									<s_post_rep>
+										<li class="[##_post_position_##] [##_post_visibility_##]">							
+											<div class="post_data [##_post_thumbnail_exist_##]">
+												<s_cond_thumbnail><div class="thumbnail"><img src="[##_post_thumbnail_##]" alt="미리보기 이미지" /></div></s_cond_thumbnail>
+												<div class="data">
+													<h3><span class="visibility">[비공개] </span><a href="[##_post_url_##]" target="[##_post_link_target_##]">[##_post_title_##]</a> <s_cond_new><img src="./images/icon_new.gif" alt="[##_post_newhours_##]시간 이내에 작성된 새 글입니다" align="top" /></s_cond_new></h3>
+													<div class="desc">
+														[##_post_description_##]
+													</div>
+
+													<div class="extra">
+														<a href="[##_post_bloglink_##]">[##_post_blogname_##]</a><span class="sep">|</span>[##_post_date_##]<span class="sep">|</span>
+													</div>
+													<div class="vote">
+														추천  <span class="[##_boom_count_class_##]" id="[##_boom_count_id_##]">[##_boom_count_##]</span> 
+													</div>
+													<div class="vote_button">
+														<a href="#" id="[##_boomup_id_##]" class="[##_boomup_class_##]" onclick="[##_boomup_onclick_##] return false;"><span>추천</span></a>
+													</div>
+													<div class="clear"></div>
+												</div>
+												<div class="clear"></div>
+
+													<s_tags>
+														<div class="tags">
+															<img src="./images/post_tag.gif" alt="태그아이콘" align="absmiddle" />&nbsp;<s_tags_rep> <a href="[##_tag_link_##]">[##_tag_name_##]</a></s_tags_rep>
+														</div>
+													</s_tags>
+											</div>
+										</li>
+									</s_post_rep>
+									</ul>
+								</div>
+							</s_postlist>
+
+							<s_feedlist>		
+								<div class="feedlist_wrap">
+									<ul class="feedlist">
+										<s_feedlist_rep>
+										<li class="[##_feed_position_##]">										
+											<div class="feed_data [##_feed_logo_exist_##]">
+
+												<s_cond_feedlogo><div class="thumbnail"><img src="[##_feeds_logo_##]" alt="블로그 로고" /></div></s_cond_feedlogo>
+
+												<div class="data">
+													<h3><a href="[##_feeds_blogurl_##]" target="_blank">[##_feeds_title_##]</a></h3>
+													<div class="extra">
+														<a href="[##_feeds_blogurl_##]" target="_blank">[##_feeds_blogurl_##]</a>
+													</div>
+
+													<div class="desc">[##_feeds_description_##]</div>
+													<div class="date">[##_feeds_created_##]</span>&nbsp;&nbsp;(최근 업데이트 : [##_feeds_lastupdate_##])</div>						
+												</div>
+												<div class="clear"></div>
+											</div>
+											<div class="feedlist_more">
+												<s_feedrecent>
+													<h4>이 블로그에 등록된 최근 글</h4><div class="more"><a href="[##_feeds_linkurl_##]"><img src="./images/bt_more.gif" alt="더보기" /></a></div>
+													<div class="clear"></div>
+													<ul class="feedrecent">
+														<s_feedrecent_rep>
+														<li>
+															<a href="[##_feeds_recent_linkurl_##]">[##_feeds_recent_title_##]</a>&nbsp;&nbsp;&nbsp;<span class="date">[##_feeds_recent_date_##]</span>
+														</li>
+														</s_feedrecent_rep>
+													</ul>
+												</s_feedrecent>
+											</div>
+										</li>	
+										</s_feedlist_rep>
+									</ul>
+								</div>
+							</s_feedlist>	
+
+							<s_paging>
+								<div id="paging">
+									<s_paging_rep>
+									<a href="[##_page_url_##]" class="num [##_page_highlight_##]">[##_page_number_##]</a>
+									</s_paging_rep>								
+									
+									<div class="prevnext">
+										<a href="[##_prev_page_##]"><img src="./images/bt_prev.gif" alt="이전" align="absmiddle" />이전<!--<img src="./images/bt_prev.gif" alt="이전" align="absmiddle" />--></a>&nbsp;|&nbsp;<a href="[##_next_page_##]">다음<img src="./images/bt_next.gif" alt="다음" align="absmiddle" /><!--<img src="./images/bt_next.gif" alt="다음" align="absmiddle" />--></a>
+									</div>
+
+									<div class="top">
+										<a href="#"><img src="./images/bt_up.gif" alt="맨위로" align="absmiddle" />맨위로</a>
+									</div>
+								</div>
+							</s_paging>
+
+						</div> <!-- main_data close -->
+						<div id="right_sidebar"> 
+							<s_focus>
+							<div class="focuspost sidebar_item">
+								<h3>
+									<div class="left"><img src="./images/title_focus.gif" alt="포커스" /></div>
+									<div class="right"><a href="[##_focuslist_url_##]"><img src="./images/bt_more.gif" alt="더보기" /></a></div>
+									<div class="clear"></div>
+								</h3>
+								<ul>
+									<s_focus_rep>
+									<li>
+										<div class="[##_focus_thumbnail_exist_##]">
+											<s_cond_focus_thumbnail><div class="thumbnail"><img src="[##_focus_thumbnail_##]" alt="미리보기 이미지" /></div></s_cond_focus_thumbnail>
+											<div class="data">
+												<div class="title"><a href="[##_focus_link_url_##]" target="_blank">[##_focus_title_##]</a></div>
+												<!--
+												<div class="description">
+													[##_focus_description_##]
+												</div>
+												-->
+												<div class="extra">
+													[##_focus_author_##]<span class="sep">|</span>[##_focus_date_##]
+												</div>											
+											</div>
+											<div class="clear"></div>
+										</div>
+									</li>
+									</s_focus_rep>			
+								</ul>
+							</div>	<!-- hotpost close -->
+							</s_focus>
+
+							<s_boom>
+							<div class="boompost sidebar_item">
+								<h3><img src="./images/title_hot.gif" alt="최신인기글" /></h3>
+								<ul>
+									<s_boom_rep>
+									<li>
+										<div class="[##_boom_thumbnail_exist_##]">
+											<s_cond_boom_thumbnail><div class="thumbnail"><img src="[##_boom_thumbnail_##]" alt="미리보기 이미지" /></div></s_cond_boom_thumbnail>
+											<div class="data">
+												<div class="title"><a href="[##_boom_link_url_##]" target="_blank">[##_boom_title_##]</a></div>
+												<!--
+												<div class="description">
+													[##_boom_description_##]
+												</div>
+												-->
+												<div class="extra">
+													[##_boom_author_##]<span class="sep">|</span>[##_boom_date_##]
+												</div>											
+											</div>
+											<div class="clear"></div>
+										</div>
+									</li>
+									</s_boom_rep>
+								</ul>
+							</div>	<!-- hotpost close -->
+							</s_boom>					
+							
+							<div class="rsslist sidebar_item">
+								<h3><img src="./images/title_rss.gif" alt="RSS 구독" /></h3>
+								<ul>
+									<li><a href="[##_rss_url_##]" target="_blank" />최신글</a> <a href="[##_rss_url_##]" target="_blank" /><img src="./images/bt_rss.gif" alt="RSS" align="top" /></a></li>
+									<li><a href="[##_focus_rss_url_##]" target="_blank" />포커스</a> <a href="[##_focus_rss_url_##]" target="_blank" /><img src="./images/bt_rss.gif" alt="RSS" align="top"  /></a></li>
+								</ul>
+							</div> <!-- rss list close -->
+							<div class="sidebar_item_shadow">&nbsp;</div>
+
+						</div> <!-- right_sidebar close -->
+						<div class="clear"></div>
+					</td> <!-- main close -->
+				</tr>
+			</table>
+		</div> <!-- main close -->
+
+		<div id="footer">
+			<s_category>
+			<div class="category">
+				<div class="title">
+					<strong>분류</strong><span class="sep">:</span>
+				</div>
+				[##_category_list_##]
+				<div class="clear"></div>
+			</div>
+			</s_category>
+			<div class="messages">
+				<div class="stats">
+					<strong>[##_title_##]</strong>에 <strong>[##_feed_count_##]</strong>개의 블로그에서 <strong>[##_feeditem_count_##]</strong>개의 글, <strong>[##_tag_count_##]</strong>개의 태그가 수집되었습니다.
+				</div>
+				<div class="powered">
+					<a href="http://bloglounge.org" target="_blank"><img src="./images/powered.gif" alt="powered bloglounge" /></a>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

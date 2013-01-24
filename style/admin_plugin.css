@@ -1,0 +1,96 @@
+.pluginlist { margin-top:10px; }
+	.pluginlist .plugin_state {}
+		.pluginlist .list_use .plugin_state div { background-image:url(../images/admin/icon_check.gif); background-position:center; background-repeat:no-repeat; }
+	.pluginlist .plugin_use { text-align:center; padding-top:2px; }
+	.pluginlist .plugin_name { padding-left:10px; }
+		.pluginlist .list_use .plugin_name { font-weight:bold; }
+	.pluginlist .datas .plugin_desc { padding-left:10px; font-size:11px; color:#999; }
+	.pluginlist .datas .plugin_maker { font-size:11px; text-align:center; }
+	.pluginlist .plugin_config { text-align:center; padding-top:2px; }
+		.pluginlist .plugin_config a { display:none; }	
+		.pluginlist .list_use .plugin_config a { display:inline-block; }
+
+.pluginlist .plugin_config_view { display:none; }
+.pluginlist .plugin_config_view .pluginDetail { border:3px solid #ccc; }
+
+
+/* plugin, export information style */
+
+body.plugin_body,
+body.export_body{ background:#ffffff; }
+
+br.margin { display:block; line-height:0; height:0; margin-bottom:10px; }
+
+.plugin_config_container,
+.export_config_container { overflow:hidden; padding-top:15px; padding-right:10px; }
+
+.plugin_config_preview_container,
+.export_config_preview_container { overflow:hidden;  }
+
+.plugin_config_description,
+.export_config_description { font-family:Dotum; padding:5px; padding-top:0;  }
+	.plugin_config_description dl,
+	.export_config_description dl { clear:both;  }
+		.plugin_config_description dl dt,
+		.export_config_description dl dt { float:left; color:#666; font-size:11px; font-weight:bold; width:90px; }
+		.plugin_config_description dl dd,
+		.export_config_description dl dd { float:left; color:#7a7a7a; font-size:11px; line-height:16px; }
+		
+		.plugin_config_description .caption,
+		.export_config_description .caption { clear:both; margin:0; margin-left:90px; padding-top:4px; color:#888; font-size:11px; line-height:16px; }
+
+	.plugin_config_description fieldset,
+	.export_config_description fieldset { border:1px solid #eee; padding:10px; padding-top:0; margin-bottom:15px; }
+		.plugin_config_description fieldset.lastChild,
+		.export_config_description fieldset.lastChild { margin-bottom:0; }
+
+	.plugin_config_description fieldset legend,
+	.export_config_description fieldset legend { font-weight:bold; margin-top:0; padding-left:5px; padding-right:5px; *margin-bottom:6px; }
+	
+	.plugin_config_description .field dl dt,
+	.export_config_description .field dl dt { padding-top:5px; }
+
+	.plugin_config_description .field .textarea,
+	.export_config_description .field .textarea { border:1px solid #ddd; padding:3px; background:#fff; width:300px; }
+	.plugin_config_description .field .text,
+	.export_config_description .field .text { border:1px solid #ddd; padding:3px; background:#fff; width:300px; }
+	.plugin_config_description .field .select,
+	.export_config_description .field .select  { border:1px solid #ddd; width:300px; }
+	.plugin_config_description .clear,
+	.export_config_description .clear { height:8px; font-size:0; }
+
+.plugin_config_empty,
+.export_config_empty { font-size:11px; color:#999; text-align:center; padding-bottom:5px; }
+
+#plugin_information_wrap fieldset,
+#export_information_wrap fieldset { border:1px solid #eee; padding:10px; padding-top:0; }
+	#plugin_information_wrap fieldset legend,
+	#export_information_wrap fieldset legend { font-weight:bold; margin-top:0;  padding-left:5px; padding-right:5px; *margin-bottom:6px; }
+	#plugin_information_wrap dl dt,
+	#export_information_wrap dl dt { float:left; color:#666; font-size:11px; font-weight:bold; width:90px; }
+	#plugin_information_wrap dl dd,
+	#export_information_wrap dl dd { float:left; color:#7a7a7a; font-size:11px; line-height:16px; width:350px; }
+
+	#plugin_information_wrap .clear,
+	#export_information_wrap .clear { height:8px; font-size:0; }
+
+#plugin_wrap,
+#export_wrap {}
+#plugin_information_wrap,
+#export_information_wrap { float:left; width:465px; padding:10px; padding-left:15px; padding-top:15px;}
+#plugin_config_wrap,
+#export_config_wrap { float:right; width:500px; overflow-y:auto; }
+
+#plugin_config_button_wrap,
+#export_config_button_wrap { text-align:center; padding-top:10px; padding-bottom:10px; border-top:1px solid #eee;  }
+
+/* export */
+
+.exportlist .datas .export_domain { text-align:center; }
+.exportlist .datas .export_title { padding-left:10px; }
+.exportlist .datas .export_count { text-align:center; }
+.exportlist .datas .export_config { text-align:center; }
+.exportlist .datas .export_delete { text-align:center; }
+
+.exportlist .export_config_view { display:none; }
+.exportlist .export_config_view .exportDetail { border:3px solid #ccc; }

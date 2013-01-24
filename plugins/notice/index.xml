@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="1.0">
+	<information>
+		<name>공지사항</name>
+		<version>1.0</version>
+		<description><![CDATA[ 공지사항을 사용할 수 있도록 설정하는 플러그인입니다. ]]></description>
+		<license><![CDATA[ 자유롭게 수정할 수 있으며, 원저자 표시하에 재배포 가능합니다.]]></license>
+		<author link="http://www.itcanus.net/" email="ncloud@daumfoundation.org">ITCanus (ncloud)</author>
+	</information>
+	<binding>
+		<admin menu="blog">
+			<text>getNoticeMenuText</text>
+			<page>getNoticePage</page>
+		</admin>
+		<listener event="Meta.skinEnd">dressNotice</listener>
+	</binding>	
+	<config>
+		<window height="auto" />
+		<fieldset legend="기본">
+			<field title="블로그선택" name="blog" type="blog">
+				<caption><![CDATA[공지사항으로 사용할 블로그를 선택해주세요.]]></caption>
+			</field>	
+			<field title="개수" name="count" type="select" value="5">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+				<option value="11">11</option>
+				<option value="12">12</option>
+				<option value="13">13</option>
+				<option value="14">14</option>
+				<option value="15">15</option>
+				<option value="16">16</option>
+				<option value="17">17</option>
+				<option value="18">18</option>
+				<option value="19">19</option>
+				<option value="20">20</option>
+				<caption><![CDATA[화면에 보여질 공지사항의 개수를 설정합니다.]]></caption>
+			</field>	
+			<field title="글수" name="title_length" type="text" value="18">
+				<caption><![CDATA[화면에 보여질 공지사항의 제목 글수를 설정합니다.]]></caption>
+			</field>
+		</fieldset>
+	</config>
+	<storage>
+		<table>
+		  <name>PluginNotice</name>
+		  <fields>
+			  <field>
+				<name>id</name>
+				<attribute>int</attribute>
+				<length>11</length>
+				<isnull>0</isnull>
+				<autoincrement>1</autoincrement>
+			  </field>    
+			  <field>
+				<name>exceptFeeditem</name>
+				<attribute>int</attribute>
+				<length>11</length>
+				<isnull>0</isnull>
+			  </field>    
+		  </fields>
+		  <key>exceptFeeditem</key>
+		</table>
+	</storage>
+</plugin>

@@ -1,0 +1,79 @@
+#,
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-10-28 05:10:55+0000\n"
+"PO-Revision-Date: 2007-10-28 05:10:55+0000\n"
+"Last-Translator: WING\n"
+"Language-Team: WING\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "%1 가입하기"
+msgstr "%1 <span style=\"color:#447BB3; padding-left:5px;\">가입하기</span>"
+
+msgid "%1 로그인"
+msgstr "%1 <span style=\"color:#F6358D; padding-left:5px;\">로그인</span>"
+
+msgid "%1 설정"
+msgstr "%1 <span style=\"color:#649109; padding-left:5px;\">설정</span>"
+
+msgid "금요일"
+msgstr "금"
+
+msgid "날개 새 버전이 출시되었습니다.\\n확인을 누르시면 다운로드 페이지로 이동합니다.\\n취소하시면 오늘은 이 메세지를 보이지 않습니다."
+msgstr "날개 새 버전 \" + recentVersion + \" (\" + recentVersionName + \") 이 출시되었습니다.\\n(현재 사용중인 버전은 \"+myVersion+\" (\" +myVersionName+\") 입니다.\\n\\n확인을 누르시면 다운로드 페이지로 이동합니다.\\n취소하시면 오늘은 이 메세지를 보이지 않습니다."
+
+msgid "날개툴을 새롭게 설치합니다"
+msgstr "날개툴을 <strong class=\"sblue\">새롭게</strong> 설치합니다"
+
+msgid "댓글 수 수집 가능 블로그 목록"
+msgstr "태터툴즈, 티스토리, 다음 블로그, 이글루스, 네이버 블로그, 워드프레스"
+
+msgid "댓글 수 수집 가능 블로그 목록2"
+msgstr "태터툴즈, 티스토리<br />다음 블로그<br />이글루스<br />네이버 블로그<br />워드프레스"
+
+msgid "목요일"
+msgstr "목"
+
+msgid "설치 다음 버튼 이미지"
+msgstr "../images/bt_next.jpg"
+
+msgid "설치 뒤로 버튼 이미지"
+msgstr "../images/bt_back.jpg"
+
+msgid "설치 로고 이미지"
+msgstr "../images//logo_setup.jpg"
+
+msgid "설치되어 있는 날개툴을 삭제합니다"
+msgstr "설치되어 있는 날개툴을 <strong class=\"sopera\">삭제</strong>합니다"
+
+msgid "수요일"
+msgstr "수"
+
+msgid "월요일"
+msgstr "월"
+
+msgid "이전 버전의 날개툴에서 업그레이드 합니다"
+msgstr "이전 버전의 날개툴에서 <strong class=\"sgreen\">업그레이드</strong> 합니다"
+
+msgid "일요일"
+msgstr "일"
+
+msgid "주의!! 예기치 않은 오류로 인해 기존 데이터가 손상될 수 있습니다."
+msgstr "<span class=\"sopera\">주의!!</span> 예기치 않은 오류로 인해 기존 데이터가 손상될 수 있습니다."
+
+msgid "토요일"
+msgstr "토"
+
+msgid "퍼미션 설정 방법을 검색 사이트를 통해 찾아보세요"
+msgstr "<a href=\"http://search.daum.net/cgi-bin/nsp/search.cgi?nil_suggest=btn&nil_ch=&oldw=tot&sw=tot&ucc=22&q=%C6%DB%B9%CC%BC%C7+%BC%B3%C1%A4%C7%CF%B4%C2+%B9%E6%B9%FD\" class=\"_blank underline\">[ Daum검색  ]</a>&nbsp;<a href=\"http://search.naver.com/search.naver?where=nexearch&query=%C6%DB%B9%CC%BC%C7+%BC%B3%C1%A4%C7%CF%B4%C2+%B9%FD&frm=t1&sm=top_hty\" class=\"_blank underline\">[ 네이버 검색 ]</a>&nbsp;<a href=\"http://search.empas.com/search/ok.html?q=%C6%DB%B9%CC%BC%C7+%BC%B3%C1%A4%C7%CF%B4%C2+%B9%E6%B9%FD&qn=&m=B&n=10&o=A&ps=&pt=7\" class=\"_blank underline\">[ 엠파스 검색 ]</a>&nbsp;에서 쉬운 설명을 찾으실 수 있습니다."
+
+msgid "피드 업데이트는 방문자가 있을 때 이루어집니다.<br />피드의 새 글을 지속적으로 자동 업데이트 해주는 \"시에스타\" 서비스를 알아보세요."
+msgstr "피드 업데이트는 방문자가 있을 때 이루어집니다.<br />피드의 새 글을 지속적으로 자동 업데이트 해주는 <a href=\"http://service.wingz.kr/siesta/\" style=\"font-weight:bold;\" onclick=\"javascript: window.open(this.href); return false;\">\"시에스타\" 서비스</a>를 알아보세요."
+
+msgid "화요일"
+msgstr "화"
+

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<export version="1.0">
+	<information>
+		<name>iframe용 익스포트</name>
+		<version>0.2</version>
+		<description><![CDATA[외부에서 호출하여 iframe에서 사용할 수 있는 심플한 익스포트입니다.]]></description>
+		<license><![CDATA[ 자유롭게 수정할 수 있으며, 원 저자 표시하에 재배포 가능합니다<br /><a href="http://creativecommons.org/licenses/by-nc-sa/2.0/kr/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/2.0/kr/80x15.png" /></a>]]></license>
+		<author link="http://www.itcanus.net/" email="ncloud@daumfoundation.org">ITCanus (ncloud)</author>
+	</information>
+	<binding>
+		<listener action="default">exportFunction_iframe</listener>
+	</binding>	
+	<config>
+		<window height="auto" />
+		<fieldset legend="기본">
+			<field title="썸네일" name="thumbnail" type="radio" value="true">
+				<option value="true">보여짐</option>
+				<option value="false">보여지지 않음</option>
+				<caption><![CDATA[썸네일을 보여줄지 지정합니다.]]></caption>
+			</field>
+			<field title="링크" name="popup" type="select" value="true">
+				<option value="true">새창 열기</option>
+				<option value="false">현재창</option>
+				<caption><![CDATA[링크를 클릭했을때의 행동을 지정합니다.]]></caption>
+			</field>
+			<field title="글 갯수" name="count" type="select" value="10">
+				<option value="5">5</option>
+				<option value="10">10</option>
+				<option value="15">15</option>
+				<option value="20">20</option>
+				<option value="25">25</option>
+				<option value="30">30</option>
+				<caption><![CDATA[등록된 글을 페이지당 몇개 보여줄지 지정합니다.]]></caption>
+			</field>	
+			<field title="보기 모드" name="focus_view" type="radio" value="all">
+				<option value="all">모든 글 보기</option>
+				<option value="focus">포커스 글 보기</option>
+				<caption><![CDATA[모든 글을 보거나 포커스 지정된 글만 보일지 지정합니다.]]></caption>
+			</field>		
+			<field title="분류 지정" name="category_view" type="radio" value="false">
+				<option value="true">사용</option>
+				<option value="false">사용 안함</option>
+				<caption><![CDATA[특정 분류만 보이도록 설정하실지 지정합니다.<br />(보기 모드가 "포커스 글 보기" 일 경우 사용하실 수 없습니다.) ]]></caption>
+			</field>		
+			<field title="분류" name="category" type="category">
+			</field>
+		</fieldset>
+	</config>
+</export>

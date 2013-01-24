@@ -1,0 +1,15 @@
+.admin_content_post_error { padding:10px; }
+	.admin_content_post_error .error { border:1px solid #fcb5b5;  background:#fff4f4; padding:8px; font-size:11px; color:#eb3939; }
+		.admin_content_post_error .error span { background:url(../images/error/icon_error.gif) no-repeat 0px 0px; padding-left:15px; }
+	.admin_content_post_error .notice { border:1px solid #eeeea2; background:#ffffe4; padding:8px; font-size:11px; }
+		.admin_content_post_error .notice span { background:url(../images/error/icon_information.gif) no-repeat 0px 0px; padding-left:15px; }
+
+	.admin_content_post_error .message { margin-top:10px; border-top:1px solid #eee; padding-top:10px; border-bottom:1px solid #eee; padding-bottom:10px; background:#ffffff; }
+		.admin_content_post_error .message h3 { font-size:12px; margin:0; padding:0; margin-bottom:6px; }
+			.admin_content_post_error .message .url { margin-top:4px; }
+			.admin_content_post_error .message a { font-size:11px; color:#aaa; text-decoration:none; }
+			.admin_content_post_error .message a:hover { color:#999; text-decoration:underline; }
+
+	.admin_content_post_error .buttons { margin-top:15px; margin-bottom:8px; }
+		.admin_content_post_error .buttons a { text-decoration:none; color:#ffffff; padding:5px; padding-left:10px; padding-right:10px; background:#333; margin-right:5px; _moz_border_round:10px; }
+		.admin_content_post_error .buttons a:hover { background:#999; }
