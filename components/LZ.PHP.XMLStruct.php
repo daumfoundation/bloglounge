@@ -355,7 +355,7 @@
 			if (empty($this->_cursor['.stream']))
 				$this->_cursor['.value'] .= $d;
 			else
-				fwrite($this->_cursor['.stream'], $d);
+				fwrite($this->_cursor['.stream'], $d);	
 		}
 		
 		function x($p, $d) {

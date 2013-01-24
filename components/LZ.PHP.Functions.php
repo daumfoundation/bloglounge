@@ -116,8 +116,8 @@
 			return $ext;
 		}
 
-		function stripHTML($text, $allowTags = array()) {
-				$text = preg_replace('/<(script|style)[^>]*>.*?<\/\1>/si', '', $text);
+		function stripHTML($text, $allowTags = '') {
+			/*	$text = preg_replace('/<(script|style)[^>]*>.*?<\/\1>/si', '', $text);
 				if(count($allowTags) == 0)
 						$text = preg_replace('/<[\w\/!]+[^>]*>/', '', $text);
 				else {
@@ -131,7 +131,11 @@
 				$text = trim(preg_replace('/\s+/', ' ', $text));
 				if(!empty($text))
 						$text = str_replace(array('&#39;', '&apos;', '&quot;'), array('\'', '\'', '"'), $text);
-				return $text;
+				return $text;*/
+
+				// 특정 서버에서 제대로 삭제되지 않아 함수 변경 2009-04-07
+
+				return strip_tags($text,$allowTags);
 		}
 
 		function escapeJSInAttribute($str) {

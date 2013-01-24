@@ -116,9 +116,13 @@
 						break;
 				}
 			}
+			
+			// 네이버등 xml_parser 에서 읽지 못하는 특수문자가 본문에 포함되어 있을때.. &#8.. 이런식으로 &#8200; 과 같이 제대로 끝마치지 못한 특수문자.. 에러..
+			$corrected = preg_replace('/&#([0-9]{1,})[^0-9^;]/','', $corrected); // 제대로 마쳐지지 않은 특수문자 제거
 
-			if (preg_match('/&#([0-9]{1,});/', $corrected))
+			if (preg_match('/&#([0-9]{1,});/', $corrected)) {
 				$corrected = mb_decode_numericentity($corrected, array(0x0, 0x10000, 0, 0xfffff), 'UTF-8');
+			}
 			return $corrected;
 		}
 

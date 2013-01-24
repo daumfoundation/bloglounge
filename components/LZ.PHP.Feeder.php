@@ -147,7 +147,6 @@
 				}
 			}
 
-
 			$xmls = new XMLStruct();
 			if (!$xmls->open($xml)) {
 				if(preg_match_all('/<link .*?rel\s*=\s*[\'"]?alternate.*?>/i', $xml, $matches)) {
