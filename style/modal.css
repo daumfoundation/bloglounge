@@ -1,0 +1,118 @@
+/* modal basic */
+
+#modalOverlay {
+	  background-color:#000;
+}
+
+.modalContainer {
+	  left:50%;
+	  top:15%;
+}
+
+.modalContainer a.modalCloseImg {
+	display:none; 
+}
+
+a.modalClose { 
+	text-decoration:none; 
+}
+
+.modal {
+	display:none;
+}
+
+.modalWrap {
+	background:#ffffff;
+	border:1px solid red;
+}
+
+.modalTitle {
+	 background-color:#555;
+	 text-align:right;
+	 padding:6px; 
+	 padding-top:4px;
+}
+
+.modalDataWrap {
+	 border:3px solid #00a89c; 
+	 margin:4px;
+	 padding:8px;
+}
+
+.modalInput {
+}
+
+.makeModal {
+	display:none;
+}
+
+.modalShadow1 {
+	background-color:#000;
+	font-size:0;
+	position: absolute;
+	width:100%;
+	line-height:1px;
+
+	opacity:.10;
+	filter: alpha(opacity=10); 
+	-moz-opacity: 0.10;
+}
+
+.modalShadow2 {
+	background-color:#000;
+	font-size:0;
+	position: absolute;
+	width:100%;
+	line-height:2px;
+
+	opacity:.05;
+	filter: alpha(opacity=5); 
+	-moz-opacity: 0.05;
+}
+
+/* adminModal */
+
+.adminModal {
+	position:absolute;
+	z-index:99;
+	border:10px solid #efefef;
+	background-color:#ffffff;
+	display:none;
+}
+
+.adminModalFrame { 
+	border:0;
+}
+
+/* modal style */
+
+.modal_title { padding:10px; background:#666; color:#ffffff; font-size:12px; font-weight:bold; }
+.modal_container { padding:10px; overflow:hidden; }
+
+.modal_preview_container { overflow:hidden;  }
+
+ul.modal_tabs { list-style:none; margin-bottom:10px; }
+	ul.modal_tabs li { float:left; padding:8px; margin-right:5px; }
+	ul.modal_tabs li.selected { background:#eee; font-weight:bold; }
+
+.modal_description { font-family:Dotum; padding:5px;  }
+	.modal_description dl { clear:both; margin-bottom:10px; }
+		.modal_description dl dt { float:left; color:#666; font-size:11px; font-weight:bold; width:90px; }
+		.modal_description dl dd { float:left; color:#7a7a7a; font-size:11px; line-height:16px; }
+		
+		.modal_description .caption { clear:both; margin-left:90px; color:#888; font-size:11px; margin-bottom:10px; line-height:16px; }
+
+	.modal_description fieldset { border:1px solid #eee; padding:10px; padding-top:0; margin-bottom:15px; }
+		.modal_description fieldset.lastChild { margin-bottom:0; }
+
+	.modal_description fieldset legend { font-weight:bold; margin-bottom:15px; margin-top:0; }
+
+	.modal_description .field .input { border:1px solid #ddd; padding:3px; background:#fff; width:300px; }
+		.modal_description .field dl dt { padding-top:5px; }
+
+	.modal_description .field .textarea { border:1px solid #ddd; padding:3px; background:#fff; width:300px; }
+
+
+.modalclose_wrap { clear:both; text-align:center; }
+
+.modal_empty { font-size:11px; color:#999; text-align:center; }

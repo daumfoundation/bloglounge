@@ -1,0 +1,81 @@
+@charset "utf-8";
+
+/* 기본 설정 */
+
+* {
+	margin: 0px;
+	padding: 0px;
+	border:0px;
+}
+
+html { width:100%; height:100%; }   
+
+body {
+	width:100%; height:100%; 
+	margin: 0px; padding: 0px; font-size:9pt; 
+}   
+
+input, select, textarea {
+	font:12px Dotum;
+	letter-spacing:-0.2pt;
+	vertical-align:middle;
+}
+
+a {
+	text-decoration:none;
+	color:#545454;
+}
+
+a:hover {
+	text-decoration:underline;
+	color:#0F8CE0;
+}
+
+img {
+	vertical-align:middle;
+}
+
+label {
+	cursor:pointer;
+}
+
+._blank { }
+
+.clear { clear:both; }
+
+.bar {
+	color:#A1B1C9; margin:0px 5px 0px 0px; 
+}
+
+.help {
+	color:gray;
+	font:11px Dotum;
+	letter-spacing:-0.5pt;
+	margin-left:10px;
+}
+
+.smallkr {
+	font:11px Dotum;
+	letter-spacing:-0.5pt;
+	line-height:180%;
+}
+
+.hand {
+	cursor:pointer;
+}
+
+.rdate {
+	font:10px Verdana; 
+	letter-spacing:-0.5pt; 
+	text-align:center;
+}
+
+.rnum {
+	font:12px Georgia; 
+	font-weight:bold; 
+	margin-right:5px;
+}
+
+.strong {
+	font-weight:bold;
+}

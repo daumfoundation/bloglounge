@@ -1,0 +1,2735 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-10-28 14:34+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../service/join/frame.php:96
+msgid "%1 가입하기"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:168
+msgid "%1 는 이미 존재하는 메뉴 ID 입니다"
+msgstr ""
+
+#: ../../../service/login/frame.php:66
+msgid "%1 로그인"
+msgstr ""
+
+#: ../../../admin/plugin/info/index.php:55
+msgid "%1 만듦"
+msgstr ""
+
+#: ../../../admin/index.php:123
+msgid "%1 방문자"
+msgstr ""
+
+#: ../../../admin/plugin/config/index.php:76
+msgid "%1 설정"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:180
+msgid "%1 은 유효하지 않은 메뉴 형식입니다"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:185
+msgid "%1 은 유효하지 않은 스킨입니다"
+msgstr ""
+
+#: ../../../admin/config/index.php:254
+msgid "%1 이 많고, 작성된 지 %2 이내인 글을 인기글로 선정합니다"
+msgstr ""
+
+#: ../../../admin/index.php:123
+msgid "%1 전체 방문자"
+msgstr ""
+
+#: ../../../admin/menu/index.php:271
+msgid "%1+'는 이미 존재하는 메뉴 ID 입니다'"
+msgstr ""
+
+#: ../../../admin/plugin/index.php:100
+msgid "%1+'을 끕니다'"
+msgstr ""
+
+#: ../../../admin/plugin/index.php:70
+msgid "%1+'을 켭니다'"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:307 ../../../mypage/feeds/index.php:303
+msgid "%1개"
+msgstr ""
+
+#: ../../../admin/index.php:122
+msgid "%1개 글"
+msgstr ""
+
+#: ../../../admin/index.php:121
+msgid "%1개 피드"
+msgstr ""
+
+#: ../../../admin/config/index.php:169 ../../../admin/config/index.php:170
+#: ../../../admin/config/index.php:171 ../../../admin/config/index.php:172
+msgid "%1개월간"
+msgstr ""
+
+#: ../../../admin/feeds/opml/import/index.php:36
+#: ../../../mypage/feeds/opml/import/index.php:36
+msgid "%1는 잘못된 형식의 파일입니다."
+msgstr ""
+
+#: ../../../setup/step3.php:32 ../../../setup/step1.php:22
+#: ../../../setup/step2.php:22
+msgid "%1단계"
+msgstr ""
+
+#: ../../../admin/config/index.php:142 ../../../admin/config/index.php:143
+#: ../../../admin/config/index.php:144
+msgid "%1분 이상"
+msgstr ""
+
+#: ../../../admin/config/index.php:243 ../../../admin/config/index.php:244
+#: ../../../admin/config/index.php:245 ../../../admin/config/index.php:246
+#: ../../../admin/config/index.php:247 ../../../admin/config/index.php:248
+msgid "%1시간"
+msgstr ""
+
+#: ../../../admin/config/index.php:145 ../../../admin/config/index.php:146
+#: ../../../admin/config/index.php:147 ../../../admin/config/index.php:148
+#: ../../../admin/config/index.php:149 ../../../admin/config/index.php:150
+#: ../../../admin/config/index.php:151
+msgid "%1시간 이상"
+msgstr ""
+
+#: ../../../service/join/frame.php:107
+msgid "%1에서 사용할 아이디를 입력하세요. 3자 이상의 영문, 숫자만 허용됩니다."
+msgstr ""
+
+#: ../../../admin/articles/index.php:127
+msgid "%1에서 수집된 글만 보기"
+msgstr ""
+
+#: ../../../service/join/frame.php:102
+msgid "%1에서 쓸 별명(닉네임)을 입력하세요"
+msgstr ""
+
+#: ../../../setup/step4.php:86
+msgid "%1의 날개"
+msgstr ""
+
+#: ../../../admin/config/index.php:264 ../../../admin/config/index.php:265
+#: ../../../admin/config/index.php:266 ../../../admin/config/index.php:267
+#: ../../../admin/config/index.php:268 ../../../admin/config/index.php:269
+msgid "%1일"
+msgstr ""
+
+#: ../../../admin/config/index.php:167 ../../../admin/config/index.php:168
+msgid "%1일간"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Core.php:343
+msgid "%H:%M"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Core.php:352
+#: ../../../components/LZ.PHP.Core.php:370
+msgid "%H:%M:%S"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Core.php:347
+msgid "%Y"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Core.php:366
+msgid "%Y/%m"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Core.php:354
+#: ../../../components/LZ.PHP.Core.php:362
+msgid "%Y/%m/%d"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Core.php:358
+msgid "%Y/%m/%d %H:%M"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Core.php:345
+msgid "%m/%d"
+msgstr ""
+
+#: ../../../admin/menu/index.php:565
+msgid "'새 메뉴'  버튼을 눌러 메뉴를 추가해주세요."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:183 ../../../mypage/feeds/index.php:183
+msgid "OPML 가져오기"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:388 ../../../mypage/feeds/index.php:380
+msgid "OPML 관리"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:205 ../../../mypage/feeds/index.php:205
+msgid "OPML 내보내기"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:184 ../../../mypage/feeds/index.php:184
+msgid ""
+"OPML 파일을 읽어들여 피드 목록에 추가합니다.<br/ >다른 프로그램에서 작성된 "
+"OPML 규격의 파일을 활용할 수 있습니다."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:393 ../../../mypage/feeds/index.php:385
+msgid ""
+"OPML 파일을 읽어서 피드 목록에 추가합니다.<br />다른 프로그램에서 작성된 파일"
+"과 호환될 수 있습니다."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:186 ../../../mypage/feeds/index.php:186
+msgid "URL 주소를 입력해서 가져오기"
+msgstr ""
+
+#: ../../../setup/step4.php:82
+msgid ""
+"config.php 를 생성할 수 없습니다. 이미 존재하는 파일이라면 삭제하셔야 새로 설"
+"치를 진행하실 수 있습니다."
+msgstr ""
+
+#: ../../../setup/step4.php:331
+msgid "config.php 를 찾을 수 없어 업그레이드를 진행할 수 없습니다."
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:180
+msgid "가나다"
+msgstr ""
+
+#: ../../../admin/members/index.php:109
+msgid "가입 대기 중입니다"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:102
+msgid "가입 승인"
+msgstr ""
+
+#: ../../../admin/members/index.php:77
+msgid "가입일"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:193 ../../../admin/feeds/index.php:392
+#: ../../../mypage/feeds/index.php:193 ../../../mypage/feeds/index.php:384
+msgid "가져오기"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:392 ../../../mypage/feeds/index.php:384
+msgid "가져오기 아이콘 이미지"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:193 ../../../mypage/feeds/index.php:193
+msgid "가져오기 이미지"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:65 ../../../admin/feeds/index.php:383
+#: ../../../admin/notice/index.php:265 ../../../mypage/feeds/edit/index.php:74
+#: ../../../mypage/feeds/index.php:375
+msgid "각 단어의 구분은 쉼표(,)로 합니다."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:349 ../../../admin/articles/index.php:146
+#: ../../../admin/members/index.php:129 ../../../admin/notice/index.php:219
+#: ../../../mypage/feeds/index.php:341
+msgid "검색 버튼 이미지"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:344 ../../../admin/articles/index.php:140
+#: ../../../admin/members/index.php:123 ../../../admin/notice/index.php:213
+#: ../../../mypage/feeds/index.php:336 ../../../mypage/articles/index.php:142
+msgid "검색어를 입력하세요"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:53
+msgid "검색엔진 수집 로봇의 방문 회수를 통계에 포함하지 않습니다."
+msgstr ""
+
+#: ../../../setup/step3.php:126
+msgid "계속하시려면 \"다음\" 버튼을 눌러주세요."
+msgstr ""
+
+#: ../../../admin/config/index.php:166
+msgid "계속해서"
+msgstr ""
+
+#: ../../../admin/notice/index.php:271
+msgid "공지 블로그 관리"
+msgstr ""
+
+#: ../../../admin/notice/index.php:257
+msgid "공지 블로그 설정"
+msgstr ""
+
+#: ../../../admin/notice/index.php:76
+msgid "공지 블로그 추가에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/notice/addFeed/index.php:15
+msgid "공지 블로그 피드 주소가 누락되었습니다"
+msgstr ""
+
+#: ../../../admin/notice/index.php:259
+msgid "공지 블로그로 설정한 블로그의 새 글을 자동으로 공지사항에 추가합니다"
+msgstr ""
+
+#: ../../../admin/notice/addFeed/index.php:23
+msgid ""
+"공지 블로그를 추가할 수 없습니다.\n"
+"이미 등록되었거나 시스템에 오류가 있습니다."
+msgstr ""
+
+#: ../../../admin/notice/index.php:69
+msgid "공지 블로그를 추가했습니다"
+msgstr ""
+
+#: ../../../admin/notice/index.php:60
+msgid "공지 블로그의 RSS 주소를 입력해주세요"
+msgstr ""
+
+#: ../../../service/piece/adminHeader.php:44
+msgid "공지글 관리"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:91
+msgid "공지글 제목을 %1자 만큼 보여줍니다"
+msgstr ""
+
+#: ../../../admin/notice/index.php:28
+msgid "공지글 추가에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:74
+msgid "공지글을 %1개 보여줍니다"
+msgstr ""
+
+#: ../../../admin/notice/index.php:46 ../../../admin/notice/index.php:154
+msgid "공지글을 삭제할 수 없습니다"
+msgstr ""
+
+#: ../../../admin/notice/index.php:42 ../../../admin/notice/index.php:147
+msgid "공지글을 삭제했습니다"
+msgstr ""
+
+#: ../../../admin/notice/add/index.php:23
+msgid ""
+"공지글을 추가할 수 없습니다.\n"
+"이미 등록되었거나 시스템에 오류가 있습니다."
+msgstr ""
+
+#: ../../../admin/notice/index.php:21
+msgid "공지글을 추가했습니다"
+msgstr ""
+
+#: ../../../admin/notice/index.php:162
+msgid "공지사항 관리"
+msgstr ""
+
+#: ../../../admin/notice/edit/index.php:27
+msgid "공지사항 수정하기"
+msgstr ""
+
+#: ../../../admin/notice/index.php:248
+msgid "공지사항 추가"
+msgstr ""
+
+#: ../../../admin/notice/index.php:250
+msgid "공지사항으로 등록할 글의 제목과 주소를 입력하세요"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:56
+msgid "공통 설정"
+msgstr ""
+
+#: ../../../admin/members/index.php:109
+msgid "관리자"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:92
+#: ../../../mypage/myinfo/index.php:66
+msgid "관리자 권한"
+msgstr ""
+
+#: ../../../setup/step3.php:108
+msgid "관리자 비밀번호"
+msgstr ""
+
+#: ../../../setup/step3.php:104
+msgid "관리자 아이디"
+msgstr ""
+
+#: ../../../setup/step3.php:112
+msgid "관리자 이름"
+msgstr ""
+
+#: ../../../setup/step3.php:116
+msgid "관리자 이메일"
+msgstr ""
+
+#: ../../../setup/step3.php:100
+msgid "관리자 정보를 입력해주세요."
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:67
+msgid "관리자 페이지에 접속할 수 있습니다."
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:65 ../../../admin/feeds/index.php:383
+#: ../../../mypage/feeds/edit/index.php:74 ../../../mypage/feeds/index.php:375
+msgid "관리자가 설정한 수집 태그 필터 설정이 우선권을 갖습니다"
+msgstr ""
+
+#: ../../../admin/members/delete/index.php:21
+#: ../../../admin/members/delete/index.php:42
+#: ../../../service/leaveout/index.php:21
+#: ../../../service/leaveout/index.php:42
+msgid "관리자는 삭제할 수 없습니다"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:79
+msgid ""
+"관리자는 이 메뉴를 통해 탈퇴할 수 없습니다. 관리자 페이지로 이동해주세요."
+msgstr ""
+
+#: ../../../setup/step3.php:43
+msgid "권한(퍼미션)을 설정하는 방법을 모르신다면?"
+msgstr ""
+
+#: ../../../setup/step3.php:126
+msgid "권한(퍼미션)을 조정하시고 \"다음\" 버튼을 눌러 다시 시도해주세요."
+msgstr ""
+
+#: ../../../mypage/feeds/delete/index.php:17
+#: ../../../mypage/feeds/edit/index.php:16
+#: ../../../mypage/feeds/edit/index.php:22
+#: ../../../mypage/articles/delete/index.php:17
+#: ../../../mypage/articles/edit/index.php:16
+#: ../../../mypage/articles/edit/index.php:22
+msgid "권한이 없습니다"
+msgstr ""
+
+#: ../../../admin/articles/index.php:82 ../../../mypage/articles/index.php:83
+#: ../../../service/piece/adminHeader.php:43
+#: ../../../service/piece/mypageHeader.php:33
+msgid "글 관리하기"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:281
+msgid "글 내용에 사용된 HTML 태그의 출력을 허용합니다"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:206
+msgid "글 목록 설정"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:259
+msgid "글 본문을  %1자 만큼 보여줍니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:636
+msgid "글 분류"
+msgstr ""
+
+#: ../../../admin/menu/index.php:680
+msgid "글 수"
+msgstr ""
+
+#: ../../../admin/notice/edit/index.php:16
+msgid "글 수정에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/articles/edit/index.php:27
+#: ../../../mypage/articles/edit/index.php:37
+msgid "글 수정하기"
+msgstr ""
+
+#: ../../../admin/articles/edit/index.php:17
+#: ../../../mypage/articles/edit/index.php:27
+msgid "글 정보 수정이 실패했습니다"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:241
+msgid "글 제목을  %1자 만큼 보여줍니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:69
+#: ../../../admin/articles/edit/index.php:39
+#: ../../../mypage/feeds/edit/index.php:78
+#: ../../../mypage/articles/edit/index.php:48
+msgid "글 제목이나 글쓴이 이름을 고정하고 싶은 경우 이 기능을 해제하세요"
+msgstr ""
+
+#: ../../../admin/articles/delete/index.php:19
+#: ../../../admin/articles/delete/index.php:33
+#: ../../../admin/notice/delete/index.php:20
+#: ../../../admin/notice/delete/index.php:34
+#: ../../../mypage/articles/delete/index.php:26
+#: ../../../mypage/articles/delete/index.php:40
+msgid "글 지우기에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:57
+#: ../../../admin/articles/edit/index.php:34
+#: ../../../mypage/feeds/edit/index.php:66
+#: ../../../mypage/articles/edit/index.php:44
+msgid "글쓴이"
+msgstr ""
+
+#: ../../../admin/articles/index.php:22 ../../../admin/articles/index.php:75
+#: ../../../mypage/articles/index.php:22 ../../../mypage/articles/index.php:75
+msgid "글을 삭제할 수 없습니다"
+msgstr ""
+
+#: ../../../admin/articles/index.php:18 ../../../admin/articles/index.php:68
+#: ../../../mypage/articles/index.php:18 ../../../mypage/articles/index.php:68
+msgid "글을 삭제했습니다"
+msgstr ""
+
+#: ../../../admin/config/index.php:180
+msgid ""
+"글이 너무 많이 쌓이게 되면 속도가 느려지거나 계정 용량을 초과하는 경우가 있"
+"을 수 있습니다."
+msgstr ""
+
+#: ../../../admin/articles/edit/index.php:33
+#: ../../../admin/notice/edit/index.php:33
+#: ../../../mypage/articles/edit/index.php:43
+msgid "글제목"
+msgstr ""
+
+#: ../../../admin/articles/edit/index.php:35
+#: ../../../admin/notice/edit/index.php:34
+#: ../../../mypage/articles/edit/index.php:45
+msgid "글주소"
+msgstr ""
+
+#: ../../../admin/stats/index.php:120
+#: ../../../components/Wing.Model.SkinElements.php:61
+msgid "금요일"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:49
+msgid "기능 설정"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:42
+#: ../../../admin/config/tagfilter/index.php:48
+#: ../../../admin/config/index.php:86
+msgid "기본 설정"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:68
+msgid "기본 언어"
+msgstr ""
+
+#: ../../../admin/config/index.php:95
+msgid "기본 정보"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:44
+#: ../../../admin/config/tagfilter/index.php:50
+#: ../../../admin/config/index.php:88
+msgid "기타 설정"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:67
+msgid "날개 관리자입니다."
+msgstr ""
+
+#: ../../../service/piece/adminFooter.php:56
+msgid ""
+"날개 새 버전이 출시되었습니다.\\n확인을 누르시면 다운로드 페이지로 이동합니"
+"다.\\n취소하시면 오늘은 이 메세지를 보이지 않습니다."
+msgstr ""
+
+#: ../../../setup/step3.php:29 ../../../setup/step1.php:19
+#: ../../../setup/step2.php:19 ../../../setup/step4.php:609
+msgid "날개 설치하기"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:72
+msgid "날개 전체에서 사용되는 언어구성을 설정합니다"
+msgstr ""
+
+#: ../../../setup/step3.php:41
+msgid "날개가 설치된 폴더의 권한(퍼미션)을 777 로 설정해주세요."
+msgstr ""
+
+#: ../../../setup/step2.php:30
+msgid "날개를 새로 설치하시는 경우 이 항목을 선택해주세요"
+msgstr ""
+
+#: ../../../admin/feeds/opml/export/index.php:20
+#: ../../../mypage/feeds/opml/export/index.php:20 ../../../setup/init.php:31
+#: ../../../setup/step3.php:18 ../../../setup/step1.php:8
+#: ../../../setup/step2.php:8 ../../../setup/step4.php:600
+msgid "날개툴"
+msgstr ""
+
+#: ../../../setup/step4.php:612 ../../../setup/step4.php:616
+msgid "날개툴 설치가 완료되었습니다"
+msgstr ""
+
+#: ../../../setup/step1.php:22
+msgid "날개툴 설치를 시작합니다"
+msgstr ""
+
+#: ../../../setup/step1.php:39
+msgid ""
+"날개툴은 일반 공중 라이센스 (GPL)로 배포되며, 모든 사람이 자유롭게 이용할 수 "
+"있습니다."
+msgstr ""
+
+#: ../../../setup/step2.php:29
+msgid "날개툴을 새롭게 설치합니다"
+msgstr ""
+
+#: ../../../admin/articles/index.php:89 ../../../admin/index.php:28
+#: ../../../admin/notice/index.php:169 ../../../mypage/articles/index.php:90
+#: ../../../mypage/index.php:20
+msgid "날짜"
+msgstr ""
+
+#: ../../../admin/feeds/opml/import/index.php:11
+#: ../../../admin/config/logo/index.php:11
+#: ../../../mypage/feeds/opml/import/index.php:11
+#: ../../../service/piece/adminHeader.php:5
+msgid "내 날개 관리"
+msgstr ""
+
+#: ../../../service/piece/adminHeader.php:28
+msgid "내 날개 관리 이미지"
+msgstr ""
+
+#: ../../../service/piece/adminHeader.php:28
+msgid "내 날개 관리하기"
+msgstr ""
+
+#: ../../../admin/stats/index.php:66
+msgid "내 날개 운영 상황"
+msgstr ""
+
+#: ../../../admin/index.php:118
+msgid "내 날개 통계"
+msgstr ""
+
+#: ../../../service/piece/adminHeader.php:31
+#: ../../../service/piece/mypageHeader.php:21
+msgid "내 날개로 돌아가기"
+msgstr ""
+
+#: ../../../service/piece/adminHeader.php:31
+#: ../../../service/piece/mypageHeader.php:21
+msgid "내 날개로 돌아가기 이미지"
+msgstr ""
+
+#: ../../../admin/config/index.php:108
+msgid "내 날개를 소개하는 문구를 입력합니다 (한글 120자 이내)"
+msgstr ""
+
+#: ../../../admin/index.php:122
+msgid "내 날개에 보관된 글 수"
+msgstr ""
+
+#: ../../../admin/config/index.php:112
+msgid "내 날개의 로고 이미지를 설정합니다"
+msgstr ""
+
+#: ../../../admin/config/index.php:104
+msgid "내 날개의 제목을 설정합니다 (한글 50자 이내)"
+msgstr ""
+
+#: ../../../service/piece/mypageHeader.php:5
+#: ../../../service/piece/mypageHeader.php:35
+msgid "내 정보 관리"
+msgstr ""
+
+#: ../../../service/piece/mypageHeader.php:18
+msgid "내 정보 관리 이미지"
+msgstr ""
+
+#: ../../../service/piece/mypageHeader.php:18
+msgid "내 정보 관리하기"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:190 ../../../mypage/feeds/index.php:190
+msgid "내 컴퓨터에서 파일을 올리기"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:207 ../../../admin/feeds/index.php:396
+#: ../../../mypage/feeds/index.php:207 ../../../mypage/feeds/index.php:388
+msgid "내보내기"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:396 ../../../mypage/feeds/index.php:388
+msgid "내보내기 아이콘 이미지"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:207 ../../../mypage/feeds/index.php:207
+msgid "내보내기 이미지"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:370 ../../../admin/articles/index.php:168
+#: ../../../admin/members/index.php:151 ../../../admin/notice/index.php:244
+#: ../../../mypage/feeds/index.php:362 ../../../setup/step3.php:127
+#: ../../../setup/step1.php:47 ../../../setup/step2.php:44
+#: ../../../setup/step4.php:620
+msgid "다음"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:370 ../../../admin/articles/index.php:168
+#: ../../../admin/members/index.php:151 ../../../admin/notice/index.php:244
+#: ../../../mypage/feeds/index.php:362
+msgid "다음 버튼 이미지"
+msgstr ""
+
+#: ../../../setup/step1.php:38
+msgid ""
+"단, GPL 또는 그에 준하는 라이센스에 의해 날개툴 내에 포함된 외부 소스에 대해"
+"서는 각 파일에 표기한 해당 저작권자에 그 권리가 있으며 해당 소스에 대해서는 "
+"원본의 라이센스를 따릅니다."
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:282
+msgid ""
+"단, script, iframe 등 보안 문제에 영향을 끼칠 수 있는 일부 태그는 제거됩니다."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:193 ../../../admin/feeds/index.php:207
+#: ../../../admin/feeds/index.php:411 ../../../admin/articles/index.php:174
+#: ../../../admin/plugin/info/index.php:60
+#: ../../../admin/plugin/config/index.php:174
+#: ../../../admin/notice/index.php:160 ../../../mypage/feeds/index.php:193
+#: ../../../mypage/feeds/index.php:207 ../../../mypage/feeds/index.php:403
+#: ../../../mypage/articles/index.php:81 ../../../service/login/frame.php:78
+#: ../../../service/join/frame.php:131
+msgid "닫기"
+msgstr ""
+
+#: ../../../admin/plugin/info/index.php:60
+#: ../../../admin/plugin/config/index.php:174
+#: ../../../service/login/frame.php:78 ../../../service/join/frame.php:131
+msgid "닫기 버튼 이미지"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:193 ../../../admin/feeds/index.php:207
+#: ../../../admin/feeds/index.php:411 ../../../admin/articles/index.php:174
+#: ../../../admin/notice/index.php:160 ../../../mypage/feeds/index.php:193
+#: ../../../mypage/feeds/index.php:207 ../../../mypage/feeds/index.php:403
+#: ../../../mypage/articles/index.php:81
+msgid "닫기 이미지"
+msgstr ""
+
+#: ../../../admin/config/index.php:188
+msgid "댓글 수 수집 가능 블로그 목록"
+msgstr ""
+
+#: ../../../admin/config/index.php:187
+msgid "댓글 수 수집 가능 블로그 목록2"
+msgstr ""
+
+#: ../../../setup/step3.php:85
+msgid "데이터베이스 비밀번호"
+msgstr ""
+
+#: ../../../setup/step3.php:81
+msgid "데이터베이스 사용자명"
+msgstr ""
+
+#: ../../../setup/step3.php:77
+msgid "데이터베이스 서버"
+msgstr ""
+
+#: ../../../setup/step4.php:338
+msgid "데이터베이스 서버에 접속할 수 없습니다. config.php 내용을 확인해주세요."
+msgstr ""
+
+#: ../../../setup/step4.php:39
+msgid "데이터베이스 서버에 접속할 수 없습니다. 입력하신 내용을 확인해주세요."
+msgstr ""
+
+#: ../../../setup/step3.php:89
+msgid "데이터베이스 이름"
+msgstr ""
+
+#: ../../../setup/step3.php:69
+msgid "데이터베이스 종류"
+msgstr ""
+
+#: ../../../service/join/frame.php:30 ../../../service/join/index.php:40
+msgid "두 비밀번호가 일치하지 않습니다"
+msgstr ""
+
+#: ../../../setup/step3.php:127 ../../../setup/step1.php:47
+#: ../../../setup/step2.php:44
+msgid "뒤로"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Functions.php:199
+msgid "뒤로 버튼 이미지"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Functions.php:199
+msgid "뒤로가기"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:224
+msgid "등록된 글을 페이지당 %1개씩 보여줍니다"
+msgstr ""
+
+#: ../../../admin/config/index.php:116
+msgid "등록된 로고 이미지를 삭제합니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:564
+msgid "등록된 메뉴가 없습니다"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:314
+msgid "등록된 피드 목록을 %1 순서로, 페이지당 %2 개씩 보여줍니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:206 ../../../mypage/feeds/index.php:206
+msgid ""
+"등록된 피드 목록을 OPML 형식의 파일로 저장합니다. 수집된 글 내용이나 설정은 "
+"포함되지 않으며, 날개의 가져오기 기능이나 이 형식을 지원하는 다른 곳에서 활용"
+"할 수 있습니다"
+msgstr ""
+
+#: ../../../admin/stats/index.php:84
+msgid "등록된 피드 수"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:118
+msgid "등록된 피드를 %1 순서로 %2 개 보여줍니다"
+msgstr ""
+
+#: ../../../admin/stats/index.php:77
+msgid "등록된 회원 수"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:249 ../../../mypage/feeds/index.php:249
+msgid "등록일자"
+msgstr ""
+
+#: ../../../admin/index.php:76
+msgid "등록자"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:78
+#: ../../../mypage/myinfo/index.php:49
+msgid "등록한 날짜"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:377 ../../../mypage/feeds/index.php:369
+msgid "등록한 사람"
+msgstr ""
+
+#: ../../../admin/members/index.php:78
+msgid "등록한 피드"
+msgstr ""
+
+#: ../../../admin/members/index.php:111
+msgid "등록한 피드가 없습니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:250 ../../../mypage/feeds/index.php:250
+msgid "등록한사람"
+msgstr ""
+
+#: ../../../service/join/frame.php:125
+msgid "등록할 피드 주소를 정확히 입력해주세요"
+msgstr ""
+
+#: ../../../admin/skin/index.php:81
+msgid "라이센스"
+msgstr ""
+
+#: ../../../admin/config/index.php:111
+msgid "로고"
+msgstr ""
+
+#: ../../../admin/config/index.php:12
+msgid "로고 이미지"
+msgstr ""
+
+#: ../../../admin/config/index.php:116
+msgid "로고 이미지 삭제"
+msgstr ""
+
+#: ../../../admin/config/index.php:15
+msgid "로고 이미지가 설정되지 않았습니다"
+msgstr ""
+
+#: ../../../admin/config/logo/index.php:45
+msgid "로고 이미지를 업로드 할 수 없었습니다"
+msgstr ""
+
+#: ../../../admin/config/logo/index.php:38
+msgid "로고는 GIF, JPG, PNG 형식의 파일만 가능합니다"
+msgstr ""
+
+#: ../../../admin/config/logo/index.php:58
+msgid "로고를 변경할 수 없었습니다"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Functions.php:200
+#: ../../../service/piece/adminHeader.php:33
+#: ../../../service/piece/mypageHeader.php:23
+msgid "로그아웃"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Functions.php:200
+msgid "로그아웃 버튼 이미지"
+msgstr ""
+
+#: ../../../service/piece/adminHeader.php:33
+#: ../../../service/piece/mypageHeader.php:23
+msgid "로그아웃 이미지"
+msgstr ""
+
+#: ../../../service/login/frame.php:35 ../../../service/login/frame.php:77
+#: ../../../service/login/index.php:54 ../../../service/login/index.php:79
+msgid "로그인"
+msgstr ""
+
+#: ../../../service/boom/index.php:13
+msgid "로그인 한 사람만 이 기능을 사용할 수 있습니다"
+msgstr ""
+
+#: ../../../admin/config/index.php:221
+msgid "로그인 한 사람만 추천, 반대 기능을 사용할 수 있습니다."
+msgstr ""
+
+#: ../../../service/login/index.php:79
+msgid "로그인버튼이미지"
+msgstr ""
+
+#: ../../../service/login/frame.php:77
+msgid "로그인버튼이미지2"
+msgstr ""
+
+#: ../../../service/login/index.php:69
+msgid "로그인이 필요합니다"
+msgstr ""
+
+#: ../../../service/login/index.php:69
+msgid "로그인이 필요합니다 이미지"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:85
+#: ../../../mypage/myinfo/index.php:56
+msgid "마지막 로그인"
+msgstr ""
+
+#: ../../../admin/index.php:120
+msgid "마지막 업데이트"
+msgstr ""
+
+#: ../../../admin/config/index.php:156
+msgid "마지막 업데이트로부터 %1 지난 피드만 새 글을 가져옵니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:10 ../../../service/piece/adminHeader.php:47
+msgid "메뉴 관리"
+msgstr ""
+
+#: ../../../admin/menu/index.php:623
+msgid "메뉴 목록에 출력되는 이름을 정해주세요"
+msgstr ""
+
+#: ../../../admin/menu/index.php:280
+msgid "메뉴 생성에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:422
+msgid "메뉴 속성 저장에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:425
+msgid "메뉴 속성을 저장하고 있습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:415
+msgid "메뉴 속성을 저장했습니다"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:217
+msgid "메뉴 속성이 비어있습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:383
+msgid "메뉴 순서 저장에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:386
+msgid "메뉴 순서를 저장하고 있습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:377
+msgid "메뉴 순서를 저장했습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:610
+msgid "메뉴 순서와 구성은 이 버튼을 클릭하여 저장할 수 있습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:266
+msgid "메뉴 이름과 메뉴 ID 를 입력해주세요"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:45
+#: ../../../components/Wing.Model.Menu.php:162
+msgid "메뉴 이름이 너무 깁니다. 한글 %1자 이내로 지정해주세요."
+msgstr ""
+
+#: ../../../admin/menu/index.php:629
+msgid "메뉴 주소로 사용되기 위한 ID를 정해주세요"
+msgstr ""
+
+#: ../../../admin/menu/index.php:600 ../../../admin/menu/index.php:627
+#: ../../../admin/menu/index.php:629
+msgid "메뉴ID"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:56
+msgid "메뉴ID 는 영문과 숫자 조합으로만 구성될 수 있습니다"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:53
+msgid "메뉴ID 는 영숫자 조합 127자 이내로 지정해야 합니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:332
+msgid "메뉴를 삭제하고 있습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:312
+msgid "메뉴를 삭제할 수 없습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:306
+msgid "메뉴를 정말로 삭제하시겠습니까?\\n삭제하면 되돌릴 수 없습니다."
+msgstr ""
+
+#: ../../../admin/menu/index.php:300
+msgid "메뉴를 추가하고 있습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:676
+msgid "메뉴마다 스킨을 다르게 지정할 수 있습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:613
+msgid "메뉴순서저장 버튼 이미지"
+msgstr ""
+
+#: ../../../admin/menu/index.php:470
+msgid "메뉴의 속성 가져오기에 실패했습니다.\\n잠시 후 다시 시도해주세요"
+msgstr ""
+
+#: ../../../admin/menu/index.php:621
+msgid "메뉴이름"
+msgstr ""
+
+#: ../../../admin/notice/index.php:291
+msgid "모든 글 수집"
+msgstr ""
+
+#: ../../../admin/notice/index.php:263
+msgid "모든 글을 공지사항으로 등록합니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:63 ../../../admin/feeds/index.php:381
+#: ../../../mypage/feeds/edit/index.php:72 ../../../mypage/feeds/index.php:373
+msgid "모든 글을 수집합니다"
+msgstr ""
+
+#: ../../../admin/index.php:63 ../../../mypage/index.php:73
+msgid "모든 피드 업데이트"
+msgstr ""
+
+#: ../../../admin/config/tagfilter/index.php:64
+msgid "모든 피드로부터 지정한 태그 또는 분류의 글만 수집합니다"
+msgstr ""
+
+#: ../../../admin/config/tagfilter/index.php:69
+msgid "모든 피드로부터 지정한 태그 또는 분류의 글을 수집하지 않습니다"
+msgstr ""
+
+#: ../../../admin/config/index.php:292
+msgid "목록에 보이지 않게 합니다"
+msgstr ""
+
+#: ../../../admin/stats/index.php:119
+#: ../../../components/Wing.Model.SkinElements.php:60
+msgid "목요일"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:182
+msgid "무작위"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:63
+msgid "문장 꾸러미 설정"
+msgstr ""
+
+#: ../../../admin/articles/index.php:126 ../../../admin/notice/index.php:200
+msgid "미리보기"
+msgstr ""
+
+#: ../../../admin/skin/index.php:62 ../../../admin/skin/index.php:104
+msgid "미리보기 이미지"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:58
+msgid "미리보기 이미지를 생성하지 않습니다."
+msgstr ""
+
+#: ../../../admin/articles/index.php:29 ../../../admin/notice/index.php:112
+#: ../../../mypage/articles/index.php:29
+msgid "미리보기 할 수 있는 내용이 없습니다"
+msgstr ""
+
+#: ../../../admin/feeds/opml/import/index.php:52
+#: ../../../admin/feeds/opml/import/index.php:79
+#: ../../../mypage/feeds/opml/import/index.php:52
+#: ../../../mypage/feeds/opml/import/index.php:79
+msgid "바른 형식의 OPML 파일이 아닙니다."
+msgstr ""
+
+#: ../../../admin/stats/index.php:208 ../../../admin/stats/index.php:222
+msgid "반대율"
+msgstr ""
+
+#: ../../../admin/config/index.php:300
+msgid "반대한 사람이 %1 이상인 글에 대해 %2"
+msgstr ""
+
+#: ../../../service/boom/index.php:56
+msgid "반대할 수 없습니다. 이미 반대한 글이거나 잘못된 요청입니다."
+msgstr ""
+
+#: ../../../admin/stats/index.php:220
+msgid "방문자 수 대비 각 글을 읽은 비율"
+msgstr ""
+
+#: ../../../admin/stats/index.php:221 ../../../admin/stats/index.php:222
+msgid "방문자 수 대비 추천 비율"
+msgstr ""
+
+#: ../../../admin/stats/index.php:59
+msgid "방문자 수 초기화 버튼 이미지"
+msgstr ""
+
+#: ../../../admin/stats/index.php:182
+msgid "방문자 활동 정보"
+msgstr ""
+
+#: ../../../admin/members/index.php:76
+msgid "별명"
+msgstr ""
+
+#: ../../../admin/notice/index.php:291
+msgid "분류지정"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:252 ../../../admin/index.php:30
+#: ../../../admin/index.php:75 ../../../mypage/feeds/index.php:252
+#: ../../../mypage/index.php:22
+msgid "블로그"
+msgstr ""
+
+#: ../../../admin/articles/index.php:91 ../../../mypage/articles/index.php:92
+msgid "블로그 (작성자)"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:47
+#: ../../../mypage/feeds/edit/index.php:56
+msgid "블로그 제목"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:71
+#: ../../../mypage/myinfo/index.php:41 ../../../service/login/frame.php:70
+#: ../../../service/login/index.php:83 ../../../service/join/frame.php:115
+#: ../../../service/join/index.php:90
+msgid "비밀번호"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:82 ../../../service/join/frame.php:117
+#: ../../../service/join/index.php:91
+msgid "비밀번호 확인"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:97
+msgid "비밀번호 확인에 실패했습니다"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:100
+msgid "비밀번호가 잘못되었습니다"
+msgstr ""
+
+#: ../../../service/join/frame.php:19 ../../../service/join/index.php:29
+msgid "비밀번호는 6자 이상으로 해 주세요"
+msgstr ""
+
+#: ../../../service/join/frame.php:119
+msgid "비밀번호는 6자 이상의 영문,숫자로 이루어져야합니다."
+msgstr ""
+
+#: ../../../service/login/frame.php:11 ../../../service/login/index.php:22
+#: ../../../service/login/index.php:27 ../../../service/join/frame.php:13
+#: ../../../service/join/index.php:23
+msgid "비밀번호를 입력해주세요"
+msgstr ""
+
+#: ../../../service/join/frame.php:15 ../../../service/join/index.php:25
+msgid "비밀번호를 확인해주세요"
+msgstr ""
+
+#: ../../../service/login/index.php:83 ../../../service/join/index.php:90
+msgid "비밀번호이미지"
+msgstr ""
+
+#: ../../../setup/step4.php:22
+msgid "빠진 내용이 있습니다."
+msgstr ""
+
+#: ../../../admin/plugin/index.php:83
+msgid "사용중인 플러그인 입니다. 클릭하시면 작동을 중단합니다."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:255 ../../../admin/articles/index.php:94
+#: ../../../admin/members/index.php:80 ../../../admin/notice/index.php:172
+#: ../../../admin/notice/index.php:279 ../../../mypage/feeds/index.php:255
+#: ../../../mypage/articles/index.php:95
+msgid "삭제"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:314 ../../../admin/articles/index.php:130
+#: ../../../admin/articles/index.php:143 ../../../admin/notice/index.php:202
+#: ../../../admin/notice/index.php:216 ../../../admin/notice/index.php:293
+#: ../../../mypage/feeds/index.php:310 ../../../mypage/articles/index.php:132
+#: ../../../mypage/articles/index.php:145
+msgid "삭제 이미지"
+msgstr ""
+
+#: ../../../admin/members/index.php:17
+msgid "삭제되었습니다"
+msgstr ""
+
+#: ../../../admin/articles/index.php:130 ../../../admin/notice/index.php:202
+#: ../../../admin/notice/index.php:293 ../../../mypage/articles/index.php:132
+msgid "삭제하기"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:251 ../../../mypage/feeds/index.php:251
+msgid "상태"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:296 ../../../mypage/feeds/index.php:292
+msgid "새 글 가져오기에 실패한 피드입니다. RSS 정보가 유효한지 확인해주세요"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:105 ../../../mypage/feeds/index.php:105
+msgid "새 글을 확인하고 있습니다"
+msgstr ""
+
+#: ../../../admin/update/index.php:37 ../../../admin/feeds/update/index.php:22
+#: ../../../admin/feeds/index.php:102 ../../../admin/notice/index.php:105
+#: ../../../mypage/update/index.php:37 ../../../mypage/feeds/index.php:102
+msgid "새 글이 없습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:590
+msgid "새 메뉴 추가"
+msgstr ""
+
+#: ../../../admin/menu/index.php:590
+msgid "새 메뉴 추가 버튼 이미지"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:43
+msgid "새 비밀번호를 입력하신 뒤 고치기를 누르면 변경됩니다."
+msgstr ""
+
+#: ../../../admin/index.php:71
+msgid "새로 등록된 피드"
+msgstr ""
+
+#: ../../../admin/index.php:87
+msgid "새로 등록된 피드가 없습니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:253 ../../../mypage/feeds/index.php:253
+msgid "새로고침"
+msgstr ""
+
+#: ../../../admin/index.php:63 ../../../mypage/index.php:73
+msgid "새로고침 이미지"
+msgstr ""
+
+#: ../../../setup/step3.php:64
+msgid "서버 접속 정보를 입력해주세요"
+msgstr ""
+
+#: ../../../admin/notice/index.php:132
+msgid "선택한 공지사항을 삭제하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:346 ../../../admin/articles/index.php:143
+#: ../../../admin/notice/index.php:216 ../../../mypage/feeds/index.php:338
+#: ../../../mypage/articles/index.php:145
+msgid "선택한 글 삭제하기"
+msgstr ""
+
+#: ../../../admin/articles/index.php:53 ../../../mypage/articles/index.php:53
+msgid "선택한 글을 삭제하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/menu/index.php:587
+msgid "선택한 메뉴 단계 변경"
+msgstr ""
+
+#: ../../../admin/menu/index.php:591
+msgid "선택한 메뉴 삭제"
+msgstr ""
+
+#: ../../../admin/menu/index.php:591
+msgid "선택한 메뉴 삭제 버튼 이미지"
+msgstr ""
+
+#: ../../../admin/menu/index.php:586
+msgid "선택한 메뉴 아래로 내림"
+msgstr ""
+
+#: ../../../admin/menu/index.php:585
+msgid "선택한 메뉴 위로 올림"
+msgstr ""
+
+#: ../../../admin/menu/index.php:586
+msgid "선택한 메뉴를 아래로 내립니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:585
+msgid "선택한 메뉴를 위로 올립니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:587
+msgid "선택한 메뉴의 단계를 바꿉니다"
+msgstr ""
+
+#: ../../../admin/skin/index.php:122
+msgid "선택한 스킨"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:118 ../../../mypage/feeds/index.php:118
+msgid "선택한 피드를 삭제하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/members/index.php:126
+msgid "선택한 회원 정보 삭제하기"
+msgstr ""
+
+#: ../../../admin/members/index.php:39
+msgid "선택한 회원정보를 삭제하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/skin/index.php:89
+msgid "선택할 수 있는 스킨"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:25 ../../../admin/config/index.php:107
+#: ../../../admin/skin/index.php:76 ../../../mypage/feeds/index.php:25
+msgid "설명"
+msgstr ""
+
+#: ../../../admin/plugin/info/index.php:47 ../../../admin/notice/index.php:277
+msgid "설정"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:32
+#: ../../../admin/config/tagfilter/index.php:38
+#: ../../../admin/config/index.php:55
+msgid "설정을 저장하고 있습니다"
+msgstr ""
+
+#: ../../../admin/plugin/config/index.php:54
+msgid "설정을 저장할 수 없었습니다"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:120
+#: ../../../admin/config/index.php:122 ../../../admin/config/index.php:308
+msgid "설정을 저장합니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:58
+#: ../../../mypage/feeds/edit/index.php:67
+msgid "설정하지 않으면 피드에 포함된 글쓴이 정보를 사용합니다."
+msgstr ""
+
+#: ../../../admin/plugin/config/index.php:87
+msgid "설정할 수 있는 항목이 없습니다"
+msgstr ""
+
+#: ../../../setup/index.php:8 ../../../setup/index.php:41
+msgid "설치를 시작합니다"
+msgstr ""
+
+#: ../../../setup/step3.php:127 ../../../setup/step1.php:47
+#: ../../../setup/step2.php:44 ../../../setup/step4.php:620
+msgid "설치 다음 버튼 이미지"
+msgstr ""
+
+#: ../../../setup/step2.php:8
+msgid "설치 두번째 단계"
+msgstr ""
+
+#: ../../../setup/step3.php:127 ../../../setup/step1.php:47
+#: ../../../setup/step2.php:44
+msgid "설치 뒤로 버튼 이미지"
+msgstr ""
+
+#: ../../../setup/step3.php:29 ../../../setup/step1.php:19
+#: ../../../setup/step2.php:19 ../../../setup/step4.php:609
+msgid "설치 로고 이미지"
+msgstr ""
+
+#: ../../../setup/step3.php:18
+msgid "설치 세번째 단계"
+msgstr ""
+
+#: ../../../setup/step3.php:32
+msgid "설치 정보를 입력합니다"
+msgstr ""
+
+#: ../../../setup/init.php:31
+msgid "설치 중 오류가 발생했습니다"
+msgstr ""
+
+#: ../../../setup/step1.php:8
+msgid "설치 첫번째 단계"
+msgstr ""
+
+#: ../../../setup/step2.php:33
+msgid "설치되어 있는 날개툴을 삭제합니다"
+msgstr ""
+
+#: ../../../setup/step4.php:600 ../../../setup/step4.php:612
+msgid "설치완료"
+msgstr ""
+
+#: ../../../setup/step3.php:38
+msgid "성공"
+msgstr ""
+
+#: ../../../setup/step1.php:37
+msgid ""
+"소스를 포함한 소프트웨어에 포함된 모든 저작물(이하 날개툴)의 저작권자는 김지"
+"한(라지엘) 입니다."
+msgstr ""
+
+#: ../../../admin/menu/index.php:644
+msgid "속성"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:311 ../../../admin/notice/index.php:292
+#: ../../../mypage/feeds/index.php:307
+msgid "수동 업데이트 이미지"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:311 ../../../mypage/feeds/index.php:307
+msgid "수동으로 업데이트 하기"
+msgstr ""
+
+#: ../../../admin/stats/index.php:118
+#: ../../../components/Wing.Model.SkinElements.php:59
+msgid "수요일"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:254 ../../../admin/articles/index.php:93
+#: ../../../admin/members/index.php:79 ../../../admin/notice/index.php:171
+#: ../../../mypage/feeds/index.php:254 ../../../mypage/articles/index.php:94
+msgid "수정"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:313 ../../../admin/articles/index.php:129
+#: ../../../admin/members/edit/index.php:109
+#: ../../../admin/members/index.php:112
+#: ../../../admin/notice/edit/index.php:36 ../../../admin/notice/index.php:201
+#: ../../../mypage/feeds/index.php:309 ../../../mypage/myinfo/index.php:92
+#: ../../../mypage/articles/edit/index.php:55
+#: ../../../mypage/articles/index.php:131
+msgid "수정 이미지"
+msgstr ""
+
+#: ../../../admin/articles/index.php:129
+#: ../../../admin/members/edit/index.php:109
+#: ../../../admin/notice/edit/index.php:36 ../../../admin/notice/index.php:201
+#: ../../../mypage/myinfo/index.php:92
+#: ../../../mypage/articles/edit/index.php:55
+#: ../../../mypage/articles/index.php:131
+msgid "수정하기"
+msgstr ""
+
+#: ../../../admin/notice/index.php:278
+msgid "수집"
+msgstr ""
+
+#: ../../../admin/config/index.php:129
+msgid "수집 설정"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:307 ../../../mypage/feeds/index.php:303
+msgid "수집된 글"
+msgstr ""
+
+#: ../../../admin/config/index.php:177
+msgid "수집된 글을 %1 보관합니다."
+msgstr ""
+
+#: ../../../admin/config/index.php:210
+msgid "수집된 글을 RSS 로 출력합니다."
+msgstr ""
+
+#: ../../../mypage/index.php:61
+msgid "수집된 글이 없습니다."
+msgstr ""
+
+#: ../../../admin/config/tagfilter/index.php:70
+msgid ""
+"수집을 차단하고자 하는 단어를 지정할 수 있으며, 각 단어의 구분은 쉼표(,)로 합"
+"니다."
+msgstr ""
+
+#: ../../../admin/config/tagfilter/index.php:65
+msgid ""
+"수집하고자 하는 단어를 지정할 수 있으며, 각 단어의 구분은 쉼표(,)로 합니다."
+msgstr ""
+
+#: ../../../admin/menu/index.php:660
+msgid "스킨"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:50 ../../../admin/skin/index.php:44
+msgid "스킨 고르기"
+msgstr ""
+
+#: ../../../setup/step1.php:41
+msgid "스킨 및 플러그인의 저작권은 해당 제작자에게 있습니다."
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:45 ../../../admin/skin/index.php:39
+#: ../../../service/piece/adminHeader.php:50
+msgid "스킨 설정"
+msgstr ""
+
+#: ../../../admin/skin/index.php:66
+msgid "스킨 이름"
+msgstr ""
+
+#: ../../../admin/menu/index.php:663 ../../../admin/menu/index.php:683
+msgid "스킨 출력 설정과 같게"
+msgstr ""
+
+#: ../../../admin/skin/index.php:32
+msgid "스킨을 변경하지 못했습니다"
+msgstr ""
+
+#: ../../../setup/step3.php:40
+msgid "실패"
+msgstr ""
+
+#: ../../../setup/step4.php:617
+msgid "아래의 \"다음\" 버튼을 눌러 관리자 모드로 이동할 수 있습니다."
+msgstr ""
+
+#: ../../../admin/config/index.php:294
+msgid "아무것도 하지 않습니다"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:50
+#: ../../../admin/members/index.php:75 ../../../mypage/myinfo/index.php:20
+#: ../../../service/login/frame.php:69 ../../../service/login/index.php:76
+#: ../../../service/join/frame.php:105 ../../../service/join/index.php:86
+msgid "아이디"
+msgstr ""
+
+#: ../../../service/login/frame.php:72 ../../../service/login/index.php:90
+msgid "아이디 저장"
+msgstr ""
+
+#: ../../../service/login/frame.php:16 ../../../service/login/index.php:36
+msgid "아이디, 비밀번호가 잘못되었거나 가입대기중입니다"
+msgstr ""
+
+#: ../../../service/join/frame.php:26 ../../../service/join/index.php:36
+msgid "아이디는 3자 이상이 되어야 합니다"
+msgstr ""
+
+#: ../../../service/login/frame.php:9 ../../../service/login/index.php:20
+#: ../../../service/login/index.php:25 ../../../service/join/frame.php:9
+#: ../../../service/join/index.php:19
+msgid "아이디를 입력해주세요"
+msgstr ""
+
+#: ../../../service/join/frame.php:24 ../../../service/join/index.php:34
+msgid "아이디에 잘못된 문자가 포함되어 있습니다"
+msgstr ""
+
+#: ../../../service/login/index.php:76 ../../../service/join/index.php:86
+msgid "아이디이미지"
+msgstr ""
+
+#: ../../../service/login/frame.php:62
+msgid "암호화 준비중 입니다"
+msgstr ""
+
+#: ../../../admin/stats/index.php:47
+msgid "어제 방문자 수"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:96 ../../../admin/notice/index.php:102
+#: ../../../mypage/feeds/index.php:96
+msgid "업데이트 완료"
+msgstr ""
+
+#: ../../../admin/update/index.php:37 ../../../mypage/update/index.php:37
+msgid "업데이트 완료 (%1개의 새 글)"
+msgstr ""
+
+#: ../../../admin/update/index.php:31 ../../../mypage/update/index.php:31
+msgid "업데이트 중"
+msgstr ""
+
+#: ../../../admin/feeds/opml/import/index.php:33
+#: ../../../mypage/feeds/opml/import/index.php:33
+msgid "업로드 할 파일을 선택하지 않았습니다."
+msgstr ""
+
+#: ../../../admin/feeds/info/index.php:17
+#: ../../../mypage/feeds/info/index.php:18
+msgid "없음"
+msgstr ""
+
+#: ../../../setup/step3.php:58
+msgid "예전 데이터를 미리 백업하신 뒤 업그레이드를 진행해주세요."
+msgstr ""
+
+#: ../../../admin/stats/index.php:42
+msgid "오늘 방문자 수"
+msgstr ""
+
+#: ../../../admin/index.php:123
+msgid "오늘의 방문자"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:195
+msgid "올바른 URL을 지정해 주세요"
+msgstr ""
+
+#: ../../../admin/skin/save/index.php:13
+msgid "올바른 스킨이 아닙니다"
+msgstr ""
+
+#: ../../../admin/config/index.php:200
+msgid "운영자가 승인해야 회원가입을 가능하게 합니다."
+msgstr ""
+
+#: ../../../admin/config/index.php:184
+msgid "원본글의 댓글 수를 함께 수집합니다."
+msgstr ""
+
+#: ../../../admin/stats/index.php:116
+#: ../../../components/Wing.Model.SkinElements.php:57
+msgid "월요일"
+msgstr ""
+
+#: ../../../service/join/index.php:105
+msgid "위의 정보가 맞습니까?"
+msgstr ""
+
+#: ../../../admin/notice/index.php:36
+msgid "이 공지사항을 삭제하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/articles/index.php:11 ../../../mypage/articles/index.php:11
+msgid "이 글을 삭제하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/articles/edit/index.php:42
+#: ../../../mypage/articles/edit/index.php:51
+msgid "이 글의 RSS 재출력과 외부 검색 노출을 허용합니다."
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:58
+msgid ""
+"이 기능을 선택하면 이전에 생성된 미리보기 이미지 모두가 삭제됩니다. 계속하시"
+"겠습니까?"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:81
+msgid "이 날개를 탈퇴합니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:488
+msgid ""
+"이 메뉴 이름을 클릭하면 연결할 주소를 입력해주세요. 상위 메뉴를 이 속성으로 "
+"지정하면 하위 메뉴를 볼 수 없습니다."
+msgstr ""
+
+#: ../../../admin/menu/index.php:215
+msgid "이 메뉴는 2차 메뉴로 만들 수 없습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:493
+msgid "이 메뉴에는 지정한 피드의 글만 보이게 됩니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:483 ../../../admin/menu/index.php:656
+msgid ""
+"이 메뉴에서 보여줄 글의 태그 또는 분류를 지정해주세요. 각각의 단어는 쉼표(,)"
+"로 구분합니다."
+msgstr ""
+
+#: ../../../admin/menu/index.php:691
+msgid "이 메뉴에서 한 페이지에 출력될 글 수를 지정합니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:696
+msgid "이 메뉴의 속성을 저장합니다"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:59
+msgid ""
+"이 설정을 선택하면 글 내용의 미리보기를 생성하지 않으며, 기존에 생성된 미리보"
+"기 파일은 제거됩니다."
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:54
+msgid ""
+"이 설정을 선택하면 사람이 아닌 기계적인 방법으로 접근한 방문은 통계에 포함하"
+"지 않습니다."
+msgstr ""
+
+#: ../../../admin/config/index.php:211
+msgid ""
+"이 설정을 선택하면 사용자가 재배포를 허용한 최근 글 10개를 다시 RSS 피드로 출"
+"력할 수 있습니다."
+msgstr ""
+
+#: ../../../admin/articles/edit/index.php:43
+#: ../../../mypage/articles/edit/index.php:52
+msgid ""
+"이 설정을 선택하면 이 날개의 RSS 출력, 외부 검색엔진 수집등의 기능에 이 글의 "
+"정보가 포함됩니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:73
+#: ../../../mypage/feeds/edit/index.php:82
+msgid ""
+"이 설정을 선택하면 이 날개의 RSS 출력, 외부 검색엔진 수집등의 기능에 이 피드"
+"에서 수집된 글의 정보가 포함됩니다"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:93
+msgid "이 설정을 선택하면 이 회원에게 관리자 권한을 부여합니다"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:103
+msgid "이 설정을 선택하면 이 회원의 가입을 승인합니다"
+msgstr ""
+
+#: ../../../admin/config/index.php:206
+msgid ""
+"이 설정을 선택하면 인증 과정을 거친 피드에서 수집된 글만 글 목록에 출력됩니"
+"다."
+msgstr ""
+
+#: ../../../admin/config/index.php:201
+msgid ""
+"이 설정을 선택하면 회원정보 관리에서 가입 신청을 허락해주어야 가입자가 피드"
+"를 등록할 수 있습니다."
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:75
+#: ../../../admin/articles/edit/index.php:46
+#: ../../../mypage/feeds/edit/index.php:84
+msgid "이 정보를 저장합니다"
+msgstr ""
+
+#: ../../../admin/plugin/info/index.php:50
+#: ../../../admin/plugin/config/index.php:79
+msgid "이 플러그인에 대해"
+msgstr ""
+
+#: ../../../admin/plugin/info/index.php:59
+msgid "이 플러그인은 %1에 설치되어 있습니다"
+msgstr ""
+
+#: ../../../admin/notice/index.php:84
+msgid "이 피드를 공지 블로그에서 삭제하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:328 ../../../mypage/feeds/index.php:324
+msgid "이 피드를 인증받습니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:22 ../../../mypage/feeds/index.php:22
+msgid "이 피드를 추가할까요?"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:72
+#: ../../../mypage/feeds/edit/index.php:81
+msgid "이 피드에서 수집된 글의 RSS 재출력과 외부 검색 노출을 허용합니다."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:77 ../../../mypage/feeds/index.php:77
+msgid "이 피드와 수집된 글을 삭제하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/members/index.php:11
+msgid "이 회원 정보를 삭제하고 탈퇴처리 하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:86
+msgid "이 회원은 로그인 하지 않았습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:596 ../../../service/join/frame.php:100
+#: ../../../service/join/index.php:82
+msgid "이름"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:57
+#: ../../../mypage/myinfo/index.php:27
+msgid "이름(별명)"
+msgstr ""
+
+#: ../../../service/join/frame.php:11 ../../../service/join/index.php:21
+msgid "이름을 입력해주세요"
+msgstr ""
+
+#: ../../../service/join/index.php:82
+msgid "이름이미지"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:64
+#: ../../../mypage/myinfo/index.php:34 ../../../service/join/frame.php:110
+#: ../../../service/join/index.php:94
+msgid "이메일"
+msgstr ""
+
+#: ../../../admin/skin/index.php:72
+msgid "이메일 보내기"
+msgstr ""
+
+#: ../../../service/join/frame.php:28 ../../../service/join/index.php:38
+msgid "이메일 주소가 잘못되었습니다"
+msgstr ""
+
+#: ../../../service/join/frame.php:112
+msgid "이메일 주소는 비밀번호 초기화등에 이용되므로 정확히 입력해야 합니다"
+msgstr ""
+
+#: ../../../service/join/frame.php:17 ../../../service/join/index.php:27
+msgid "이메일 주소를 입력해주세요"
+msgstr ""
+
+#: ../../../service/join/index.php:94
+msgid "이메일이미지"
+msgstr ""
+
+#: ../../../service/join/frame.php:37
+msgid "이미 등록된 이메일 주소 입니다"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:63
+msgid "이미 존재하는 메뉴ID 입니다"
+msgstr ""
+
+#: ../../../service/join/frame.php:35
+msgid "이미 존재하는 아이디입니다"
+msgstr ""
+
+#: ../../../admin/stats/index.php:125 ../../../admin/stats/index.php:173
+msgid "이번주"
+msgstr ""
+
+#: ../../../admin/stats/index.php:52
+msgid "이번주 방문자 수"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:363 ../../../admin/articles/index.php:161
+#: ../../../admin/members/index.php:144 ../../../admin/notice/index.php:237
+#: ../../../mypage/feeds/index.php:355
+msgid "이전"
+msgstr ""
+
+#: ../../../setup/step2.php:38
+msgid "이전 버전의 날개툴 위에 덮어 씌우신 경우 이 항목을 선택하세요"
+msgstr ""
+
+#: ../../../setup/step2.php:37
+msgid "이전 버전의 날개툴에서 업그레이드 합니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:363 ../../../admin/articles/index.php:161
+#: ../../../admin/members/index.php:144 ../../../admin/notice/index.php:237
+#: ../../../mypage/feeds/index.php:355
+msgid "이전 버튼 이미지"
+msgstr ""
+
+#: ../../../setup/init.php:40
+msgid "이전 페이지로"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:57
+msgid "이전에 로그인 한 일이 없습니다"
+msgstr ""
+
+#: ../../../setup/step3.php:55
+msgid "이전에 설치된 날개를 새 버전으로 업그레이드 합니다."
+msgstr ""
+
+#: ../../../admin/config/index.php:216
+msgid "인기글 설정"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:171
+msgid "인기글 제목을 %1자 만큼 보여줍니다"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:154
+msgid "인기글을 %1개 보여줍니다"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:181
+msgid "인기많은"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:76
+msgid "인사말 모음 "
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:93
+msgid "인사말 치환자에 사용되는 문장을 정의할 수 있습니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:292 ../../../mypage/feeds/index.php:288
+msgid "인증 대기중인 피드입니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:325 ../../../mypage/feeds/index.php:321
+msgid ""
+"인증되지 않은 피드입니다. 이 피드에서 수집된 글은 목록에 보이지 않습니다."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:328 ../../../mypage/feeds/index.php:324
+msgid "인증받기 이미지"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:408 ../../../mypage/feeds/index.php:400
+msgid ""
+"인증을 거치지 않은 피드에서 수집되는 글은 글 목록에 출력되지 않습니다. 이 피"
+"드를 인증받기 위해서는 아래의 문장이 내용에 포함된 새 글을 작성해야 합니다. "
+"인증을 위한 글이 수집되면 자동으로 피드 인증이 완료됩니다."
+msgstr ""
+
+#: ../../../admin/config/index.php:186
+msgid ""
+"일부 블로그에 한하여 수집 가능하며, 실험적인 기능이므로 문제가 발생할 가능성"
+"이 있습니다."
+msgstr ""
+
+#: ../../../admin/stats/index.php:115
+#: ../../../components/Wing.Model.SkinElements.php:56
+msgid "일요일"
+msgstr ""
+
+#: ../../../admin/config/index.php:234
+msgid "읽은 사람"
+msgstr ""
+
+#: ../../../admin/articles/index.php:92 ../../../mypage/articles/index.php:93
+msgid "읽은수"
+msgstr ""
+
+#: ../../../service/join/frame.php:130
+msgid "입력하신 정보로 가입하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/config/index.php:293
+msgid "자동으로 삭제합니다"
+msgstr ""
+
+#: ../../../admin/plugin/index.php:191
+msgid "자세히 보기"
+msgstr ""
+
+#: ../../../admin/skin/index.php:71
+msgid "작가 정보"
+msgstr ""
+
+#: ../../../admin/config/index.php:275
+msgid "작성된 지 %1 이 넘은 글은 호감도를 계산하지 않습니다"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:276
+msgid "작성된 지 %1시간 이내의 글에 새 글 표시합니다"
+msgstr ""
+
+#: ../../../admin/index.php:31 ../../../mypage/index.php:23
+msgid "작성자"
+msgstr ""
+
+#: ../../../setup/step2.php:22
+msgid "작업 유형을 선택해주세요"
+msgstr ""
+
+#: ../../../admin/articles/delete/index.php:27
+#: ../../../admin/notice/delete/index.php:28
+#: ../../../mypage/articles/delete/index.php:34
+msgid "잘못된 글 번호 입니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:10
+#: ../../../admin/articles/edit/index.php:9
+#: ../../../admin/notice/edit/index.php:10
+#: ../../../mypage/feeds/edit/index.php:11
+#: ../../../mypage/articles/edit/index.php:11
+msgid "잘못된 글 번호입니다"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:114
+#: ../../../components/Wing.Model.Menu.php:150
+#: ../../../components/Wing.Model.Menu.php:174
+msgid "잘못된 메뉴 ID 입니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:148 ../../../mypage/feeds/index.php:148
+msgid "잘못된 접근입니다"
+msgstr ""
+
+#: ../../../admin/plugin/deactivate/index.php:16
+#: ../../../admin/plugin/activate/index.php:16
+msgid "잘못된 플러그인 이름입니다"
+msgstr ""
+
+#: ../../../admin/feeds/update/index.php:15
+#: ../../../admin/feeds/delete/index.php:26
+#: ../../../admin/notice/deleteFeed/index.php:15
+#: ../../../admin/notice/updateFeed/index.php:15
+#: ../../../mypage/feeds/update/index.php:16
+#: ../../../mypage/feeds/delete/index.php:34
+msgid "잘못된 피드 번호 입니다"
+msgstr ""
+
+#: ../../../admin/members/delete/index.php:35
+#: ../../../service/leaveout/index.php:35
+msgid "잘못된 회원 번호 입니다"
+msgstr ""
+
+#: ../../../admin/update/index.php:23 ../../../mypage/update/index.php:23
+msgid "잠시만 기다려 주세요..."
+msgstr ""
+
+#: ../../../admin/plugin/config/index.php:173
+msgid "저장"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:75
+#: ../../../admin/config/misc/index.php:120
+#: ../../../admin/config/index.php:122 ../../../admin/config/index.php:308
+#: ../../../admin/articles/edit/index.php:46
+#: ../../../admin/plugin/config/index.php:173
+#: ../../../mypage/feeds/edit/index.php:84
+msgid "저장 버튼 이미지"
+msgstr ""
+
+#: ../../../admin/skin/index.php:25
+msgid "저장되었습니다"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:18
+#: ../../../admin/config/tagfilter/index.php:30
+#: ../../../admin/config/index.php:39
+msgid "저장에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:15
+#: ../../../admin/config/tagfilter/index.php:27
+#: ../../../admin/config/logo/index.php:69 ../../../admin/config/index.php:36
+#: ../../../admin/skin/config/index.php:15
+#: ../../../admin/plugin/config/index.php:50
+msgid "저장했습니다"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:338 ../../../admin/skin/index.php:122
+msgid "적용 버튼 이미지"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:249
+msgid "전부"
+msgstr ""
+
+#: ../../../admin/index.php:121
+msgid "전체 피드 갯수"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:248 ../../../admin/articles/index.php:88
+#: ../../../admin/members/index.php:74 ../../../admin/notice/index.php:168
+#: ../../../mypage/feeds/index.php:248 ../../../mypage/articles/index.php:89
+msgid "전체선택"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:248 ../../../admin/articles/index.php:88
+#: ../../../admin/members/index.php:74 ../../../admin/notice/index.php:168
+#: ../../../mypage/feeds/index.php:248 ../../../mypage/articles/index.php:89
+msgid "전체선택 이미지"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:288 ../../../mypage/feeds/index.php:284
+msgid "정상적으로 수집하고 있습니다"
+msgstr ""
+
+#: ../../../admin/config/index.php:195
+msgid "정책 설정"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:24 ../../../admin/config/index.php:103
+#: ../../../admin/articles/index.php:90 ../../../admin/index.php:29
+#: ../../../admin/notice/index.php:170 ../../../admin/notice/index.php:251
+#: ../../../admin/notice/index.php:275 ../../../mypage/feeds/index.php:24
+#: ../../../mypage/articles/index.php:91 ../../../mypage/index.php:21
+msgid "제목"
+msgstr ""
+
+#: ../../../admin/notice/add/index.php:15
+msgid "제목 또는 주소가 빠져있습니다"
+msgstr ""
+
+#: ../../../admin/notice/index.php:15
+msgid "제목과 주소를 입력해주세요"
+msgstr ""
+
+#: ../../../components/LZ.PHP.Feeder.php:172
+msgid "제목없음"
+msgstr ""
+
+#: ../../../admin/stats/index.php:187 ../../../admin/stats/index.php:220
+msgid "조회율"
+msgstr ""
+
+#: ../../../components/Wing.Model.Menu.php:119
+#: ../../../components/Wing.Model.Menu.php:155
+msgid "존재하지 않는 메뉴 ID입니다"
+msgstr ""
+
+#: ../../../service/piece/pageNotFound.php:25
+msgid "존재하지 않는 페이지 입니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:633
+msgid "종류"
+msgstr ""
+
+#: ../../../admin/stats/index.php:110
+msgid "주간 방문자"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:23 ../../../admin/notice/index.php:252
+#: ../../../admin/notice/index.php:276 ../../../mypage/feeds/index.php:23
+msgid "주소"
+msgstr ""
+
+#: ../../../admin/menu/index.php:638
+msgid "주소 연결"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:93
+msgid ""
+"주의! 관리자 권한이 부여되면 데이터 삭제를 포함한 모든 관리 기능을 사용할 수 "
+"있습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:609
+msgid "주의! 메뉴 추가와 삭제는 실행하는 즉시 반영됩니다."
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:81
+msgid "주의! 탈퇴할 경우 모든 데이터가 백업없이 삭제됩니다"
+msgstr ""
+
+#: ../../../setup/step3.php:57
+msgid "주의!! 예기치 않은 오류로 인해 기존 데이터가 손상될 수 있습니다."
+msgstr ""
+
+#: ../../../setup/step1.php:46
+msgid "준비가 되셨으면 \"다음\" 버튼을 눌러 설치 과정을 시작하세요."
+msgstr ""
+
+#: ../../../admin/stats/index.php:70
+msgid "지금까지 수집된 글"
+msgstr ""
+
+#: ../../../admin/stats/index.php:37
+msgid "지금까지 총 방문자 수"
+msgstr ""
+
+#: ../../../admin/config/tagfilter/index.php:60
+msgid ""
+"지나치게 많은 단어의 지정은 수집 효율과 동작 속도를 저하시킬 수 있습니다."
+msgstr ""
+
+#: ../../../admin/stats/index.php:149 ../../../admin/stats/index.php:174
+msgid "지난주"
+msgstr ""
+
+#: ../../../admin/config/index.php:187 ../../../admin/config/index.php:188
+msgid "지원 가능한 블로그"
+msgstr ""
+
+#: ../../../admin/notice/index.php:264
+msgid "지정한 분류 또는 태그에 해당하는 글만 공지사항으로 등록합니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:64 ../../../admin/feeds/index.php:382
+#: ../../../mypage/feeds/edit/index.php:73 ../../../mypage/feeds/index.php:374
+msgid "지정한 분류 또는 태그에 해당하는 글만 수집합니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:418 ../../../mypage/feeds/index.php:410
+msgid "진행중입니다"
+msgstr ""
+
+#: ../../../admin/articles/edit/index.php:36
+msgid "첫번째 태그는 글 분류로 취급됩니다"
+msgstr ""
+
+#: ../../../admin/stats/index.php:23
+msgid "초기화 되었습니다"
+msgstr ""
+
+#: ../../../admin/stats/resetCount/index.php:15
+msgid "초기화 실패"
+msgstr ""
+
+#: ../../../admin/stats/index.php:27
+msgid "초기화에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/stats/index.php:59
+msgid "총 방문자 수 초기화"
+msgstr ""
+
+#: ../../../admin/stats/index.php:17
+msgid "총 방문자 수를 0 으로 설정하시겠습니까?"
+msgstr ""
+
+#: ../../../admin/notice/index.php:292
+msgid "최근 글 수동으로 수집하기"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:307 ../../../admin/stats/index.php:91
+#: ../../../mypage/feeds/index.php:303
+msgid "최근 업데이트"
+msgstr ""
+
+#: ../../../admin/index.php:23 ../../../mypage/index.php:15
+msgid "최근 업데이트 된 글"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:101
+#: ../../../admin/skin/config/index.php:297
+msgid "최근에 글을 수집한"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:100
+#: ../../../admin/skin/config/index.php:296
+msgid "최근에 등록된"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:379 ../../../admin/menu/index.php:603
+#: ../../../admin/notice/index.php:253 ../../../admin/notice/index.php:261
+#: ../../../mypage/feeds/index.php:371
+msgid "추가 버튼 이미지"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:308 ../../../mypage/feeds/index.php:304
+msgid "추가정보"
+msgstr ""
+
+#: ../../../admin/menu/index.php:603
+msgid "추가하기"
+msgstr ""
+
+#: ../../../service/boom/index.php:42
+msgid "추천 할 수 없습니다. 이미 추천한 글이거나 잘못된 요청입니다."
+msgstr ""
+
+#: ../../../admin/stats/index.php:197 ../../../admin/stats/index.php:221
+msgid "추천률"
+msgstr ""
+
+#: ../../../admin/config/index.php:235
+msgid "추천한 사람"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:21
+msgid "출력 설정을 변경하지 못했습니다"
+msgstr ""
+
+#: ../../../admin/plugin/index.php:113 ../../../admin/plugin/index.php:189
+msgid "클릭하시면 플러그인을 켜실 수 있습니다"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:107
+msgid "탈퇴 과정을 진행하려면 비밀번호 확인 입력을 해주세요"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:74
+msgid "탈퇴하기"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:103
+msgid "탈퇴했습니다. 안녕히가세요."
+msgstr ""
+
+#: ../../../admin/articles/edit/index.php:36
+msgid "태그"
+msgstr ""
+
+#: ../../../admin/config/tagfilter/index.php:14
+#: ../../../admin/config/tagfilter/index.php:20
+msgid "태그 또는 분류명을 지정해주세요"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:199
+msgid "태그 상자에 태그를 %1 순서로 %2 개 보여줍니다"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:43
+#: ../../../admin/config/tagfilter/index.php:49
+#: ../../../admin/config/index.php:87
+msgid "태그 필터"
+msgstr ""
+
+#: ../../../admin/config/tagfilter/index.php:55
+msgid "태그 필터 설정"
+msgstr ""
+
+#: ../../../setup/step4.php:322
+msgid "테이블 생성에 실패했습니다."
+msgstr ""
+
+#: ../../../setup/step3.php:93
+msgid "테이블 식별자"
+msgstr ""
+
+#: ../../../setup/step4.php:34
+msgid "테이블 식별자에 사용할 수 없는 문자가 포함되어 있습니다"
+msgstr ""
+
+#: ../../../setup/step4.php:59
+msgid "테이블이 이미 존재합니다"
+msgstr ""
+
+#: ../../../admin/stats/index.php:121
+#: ../../../components/Wing.Model.SkinElements.php:62
+msgid "토요일"
+msgstr ""
+
+#: ../../../admin/stats/index.php:32 ../../../service/piece/adminHeader.php:48
+msgid "통계 보기"
+msgstr ""
+
+#: ../../../admin/feeds/opml/import/index.php:45
+#: ../../../mypage/feeds/opml/import/index.php:45
+msgid ""
+"파일 가져오기에 실패했습니다.\\n날개가 설치된 폴더와 cache 폴더에 쓰기 권한"
+"이 있는지 확인해주세요."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:418 ../../../mypage/feeds/index.php:410
+msgid "파일을 가져오고 있습니다"
+msgstr ""
+
+#: ../../../admin/feeds/opml/import/index.php:72
+#: ../../../mypage/feeds/opml/import/index.php:72
+msgid "파일을 가져올 수 없습니다.\\n정확한 주소가 맞는지 확인해 주세요."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:210 ../../../mypage/feeds/index.php:210
+msgid "파일을 생성하고 있습니다"
+msgstr ""
+
+#: ../../../admin/plugin/info/index.php:55
+msgid "판올림"
+msgstr ""
+
+#: ../../../setup/step3.php:44
+msgid "퍼미션 설정 방법을 검색 사이트를 통해 찾아보세요"
+msgstr ""
+
+#: ../../../setup/step3.php:36
+msgid "폴더 쓰기 권한을 확인합니다"
+msgstr ""
+
+#: ../../../setup/step1.php:40
+msgid ""
+"프로그램 사용에 대한 유지 및 보수 등의 의무와, 사용 중 데이터 손실 등의 사고"
+"에 대한 책임은 사용자에게 있습니다."
+msgstr ""
+
+#: ../../../admin/plugin/index.php:120
+msgid "플러그인 끄기에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/plugin/info/index.php:51
+#: ../../../admin/plugin/config/index.php:80
+#: ../../../admin/plugin/index.php:180
+#: ../../../service/piece/adminHeader.php:51
+msgid "플러그인 설정"
+msgstr ""
+
+#: ../../../admin/plugin/info/index.php:19
+#: ../../../admin/plugin/config/index.php:20
+msgid "플러그인 정보를 읽을 수 없습니다"
+msgstr ""
+
+#: ../../../admin/plugin/info/index.php:13
+#: ../../../admin/plugin/config/index.php:14
+#: ../../../admin/plugin/deactivate/index.php:26
+#: ../../../admin/plugin/activate/index.php:26
+msgid "플러그인 정보를 찾을 수 없습니다"
+msgstr ""
+
+#: ../../../admin/plugin/index.php:94
+msgid "플러그인 켜기에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/plugin/info/index.php:9
+#: ../../../admin/plugin/config/index.php:10
+#: ../../../admin/plugin/deactivate/index.php:21
+#: ../../../admin/plugin/activate/index.php:21
+msgid "플러그인이 존재하지 않습니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:242 ../../../mypage/feeds/index.php:242
+#: ../../../service/piece/adminHeader.php:46
+#: ../../../service/piece/mypageHeader.php:34
+msgid "피드 관리"
+msgstr ""
+
+#: ../../../admin/members/index.php:111
+msgid "피드 더 보기"
+msgstr ""
+
+#: ../../../admin/config/index.php:205
+msgid "피드 등록시 인증 기능을 사용합니다."
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:114
+msgid "피드 등록시 인증에 사용되는 문장을 정의할 수 있습니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:303 ../../../mypage/feeds/index.php:299
+msgid "피드 등록일시"
+msgstr ""
+
+#: ../../../admin/feeds/opml/export/index.php:20
+#: ../../../mypage/feeds/opml/export/index.php:20
+msgid "피드 목록"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:397 ../../../mypage/feeds/index.php:389
+msgid ""
+"피드 목록 전체를 OPML 파일로 저장합니다.<br />가져오기 기능을 통해 복원할 수 "
+"있으나, 글 내용은 포함되지 않습니다."
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:287
+msgid "피드 목록 화면 설정"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:314 ../../../mypage/feeds/index.php:310
+msgid "피드 삭제"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:313 ../../../mypage/feeds/index.php:309
+msgid "피드 수정"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:28
+#: ../../../mypage/feeds/edit/index.php:37
+msgid "피드 수정에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:39
+#: ../../../mypage/feeds/edit/index.php:48
+msgid "피드 수정하기"
+msgstr ""
+
+#: ../../../admin/notice/updateFeed/index.php:22
+#: ../../../mypage/feeds/update/index.php:23
+msgid "피드 업데이트 실패"
+msgstr ""
+
+#: ../../../admin/config/index.php:158
+msgid ""
+"피드 업데이트는 방문자가 있을 때 이루어집니다.<br />피드의 새 글을 지속적으"
+"로 자동 업데이트 해주는 \"시에스타\" 서비스를 알아보세요."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:406 ../../../mypage/feeds/index.php:398
+msgid "피드 인증 받기"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:97
+msgid "피드 인증문"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:328 ../../../mypage/feeds/index.php:324
+msgid "피드 인증받기"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:160 ../../../mypage/feeds/index.php:160
+msgid "피드 인증을 시작할 수 없습니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:68
+#: ../../../admin/articles/edit/index.php:38
+#: ../../../mypage/feeds/edit/index.php:77
+#: ../../../mypage/articles/edit/index.php:47
+msgid "피드 정보로부터 제목, 글쓴이 이름을 자동으로 업데이트 합니다."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:38 ../../../mypage/feeds/index.php:38
+msgid "피드 정보를 가져올 수 없습니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:42 ../../../mypage/feeds/index.php:42
+msgid "피드 정보를 확인하고 있습니다"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:332
+msgid "피드 제목을 %1 자 만큼 보여줍니다"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:136
+msgid "피드 제목을 %1자 만큼 보여줍니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:52 ../../../admin/feeds/index.php:307
+#: ../../../mypage/feeds/edit/index.php:61 ../../../mypage/feeds/index.php:303
+msgid "피드 주소"
+msgstr ""
+
+#: ../../../admin/feeds/add/index.php:16
+#: ../../../mypage/feeds/add/index.php:17
+msgid "피드 주소가 없습니다"
+msgstr ""
+
+#: ../../../admin/feeds/edit/index.php:53
+#: ../../../mypage/feeds/edit/index.php:62
+msgid "피드 주소를 수정할 경우 인증 상태가 해제됩니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:15 ../../../admin/feeds/index.php:48
+#: ../../../mypage/feeds/index.php:15 ../../../mypage/feeds/index.php:48
+msgid "피드 주소를 입력해주세요"
+msgstr ""
+
+#: ../../../admin/feeds/delete/index.php:18
+#: ../../../admin/feeds/delete/index.php:32
+#: ../../../admin/notice/deleteFeed/index.php:22
+#: ../../../mypage/feeds/delete/index.php:26
+#: ../../../mypage/feeds/delete/index.php:40
+msgid "피드 지우기에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/menu/index.php:637
+msgid "피드 지정"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:375 ../../../mypage/feeds/index.php:367
+msgid "피드 추가"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:63 ../../../mypage/feeds/index.php:63
+msgid "피드 추가에 실패했습니다"
+msgstr ""
+
+#: ../../../service/join/frame.php:123 ../../../service/join/index.php:98
+msgid "피드등록"
+msgstr ""
+
+#: ../../../service/join/index.php:98
+msgid "피드등록이미지"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:87 ../../../admin/feeds/index.php:140
+#: ../../../admin/notice/index.php:94 ../../../mypage/feeds/index.php:87
+#: ../../../mypage/feeds/index.php:140
+msgid "피드를 삭제할 수 없습니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:83 ../../../admin/feeds/index.php:133
+#: ../../../admin/notice/index.php:90 ../../../mypage/feeds/index.php:83
+#: ../../../mypage/feeds/index.php:133
+msgid "피드를 삭제했습니다"
+msgstr ""
+
+#: ../../../admin/feeds/opml/import/index.php:56
+#: ../../../admin/feeds/opml/import/index.php:83
+#: ../../../admin/feeds/index.php:72
+#: ../../../mypage/feeds/opml/import/index.php:56
+#: ../../../mypage/feeds/opml/import/index.php:83
+#: ../../../mypage/feeds/index.php:72
+msgid "피드를 추가하고 있습니다"
+msgstr ""
+
+#: ../../../admin/feeds/add/index.php:23
+#: ../../../mypage/feeds/add/index.php:24
+msgid ""
+"피드를 추가할 수 없습니다.\n"
+"이미 등록되었거나 잘못된 피드입니다."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:54 ../../../mypage/feeds/index.php:54
+msgid "피드를 추가했습니다"
+msgstr ""
+
+#: ../../../admin/feeds/index.php:378 ../../../mypage/feeds/index.php:370
+msgid "피드의 주소"
+msgstr ""
+
+#: ../../../setup/step4.php:357
+msgid ""
+"필수 테이블이 존재하지 않아 업그레이드를 진행할 수 없습니다. 새로 설치해 주세"
+"요."
+msgstr ""
+
+#: ../../../admin/feeds/index.php:27 ../../../mypage/feeds/index.php:27
+msgid "필터"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:22
+msgid "한 명 이상의 관리자는 존재해야 합니다."
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:70
+msgid "한국어"
+msgstr ""
+
+#: ../../../admin/skin/index.php:50
+msgid "현재 사용중인 스킨"
+msgstr ""
+
+#: ../../../setup/step2.php:34
+msgid "현재 설치되어 있는 날개툴을 삭제하시려면 이 항목을 선택하세요"
+msgstr ""
+
+#: ../../../admin/skin/config/index.php:51 ../../../admin/skin/index.php:45
+msgid "화면 출력 설정"
+msgstr ""
+
+#: ../../../admin/stats/index.php:117
+#: ../../../components/Wing.Model.SkinElements.php:58
+msgid "화요일"
+msgstr ""
+
+#: ../../../admin/config/misc/index.php:37
+#: ../../../admin/config/tagfilter/index.php:43
+#: ../../../admin/config/index.php:81 ../../../admin/plugin/index.php:191
+#: ../../../service/piece/adminHeader.php:49
+msgid "환경 설정"
+msgstr ""
+
+#: ../../../service/join/frame.php:130
+msgid "회원 가입"
+msgstr ""
+
+#: ../../../service/join/index.php:105
+msgid "회원 가입 버튼 이미지"
+msgstr ""
+
+#: ../../../service/join/frame.php:130
+msgid "회원 가입 버튼 이미지2"
+msgstr ""
+
+#: ../../../admin/stats/index.php:221 ../../../admin/stats/index.php:222
+msgid "회원 수 대비 추천 비율"
+msgstr ""
+
+#: ../../../service/join/frame.php:57 ../../../service/join/index.php:60
+#: ../../../service/join/index.php:75 ../../../service/join/index.php:105
+msgid "회원가입"
+msgstr ""
+
+#: ../../../service/join/frame.php:46 ../../../service/join/index.php:51
+msgid "회원가입에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/members/index.php:68
+#: ../../../service/piece/adminHeader.php:45
+msgid "회원정보 관리"
+msgstr ""
+
+#: ../../../admin/members/index.php:113
+msgid "회원정보 삭제 (탈퇴)"
+msgstr ""
+
+#: ../../../admin/members/delete/index.php:27
+#: ../../../admin/members/delete/index.php:48
+#: ../../../service/leaveout/index.php:27
+#: ../../../service/leaveout/index.php:48
+msgid "회원정보 삭제에 실패했습니다"
+msgstr ""
+
+#: ../../../admin/members/index.php:112
+msgid "회원정보 수정"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:30
+msgid "회원정보 수정 실패"
+msgstr ""
+
+#: ../../../admin/members/edit/index.php:41
+#: ../../../mypage/myinfo/index.php:13
+msgid "회원정보 수정하기"
+msgstr ""
+
+#: ../../../admin/members/index.php:24 ../../../admin/members/index.php:61
+msgid "회원정보를 삭제할 수 없습니다"
+msgstr ""
+
+#: ../../../admin/members/index.php:54
+msgid "회원정보를 삭제했습니다"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:117
+msgid "회원정보를 수정할 수 없습니다"
+msgstr ""
+
+#: ../../../mypage/myinfo/index.php:119
+msgid "회원정보를 수정했습니다"
+msgstr ""

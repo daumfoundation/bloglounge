@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>[##_title_##]</title>
+<link rel="alternate" type="application/rss+xml" title="[##_title_##]" href="[##_rss_url_##]" />
+<link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+<link rel="shortcut icon" href="[##_index_url_##]/images/favicon.ico" />
+</head>
+<body>
+	<div id="wrap">		
+		<div id="menu">
+			<div id="logo_text">
+				<a href="[##_base_url_##]">[##_title_##]</a>
+			</div>
+			<div id="login_box">
+				<div class="loginbox_left"><div class="loginbox_right">
+					<div class="loginbox_data">
+						<s_guest>
+							<a href="[##_login_url_##]" onclick="[##_login_onclick_##]"><span class="strong">로그인</span></a><span class="sep">|</span><a href="[##_join_url_##]" onclick="[##_join_onclick_##]">회원가입</a>
+						</s_guest>
+						<s_member>
+							<a href="[##_admin_url_##]"><span class="strong">관리</span></a><span class="sep">|</span><a href="[##_logout_url_##]">로그아웃</a><s_admin></s_admin>
+						</s_member>
+					</div>
+				</div></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div id="container">
+			<div id="main">	
+			
+				[##_issue_focus_##]
+
+				[##_category_focus_##]
+
+				<div class="main_wrap">
+					
+					<s_content></s_content>
+
+					<s_cond_message>
+						<div class="message_wrap">
+							<s_cond_feedlist>
+								<img src="./images/title_feedlist.gif" alt="블로그 목록" />
+							</s_cond_feedlist>
+							<s_cond_postlist>
+								<img src="./images/title_newpost.gif" alt="새로 수집된 글" /> <a href="[##_rss_url_##]" target="_blank"><img src="./images/bt_rss.gif" alt="RSS" align="absmiddle" /></a>
+							</s_cond_postlist>	
+							<s_cond_focuslist>
+								<img src="./images/title_focuslist.gif" alt="포커스 목록" />
+							</s_cond_focuslist>
+							<s_cond_search_all>
+								<span class="text">[##_search_all_##]</span><img src="./images/bg_search_text1.gif" alt="에 대한 검색결과" align="absmiddle"  /><span class="count">[##_search_count_##]</span><img src="./images/bg_search_text2.gif" alt="건" align="absmiddle"  />			
+							</s_cond_search_all>
+							<s_cond_search_tag>
+								<span class="text">[##_search_tag_##]</span><img src="./images/bg_search_text1.gif" alt="에 대한 검색결과" align="absmiddle" /><span class="count">[##_search_count_##]</span><img src="./images/bg_search_text2.gif" alt="건" align="absmiddle" />			
+							</s_cond_search_tag>
+							<s_cond_search_blogurl>
+								<div class="search_blog">
+									<s_cond_search_bloglogo><div class="thumbnail"><img src="[##_search_bloglogo_##]" alt="블로그 로고" /></div></s_cond_search_bloglogo>
+									<div class="data">
+										<h3>[##_search_blogtitle_##]</h3>
+										<div class="address">
+											<a href="[##_search_blogurl_##]" target="_blank">[##_search_blogurl_##]</a>
+										</div>
+										<div class="desc">
+											[##_search_blogdescription_##]
+										</div>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="search_blog_stat">
+									<img src="./images/bg_search_text0.gif" alt="블로그" align="absmiddle"  /><span class="text">"[##_search_blogtitle_##]"</span><img src="./images/bg_search_text1.gif" alt="에 대한 검색결과" align="absmiddle"  /><span class="count">[##_search_blogcount_##]</span><img src="./images/bg_search_text2.gif" alt="건" align="absmiddle" />
+								</div>
+							</s_cond_search_blogurl>
+							<s_cond_search_date>							
+								<span class="text">[##_search_date:Y년 m월 d일_##]</span><img src="./images/bg_search_text1.gif" alt="에 대한 검색결과" align="absmiddle"  /><span class="count">[##_search_count_##]</span><img src="./images/bg_search_text2.gif" alt="건" align="absmiddle"  />			
+							</s_cond_search_date>
+							<s_cond_search_category>
+								<span class="text">[##_search_category_##]</span><img src="./images/bg_search_text1.gif" alt="에 대한 검색결과" align="absmiddle" /><span class="count">[##_search_count_##]</span><img src="./images/bg_search_text2.gif" alt="건" align="absmiddle" />			
+							</s_cond_search_category>
+							<s_cond_search_empty>
+								<div class="empty">검색결과가 없습니다.</div>
+							</s_cond_search_empty>
+							<s_cond_empty>
+								<div class="empty">수집된 글이 없습니다.</div>
+							</s_cond_empty>
+						</div>
+					</s_cond_message>	
+					
+					<s_postlist>
+					<div class="postlist_wrap">								
+						<ul class="postlist">
+						<s_post_rep>
+							<li class="[##_post_position_##] [##_post_visibility_##]">							
+								<div class="post_data [##_post_thumbnail_exist_##]">
+									<s_cond_thumbnail><div class="thumbnail"><img src="[##_post_thumbnail_##]" alt="미리보기 이미지" /></div></s_cond_thumbnail>
+									<div class="data">
+										<h3><span class="visibility">[비공개] </span><a href="[##_post_url_##]" target="_blank">[##_post_title_##]</a> <s_cond_new><img src="./images/icon_new2.gif" alt="[##_post_newhours_##]시간 이내에 작성된 새 글입니다" align="absmiddle" /></s_cond_new></h3>
+										<div class="desc">
+											[##_post_description_##]
+										</div>
+
+										<div class="extra">
+											<a href="[##_post_bloglink_##]">[##_post_blogname_##]</a><span class="sep">|</span>[##_post_date_##]
+										</div>
+
+										<s_tags>
+											<!--
+											<div class="tag">
+												<img src="./images/post_tag.gif" alt="태그아이콘" align="absmiddle" />&nbsp;<s_tags_rep> <a href="[##_tag_link_##]">[##_tag_name_##]</a></s_tags_rep>
+											</div>
+											-->
+										</s_tags>
+									</div>
+									<div class="boom">
+										<h3 id="[##_boomup_id_##]" onclick="[##_boomup_onclick_##] return false;" class="[##_boomup_class_##] [##_boom_rank_class_##]"><span>추천</span></h3>
+									</div>
+									<div class="clear"></div>
+								</div>
+							</li>
+						</s_post_rep>
+						</ul>
+					</div>
+					</s_postlist>	
+					
+					<s_feedlist>		
+					<div class="feedlist_wrap">
+						<ul class="feedlist">
+							<s_feedlist_rep>
+							<li class="[##_feed_position_##]">										
+								<div class="feed_data [##_feed_logo_exist_##]">
+
+									<s_cond_feedlogo><div class="thumbnail"><img src="[##_feeds_logo_##]" alt="블로그 로고" /></div></s_cond_feedlogo>
+
+									<div class="data">
+										<h3><a href="[##_feeds_blogurl_##]" target="_blank">[##_feeds_title_##]</a></h3>
+										<div class="extra">
+											<a href="[##_feeds_blogurl_##]" target="_blank">[##_feeds_blogurl_##]</a>
+										</div>
+
+										<div class="desc">[##_feeds_description_##]</div>
+
+										<div class="date">[##_feeds_created_##]</span>&nbsp;&nbsp;(최근 업데이트 : [##_feeds_lastupdate_##])</div>						
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="feedlist_more">
+									<s_feedrecent>
+										<h4>이 블로그에 등록된 최근 글</h4><div class="more"><a href="[##_feeds_linkurl_##]">더보기..</a></div>
+										<div class="clear"></div>
+										<ul class="feedrecent">
+											<s_feedrecent_rep>
+											<li>
+												<a href="[##_feeds_recent_linkurl_##]">[##_feeds_recent_title_##]</a>&nbsp;&nbsp;&nbsp;<span class="date">[##_feeds_recent_date_##]</span>
+											</li>
+											</s_feedrecent_rep>
+										</ul>
+									</s_feedrecent>
+								</div>
+							</li>	
+							</s_feedlist_rep>
+						</ul>
+				</div>
+				</s_feedlist>	
+				</div>
+
+				<s_paging>
+					<div id="paging">
+						<a href="[##_prev_page_##]"><img src="./images/bt_prev.gif" alt="이전" align="absmiddle" /></a>&nbsp;
+						<s_paging_rep>
+						<a href="[##_page_url_##]" class="num [##_page_highlight_##]">[##_page_number_##]</a>
+						</s_paging_rep>
+						&nbsp;<a href="[##_next_page_##]"><img src="./images/bt_next.gif" alt="다음" align="absmiddle" /></a>
+					</div>
+				</s_paging>
+			</div> <!-- main close -->
+			
+
+			<div id="sidebar">
+				
+				<s_search>
+				<div class="search">			
+					<input type="hidden" name="type" value="all" />
+					<!-- [##_search_typeselect_##] -->
+					<input type="text" name="keyword" id="keyword" class="input" value="[##_search_keyword_##]" />
+					<input type="image" src="./images/bt_search.gif" align="absmiddle" />
+				</div>
+				</s_search>
+
+				<s_notice>
+				<div class="notices sidebar_item sidebar_nomargin_item">
+					<h3><img src="./images/title_notice.gif" alt="공지사항" /></h3>
+					<ul>					
+						<s_notice_rep>
+						<li><a href="[##_notice_url_##]" target="_blank">[##_notice_title_##]</a></li>
+						</s_notice_rep>					
+					</ul>
+				</div><!-- notice close -->
+				<div class="sidebar_shadow"></div>
+				</s_notice>
+				
+				<s_category>
+				<div class="categories sidebar_item">
+					<h3><img src="./images/title_category.gif" alt="분류" /></h3>				
+					[##_category_list_##]
+				</div>
+				</s_category>
+
+				<s_tagcloud>
+				<div class="randomtag sidebar_item">
+					<h3><img src="./images/title_randomtag.gif" alt="랜덤태그" /></h3>				
+					<ol>
+						<s_tagcloud_rep>
+							<li><a href="[##_tagcloud_url_##]" class="[##_tagcloud_class_##]">[##_tagcloud_name_##]</a></li>
+						</s_tagcloud_rep>
+					</ol>
+					
+				</div> <!-- randomtag close -->
+				</s_tagcloud>
+				
+				<s_focus>
+				<div class="focuspost sidebar_item">
+					<h3><img src="./images/title_focus.gif" alt="포커스" /></h3>
+					<ul>
+						<s_focus_rep>
+						<li><a href="[##_focus_link_url_##]" target="_blank">[##_focus_title_##]</a></li>
+						</s_focus_rep>
+						<li class="more"><a href="[##_focuslist_url_##]">포커스 전체보기</a></li>
+					</ul>
+				</div>	<!-- hotpost close -->
+				</s_focus>
+				
+				<s_boom>
+				<div class="hotpost sidebar_item">
+					<h3><img src="./images/title_hot.gif" alt="최신인기글" /></h3>
+					<ul>
+					<s_boom_rep>
+						<li><a href="[##_boom_link_url_##]" target="_blank">[##_boom_title_##]</a></li>
+					</s_boom_rep>
+					</ul>
+				</div>	<!-- hotpost close -->
+				</s_boom>
+				
+				<s_feed>
+				<div class="recentblog sidebar_item">
+					<h3><img src="./images/title_blog.gif" alt="블로그목록" /></h3>
+					<ul>
+						<s_feed_rep>
+						<li><a href="[##_feed_link_url_##]">[##_feed_title_##]</a></li>
+						</s_feed_rep>
+						<li class="more"><a href="[##_feedlist_url_##]">블로그 전체보기</a></li>						
+					</ul>
+				</div>
+				</s_feed> <!-- recentblog close -->
+
+				<div class="stats">
+					<ul>
+						<li><img src="./images/title_total_blog.gif" alt="전체블로그" align="absmiddle" /> [##_feed_count_##]</li>
+						<li><img src="./images/title_total_post.gif" alt="전체수집된글" align="absmiddle" /> [##_feeditem_count_##]</li>
+						<li><img src="./images/title_total_tag.gif" alt="전체태그" align="absmiddle" /> [##_tag_count_##]</li>
+					</ul>
+				</div> <!-- stats close -->
+
+				<div class="powered">
+					<a href="http://bloglounge.itcanus.net" target="_blank"><img src="./images/bt_powered.gif" alt="powered by Bloglounge" /></a>
+				</div>
+
+			</div>
+
+			<div class="clear"></div>
+		</div>		
+
+	</div>
+</body>
+</html>

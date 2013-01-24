@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<skin>
+	<information>
+		<name>날개 기본링크 스킨</name>
+		<version>1.1.2</version>
+		<description>
+			<![CDATA[심플하고 간단한 날개의 기본 링크스킨.]]>
+		</description>
+		<license>
+			<![CDATA[누구나 수정 및 추가하실 수 있으며, 재배포 또한 자유롭게 하셔도 됩니다.]]>
+		</license>
+	</information>
+	<author>
+		<name>ncloud</name>
+		<homepage>http://www.ncloudblog.com/</homepage>
+		<email>yuschcloud@gmail.com</email>
+	</author>
+</skin>

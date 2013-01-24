@@ -1,0 +1,15 @@
+.add_wrap { margin-top:15px; }
+.add_detail_wrap { margin-top:15px; margin-bottom:10px; }
+	.add_detail_wrap dl { height:24px; }
+	.add_detail_wrap dt { font-weight:bold; }
+
+	.add_detail_wrap .options_wrap { border-top:1px solid #ccc; margin-top:10px; padding-top:4px; }
+		.add_detail_wrap .options_wrap p { margin-bottom:10px; }
+		.add_detail_wrap .options_wrap .help { margin-top:5px; }
+		.add_detail_wrap .options_wrap .input { width:300px; }
+
+.opml_wrap { margin-top:15px; padding-top:20px; background:url(../images/admin/bg_line.gif) repeat-x top; }
+	.opml_wrap .opmlImport { display:none; padding:12px; margin-top:4px; margin-bottom:14px; margin-left:62px; width:400px; background:#f4f4f4; border:1px solid #aaa; }
+
+	.opml_wrap .opmlImport .input { width:300px; }
+	.opml_wrap .opmlImport .help { margin-top:10px; }

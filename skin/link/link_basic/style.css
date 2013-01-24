@@ -1,0 +1,51 @@
+@charset "utf-8";
+
+* {
+	margin: 0px;
+	padding: 0px;
+	border:0px;
+	font:12px Gulim, Dotum;
+}
+
+body {
+	overflow-y: hidden;
+}
+
+a { color:#666; text-decoration:none; }
+a:hover { color:#666; text-decoration:underline; }
+
+.clear { clear:both; height:0; font-size:0; }
+
+#frameWrap { width:100%; }
+#toolbar { height:35px; background:url(./images/bg.gif) repeat-x #dddddd; }
+.toolbar { padding-top:6px; }
+
+	.logo_title { float:left; margin-left:5px; font:bold 12px Gulim,Dotum; padding-left:40px; padding-top:6px; background:url(./images/logo.gif) no-repeat 5px 2px;}
+		.logo_title a { font-weight:bold; }
+	.boom		{ float:left; margin-left:30px; background:url(./images/bg_sep.gif) no-repeat left 5px; padding-left:16px; }
+		.boom .boom0 { width:43px; height:20px; background:url(./images/rank0.gif) no-repeat 0px 4px; }
+		.boom .boom1 { width:43px; height:20px; background:url(./images/rank1.gif) no-repeat 0px 3px; }
+		.boom .boom2 { width:43px; height:20px; background:url(./images/rank2.gif) no-repeat 0px 3px; }
+		.boom .boom3 { width:43px; height:20px; background:url(./images/rank3.gif) no-repeat 0px 3px; }
+		.boom .boom4 { width:43px; height:20px; background:url(./images/rank4.gif) no-repeat 0px 3px; }	
+		.boom .boom5 { width:43px; height:20px; background:url(./images/rank5.gif) no-repeat 0px 3px; }
+	
+		.boom .rankboom { float:left; } 
+		.boom .boomup { float:left; margin-left:10px; padding-top:1px; }
+		.boom .boomdown { float:left; margin-left:4px; padding-top:1px;  }
+
+		.boom .boomup img,
+		.boom .boomdown img, { cursor:pointer; }
+
+		.boom .boomup .isBoomedUp { width:58px; height:23px; background:url(./images/bt_boomup2.gif) no-repeat; }
+		.boom .boomup .isntBoomedUp { width:58px; height:23px; background:url(./images/bt_boomup.gif) no-repeat; }
+
+		.boom .boomdown .isBoomedDown { width:58px; height:23px; background:url(./images/bt_boomdown2.gif) no-repeat; }
+		.boom .boomdown .isntBoomedDown { width:58px; height:23px; background:url(./images/bt_boomdown.gif) no-repeat; }
+
+	.tools { float:right; padding-top:2px; color:#707070; letter-spacing:1px; font-size:11px; padding-top:7px; }		
+		.tools a { font-size:11px; }
+		.tools strong a { font-weight:bold; }
+		.tools .sep { color:#bfbfbf; font-size:10px; }
+
+	.close_button { float:right; margin-left:12px; padding-right:10px; padding-top:4px;  }

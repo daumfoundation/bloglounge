@@ -1,0 +1,20 @@
+.setting_wrap { margin-top:15px; }
+	.setting_wrap .setting { background:url(../images/admin/bg_line.gif) repeat-x top; padding-top:15px; margin-top:10px; margin-bottom:20px; }
+	
+	.setting_wrap .setting .logoImage { float:left; width:150px; margin-right:15px; text-align:center; overflow:hidden; }
+		.setting_wrap .setting .logoImage img { padding:3px; border:1px solid #ddd; background:#fff; }
+	.setting_wrap .setting .data	  { float:left; }
+	.setting_wrap .setting .last_item { margin-bottom:10px; background:url(../images/admin/bg_dot.gif) repeat-x bottom; padding-bottom:10px; }
+	.setting_wrap .setting .comments .text { margin:0; padding:0; }
+	.setting_wrap .setting .comments .checkbox_hint { margin-left:24px; }
+
+	.setting_wrap .setting .button_wrap { text-align:center; }
+
+	.setting_wrap .setting .borderbox { margin-top:0; margin-bottom:20px; }
+
+	.setting_wrap .setting .textarea_wrap { padding-left:24px; padding-top:5px; }
+		.setting_wrap .setting .textarea_wrap textarea { width:600px; height:80px; }
+		.setting_wrap .setting .help { margin-top:6px; }
+			.setting_wrap .setting .textarea_wrap .help { margin-top:10px; }
+
+	.setting_wrap .setting .setting_data { margin-top:10px; margin-bottom:20px; }

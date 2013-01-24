@@ -1,0 +1,11 @@
+.pluginlist { margin-top:10px; }
+	.pluginlist .plugin_state {}
+		.pluginlist .list_use .plugin_state div { background-image:url(../images/admin/icon_check.gif); background-position:center; background-repeat:no-repeat; }
+	.pluginlist .plugin_use { text-align:center; padding-top:2px; }
+	.pluginlist .plugin_name { padding-left:10px; }
+		.pluginlist .list_use .plugin_name { font-weight:bold; }
+	.pluginlist .datas .plugin_desc { padding-left:10px; font-size:11px; color:#999; }
+	.pluginlist .datas .plugin_maker { font-size:11px; text-align:center; }
+	.pluginlist .plugin_config { text-align:center; padding-top:2px; }
+		.pluginlist .plugin_config img { display:none; }	
+		.pluginlist .list_use .plugin_config img { display:inline; }

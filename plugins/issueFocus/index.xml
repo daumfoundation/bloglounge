@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="1.0">
+	<information>
+		<name>이슈포커스</name>
+		<version>0.1</version>
+		<description><![CDATA[포커스로 선택된 글과 이슈태그를 보여주는 플러그인입니다.]]></description>
+		<license><![CDATA[ 자유롭게 수정할 수 있으며, 원저자 표시하에 재배포 가능합니다<br /><a href="http://creativecommons.org/licenses/by-nc-sa/2.0/kr/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/2.0/kr/80x15.png" /></a>]]></license>
+		<author link="http://www.itcanus.net/" email="ncloud@daumfoundation.org">ITCanus (ncloud)</author>
+	</information>
+	<binding>
+		<tag name="issue_focus">getIssueFocus</tag>
+	</binding>
+	<config>
+		<window width="520" height="720" />
+		<fieldset legend="포커스">
+			<field title="사용" name="useFocus" type="checkbox" checked="true" value="사용하기">
+				<caption><![CDATA[포커스로 선택한 글을 보여주는 기능을 사용할지 선택합니다.]]></caption>
+			</field>	
+			<field title="개수" name="focusCount" type="select" value="3">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<caption><![CDATA[포커스 기능을 사용할 경우 몇개의 포커스를 보여줄지 지정합니다.]]></caption>
+			</field>
+		</fieldset>
+		<fieldset legend="이슈태그">
+			<field title="방식" name="issueType" type="select" value="auto">
+				<option value="auto">자동 알고리즘</option>
+				<option value="custom">직접 선택</option>
+				<caption><![CDATA[특정 알고리즘으로 인기 태그를 자동으로 지정하여 보여주거나,<br /> 직접 이슈태그를 지정할 수 있습니다.]]></caption>
+			</field>
+			<field title="태그" name="issueTag" type="text" value="">
+				<caption><![CDATA[직접 이슈태그를 작성하실 경우 이곳에 태그를 작성해주세요.<br /> 태그는 쉼표(,)로 구분합니다.]]></caption>
+			</field>
+			<field title="태그개수" name="issueCount" type="select" value="4">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<caption><![CDATA[화면에 보여줄 이슈태그 개수를 지정합니다.]]></caption>
+			</field>		
+			<field title="글개수" name="issueFeedCount" type="select" value="3">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+				<caption><![CDATA[이슈태그에 해당하는 최근 글 개수를 지정합니다.]]></caption>
+			</field>
+		</fieldset>		
+		<fieldset legend="글수">
+			<field title="제목" name="issueTitleLength" type="text" value="60">
+			</field>		
+			<field title="내용" name="issueDescLength" type="text" value="200">
+			</field>		
+		</fieldset>
+	</config>
+</plugin>

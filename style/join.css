@@ -1,0 +1,47 @@
+@charset "utf-8";
+
+/* 기본 설정 */
+
+body {
+	background: #f2f2f2;
+	font:12px Dotum;
+	color:#545454;
+}
+
+label { cursor:pointer; }
+
+img { border:0; }
+
+form { margin:0; padding:0; }
+
+.clear { clear:both; height:0; font-size:0; }
+
+#logo { padding-left:10px; }
+
+#container { width:545px; margin:0 auto; margin-top:150px; }
+	.line { background:none; border:none; height:0; border-bottom:1px solid #eaeaea; font-size:0; padding:0; margin:0; margin-bottom:3px; }
+
+	#join_wrap { width:340px; float:left; border-right:1px dotted #e5e5e5; margin-left:10px; }
+		#join_wrap table { margin-top:5px; }
+			#join_wrap table.join_table tr { height:28px; }
+				#join_wrap table.join_table tr.comment { height:auto; padding-bottom:5px; vertical-align:top; line-height:15px; color:#999; font-size:11px;  }
+				#join_wrap table.join_table tr.alert { color:#eb3939; }
+
+			#join_wrap table .title { width:80px; padding-right:10px; font-size:11px; color:#444; }
+			
+			#join_wrap table ol { margin:0; list-style:none; }
+		#join_wrap .input { width:202px; padding-left:4px; padding-right:4px; background:#f2f2f2; border-left:1px solid #cacaca; border-top:1px solid #cacaca; border-right:1px solid #d7d7d7; border-bottom:1px solid #d7d7d7; }
+			#join_wrap .errorInput { border:1px solid #f39292; border-right:1px solid #feb2b2; border-bottom:1px solid #feb2b2; background:#fbe2e2; }
+
+		#join_wrap .save_id { font-size:11px; margin-top:2px; color:#777; }
+			#join_wrap .save_id label { margin-left:4px; cursor:pointer; }
+
+		#join_wrap .join_message { margin-top:12px; font-size:11px; }
+			#join_wrap .join_message a { color:#7d7d7d; text-decoration:none; }
+			#join_wrap .join_message a:hover { text-decoration:underline; }
+
+		#join_wrap  .buttons { margin-right:10px; margin-top:10px; border-top:1px dotted #ddd; padding-top:10px; }
+
+	#temp_images { width:150px; height:20px; padding-top:190px; float:right; background:url(../images/admin/login_character.gif) no-repeat center; margin-right:10px; text-align:right; }
+
+.error_wrap { border:1px solid #eec5c5; background:#ffecec; padding:5px; margin-bottom:10px; margin-right:10px; font-size:11px; color:#b76b6b; }

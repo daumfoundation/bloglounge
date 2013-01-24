@@ -1,0 +1,125 @@
+.paging_wrap { margin-top:10px; }
+
+.bloglist { margin-top:10px; }
+
+	.bloglist .bloglist_date { text-align:center; color:#888; font-size:11px; }		
+	
+	.bloglist .headers .bloglist_title { font-weight:bold; }
+
+	.bloglist .bloglist_title { padding-left:6px;  padding-right:6px;  }
+		.bloglist .bloglist_title .ftool { float:left; width:64px; padding-top:4px; }
+		.bloglist .bloglist_title .ftitle { float:left; width:180px; text-align:left; overflow:hidden; padding-top:8px; font-weight:bold;}
+
+	.bloglist .bloglist_count { text-align:center; }
+	.bloglist .bloglist_update { padding-left:6px;}
+		.bloglist .bloglist_update .date { color:#888; font-size:11px; }
+	
+	.bloglist .bloglist_update .empty { font-size:11px; color:#999; }
+
+	.bloglist .bloglist_execute { text-align:center; padding-left:10px; padding-right:10px; }
+			.bloglist .bloglist_execute .tools { float:left; }
+			.bloglist .bloglist_execute .deletes { float:right; }
+
+.entrylist { margin-top:10px; }		
+
+	.entrylist .datas .list_item { height:50px; }
+
+	.entrylist .entrylist_select { text-align:center; }
+	.entrylist .entrylist_date { text-align:center; color:#888; font-size:11px; line-height:16px; }
+		.entrylist .entrylist_date .date_text { color:#999; }
+	
+	.entrylist .entrylist_category { text-align:center; }
+		.entrylist .entrylist_category .empty { color:#999; font-size:11px; }
+
+	.entrylist .entrylist_title { padding-left:5px; }	
+		.entrylist .headers .entrylist_title { font-weight:bold; }
+		.entrylist .datas .entrylist_title { font-size:11px; color:#888; }
+		
+		.entrylist .entrylist_title .focus { float:left; width:35px; padding-top:7px; }
+
+		.entrylist .entrylist_title .thumbnail { float:left; margin-right:10px; }
+				.entrylist .entrylist_title .thumbnail img { width:28px; border:1px solid #bbb; padding:1px; }
+		
+		.entrylist .entrylist_title .data	   { float:left; width:242px; overflow:hidden; }	
+
+				.entrylist .entrylist_title .data  a { color:#888; }
+				.entrylist .entrylist_title .data .title { font-weight:bold; padding-top:2px; font-size:12px; padding-bottom:4px; }
+				.entrylist .entrylist_title .data .title a { color:#555; }
+
+		.entrylist .entrylist_blog { text-align:center; }
+
+		.entrylist .entrylist_rank { text-align:center;  }
+			.entrylist .entrylist_rank .rank0 { color:#aaa; }
+			.entrylist .entrylist_rank .rank1 { color:#888; }
+			.entrylist .entrylist_rank .rank2 { color:#666; }
+			.entrylist .entrylist_rank .rank3 { color:#444; }
+			.entrylist .entrylist_rank .rank4 { color:#222; }
+			.entrylist .entrylist_rank .rank5 { color:#222; font-weight:bold; }
+
+		.entrylist .entrylist_hit { text-align:center;  }
+		.entrylist .entrylist_execute { text-align:center; padding-left:10px; padding-right:10px;  }
+			.entrylist .entrylist_execute .tools { float:left; }
+			.entrylist .entrylist_execute .trash { float:right; }
+
+	.entrylist .footers	{ }
+		.entrylist .footers .select { float:left; width:50px; text-align:center; }
+		.entrylist .footers .action { float:left; padding-top:4px; color:#707070; font-size:11px; padding-left:5px; }
+			.entrylist .footers .action .sep { color:#d0d0d0; }
+			.entrylist .footers .action a { color:#707070; text-decoration:none; }
+			.entrylist .footers .action a:hover { text-decoration:underline; }		
+			
+		
+	/* hide */
+		.entrylist .datas .list_item_hide,
+		.bloglist .datas .list_item_hide		{ background:url(../images/admin/bg_hide_list.gif) repeat-x #f8f8f8; color:#aaa; }
+			
+			.entrylist .datas .list_item_hide a,
+			.bloglist .datas .list_item_hide a { color:#aaa; }
+			
+				.entrylist .datas .list_item_hide .entrylist_title .title a,
+				.bloglist .datas .list_item_hide .entrylist_title .title a { color:#999; }
+				
+				.bloglist .datas .list_item_hide .date { color:#bbb; }
+			
+			.entrylist .datas .list_item_hide .focusImage,
+			.entrylist .datas .list_item_hide .thumbnail { opacity:.40; filter: alpha(opacity=40); -moz-opacity: 0.40; }
+
+			.entrylist .datas .list_item_hide .entrylist_rank .rank0,
+			.entrylist .datas .list_item_hide .entrylist_rank .rank1,
+			.entrylist .datas .list_item_hide .entrylist_rank .rank2,
+			.entrylist .datas .list_item_hide .entrylist_rank .rank3,
+			.entrylist .datas .list_item_hide .entrylist_rank .rank4,
+			.entrylist .datas .list_item_hide .entrylist_rank .rank5 { color:#aaa; font-weight:normal; }
+
+	/* */
+	.read_item { margin-top:14px; }
+		.read_item1 { float:left; width:495px; margin-right:10px; }
+		.read_item2 { float:left; width:495px; }
+
+		.read_item .item { padding:20px; }
+		.read_item .item h2 { margin:0; padding:0; font-size:12px; font-weight:bold; color:#555; margin-bottom:4px; }
+			.read_item .item .extra { font-size:11px; color:#777; line-height:16px; }
+				.read_item .item .extra a {  color:#999; text-decoration:none; }
+				.read_item .item .extra a:hover { text-decoration:underline; }
+
+				.read_item .item .extra .date { color:#999; }
+				.read_item .item .extra .date_text { color:#aaa; }
+				.read_item .item .extra .count { color:#999; }
+
+			.read_item .item .data  { border-top:1px solid #eee; margin-top:10px;  }
+				.read_item .item .data .thumbnail { border-bottom:1px solid #efefef; padding-top:10px; padding-bottom:10px; }
+				.read_item .item .data .thumbnail img { width:60px; height:60px; margin-right:5px; padding:1px; border:2px solid #ffffff; }
+				.read_item .item .data .thumbnail img.selected { border:2px solid #FF7200; }
+
+			.read_item .item .data .desc { color:#999; padding-top:10px; line-height:16px; margin-bottom:10px; }
+			
+			.read_item .item .data ul { list-style:none; margin:0; padding:0; margin-top:8px; }
+			.read_item .item .data ul li { margin-top:10px; font-size:11px; color:#999; background:url(../images/admin/bg_li.gif) no-repeat left center; padding-left:8px; }
+				.read_item .item .data ul li a { color:#999; text-decoration:none; }
+				.read_item .item .data ul li a:hover { text-decoration:underline; }
+
+			.read_item .item .data ul li.more { background:none; text-align:right; border-top:1px solid #f3f3f3; padding-top:6px; }
+				.read_item .item .data ul li.more a { color:#777;  }
+			
+			.read_item .recent_posts { margin-top:10px; }
+				.read_item .recent_posts h2 { font-size:11px; }

@@ -1,0 +1,42 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta content="[##_author_##]" name="Author"/>
+<meta content="[##_tags_##]" name="Keywords"/>
+<title>[##_title_##] - [##_author_##] / [##_wing_name_##] : [##_wing_version_##]</title>
+<link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+<link rel="shortcut icon" href="[##_base_url_##]/images/favicon.ico" />
+<s_rss><link href="[##_rss_url_##]" title="[##_author_##]" type="application/rss+xml" rel="alternate"/></s_rss>
+<s_atom><link href="[##_atom_url_##]" title="[##_author_##]" type="application/atom+xml" rel="alternate"/></s_atom>
+</head>
+<body>
+<script type="text/javascript" src="./js/frame.js"></script>
+<div id="toolbar">
+<div class="toolbar">
+	<div class="logo_title">
+		<a href="[##_meta_url_##]">[##_meta_title_##]</a>
+	</div>
+	<div class="boom">
+		<div class="rankboom boom[##_boom_rank_##]" alt="[##_boom_rank_##]" id="[##_boom_rank_id_##]"></div> 
+		<div class="boomup"><img src="./images/spacer.gif" id="[##_boomup_id_##]" onclick="[##_boomup_onclick_##] return false;" class="[##_boomup_class_##]" /></div>
+		<!--<div class="boomdown"><img src="./images/spacer.gif" id="[##_boomdown_id_##]" onclick="[##_boomdown_onclick_##] return false;" class="[##_boomdown_class_##]" /></div>-->
+	</div>	
+	<div class="close_button">
+		<a href="[##_permalink_##]"><img src="./images/bt_close.gif" alt="툴바닫기" /></a>
+	</div>
+	<div class="tools">
+		<s_member>
+			<strong><a href="[##_logout_url_##]" onclick="[##_logout_onclick_##]">로그아웃</a></strong>
+		</s_member>
+		<s_guest>
+			<strong><a href="[##_login_url_##]" onclick="[##_login_onclick_##]">로그인</a></strong> <span class="sep">|</span> <a href="[##_join_url_##]" onclick="[##_join_onclick_##]">회원가입</a>
+		</s_guest>
+	</div>	
+
+</div>
+</div>
+<div id="frameWrap">
+	<iframe frameborder="0" scrolling="yes" style="margin: 0px; width: 100%; height: 100%; overflow-x: hidden;" src="[##_permalink_##]" name="contentFrame" id="contentFrame"/>
+</div>
+</body>
+</html>

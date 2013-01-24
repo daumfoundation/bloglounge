@@ -1,0 +1,46 @@
+.select_skin_wrap { margin-top:15px; }
+.select_skin_data { padding:20px; }
+	.select_skin_data .thumbnail { float:left; width:200px; margin-right:10px; overflow:hidden; }
+		.select_skin_data .thumbnail img { border:1px solid #e8e8e8; padding:3px; background:#ffffff; }
+
+	.select_skin_data .data { float:left; width:740px; padding-top:4px; }
+		.select_skin_data .title { color:#afafaf; font-weight:bold; margin-bottom:4px; }
+
+	.select_skin_data .data .desc { height:76px; line-height:20px; overflow:hidden; }
+
+	.select_skin_data .data .tools { margin-top:10px; }
+	
+	.select_skin_data .empty { text-align:center; font-size:11px; color:#999; }
+
+.list_title_wrap { margin-top:30px; }
+	.list_title_wrap .innerline { margin-top:10px; }
+
+.list_skin_wrap { margin-top:20px; }
+	.list_skin_wrap ul { list-style:none; margin:0; padding:0; }
+	.list_skin_wrap ul li { float:left; width:200px; overflow:hidden; text-align:center; margin-bottom:25px; }
+		.list_skin_wrap ul li .thumbnail .thumbnail_box { width:142px; height:143px; background:url(../images/admin/bg_thumbnail.gif) no-repeat; }
+		.list_skin_wrap ul li .thumbnail img { width:140px; margin-left:1px; margin-top:1px; }
+			.list_skin_wrap ul li.selected .thumbnail img { }
+
+		.list_skin_wrap ul li .data { margin-top:10px; }
+		.list_skin_wrap ul li .data .title { color:#555; line-height:16px; }
+			.list_skin_wrap ul li .data .title .name { color:#999; }
+			.list_skin_wrap ul li .data .title .version { font:11px Tahoma; color:#777; }
+		.list_skin_wrap ul li .data .tools { margin-top:10px; }
+
+	.list_skin_wrap .innerline { margin-bottom:15px; }
+
+.skin_setting_wrap { margin-top:20px; }
+	.skin_setting_wrap .now_skin { float:left; margin-right:25px; width:300px; }
+		.skin_setting_wrap .now_skin .data { text-align:center; }
+			.skin_setting_wrap .now_skin .data .thumbnail { margin-bottom:10px; }
+				.skin_setting_wrap .now_skin .data .thumbnail img { padding:5px; border:1px solid #ddd; width:100px; }
+			.skin_setting_wrap .now_skin .data .desc { font-size:11px; color:#888; }
+			.skin_setting_wrap .now_skin .data .desc .name { color:#aaa; margin-left:4px; }
+			.skin_setting_wrap .now_skin .data .desc .version { font:11px Tahoma; color:#999; }
+
+	.skin_setting_wrap .skin_setting { float:left; width:675px; }
+
+	.skin_setting_wrap .skin_setting .last_item { margin-bottom:10px; background:url(../images/admin/bg_dot.gif) repeat-x bottom; padding-bottom:10px; }
+
+.skin_setting_tools { margin-top:20px; text-align:center; }

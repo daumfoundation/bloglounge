@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<skin>
+	<information>
+		<name>Basic</name>
+		<version>1.0</version>
+		<description>
+			<![CDATA[ Bloglounge 기본 스킨입니다. ]]>
+		</description>
+		<license>
+			<![CDATA[자유롭게 수정이 가능하며, 저작권 표시하에 재배포 가능합니다.]]>
+		</license>
+	</information>
+	<author>
+		<name>ITcanus (ncloud)</name>
+		<homepage>http://www.ITcanus.net/</homepage>
+		<email>ncloud@daumfoundation.org</email>
+	</author>
+</skin>

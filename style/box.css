@@ -1,0 +1,36 @@
+.box	  { background:#ffffff; width:100%; height:100%; }
+.box_lt   { background:url(../images/admin/bg_box_lt.gif) no-repeat left top; width:100%; height:100%; }
+.box_rt   { background:url(../images/admin/bg_box_rt.gif) no-repeat right top; width:100%; height:100%; }
+.box_lb   { background:url(../images/admin/bg_box_lb.gif) no-repeat left bottom; width:100%; height:100%; }
+.box_rb   { background:url(../images/admin/bg_box_rb.gif) no-repeat right bottom; width:100%; height:100%; }
+.box_l    { background:url(../images/admin/bg_box_l.gif) repeat-y left top; width:100%; height:100%; }
+.box_r    { background:url(../images/admin/bg_box_r.gif) repeat-y right top; width:100%; height:100%; }
+.box_t    { background:url(../images/admin/bg_box_t.gif) repeat-x left top; width:100%; height:100%; }
+.box_b    { background:url(../images/admin/bg_box_b.gif) repeat-x left bottom; width:100%; height:100%; }
+.box_data { padding:10px; }
+
+.box2    { background:url(../images/admin/bg_box2_c.gif) repeat-x left top; width:100%; height:30px; }
+.box2_l    { background:url(../images/admin/bg_box2_l.gif) no-repeat left top; width:100%; height:100%; }
+.box2_r    { background:url(../images/admin/bg_box2_r.gif) no-repeat right top; width:100%; height:100%; }
+
+.box3	  { background:#eeeeee; width:100%; height:100%; }
+.box3_lt   { background:url(../images/admin/bg_box3_lt.gif) no-repeat left top; width:100%; height:100%; }
+.box3_rt   { background:url(../images/admin/bg_box3_rt.gif) no-repeat right top; width:100%; height:100%; }
+.box3_lb   { background:url(../images/admin/bg_box3_lb.gif) no-repeat left bottom; width:100%; height:100%; }
+.box3_rb   { background:url(../images/admin/bg_box3_rb.gif) no-repeat right bottom; width:100%; height:100%; }
+.box3_l    { background:url(../images/admin/bg_box3_l.gif) repeat-y left top; width:100%; height:100%; }
+.box3_r    { background:url(../images/admin/bg_box3_r.gif) repeat-y right top; width:100%; height:100%; }
+.box3_t    { background:url(../images/admin/bg_box3_t.gif) repeat-x left top; width:100%; height:100%; }
+.box3_b    { background:url(../images/admin/bg_box3_b.gif) repeat-x left bottom; width:100%; height:100%; }
+.box3_data { padding:10px; }
+
+.table_box	  { background:#ffffff; width:100%; height:100%; }
+.table_box_lt   { background:url(../images/admin/bg_table_box_lt.gif) no-repeat left top; width:100%; height:100%; }
+.table_box_rt   { background:url(../images/admin/bg_table_box_rt.gif) no-repeat right top; width:100%; height:100%; }
+.table_box_lb   { background:url(../images/admin/bg_table_box_lb.gif) no-repeat left bottom; width:100%; height:100%; }
+.table_box_rb   { background:url(../images/admin/bg_table_box_rb.gif) no-repeat right bottom; width:100%; height:100%; }
+.table_box_l    { background:url(../images/admin/bg_table_box_l.gif) repeat-y left top; width:100%; height:100%; }
+.table_box_r    { background:url(../images/admin/bg_table_box_r.gif) repeat-y right top; width:100%; height:100%; }
+.table_box_t    { background:url(../images/admin/bg_table_box_t.gif) repeat-x left top; width:100%; height:100%; }
+.table_box_b    { background:url(../images/admin/bg_table_box_b.gif) repeat-x left bottom; width:100%; height:100%; }
+.table_box_data { padding-left:1px; padding-right:1px; }
