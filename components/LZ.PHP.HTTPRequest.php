@@ -1,5 +1,4 @@
 <?php
-
 	class HTTPRequest {
 		var $method = 'GET', $contentType = 'application/x-www-form-urlencoded', $content = '', $timeout = 10, $responseCookies = array(), $followPath = false, $pathToSave, $url, $eTag, $lastModified, $responseText;
 		
@@ -44,8 +43,6 @@
 				fwrite($socket, $this->method . ' ' . $path . " HTTP/1.1\r\n");
 				fwrite($socket, 'Host: ' . $request['host'] . "\r\n");
 				fwrite($socket, "User-Agent: Mozilla/4.0 (compatible; Bloglounge ".BLOGLOUNGE_VERSION.")\r\n");
-				if (!is_null($this->referer))
-					fwrite($socket, "Referer: {$this->referer}\r\n");
 				if (!is_null($this->eTag))
 					fwrite($socket, "If-None-Match: {$this->eTag}\r\n");
 				if (!is_null($this->lastModified)) {
@@ -61,9 +58,7 @@
 				fwrite($socket, "\r\n");
 				if ($this->content !== false)
 					fwrite($socket, $this->content);
-				if($this->async)
-					return true;
-				
+
 				for (; $trial < 5; $trial++) {
 					if (!$line = fgets($socket)) {
 						fclose($socket);
