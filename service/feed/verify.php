@@ -9,9 +9,8 @@
 	$response['message'] = '';
 	
 	$id = $_POST['id'];
-	$value = $_POST['value'];
 
-	if(empty($id) || empty($value) || !in_array($value, array('y','n'))) {
+	if(empty($id)) {
 			$response['error'] = -1;
 			$response['message'] = _t('잘못된 접근입니다.');
 	} else {
@@ -21,20 +20,22 @@
 		} else {
 			$ids = explode(',', $id);
 
-			foreach($ids as $id) {	
+			foreach($ids as $id) {		
 				if(empty($id)) continue;
 
-				$feedItem = FeedItem::getAll($id);
-				$feed = Feed::getAll($feedItem['feed']);
+				$feed = Feed::getAll($id);
 				
 				if(isAdmin() || $feed['owner'] == getLoggedId()) {
-					FeedItem::edit($id,'visibility', $value);
+					$feeder = new Feed;
+					$result = $feeder->verifyFeed($feed['xmlURL']);
+					$response['feed'] = $result[1];
+					$response['success'] = $result[2] ? 'true' : 'false';
 				} else {
 					$response['error'] = -1;
 					$response['message'] = _t('잘못된 접근입니다.');
 					break;
 				}
-			}	
+			}
 		}
 	}
 

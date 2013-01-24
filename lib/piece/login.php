@@ -12,6 +12,17 @@
 </head>
 
 <body>
+<?php
+	if(!empty($errorMsg)) {
+?>
+	<script type="text/javascript">
+		$(window).ready( function() {
+			alert("<?php echo $errorMsg;?>");
+		});
+	</script>
+<?php
+	}
+?>
 	<div id="container">
 		<div class="box">
 			<div class="box_l"><div class="box_r"><div class="box_t"><div class="box_b">

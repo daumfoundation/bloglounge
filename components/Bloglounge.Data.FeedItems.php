@@ -134,10 +134,6 @@
 				$db->execute("DELETE FROM {$database['prefix']}TagRelations WHERE item IN ($itemStr)"); // clear TagRelations
 				
 				if ($db->execute('DELETE FROM '.$database['prefix'].'FeedItems WHERE feed='.$feedId)) {
-					if (Validator::getBool(Settings::get('useRssOut'))) {
-						requireComponent('Bloglounge.Data.RSSOut');
-						RSSOut::refresh();
-					}
 
 					foreach($categoryIds as $categoryId) {
 						Category::rebuildCount($categoryId);
@@ -194,7 +190,11 @@
 			$media->set('outputPath', $cacheDir.'/'.$division);
 
 			$item['id'] = $itemId; // for uniqueId
-			if (!$result = $media->get($item, Settings::get('thumbnailLimit')))
+			
+			$thumbnailLimit = Settings::get('thumbnailLimit');
+			if($thumbnailLimit == 0) return false;
+
+			if (!$result = $media->get($item, $thumbnailLimit))
 				return false;
 
 			foreach($result['movies'] as $m_item) {
@@ -246,6 +246,10 @@
 			}
 
 			return $page;
+		}
+
+		function getPredictionPageByOwner($owner,$id, $pageCount, $searchType='', $searchKeyword='',$searchExtraValue='', $viewDelete = false) {
+			return FeedItem::getPredictionPage($id, $pageCount, $searchType, $searchKeyword,$searchExtraValue, $viewDelete, $owner);
 		}
 
 		function getFeedItemCount($filter='') {
@@ -494,17 +498,23 @@
 			if(!$written) $written = 0;
 			$written = date('Ymd', $written);
 
+			//$rankBy = 'mix';
 			switch ($rankBy) {
 				case 'click':
-					$rankBy = 'i.click+((FROM_UNIXTIME(i.written,"%Y%m%d")-'.$written.')*10000)';
+					$rankBy = 'i.click+((FROM_UNIXTIME(i.written,"%Y%m%d%")-'.$written.')*10000)';
+					$min = ' AND i.click > 0 ';
 				break;
+			//	case 'mix':
+			//		$rankBy = 'i.click + ((i.boomUp-i.boomDown) * 100) + ((FROM_UNIXTIME(i.written,"%Y%m%d%")-'.$written.')*10000)';
+			//	break;
 				default:
 				case 'boom':
-					$rankBy = 'i.boomUp-i.boomDown+((FROM_UNIXTIME(i.written,"%Y%m%d")-'.$written.')*10000)';
+					$rankBy = '(i.boomUp-i.boomDown)+((FROM_UNIXTIME(i.written,"%Y%m%d")-'.$written.')*10000)';
+					$min = ' AND (i.boomUp-i.boomDown) > 0 ';
 				break;
 			}
-			$qBoom = '';
-			return $db->queryAll('SELECT i.id, i.permalink, i.title, i.description, i.author, i.thumbnailId, i.written FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE i.feedVisibility = "y" '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
+
+			return $db->queryAll('SELECT i.id, i.permalink, i.title, i.description, i.author, i.thumbnailId, i.written FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE i.feedVisibility = "y" '.$min.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
 		}
 	}
 ?>

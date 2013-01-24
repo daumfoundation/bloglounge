@@ -111,8 +111,10 @@ img { border:0; }
 		.wrap h3 .cnt { font-weight:normal; color:#888; }
 	.wrap h4 { color:#494949; font-size:12px; font-weight:bold; margin:0; padding:0; margin-bottom:6px; }
 	.wrap h5 { color:#939393; font-size:11px; font-weight:normal; margin:0; padding:0; margin-bottom:10px; padding-bottom:14px; background:url(../images/admin/bg_line.gif) repeat-x bottom; }
+	.wrap h6 { color:#494949; font-size:12px; font-weight:bold; margin:0; padding:0; margin-bottom:6px; }
 
 	.wrap .input { padding:4px; padding-bottom:2px; border:1px solid #c5c5c5; background:url(../images/admin/bg_input2.gif) repeat-x #ffffff; font-size:11px; }
+	.wrap .input[disabled] { background:#eee; }
 	
 	.wrap label { cursor:pointer; }
 	
@@ -160,9 +162,13 @@ img { border:0; }
 				.wrap dl dd.text a:hover { text-decoration:underline; }
 			
 			.wrap dl dd.hint { padding-top:2px; color:#888; font-size:11px; }
+			.wrap dl dd.radiogroup { line-height:20px; }
 
 		.wrap dl dd { float:left; padding:0; margin:0; }
 			.wrap dl dd .input { width:250px; }
+			.wrap dl dd .radio { margin-right:4px; vertical-align:middle; }
+			.wrap dl dd label { font-size:11px; }
+
 		.wrap dl.comments	 { height:20px; }
 		.wrap dl.comments dd { color:#949494; font-size:11px; }
 		
@@ -285,9 +291,9 @@ img.new { margin-left:4px; }
 /* layout */
 
 .admin_table { width:100%; height:100%; }
-	.admin_table .headers { height:36px; padding-left:1px; padding-right:1px; color:#676767; text-align:center;  }
+	.admin_table .headers { padding-left:1px; padding-right:1px; color:#676767; text-align:center;   }
 		.admin_table .headers .sep { background:url(../images/admin/bg_list_header_sep.gif) no-repeat right 16px; }
-			.admin_table .headers td { padding-top:4px; _height:32px; *height:32px; }
+			.admin_table .headers td { padding-top:4px; height:36px; _height:32px; *height:32px; }
 	
 	.admin_table .datas { color:#5B5B5B; }
 	.admin_table .datas .list_first { /* background:url(../images/admin/bg_table_box_first_item.gif) repeat-x; */ }
@@ -316,7 +322,7 @@ img.new { margin-left:4px; }
  /* button */
 
 .normalbutton { background:url("../images/admin/bt_normal_button_right.gif") no-repeat right top; height:25px; display:inline-block; }
-	.normalbutton input { background:url("../images/admin/bt_normal_button_left.gif") no-repeat left top; border:0; height:25px; font-weight:bold; cursor:pointer; color:#5f5f5f; margin:0; font-size:12px; vertical-align:top; line-height:27px; padding-bottom:2px; padding-left:3px; padding-right:3px; }
+	.normalbutton input { background:url("../images/admin/bt_normal_button_left.gif") no-repeat left top; border:0; height:25px; font-weight:bold; cursor:pointer; color:#5f5f5f; margin:0; font-size:12px; vertical-align:top; *line-height:27px; padding-bottom:2px; padding-left:3px; padding-right:3px; }
 
 a.normalbutton { background:url("../images/admin/bt_normal_button_right.gif") no-repeat right top; height:25px; display:inline-block; text-decoration:none; }
 	a:hover { text-decoration:none; }
@@ -333,5 +339,7 @@ a.searchbutton { text-decoration:none; }
 
 a.microbutton { background:url("../images/admin/bt_micro_button_right.gif") no-repeat right top; height:19px; display:inline-block; vertical-align:top; text-decoration:none;  }
 	a.microbutton span { background:url("../images/admin/bt_micro_button_left.gif") no-repeat left top; display:inline-block; border:0; height:19px; cursor:pointer; color:#7e7d7d; margin:0; font:11px Dotum; vertical-align:top; line-height:19px; padding-bottom:2px; padding-left:8px; padding-right:8px; }
+
+a.microbutton[disabled] span { color:#bbb; }
 
 .boldbutton { font-weight:bold; }

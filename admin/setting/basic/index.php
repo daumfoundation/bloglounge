@@ -38,7 +38,13 @@
 
 <link rel="stylesheet" href="<?php echo $service['path'];?>/style/admin_setting.css" type="text/css" />
 <script type="text/javascript">
-		function saveSettings() {		
+		function saveSettings() {	
+			if($('#useVerifier').attr('checked') && ($('#verifierType').val() == 'custom') && ($('#verifier').val() == '')) {
+				alert("<?php echo _t('지정 단어로 인증하려면 지정 단어가 공백이면 안됩니다.');?>");
+				$('#verifier').focus();
+				return false;
+			}
+
 			$.ajax({
 			  type: "POST",
 			  url: _path +'/service/setting/save.php',
@@ -55,7 +61,10 @@
 							"&boomDownReactLimit="+$('#boomDownReactLimit').val() +
 							"&thumbnailLimit="+$('#thumbnailLimit').val()+		
 							"&updateProcess="+$('#updateProcess').val()+
-							"&summarySave="+($('#summarySave').attr('checked')?'y':'n'),
+							"&summarySave="+($('#summarySave').attr('checked')?'y':'n')+
+			 			    "&useVerifier="+($('#useVerifier').attr('checked')?'y':'n')+
+							"&verifierType="+$('#verifierType').val()+
+							"&verifier="+$('#verifier').val(),
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();
@@ -69,6 +78,20 @@
 				 alert('unknown error');
 			  }
 			});
+		}
+
+		function checkVerifier() {
+			if($('#useVerifier').attr('checked')) {
+				$('#verifierType').removeAttr( 'disabled' );
+				if($('#verifierType').val() == 'random') {
+					$('#verifier').attr( 'disabled', 'disabled' );
+				} else {
+					$('#verifier').removeAttr( 'disabled' );
+				}
+			} else {
+				$('#verifierType').attr( 'disabled', 'disabled' );
+				$('#verifier').attr( 'disabled', 'disabled' );
+			}
 		}
 </script>
 
@@ -143,7 +166,8 @@
 <?php
 			ob_start();
 ?>
-				<select name="thumbnailLimit" id="thumbnailLimit">
+				<select name="thumbnailLimit" id="thumbnailLimit">			
+					<option value="0" <?php if ($thumbnailLimit == '0') { ?>selected="selected"<?php } ?>><?php echo _f('%1개',0);?></option>
 					<option value="1" <?php if ($thumbnailLimit == '1') { ?>selected="selected"<?php } ?>><?php echo _f('%1개',1);?></option>
 					<option value="2" <?php if ($thumbnailLimit == '2') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 2);?></option>
 					<option value="3" <?php if ($thumbnailLimit == '3') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 3);?></option>
@@ -159,6 +183,8 @@
 
 		</dd>
 	</dl>	
+
+	<dl class="line"></dl>
 
 	<dl class="normal">
 		<dt></dt>
@@ -232,7 +258,7 @@
 	<dl class="normal ">
 		<dt></dt>
 		<dd>
-			<input type="checkbox" <?php if ($summarySave == 'y') { ?>checked="checked"<?php } ?> name="summarySave" id="summarySave" value="y" /><label for="summarySave">&nbsp;<?php echo _t('수집된 글의 본문을 요약저장합니다.');?></label>
+			<input type="checkbox" <?php if (Validator::getBool($summarySave)) { ?>checked="checked"<?php } ?> name="summarySave" id="summarySave" value="y" /><label for="summarySave">&nbsp;<?php echo _t('수집된 글의 본문을 요약 저장합니다.');?></label>
 		</dd>
 	</dl>		
 	<dl class="normal comments last_item">
@@ -244,7 +270,7 @@
 	<dl class="normal">
 		<dt><?php echo _t('정책');?></dt>
 		<dd>
-			<input type="checkbox" <?php if ($config->restrictJoin == 'y') { ?>checked="checked"<?php } ?> name="restrictJoin" id="restrictJoin" value="y" /><label for="restrictJoin">&nbsp;<?php echo _t('운영자가 승인해야 회원가입을 가능하게 합니다.');?></label>
+			<input type="checkbox" <?php if (Validator::getBool($config->restrictJoin)) { ?>checked="checked"<?php } ?> name="restrictJoin" id="restrictJoin" value="y" /><label for="restrictJoin">&nbsp;<?php echo _t('운영자가 승인해야 회원가입을 가능하게 합니다.');?></label>
 		</dd>
 	</dl>	
 	<dl class="normal comments">
@@ -252,11 +278,56 @@
 		<dd class="text checkbox_hint">
 			<?php echo _t('이 설정을 선택하면 회원정보 관리에서 가입 신청을 허락해주어야 가입자가 피드를 등록할 수 있습니다.');?>
 		</dd>
-	</dl>
+	</dl>	
 	<dl class="normal">
 		<dt></dt>
 		<dd>
-			<input type="checkbox" <?php if ($config->useRssOut == 'y') { ?>checked="checked"<?php } ?> name="useRssOut" id="useRssOut" value="y" /><label for="useRssOut">&nbsp;<?php echo _t('수집된 글을 RSS 로 출력합니다.');?> (http://<?php echo $_SERVER['HTTP_HOST'].$service['path'];?>/rss/)</label>
+			<input type="checkbox" <?php if (Validator::getBool($config->useVerifier)) { ?>checked="checked"<?php } ?> name="useVerifier" id="useVerifier" value="y" onclick="checkVerifier();" /><label for="useVerifier">&nbsp;<?php echo _t('인증시스템을 사용합니다.');?></label>
+		</dd>
+	</dl>	
+	<dl class="normal comments">
+		<dt></dt>
+		<dd class="text checkbox_hint">
+			<?php echo _t('이 설정을 선택하면 사용자가 등록한 블로그에 인증시스템을 도입합니다. 운영자가 등록한 블로그는 사용되지 않습니다.');?>
+		</dd>
+	</dl>
+	
+	<dl class="normal">
+		<dt></dt>
+		<dd class="inner">
+<?php
+			ob_start();
+?>
+				<select onclick="checkVerifier()" name="verifierType" id="verifierType" <?php if (!Validator::getBool($config->useVerifier)) { ?>disabled="disabled" <?php } ?>>					
+					<option value="random" <?php if ($config->verifierType == 'random') { ?>selected="selected"<?php } ?>><?php echo _t('자동생성 단어');?></option>
+					<option value="custom" <?php if ($config->verifierType == 'custom') { ?>selected="selected"<?php } ?>><?php echo _t('지정 단어');?></option>
+				</select>					
+<?php
+			$arg = ob_get_contents();
+			ob_end_clean();
+			echo _f('인증 단어로 %1 를 사용합니다.', $arg);
+?>
+		</dd>
+	</dl>		
+	<dl class="normal">
+		<dt></dt>
+		<dd class="inner">
+			지정 단어 : <input type="text" class="input" value="<?php echo $config->verifier;?>" name="verifier" id="verifier" <?php if (!Validator::getBool($config->useVerifier) || $config->verifierType == 'random') { ?>disabled="disabled" <?php } ?>/>
+		</dd>
+	</dl>	
+	<dl class="normal comments">
+		<dt></dt>
+		<dd class="text checkbox_hint">
+			<?php echo _t('인증 단어는 인증할 블로그의 태그, 제목 또는 본문에 포함될 시 인증이 됩니다. 지정 단어는 특수문자와의 조합등 잘 사용하지 않는 고유 문장(단어)을 사용하는 것이 좋습니다.');?>
+		</dd>
+	</dl>
+
+	<dl class="line"></dl>
+
+	<dl class="normal">
+		<dt></dt>
+		<dd>
+			<input type="checkbox" <?php if (Validator::getBool($config->useRssOut)) { ?>checked="checked"<?php } ?> name="useRssOut" id="useRssOut" value="y" /><label for="useRssOut">&nbsp;<?php echo _t('수집된 글을 RSS 로 출력합니다.');?> (http://<?php echo $_SERVER['HTTP_HOST'].$service['path'];?>/rss/)</label>
 		</dd>
 	</dl>	
 	<dl class="normal comments">
@@ -266,24 +337,21 @@
 		</dd>
 	</dl>
 
-	<dl class="normal  last_item">
+	<dl class="normal last_item">
 		<dt></dt>
-		<dd>
+		<dd class="inner">
 <?php	
 			$feeditemsOnRss = $config->feeditemsOnRss;
 			ob_start();
 ?>
 				<select name="feeditemsOnRss" id="feeditemsOnRss">
-					<option value="5" <?php if ($feeditemsOnRss == '5') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 5);?></option>
-					<option value="10" <?php if ($feeditemsOnRss == '10') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 10);?></option>
-					<option value="15" <?php if ($feeditemsOnRss == '15') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 15);?></option>
-					<option value="20" <?php if ($feeditemsOnRss == '20') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 20);?></option>
-					<option value="25" <?php if ($feeditemsOnRss == '25') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 25);?></option>
-					<option value="30" <?php if ($feeditemsOnRss == '30') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 30);?></option>
-					<option value="35" <?php if ($feeditemsOnRss == '35') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 35);?></option>
-					<option value="40" <?php if ($feeditemsOnRss == '40') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 40);?></option>
-					<option value="45" <?php if ($feeditemsOnRss == '45') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 45);?></option>	
-					<option value="50" <?php if ($feeditemsOnRss == '50') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 50);?></option>
+<?
+					for($i=5;$i<=100;$i+=5) {
+?>
+					<option value="<?php echo $i;?>" <?php if ($feeditemsOnRss == $i) { ?>selected="selected"<?php } ?>><?php echo _f('%1개', $i);?></option>
+<?php
+					}
+?>
 				</select>					
 <?php
 			$arg = ob_get_contents();
@@ -296,7 +364,7 @@
 	<dl class="normal">
 		<dt><?php echo _t('인기글');?></dt>
 		<dd>
-			<input type="checkbox" name="restrictBoom" id="restrictBoom" value="y" <?php if ($config->restrictBoom == 'y') {?>checked="checked"<?}?>/>&nbsp;<label for="restrictBoom"><?php echo _t('로그인 한 사람만 추천, 반대 기능을 사용할 수 있습니다.');?></label>
+			<input type="checkbox" name="restrictBoom" id="restrictBoom" value="y" <?php if (Validator::getBool($config->restrictBoom)) {?>checked="checked"<?}?>/>&nbsp;<label for="restrictBoom"><?php echo _t('로그인 한 사람만 추천, 반대 기능을 사용할 수 있습니다.');?></label>
 		</dd>
 	</dl>	
 	<dl class="normal">

@@ -6,6 +6,7 @@
 	if (($accessInfo['controller']!='setup') && (!file_exists(ROOT . '/config.php') || !file_exists(ROOT.'/remove.lock'))) {
 		Header("Location: " . ROOT . "/setup"); exit;
 	}
+
 	$part = (($qpos = strpos($request_uri, '?')) !== false) ? substr($request_uri, 0, $qpos) : $request_uri;
 	switch($accessInfo['controller']) {
 		case '':

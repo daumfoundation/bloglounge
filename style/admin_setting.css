@@ -8,12 +8,17 @@
 	.setting_wrap .setting .comments .text { margin:0; padding:0; }
 	.setting_wrap .setting .comments .checkbox_hint { margin-left:24px; }
 
+	.setting_wrap .setting .inner { margin-left:24px; }
+		.setting_wrap .setting .inner .input { height:14px; padding-top:2px; padding-bottom:2px; }
+
+	.setting_wrap .setting .line { border-bottom:1px solid #ddd; height:6px; margin-bottom:6px; margin-left:60px; margin-right:60px; }
+
 	.setting_wrap .setting .button_wrap { text-align:center; }
 
 	.setting_wrap .setting .borderbox { margin-top:0; margin-bottom:20px; }
 
 	.setting_wrap .setting .textarea_wrap { padding-left:24px; padding-top:5px; }
-		.setting_wrap .setting .textarea_wrap textarea { width:600px; height:80px; }
+		.setting_wrap .setting .textarea_wrap textarea { width:600px; height:80px; font-size:12px; border:1px solid #C5C5C5; }
 		.setting_wrap .setting .help { margin-top:6px; }
 			.setting_wrap .setting .textarea_wrap .help { margin-top:10px; }
 

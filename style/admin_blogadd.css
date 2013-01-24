@@ -1,6 +1,13 @@
 .add_wrap { margin-top:15px; }
 	.add_wrap dl dd .input { width:600px; }
 
+.verify_messages { padding:10px; }
+	.verify_messages .verifier_message { margin-top:8px; margin-bottom:12px; }
+	.verify_messages .input { height:14px; padding-top:2px; padding-bottom:2px; }
+
+	.verify_messages ul { list-style:none; margin:0; padding:0; }
+	.verify_messages ul li { color:#999; font:11px Dotum; }
+
 .add_detail_wrap { margin-top:15px; margin-bottom:10px; }
 	.add_detail_wrap dl { height:24px; }
 		.add_detail_wrap dt { font-weight:bold; }

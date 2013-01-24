@@ -8,7 +8,7 @@
 	Class Feed {
 		var $updated=0;
 
-		function add($feedURL, $visibility = 'y', $filter = '') {
+		function add($feedURL, $visibility = 'y', $filter = '', $filterType = 'tag') {
 			global $database, $db, $session;
 			if (empty($feedURL) || empty($session['id'])) {
 				return false;
@@ -20,6 +20,7 @@
 			}
 
 			$filter = implode(',', array_unique(func::array_trim((explode(',', $filter)))));
+			if(!in_array($filterType, array('tag','title','tag+title'))) $filterType = 'tag';
 			
 			if(!empty($feedInfo['logo'])) {
 				requireComponent('LZ.PHP.Media');
@@ -31,7 +32,7 @@
 				$feedInfo[$key] = $db->escape($value);
 			}
 
-			if (!$db->execute('INSERT INTO '.$database['prefix'].'Feeds (owner, xmlURL, xmlType, blogURL, title, description, language, lastUpdate, created, visibility, filter, logo) VALUES ("'.$session['id'].'", "'.$feedInfo['xmlURL'].'", "'.$feedInfo['xmlType'].'", "'.$feedInfo['blogURL'].'", "'.$feedInfo['title'].'", "'.$feedInfo['description'].'", "'.$feedInfo['language'].'", 0, UNIX_TIMESTAMP(), "'.$db->escape($visibility).'","'.$db->escape($filter).'", "'.$feedInfo['logo'].'")')) {
+			if (!$db->execute('INSERT INTO '.$database['prefix'].'Feeds (owner, xmlURL, xmlType, blogURL, title, description, language, lastUpdate, created, visibility, filter, filterType, logo) VALUES ("'.$session['id'].'", "'.$feedInfo['xmlURL'].'", "'.$feedInfo['xmlType'].'", "'.$feedInfo['blogURL'].'", "'.$feedInfo['title'].'", "'.$feedInfo['description'].'", "'.$feedInfo['language'].'", 0, UNIX_TIMESTAMP(), "'.$db->escape($visibility).'","'.$db->escape($filter).'", "'.$filterType.'", "'.$feedInfo['logo'].'")')) {
 				return false;
 			}	
 			
@@ -48,7 +49,7 @@
 
 			$modStack = array();
 			foreach ($arguments as $key=>$value) {
-				if (!Validator::enum($key, 'xmlURL,blogURL,title,description,language,lastUpdate,filter,autoUpdate,allowRedistribute,author,visibility,feedCount,everytimeUpdate,logo')) 
+				if (!Validator::enum($key, 'xmlURL,blogURL,title,description,language,lastUpdate,filter,filterType,autoUpdate,allowRedistribute,author,visibility,feedCount,everytimeUpdate,logo,isVerified')) 
 					continue;
 				if ($key == 'filter') {
 					$filterArray = func::array_trim((explode(',', $value)));
@@ -358,25 +359,48 @@
 			return $items;
 		}
 
+		
+		function verifyFeed($feedURL){
+			global $database, $db, $event;
+
+			if (preg_match("/^[0-9]+$/", $feedURL))
+				$feedURL = $db->queryCell('SELECT xmlURL FROM '.$database['prefix'].'Feeds WHERE id="'.$feedURL.'"');
+
+			list($feedId, $isVerified, $owner) = $db->pick('SELECT id, isVerified, owner FROM '.$database['prefix'].'Feeds WHERE xmlURL="'.$feedURL.'"');
+
+			$result = $event->on('Add.checkFeed', array($feedURL, $feedId));
+			if(is_array($result) && count($result)>=3) {
+				list($status, $feed, $xml) = $result;
+			} else {
+				$feedURL = trim('http://' . str_replace('http://','',$feedURL));
+				list($status, $feed, $xml) = Feed::getRemoteFeed($feedURL);
+			}
+
+			if(Validator::getBool(Settings::get('useVerifier')) && $owner != 1 && !Validator::getBool($isVerified)) {
+				if(!$this->checkVerifier($feedId,$feedURL,$xml)) {
+					return array(false, $feed['title'], false);
+				} else {
+					$db->execute("UPDATE {$database['prefix']}Feeds SET isVerified = 'y' WHERE xmlURL = '{$feedURL}'");
+				}
+			}
+
+			return array($result, $feed['title'], true);
+		}
+
 		function updateFeed($feedURL){
 			global $database, $db, $event;
 
 			if (preg_match("/^[0-9]+$/", $feedURL))
 				$feedURL = $db->queryCell('SELECT xmlURL FROM '.$database['prefix'].'Feeds WHERE id="'.$feedURL.'"');
 
-			list($feedId, $lastUpdate, $autoUpdate, $feedVisibility) = $db->pick('SELECT id, lastUpdate, autoUpdate, visibility FROM '.$database['prefix'].'Feeds WHERE xmlURL="'.$feedURL.'"');
+			list($feedId, $lastUpdate, $autoUpdate, $feedVisibility, $isVerified, $owner) = $db->pick('SELECT id, lastUpdate, autoUpdate, visibility, isVerified, owner FROM '.$database['prefix'].'Feeds WHERE xmlURL="'.$feedURL.'"');
 
-		/*	
-			if ($lastUpdate > gmmktime()-300) {
-				return array(0,_t('업데이트시기가 아닙니다.'));
-			}
-		*/
 			$result = $event->on('Add.checkFeed', array($feedURL, $feedId));
 			if(is_array($result) && count($result)>=3) {
 				list($status, $feed, $xml) = $result;
 			} else {
 				$feedURL = trim('http://' . str_replace('http://','',$feedURL));
-				list($status, $feed, $xml) = feed::getRemoteFeed($feedURL);
+				list($status, $feed, $xml) = Feed::getRemoteFeed($feedURL);
 			}
 
 			if ($status > 0){
@@ -385,6 +409,15 @@
 			} else{
 				$sQuery = (Validator::getBool($autoUpdate)) ? "title = '{$feed['title']}', description = '{$feed['description']}', " : '';
 				$db->execute("UPDATE {$database['prefix']}Feeds SET blogURL = '{$feed['blogURL']}', $sQuery language = '{$feed['language']}', lastUpdate = ".gmmktime()." WHERE xmlURL = '{$feedURL}'");
+
+				if(Validator::getBool(Settings::get('useVerifier')) && $owner != 1 && !Validator::getBool($isVerified)) {
+					if(!$this->checkVerifier($feedId,$feedURL,$xml)) {
+						return array(false, $feed['title']);
+					} else {
+						$db->execute("UPDATE {$database['prefix']}Feeds SET isVerified = 'y' WHERE xmlURL = '{$feedURL}'");
+					}
+				}
+
 				$result = $this->saveFeedItems($feedId,$feedVisibility,$xml)?0:1;
 				return array($result, $feed['title']);
 			}
@@ -426,6 +459,7 @@
 					if(count($notin) > 0)
 						$notinStr = ' owner NOT IN ('.implode(',', $notin).') AND ';
 				}
+
 				if ($feedURL = $db->queryCell("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE {$notinStr} lastUpdate < ".(gmmktime()-($updateCycle*60))." ORDER BY lastUpdate ASC LIMIT 1")) {
 					$result = $this->updateFeed($feedURL);
 					return array(!$result[0],$result[1],$feedURL);
@@ -457,6 +491,36 @@
 				}
 			}
 			return array(1,'No feeds to update');
+		}
+
+		function getVerifier($xmlURL) {
+			$verifier = 'v'.substr(md5($_SERVER['HTTP_HOST'].'|'.$xmlURL),0,8);
+			return $verifier;
+		}
+
+		function checkVerifier($feedId, $xmlURL, $xml) {
+			global $database, $db;
+
+			$result = $this->getFeedItems($xml);
+			if($result === false) return false; 
+			else {
+				list($cUseVerifier,$cVerfierType, $cVerifier) = Settings::gets('useVerifier,verifierType,verifier');
+				if(!Validator::getBool($cUseVerifier)) return false;
+
+				$verifier = $this->getVerifier($xmlURL);
+				if($cVerfierType == 'custom') {
+					$verifier = $cVerifier;
+				}
+
+				foreach($result as $item) {
+					$tags = implode(', ',$item['tags']);
+					if(strpos($item['title'],$verifier) !== false) return true;
+					if(strpos($item['description'], $verifier) !== false) return true;
+					if(strpos($tags, $verifier) !== false) return true;
+				}
+			}
+
+			return false;
 		}
 
 		function saveFeedItems($feedId,	$feedVisibility, $xml, $callbackName = null){
@@ -498,23 +562,41 @@
 			if ($db->numRows() > 0) 
 				return false;
 	
-			list($cacheThumbnail, $useRssOut) = Settings::gets('cacheThumbnail,useRssOut');
+			if ($item['written']>gmmktime()+86400)
+				return false;
+
+			$item['title']=$db->escape($db->lessen(UTF8::correct($item['title'])));
+
+			list($useRssOut) = Settings::gets('useRssOut');
 		
-			list($feedCreated) = Feed::gets($feedId, 'created');
+			list($feedCreated,$localFilter,$localFilterType) = Feed::gets($feedId, 'created,filter,filterType');
+
 			$tagString=$db->escape($db->lessen(UTF8::correct(implode(', ',$item['tags']))));
 
-			list($globalFilter,$blackFilter) = Settings::gets('filter,blackfilter');
-			$localFilter = Feed::get($feedId, 'filter');
+			list($globalFilter,$blackFilter,$globalFilterType,$blackFilterType) = Settings::gets('filter,blackfilter,filterType,blackfilterType');
 			$filter = empty($globalFilter)?$localFilter:$globalFilter;
+			$filterType = empty($globalFilter)?$localFilterType:$globalFilterType;
 
 
 			if (!Validator::is_empty($filter)) {
-				$filtered = true;
+				$filtered = true;				
 				$allowTags = explode(',', $filter);
-				foreach ($allowTags as $ftag) {
-					if (Validator::enum($ftag, $tagString)) {
-						$filtered = false;
-						break;
+
+				if($filterType == 'tag' || $filterType == 'tag+title') {					
+					foreach ($allowTags as $ftag) {
+						if (Validator::enum($ftag, $tagString)) {
+							$filtered = false;
+							break;
+						}
+					}
+				}
+
+				if($filtered && ($filterType == 'title' || $filterType == 'tag+title')) {
+					foreach ($allowTags as $ftag) {
+						if(strpos($item['title'],$ftag)!==false) {
+							$filtered = false;
+							break;
+						}
 					}
 				}
 
@@ -524,28 +606,32 @@
 			if (!Validator::is_empty($blackFilter)) {
 				$filtered = false;
 				$denyTags = explode(',', $blackFilter);
-				foreach ($denyTags as $ftag) {
-					if (Validator::enum($ftag, $tagString)) {
-						$filtered = true;
-						break;
+				if($blackFilterType == 'tag' || $blackFilterType == 'tag+title') {					
+					foreach ($denyTags as $ftag) {
+						if (Validator::enum($ftag, $tagString)) {
+							$filtered = true;
+							break;
+						}
+					}
+				}
+				if($filtered && ($filterType == 'title' || $filterType == 'tag+title')) {
+					foreach ($denyTags as $ftag) {
+						if(strpos($item['title'],$ftag)!==false) {
+							$filtered = true;
+							break;
+						}
 					}
 				}
 
 				if ($filtered) return false;
 			}
 
-
-			
 			if (preg_match('/\((.[^\)]+)\)$/Ui', trim($item['author']), $_matches)) $item['author'] = $_matches[1];
 			$item['author']=$db->escape($db->lessen(UTF8::correct($item['author'])));
 			$item['permalink']=$db->escape($db->lessen(UTF8::correct($item['permalink'])));
-			$item['title']=$db->escape($db->lessen(UTF8::correct($item['title'])));
 			$item['description']=$db->escape($db->lessen(UTF8::correct(trim($item['description'])),65535));
 
-			$enclosureString=$db->escape($db->lessen(UTF8::correct(implode('|',$item['enclosures']))));
-			
-			if ($item['written']>gmmktime()+86400)
-				return false;
+			$enclosureString=$db->escape($db->lessen(UTF8::correct(implode('|',$item['enclosures']))));				
 
 			$deadLine=0;
 			$feedLife = Settings::get('archivePeriod');
@@ -612,11 +698,8 @@
 
 				Category::buildCategoryRelations($id, $item['tags'], $oldTags);
 				
-				if (Validator::getBool($cacheThumbnail)) FeedItem::cacheThumbnail($id, $item);
-				if (Validator::getBool($useRssOut)) {
-					requireComponent('Bloglounge.Data.RSSOut');
-					RSSOut::refresh();
-				}
+				FeedItem::cacheThumbnail($id, $item);
+
 				return true;
 			}
 
@@ -869,7 +952,7 @@
 				$pageQuery = 'LIMIT '.$pageStart.','.$pageCount;
 			}
 
-			$feeds = $db->queryAll('SELECT id, blogURL, title, description, lastUpdate, created, feedCount, logo, visibility FROM '.$database['prefix'].'Feeds '.$sQuery.' ORDER BY '.$feedListPageOrder.' DESC ' . $pageQuery);
+			$feeds = $db->queryAll('SELECT id, owner, blogURL, title, description, lastUpdate, created, feedCount, logo, visibility, isVerified FROM '.$database['prefix'].'Feeds '.$sQuery.' ORDER BY '.$feedListPageOrder.' DESC ' . $pageQuery);
 
 			return array($feeds, $totalFeeds);	
 		}
@@ -897,7 +980,7 @@
 				$pageQuery = 'LIMIT '.$pageStart.','.$pageCount;
 			}
 
-			$feeds = $db->queryAll('SELECT id, blogURL, title, description, lastUpdate, created, feedCount, logo, visibility FROM '.$database['prefix'].'Feeds '.$sQuery.' ORDER BY '.$feedListPageOrder.' DESC ' . $pageQuery);
+			$feeds = $db->queryAll('SELECT id, owner, blogURL, title, description, lastUpdate, created, feedCount, logo, visibility, isVerified FROM '.$database['prefix'].'Feeds '.$sQuery.' ORDER BY '.$feedListPageOrder.' DESC ' . $pageQuery);
 
 			return array($feeds, $totalFeeds);	
 		}

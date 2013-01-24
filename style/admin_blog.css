@@ -129,6 +129,8 @@ body.entry_view { background:#ffffff; }
 	.entrylist .datas .list_use td { border-top:3px solid #F3FFCD; padding-bottom:3px; }
 	.entrylist .datas .list_use td.entrylist_select { border-left:3px solid #F3FFCD; }
 	.entrylist .datas .list_use td.entrylist_execute { border-right:3px solid #F3FFCD; }	
+	
+	.bloglist .datas .no_verifier { background:#fff7f7; }
 
 	/* */
 	.read_item { margin-top:14px; }
@@ -160,7 +162,11 @@ body.entry_view { background:#ffffff; }
 				.read_item .item .data .thumbnail img.selected { border:2px solid #FF7200; }
 
 			.read_item .item .data .desc { color:#999; padding-top:10px; line-height:16px; margin-bottom:10px; }
-			
+
+			.read_item .item .data .verifier_wrap { border-bottom:1px solid #eee; padding-bottom:10px; }
+			.read_item .item .data .no_verifier { margin-top:10px; margin-bottom:10px; border:1px solid #ffd1d1;	background-color:#fdf3f3; color:#b03434; font:11px Dotum; padding:5px; line-height:16px;  }
+			.read_item .item .data .verifier_note { border:1px solid #d7e0f1;	background-color:#f6f8fc;	padding:5px; font:11px Dotum; line-height:16px;	color:#3e5683; }
+
 			.read_item .item .data ul { list-style:none; margin:0; padding:0; margin-top:8px; }
 			.read_item .item .data ul li { margin-top:10px; font-size:11px; color:#999; background:url(../images/admin/bg_li.gif) no-repeat left center; padding-left:8px; }
 				.read_item .item .data ul li a { color:#999; text-decoration:none; }

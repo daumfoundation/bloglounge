@@ -41,12 +41,6 @@
 					break;
 				}
 			}
-
-			if (Validator::getBool(Settings::get('useRssOut'))) {
-				requireComponent('Bloglounge.Data.RSSOut');
-				RSSOut::refresh();
-				RSSOut::refresh('focus');
-			}
 		}
 	}
 

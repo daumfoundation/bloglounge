@@ -32,7 +32,7 @@
 	if (!empty($_POST['enci']) && !empty($_POST['encp'])) {
 		if (!isset($_POST['saveId'])) $_POST['saveId'] = false;
 		if (!login($_POST['enci'], $_POST['encp'], $_POST['saveId'])) {
-			$errorMsg = _t('아이디, 비밀번호가 잘못되었거나 가입대기중입니다');
+			$errorMsg = _t('아이디 또는 비밀번호가 잘못되었습니다.');
 		}
 	}
 	if (isLoggedIn()) {

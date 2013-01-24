@@ -1,5 +1,4 @@
 <?php
-
 	// from CackePHP
 	function debug($var = false, $showHtml = false, $showFrom = true) {
 		if ($showFrom) {

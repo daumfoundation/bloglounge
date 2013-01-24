@@ -18,18 +18,23 @@
 		$toEdit['title'] = htmlspecialchars($_POST['title']);
 		$toEdit['xmlURL'] = $_POST['xmlURL'];
 
-		if($_POST['useFilter'] == "on") {
+		if(in_array($_POST['useFilter'],array('tag','title','tag+title'))) {
 			$toEdit['filter'] = htmlspecialchars($_POST['filter']);
 		} else {
 			$toEdit['filter'] = "";
 		}
+
+		$toEdit['filterType'] = $_POST['useFilter'];
 		$toEdit['author'] = htmlspecialchars($_POST['author']);
 		$toEdit['autoUpdate'] = (isset($_POST['autoUpdate']) ? 'y' : 'n');
 		$toEdit['allowRedistribute'] = (isset($_POST['allowRedistribute']) ? 'y' : 'n');
 		$toEdit['visibility'] = (isset($_POST['visibility']) ? $_POST['visibility'] : NULL);
 		$toEdit['everytimeUpdate'] = (isset($_POST['everytimeUpdate']) ? 'y' : 'n');
-		if(!$is_admin) { // 회원만 가능한 기능
-			$toEdit['everytimeUpdate'] = 'n';
+		$toEdit['isVerified'] = (isset($_POST['isVerified']) ? 'y' : 'n');
+
+		if(!isAdmin()) {
+			unset($toEdit['everytimeUpdate']);	
+			unset($toEdit['isVerified']);
 		}
 
 		if (!preg_match("/^[0-9]+$/", $_POST['id']) || !Feed::edit($_POST['id'], $toEdit)) {
@@ -109,7 +114,34 @@
 				  }
 				});
 		}
+		
+		function verifyFeed(id) {
+				addMessage("<?php echo _t('인증을 시작합니다.');?>");
+				$.ajax({
+				  type: "POST",
+				  url: _path +'/service/feed/verify.php',
+				  data: 'id=' + id,
+				  dataType: 'xml',
+				  success: function(msg){		
+					error = $("response error", msg).text();
+					if(error == "0") {
+						 var success = $("response success", msg).text();
+						 if(success == 'true') {
+							 addMessage("<?php echo _t('인증을 완료했습니다.');?>","success","reload");
+						 } else {
+							 addMessage("<?php echo _t('인증코드를 찾을 수 없습니다.');?>","success","reload");
+						 }
 
+						// document.location.reload();
+					} else {
+						addMessage($("response message", msg).text(),"error");
+					}
+				  },
+				  error: function(msg) {
+					 addMessage("<?php echo _t('알 수 없는 에러가 발생하여 인증하지 못했습니다.');?>","fail");
+				  }
+				});
+		}
 		function deleteItem(id) {
 			if(confirm("<?php echo _t('이 블로그의 수집된 모든 글이 삭제되며 삭제된 글은 복구할 수 없습니다.\n\n이 블로그를 삭제하시겠습니까?');?>")) {
 				$.ajax({
@@ -209,6 +241,8 @@
 		if($readFeed) {
 			$date = Func::dateToString($readFeed['created']);			
 			$date2 = Func::dateToString($readFeed['lastUpdate']);
+			$noVerifier = Validator::getBool($config->useVerifier) && !Validator::getBool($readFeed['isVerified']) && ($readFeed['owner'] != 1);
+
 
 			$desc = str_replace('&nbsp;','',func::stripHTML($readFeed['description']));				
 			if(empty($desc)) {
@@ -231,6 +265,21 @@
 					<?php echo _t('수집된 글수');?> :  <span class="count"><?php echo $readFeed['feedCount'];?></span>
 				</div>
 				<div class="data">	
+<?php
+			if($noVerifier) {
+?>
+				<div class="verifier_wrap">
+					<div class="no_verifier">
+						<?php echo _t('이 블로그는 현재 인증이 되지 않은 블로그입니다.<br />인증되지 않은 블로그는 업데이트 되지않습니다.');?>
+					</div>
+
+					<div class="verifier_note">
+						<?php echo _f('인증하기 위해서는 이 블로그의 최신 글에 태그, 제목 또는 본문 중 한곳에<br /> <strong>"%1"</strong> 문장(단어)이 포함되어야 합니다.',$config->verifierType=='custom'?$config->verifier:Feed::getVerifier($readFeed['xmlURL']));?>
+					</div>
+				</div>
+<?php
+			}
+?>
 					<div class="desc">
 						<?php echo $desc;?>	
 					</div>
@@ -238,7 +287,7 @@
 					<div class="grayline"></div>
 
 					<div class="recent_posts">
-						<h2>최근 수집된 글</h2>
+						<h2><?php echo _t('최근 수집된 글');?></h2>
 						<ul>
 <?php
 		if(count($posts)>0) {
@@ -294,11 +343,17 @@
 
 
 					<p class="radio_wrap">
-						<input type="radio" id="isUnFilter" name="useFilter" value="off" <?php if (empty($filter)) { ?>checked="checked" <?php } ?> /> <label for="isUnFilter"><?php echo _t('모든 글을 수집합니다.');?></label>
+						<input type="radio" id="isUnFilter" name="useFilter" value="none" <?php if (empty($filter)) { ?>checked="checked" <?php } ?> /> <label for="isUnFilter"><?php echo _t('모든 글을 수집합니다.');?></label>
 					</p>
 					<p class="radio_wrap">
-						<input type="radio" id="isFilter" name="useFilter" value="on" <?php if (!empty($readFeed['filter']) || !empty($config->filter)) { ?>checked="checked" <?php } ?> /> <label for="isFilter"><?php echo _t('지정한 분류 또는 태그에 해당하는 글만 수집합니다.');?></label>			
-						<?php if (empty($config->filter)) { ?><div class="checkbox_input"><input type="text" id="feedFilter" name="filter" value="<?php echo htmlspecialchars($readFeed['filter']);?>" class="input faderInput" onfocus="document.getElementsByName('useFilter')[1].checked=true;" /></div><?php } ?>
+						<input type="radio" id="isFilterTag" name="useFilter" value="tag" <?php if ((!empty($readFeed['filter']) || !empty($config->filter)) && $readFeed['filterType']=='tag') { ?>checked="checked" <?php } ?> /> <label for="isFilterTag"><?php echo _t('지정한 단어가 태그에 포함하는 글만 수집합니다.');?></label>		
+					</p>		
+					<p class="radio_wrap">
+						<input type="radio" id="isFilterTitle" name="useFilter" value="title" <?php if ((!empty($readFeed['filter']) || !empty($config->filter)) && $readFeed['filterType']=='title') { ?>checked="checked" <?php } ?> /> <label for="isFilterTitle"><?php echo _t('지정한 단어가 제목에 포함하는 글만 수집합니다.');?></label>		
+					</p>
+					<p class="radio_wrap">
+						<input type="radio" id="isFilterTagTitle" name="useFilter" value="tag" <?php if ((!empty($readFeed['filter']) || !empty($config->filter)) && $readFeed['filterType']=='tag+title') { ?>checked="checked" <?php } ?> /> <label for="isFilterTagTitle"><?php echo _t('지정한 단어가 태그 또는 제목에 포함하는 글만 수집합니다.');?></label>		
+						<?php if (empty($config->filter)) { ?><div class="checkbox_input"><input type="text" id="feedFilter" name="filter" value="<?php echo htmlspecialchars($readFeed['filter']);?>" class="input faderInput" onfocus="if(document.getElementsByName('useFilter')[0].checked) document.getElementsByName('useFilter')[1].checked=true;" /></div><?php } ?>
 						<div class="help checkbox_help">
 							<?php if (empty($config->filter)) { echo _t('각 단어의 구분은 쉼표(,)로 합니다.'); } else { echo htmlspecialchars($config->filter); echo _t('관리자가 설정한 수집 태그 필터 설정이 우선권을 갖습니다'); } ?>
 						</div>
@@ -316,6 +371,16 @@
 
 					<div class="grayline"></div>
 
+<?php
+				if($is_admin && Validator::getBool($config->useVerifier) && !Validator::getBool($readFeed['isVerified'])) {
+?>
+					<p class="checkbox_wrap">
+						<input type="checkbox" name="isVerified" id="isVerified" <?php if (Validator::getBool($readFeed['isVerified'])) { ?>checked="checked"<?php } ?>/>&nbsp;<label for="isVerified"><?php echo _t('이 블로그의 인증을 완료합니다.');?></label><br />
+						<div class="help checkbox_help"><?php echo _t('관리자가 인증절차를 생략하고 직접 인증완료합니다.');?></div>
+					</p>
+<?php
+					}
+?>
 
 					<p class="checkbox_wrap">
 						<input type="checkbox" name="autoUpdate" id="autoUpdate" <?php if (Validator::getBool($readFeed['autoUpdate'])) { ?>checked="checked"<?php } ?>/>&nbsp;<label for="autoUpdate"><?php echo _t('피드 정보로부터 제목, 글쓴이 이름을 자동으로 업데이트 합니다.');?></label><br />
@@ -375,20 +440,31 @@
 			$stringDate = Func::dateToString($feed['lastUpdate']);
 			$lastPost = Feed::getLatestPost($feed['id']);
 			$isNew = Func::isNew($feed['created'],1);
+			$noVerifier = Validator::getBool($config->useVerifier) && !Validator::getBool($feed['isVerified']) && ($feed['owner'] != 1);
 
 			$data['id'] = 'list_item_'.$feed['id'];
-			$data['class'] = ($feed['visibility']=='n'?'list_item_hide':'').($feed['id']==$read?' list_item_select':'');
+			$data['class'] = ($feed['visibility']=='n'?'list_item_hide':'').($feed['id']==$read?' list_item_select':'').($noVerifier?' no_verifier':'');
 			
 			$data['datas'] = array();
 			
 			// 블로그 등록날짜
-			array_push($data['datas'], array('class'=>'bloglist_date','data'=> date('y.m.d H:i:s', $feed['created']) ));
+			array_push($data['datas'], array('class'=>'bloglist_date','data'=> $noVerifier ? _t('미인증') : date('y.m.d H:i:s', $feed['created']) ));
 			
 			// 블로그 제목
 			ob_start();
 ?>
 			<div class="ftool">
+<?php
+			if($noVerifier) {
+?>
+				<a href="#" class="microbutton" onclick="verifyFeed(<?php echo $feed['id'];?>); return false;"><span><?php echo _t('인증하기');?></span></a>
+<?php
+			} else {
+?>
 				<a href="#" class="microbutton" onclick="updateFeed(<?php echo $feed['id'];?>); return false;"><span><?php echo _t('업데이트');?></span></a>
+<?php
+			}
+?>
 			</div>
 			<div class="ftitle">
 				<a href="<?php echo $service['path'];?>/admin/blog/list?read=<?php echo $feed['id'];?>"><?php echo UTF8::lessenAsEm(stripcslashes($feed['title']), 25);?></a> <?php echo ($isNew?' <img src="'.$service['path'].'/images/admin/icon_new.gif" alt="new" align="absmiddle"/>':'');?>

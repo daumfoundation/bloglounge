@@ -3,19 +3,12 @@
 	define('NO_SESSION', true);
 	include ROOT . '/lib/include.php';
 	
-	if (!file_exists(ROOT . '/cache/rss/1.xml')) {
-		requireComponent('Bloglounge.Data.RSSOut');
-		RSSOut::refresh();
-	}
-	if (!file_exists(ROOT . '/cache/rss/1_focus.xml')) {
-		requireComponent('Bloglounge.Data.RSSOut');
-		RSSOut::refresh('focus');
-	}
+	requireComponent('Bloglounge.Data.RSSOut');
+
 	if (!file_exists(ROOT . '/cache/rss/0.xml')) {
-		requireComponent('Bloglounge.Data.RSSOut');
 		RSSOut::stop();
 	}
-	
+
 	$action = $accessInfo['action'];
 	$config = new Settings;
 
@@ -24,21 +17,22 @@
 	if(Validator::getBool($config->useRssOut)===true) {
 		switch($action) {
 			case 'focus':
-				$fp = fopen(ROOT . "/cache/rss/1_focus.xml", 'r+');
-				$result = fread($fp, filesize(ROOT . "/cache/rss/1_focus.xml"));
-				fclose($fp);
+				RSSOut::refresh('focus', false);
 			break;
-			default:
-				$fp = fopen(ROOT . "/cache/rss/1.xml", 'r+');
-				$result = fread($fp, filesize(ROOT . "/cache/rss/1.xml"));
-				fclose($fp);
+			case 'category':
+				
+				requireComponent('Bloglounge.Data.Category');
+				$category = Category::getByName(urldecode($accessInfo['value']));
+				RSSOut::refresh('category', false, $category);
+			break;
+			default: // recent
+				RSSOut::refresh('recent',false);
 			break;
 		}
 	} else {
+		// error
 		$fp = fopen(ROOT . "/cache/rss/0.xml", 'r+');
 		$result = fread($fp, filesize(ROOT . "/cache/rss/0.xml"));
 		fclose($fp);
 	}
-
-	echo $result;
 ?>

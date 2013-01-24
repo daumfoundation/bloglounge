@@ -9,6 +9,7 @@
 	$response['message'] = '';
 	
 	$name = $_POST['name'];
+	
 	$filter = isset($_POST['filter'])?$_POST['filter']:'';
 
 	if(empty($name)) {

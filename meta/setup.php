@@ -302,6 +302,8 @@
 					  `created` int(11) NOT NULL default '0',
 					  `visibility` enum('y','n') NOT NULL default 'y',
 					  `filter` text NOT NULL,
+					  `filterType` enum('tag','title','tag+title') NOT NULL default 'tag',
+					  `isVerified` enum('y','n') NOT NULL default 'n',
 					  `autoUpdate` enum('y','n') NOT NULL default 'y',
 					  `allowRedistribute` enum('y','n') NOT NULL default 'y',	
 					  `everytimeUpdate` enum('y','n') NOT NULL default 'n',
@@ -418,6 +420,8 @@
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('totalVisit','0');	
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('filter','');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('blackfilter','');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('filterType','tag');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('blackfilterType','tag');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('restrictBoom','n');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('restrictJoin','n');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankBy','boom');
@@ -428,11 +432,14 @@
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('boomDownReactLimit','20');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('useRssOut','y');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('countRobotVisit','y');
-					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('cacheThumbnail','y');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailLimit','3');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('feeditemsOnRss','10');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('summarySave','n');	
-						
+
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('useVerifier','n');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('verifierType','random');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('verifier','');
+
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postList','10');					
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postTitleLength','40');					
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postDescLength','400');					
@@ -818,8 +825,7 @@
 						array_push($checkups, array('success', _t('피드 아이템 테이블의 보기필드의 옵션을 변경했습니다.')));
 					}
 
-					if ($db->exists("DESC {$prefix}Feeds `isVerified`")) { // ncloud 0.1.2
-						$db->execute("ALTER TABLE {$prefix}Feeds DROP `isVerified`");
+					if ($db->exists("DESC {$prefix}Feeds `verifier`")) { // ncloud 0.1.2
 						$db->execute("ALTER TABLE {$prefix}Feeds DROP `verifier`");
 
 						array_push($checkups, array('success', _t('피드 테이블의 인증시스템과 관련된 필드를 삭제했습니다.')));
@@ -945,9 +951,6 @@
 					}
 					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'countRobotVisit'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('countRobotVisit','y')");
-					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'cacheThumbnail'")) {
-						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('cacheThumbnail','y')");
 					}
 					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'useVerifier'")) {
 						$db->execute("DELETE FROM {$prefix}Settings WHERE `name` = 'useVerifier'");	
@@ -1086,7 +1089,38 @@
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('summarySave','n')");	
 						array_push($checkups, array('success', _t('설정 테이블에 요약저장 필드를 추가했습니다.')));
 					}
-					
+
+					if (!$db->exists("DESC {$prefix}Feeds `filterType`")) {  // 0.2.7
+						$db->execute("ALTER TABLE {$prefix}Feeds ADD `filterType` enum('tag','title','tag+title') NOT NULL default 'tag' AFTER `filter`");
+						array_push($checkups, array('success', _t('피드 테이블에 필터종류 필드를 생성했습니다.')));
+					}		
+					/*
+					if (!$db->exists("DESC {$prefix}Categories `filterType`")) {
+						$db->execute("ALTER TABLE {$prefix}Categories ADD `filterType` enum('tag','title','tag+title') NOT NULL default 'tag' AFTER `filter`");
+						array_push($checkups, array('success', _t('분류 테이블에 필터종류 필드를 생성했습니다.')));
+					}*/
+
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'filterType'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('filterType','tag')");	
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('blackfilterType','tag')");	
+
+						array_push($checkups, array('success', _t('설정 테이블에 필터종류 필드를 추가했습니다.')));
+					}					
+
+					if (!$db->exists("DESC {$prefix}Feeds `isVerified`")) {
+						$db->execute("ALTER TABLE {$prefix}Feeds ADD `isVerified` enum('y','n') NOT NULL default 'n' AFTER `filterType`");
+
+						array_push($checkups, array('success', _t('피드 테이블의 인증시스템과 관련된 필드를 추가했습니다.')));
+					}
+
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'useVerifier'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('useVerifier','n')");	
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('verifierType','random')");	
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('verifier','')");	
+
+						array_push($checkups, array('success', _t('설정 테이블에 인증시스템 관련 필드를 추가했습니다.')));
+					}	
+
 					$result = '';
 					foreach($checkups as $checkup) {
 						$result .= '<li class="'.$checkup[0].'">'.$checkup[1].'</li>';

@@ -83,6 +83,8 @@
 				
 				$s_condSearchCategory = $skin->parseTag('search_category', $searchKeyword, $src_condSearchCategory);
 				$s_condSearchCategory = $skin->parseTag('search_count', $totalFeedItems, $s_condSearchCategory);
+				$s_condSearchCategory = $skin->parseTag('search_rss', $servicePath.'/rss/category/'.$searchKeyword, $s_condSearchCategory);
+
 				$src_condMessage = $skin->dressOn('cond_search_category', $src_condSearchCategory, $s_condSearchCategory, $src_condMessage);
 				$src_condMessage = $event->on('Text.searchCategory', $src_condMessage);
 				$condMessage = true;

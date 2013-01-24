@@ -19,11 +19,6 @@
 				
 				Category::buildCategoryRelations($_POST['id'], $tags, $oldTags);
 				
-				if (Validator::getBool(Settings::get('useRssOut'))) {
-					requireComponent('Bloglounge.Data.RSSOut');
-					RSSOut::refresh();
-					RSSOut::refresh('focus');
-				}
 			}
 		
 			
@@ -79,11 +74,13 @@
 		}
 	} else {
 
-		if(!empty($read)) { $page =	FeedItem::getPredictionPage($read,$pageCount); }
-		if($is_admin) {
+		
+		if($is_admin) 
+			{if(!empty($read)) { $page = FeedItem::getPredictionPage($read,$pageCount); }
 			list($posts, $totalFeedItems) = FeedItem::getFeedItems('','','',$page,$pageCount);			
 		} else {
-			list($posts, $totalFeedItems) = FeedItem::getFeedItemsByOwner(getLoggedId(),'','','',$page,$pageCount);			
+			if(!empty($read)) { $page =	FeedItem::getPredictionPageByOwner(getLoggedId(),$read,$pageCount); }
+			list($posts, $totalFeedItems) = FeedItem::getFeedItemsByOwner(getLoggedId(),'','','',$page,$pageCount);	
 		}
 	}
 
@@ -381,17 +378,22 @@
 					$("#entryPreview" + id).hide();	
 					$("#list_item_" + id).removeClass('show_preview');
 				}
+				var pos = $("#list_item_"+id).offset();
+				$(window).scrollTop(pos.top);
+		//		location.href = "#entryPos" + id;
 		}
 		
 		function hideEntryView(id) {
 			$("#icon_view_more_"+id).attr('src',"<?php echo $service['path'];?>/images/admin/bt_view_more.gif");
 			$("#entryPreview" + id).hide();	
 			$("#list_item_" + id).removeClass('show_preview');
+			
+			var pos = $("#list_item_"+id).offset();
 
 			if(typeof(parent)!='undefined')
-				$(parent.window).scrollTop(0);
+				$(parent.window).scrollTop(pos.top);
 			else 
-				$(window).scrollTop(0);
+				$(window).scrollTop(pos.top);
 		}		
 		
 		function resizeEntryView(id, height) {
@@ -604,7 +606,6 @@
 					array('title'=>_t('실행'),'class'=>'entrylist_execute','width'=>'auto'));
 	
 	$datas = array();
-
 	if(count($posts)>0) {
 		foreach($posts as $post) {		
 			
@@ -627,7 +628,7 @@
 	
 			// 글 등록날짜		
 			ob_start();
-?>
+?>			
 			<?php echo date('y.m.d H:i:s', $post['written']);?><br />
 			<span class="date_text">(<?php echo $date;?>)</span>
 <?php

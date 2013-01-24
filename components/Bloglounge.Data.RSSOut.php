@@ -29,7 +29,7 @@
 			$xml->endAllGroups();
 			$xml->close();
 		}
-		function refresh($type = 'recent') {
+		function refresh($type = 'recent', $file = true, $value = array()) {
 			global $database, $db, $service;
 			requireComponent('LZ.PHP.XMLWriter');		
 
@@ -41,17 +41,35 @@
 			$config = new Settings;
 			$rssCount = $config->feeditemsOnRss;
 			$myURL = 'http://'.$_SERVER['HTTP_HOST'].$service['path'];
-
-			if($type == 'focus') {
-				$xml = new XMLFile($rssDir.'/1_focus.xml');
+			
+			if($file) {
+				if($type == 'focus') {
+					$xml = new XMLFile($rssDir.'/1_focus.xml');
+				} else if($type == 'category') {
+					$xml = new XMLFile($rssDir.'/1_category_'.$value['id'].'.xml');
+				} else {
+					$xml = new XMLFile($rssDir.'/1.xml');
+				}
 			} else {
-				$xml = new XMLFile($rssDir.'/1.xml');
+				$xml = new XMLFile('stdout');
 			}
 
 			$xml->startGroup('rss', array('version'=>'2.0'));
-
+			
+			switch($type) {
+				case 'focus':
+					$title = htmlspecialchars($config->title) . ' : ' . _t('포커스 목록');
+				break;
+				case 'category':		
+					$title = htmlspecialchars($config->title) . ' : ' . _f('%1에 대한 분류 검색결과',$value['name']);
+				break;
+				default:
+					$title = htmlspecialchars($config->title);
+				break;
+			}
+			
 			$xml->startGroup('channel');
-			$xml->write('title', htmlspecialchars($config->title) . ($type=='focus'?' : ' . _t('포커스 목록'):''));
+			$xml->write('title', $title);
 			$xml->write('link', htmlspecialchars($myURL));
 			$xml->write('description', htmlspecialchars($config->description));
 			$xml->write('language', $config->language);
@@ -71,6 +89,8 @@
 
 			if($type == 'focus') { 
 				$result = $db->query("SELECT title, permalink, author, description, tags, written FROM {$database['prefix']}FeedItems WHERE allowRedistribute='y' AND focus='y' AND visibility = 'y' ORDER BY written DESC LIMIT 0,{$rssCount}");
+			} else if($type == 'category') {
+				$result = $db->query("SELECT i.title, i.permalink, i.author, i.description, i.tags, i.written FROM {$database['prefix']}FeedItems i LEFT JOIN {$database['prefix']}CategoryRelations c ON (c.item = i.id) WHERE i.allowRedistribute='y' AND i.visibility = 'y' AND c.category = {$value['id']} ORDER BY i.written DESC LIMIT 0,{$rssCount}");		
 			} else {
 				$result = $db->query("SELECT title, permalink, author, description, tags, written FROM {$database['prefix']}FeedItems WHERE allowRedistribute='y' AND visibility = 'y' ORDER BY written DESC LIMIT 0,{$rssCount}");
 			}

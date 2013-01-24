@@ -14,16 +14,10 @@
 
 	function saveSettings() {
 			
-			var cacheThumbnail = 'y';
-			if ($('#cacheThumbnail').attr('checked')) {
-				cacheThumbnail = 'n';
-			};
-
 			$.ajax({
 			  type: "POST",
 			  url: _path +'/service/setting/save.php',
 			  data: "countRobotvisit=" + ($('#countRobotVisit').attr('checked')?'y':'n') +
-							"&cacheThumbnail=" + cacheThumbnail +
 							"&language="+ encodeURIComponent($('#language').val()) +
 							"&welcomePack="+ encodeURIComponent($('#welcomePack').val()),
 			  dataType: 'xml',
@@ -56,23 +50,10 @@
 				<input type="checkbox" name="countRobotVisit" id="countRobotVisit" <?php if ($config->countRobotVisit == 'y') {?>checked="checked"<?php } ?> />&nbsp;<label for="countRobotVisit"><?php echo _t('검색엔진 수집 로봇의 방문 회수를 통계에 포함하지 않습니다.');?></label>
 			</dd>
 		</dl>	
-		<dl class="normal comments">
-			<dt></dt>
-			<dd class="text checkbox_hint">
-				<?php echo _t('이 설정을 선택하면 사람이 아닌 기계적인 방법으로 접근한 방문은 통계에 포함하지 않습니다.');?>
-			</dd>
-		</dl>
-
-		<dl class="normal">
-			<dt></dt>
-			<dd>
-				<input type="checkbox" name="cacheThumbnail" id="cacheThumbnail" <?php if ($config->cacheThumbnail == 'n') {?>checked="checked"<?php } ?> />&nbsp;<label for="cacheThumbnail"><?php echo _t('미리보기 이미지를 생성하지 않습니다.');?></label>
-			</dd>
-		</dl>	
 		<dl class="normal comments last_item">
 			<dt></dt>
 			<dd class="text checkbox_hint">
-				<?php echo _t('이 설정을 선택하면 글 내용의 미리보기를 생성하지 않으며, 기존에 생성된 미리보기 파일은 유지됩니다.');?>			
+				<?php echo _t('이 설정을 선택하면 사람이 아닌 기계적인 방법으로 접근한 방문은 통계에 포함하지 않습니다.');?>
 			</dd>
 		</dl>
 

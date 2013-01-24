@@ -16,7 +16,7 @@
 		$newSettings = array();
 
 		foreach ($_POST as $key=>$value) {
-			if (!Validator::enum($key, 'skin,title,description,logo,updateCycle,updateProcess,archivePeriod,totalVisit,filter,blackfilter,restrictJoin,restrictBoom,rankBy,rankPeriod,rankLife,welcomePack,language,boomDownReactor,boomDownReactLimit,useRssOut,countRobotVisit,cacheThumbnail,thumbnailLimit,feeditemsOnRss,summarySave')) 
+			if (!Validator::enum($key, 'skin,title,description,logo,updateCycle,updateProcess,archivePeriod,totalVisit,filter,blackfilter,restrictJoin,restrictBoom,rankBy,rankPeriod,rankLife,welcomePack,language,boomDownReactor,boomDownReactLimit,useRssOut,countRobotVisit,thumbnailLimit,feeditemsOnRss,summarySave,filterType,blackfilterType,useVerifier,verifierType,verifier')) 
 				continue;
 			$newSettings[$key] = $db->escape($value);
 		}
@@ -25,14 +25,6 @@
 			$response['error'] = 1 ;
 			$response['message'] = $config->_error;
 		}
-
-		requireComponent('Bloglounge.Data.RSSOut');
-		RSSOut::refresh();
-		
-		/*if (($response['error'] == 0) && (Validator::getBool($newSettings['cacheThumbnail']) === false)) { // cacheThumbnail 을 n 으로 껐을때
-			$db->execute("UPDATE {$database['prefix']}FeedItems SET thumbnail=NULL");
-			func::rmpath(ROOT.'/cache/thumbnail');
-		}*/
 	}
 
 	func::printRespond($response);

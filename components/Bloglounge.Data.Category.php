@@ -10,9 +10,10 @@
 			$categoryName = $db->escape($categoryName);
 		
 			$categoryFilter = $db->escape($categoryFilter);
+
 			
 			$priority = Category::getNextPriority();
-			$result = $db->execute('INSERT INTO '.$database['prefix'].'Categories (name, priority, filter) VALUES ("'.$categoryName.'",'.$priority.',"'.$categoryFilter.'")');
+			$result = $db->execute('INSERT INTO '.$database['prefix'].'Categories (name, priority, filter) VALUES ("'.$categoryName.'",'.$priority.',"'.$categoryFilter.'"")');
 			$id = $db->insertId();
 	
 				
@@ -60,6 +61,7 @@
 			$name = $db->escape($name);
 			
 			$filter = $db->escape($filter);
+
 
 			$result = $db->execute('UPDATE '.$database['prefix'].'Categories SET name = "'.$name.'", filter = "'.$filter.'" WHERE id='.$id);	
 			
@@ -162,8 +164,7 @@
 				
 			if(!$db->query('SELECT item FROM '.$database['prefix'].'TagRelations WHERE tag IN ('. implode(',', $tagIds) .') AND type = "category"')) return false;
 			
-			$categoryIds = array();
-	
+			$categoryIds = array();	
 			while ($categorylist = $db->fetchRow()) { 
 				array_push($categoryIds, $categorylist[0]); 
 			}

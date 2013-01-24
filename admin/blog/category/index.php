@@ -21,6 +21,7 @@
 	<script type="text/javascript">
 		function categoryAdd() {
 			var name = $("#categoryAddName");
+			
 			var filter = $("#categoryAddFilter");
 			
 			if(name.val() == "") {
@@ -51,6 +52,7 @@
 		
 		function categoryModify(id) {
 			var name = $("#categoryModifyName");
+			
 			var filter = $("#categoryModifyFilter");
 			
 			if(name.val() == "") {
@@ -259,6 +261,7 @@
 					<dt></dt>
 					<dd><?php echo _t('분류명을 입력해주세요.');?></dd>
 				</dl>
+
 				<dl>
 					<dt><label for="categoryAddFilter"><?php echo _t('자동분류');?></label></dt>
 					<dd><input id="categoryAddFilter" name="categoryFilter" type="text" class="input faderInput" /></dd>
@@ -267,7 +270,7 @@
 					<dt></dt>
 					<dd><?php echo _t('자동분류는 태그로 분류됩니다. 태그는 , 로 다중입력 가능합니다.');?></dd>
 				</dl>
-
+				<div class="clear"></div>
 				<span class="normalbutton"><input type="submit" value="<?php echo _t('추가');?>" /></span>
 			</form>
 <?php
