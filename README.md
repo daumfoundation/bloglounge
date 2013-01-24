@@ -10,3 +10,13 @@
 - PHP 4.3.0 이상
 
 - MySQL  4.1 이상
+
+변동사항
+===========
+- 하단의 소스코드에서 발견된 오류 사항 수정  http://bloglounge.itcanus.net/bloglounge_qna/14969
+
+/components/LZ.PHP.HTTPRequest.php 
+
+/components/LZ.PHP.Feeder.php 
+
+/lib/begin.php
