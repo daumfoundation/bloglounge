@@ -6,5 +6,7 @@
 권장사양 (Recommend Specifications)
 ===========
 Apache 1.3 ( mod_rewrite 필수 ) 이상
+
 PHP 4.3.0 이상
+
 MySQL  4.1 이상
