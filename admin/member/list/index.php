@@ -246,10 +246,6 @@
 			
 			$data = array();
 
-			$date = Func::dateToString($post['written']);
-			$feedvisibility = Feed::get($post['feed'], 'visibility');
-
-			$data['id'] = 'memberItem'.$plugin['name'];
 			$data['class'] = ($read==$member['id']?' list_item_select':'');
 			
 			$data['datas'] = array();
@@ -261,7 +257,7 @@
 			array_push($data['datas'], array('class'=>'member_created','data'=> date('y.m.d H:i:s', $member['created']) ));
 			
 			// 멤버 아이디	
-			array_push($data['datas'], array('class'=>'member_id','data'=> '<a href="'.$service['path'].'/admin/member/list/?read='.$member['id'].'">'.$member['loginid'].'</a>' ));
+			array_push($data['datas'], array('class'=>'member_id','data'=> '<a href="'.$service['path'].'/admin/member/list/?read='.$member['id'].'">'.$member['loginid'].'</a>' . (!Validator::getBool($member['is_accepted'])?(' <span class="not_accept">('._t('미인증').')</span>'):'') ));
 		
 			// 멤버 별명
 			array_push($data['datas'], array('class'=>'member_nickname','data'=> $member['name'] ));
@@ -299,7 +295,7 @@
 	} else {
 			array_push( $datas, array( 'class'=>"list_empty", 'datas'=>array(array('data'=>'회원이 존재하지 않습니다.') )) );
 	}
-
+	$footers = '';
 	echo makeTableBox('memberlist', $headers, $datas, $footers);	
 ?>
 </div>

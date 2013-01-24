@@ -23,7 +23,7 @@
 <body style="background:#fafafa;">
 	<div class="modal_title">
 		<div class="title"><?php echo $feed['title'];?></div>
-		<div class="close">x</div>
+		<div class="close"><a href="#" onclick="parent.hideModal(); return false;">x</a></div>
 		<div class="clear"></div>
 	</div>
 	<div class="modal_preview_container">

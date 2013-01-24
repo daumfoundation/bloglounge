@@ -226,12 +226,14 @@
 			$xmls = new XMLStruct();
 			if ($xmls->open($response_text)) {
 				$captures = $xmls->selectNode("/itcanus/captures");
-				foreach($captures['capture'] as $capture) {
-					foreach( $capture['image'] as $source ) {
-						$source = $source['.attributes'];
-						array_push($result, array('id'=>rawurldecode($source['id']), 'via' => rawurldecode($source['via']), 'url' => rawurldecode($source['url'])));
+				if(isset($captures['capture'])) {
+					foreach($captures['capture'] as $capture) {
+						foreach( $capture['image'] as $source ) {
+							$source = $source['.attributes'];
+							array_push($result, array('id'=>rawurldecode($source['id']), 'via' => rawurldecode($source['via']), 'url' => rawurldecode($source['url'])));
+						}
+				
 					}
-			
 				}
 			
 			}

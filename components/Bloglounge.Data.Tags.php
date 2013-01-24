@@ -12,6 +12,7 @@
 			if (empty($tags)) return false;
 			foreach ($tags as $tag) {
 				if (!Validator::is_empty($tag)) {
+					$tag = trim($tag);
 					array_push($tagChunk, "'$tag'");
 					array_push($tagInsertChunk, "('$tag')");
 				}
@@ -22,7 +23,7 @@
 			$db->execute("INSERT IGNORE INTO {$database['prefix']}Tags (name) VALUES $tagInsertStr");
 
 			$tagIdList = array();
-			if (!$db->query("SELECT id FROM {$database['prefix']}Tags WHERE name IN ($tagStr)")) return;
+			if (!$db->query("SELECT id FROM {$database['prefix']}Tags WHERE name IN ($tagStr)")) return false;
 			while ($taglist = $db->fetchRow()) { 
 					array_push($tagIdList, $taglist[0]); 
 			}
@@ -42,27 +43,14 @@
 			if (count($deletedTags) > 0) {
 				$delTags = array();
 				$dTagStr = '\'' . implode('\' , \'', $deletedTags) . '\'';
-				if (!$db->query("SELECT id FROM {$database['prefix']}Tags WHERE name IN ($dTagStr)")) return;
+				if (!$db->query("SELECT id FROM {$database['prefix']}Tags WHERE name IN ($dTagStr)")) return false;
 				while ($dlist = $db->fetchRow()) { 
 					array_push($delTags, $dlist[0]); 
 				}
 				$db->free();
 				$delTagStr = implode(', ', $delTags); // 삭제된 태그의 id 리스트
 
-				$db->execute("DELETE FROM {$database['prefix']}TagRelations WHERE item='$itemId' AND tag IN ($delTagStr)"); // TagRelation 삭제
-
-				// 삭제된 Tag 들 중 더 이상 해당하는 Relation 이 없는 태그는 태그 자체를 삭제한다
-				if (!$db->query("SELECT DISTINCT tag FROM {$database['prefix']} WHERE tag IN ($delTagStr)")) return;
-				if ($db->numRows() > 0) {
-					$ntList = array();
-					while ($ntt = $db->fetchRow()) {
-						array_push($ntList, $ntt[0]);
-					}
-					$db->free();
-					$ntStr = implode(', ', $ntList);
-
-					$db->execute("DELETE FROM {$database['prefix']}Tags WHERE id IN ($delTagStr) AND id NOT IN ($ntStr)");
-				}
+				$db->execute("DELETE FROM {$database['prefix']}TagRelations WHERE item='$itemId' AND type='feed' AND tag IN ($delTagStr)"); // TagRelation 삭제
 			}
 		}
 
@@ -85,7 +73,7 @@
 			global $database, $db;
 
 			$limit = intval($amount * 1.5);
-			if (!$db->query("SELECT tag, count(tag) as tagUsed FROM {$database['prefix']}TagRelations GROUP BY tag ORDER BY tagUsed DESC LIMIT $limit"))
+			if (!$db->query("SELECT tag, count(tag) as tagUsed FROM {$database['prefix']}TagRelations WHERE type = 'feed' GROUP BY tag ORDER BY tagUsed DESC LIMIT $limit"))
 				return false;
 			if ($db->numRows() == 0) 
 				return false;
@@ -122,7 +110,7 @@
 			global $database, $db;
 
 			$limit = intval($amount * 1.5);
-			if (!$db->query("SELECT tag, count(tag) as tagUsed FROM {$database['prefix']}TagRelations GROUP BY tag ORDER BY RAND() LIMIT $limit"))
+			if (!$db->query("SELECT tag, count(tag) as tagUsed FROM {$database['prefix']}TagRelations WHERE type = 'feed' GROUP BY tag ORDER BY RAND() LIMIT $limit"))
 				return false;
 			if ($db->numRows() == 0) 
 				return false;
@@ -159,7 +147,7 @@
 		function getTagCloudByName($amount) {
 			global $database, $db;
 
-			if (!$db->query("SELECT t.name, count(r.tag) as tagUsed FROM {$database['prefix']}TagRelations r LEFT JOIN {$database['prefix']}Tags t ON t.id = r.tag GROUP BY r.tag"))
+			if (!$db->query("SELECT t.name, count(r.tag) as tagUsed FROM {$database['prefix']}TagRelations r ON ( r.type = 'feed' ) LEFT JOIN {$database['prefix']}Tags t ON t.id = r.tag GROUP BY r.tag"))
 				return false;
 			if ($db->numRows() == 0) 
 				return false;
@@ -177,8 +165,8 @@
 		function getFrequencyRange() {
 			global $database, $db;
 
-			list($min) = $db->pick("SELECT count(tag) as frequency FROM {$database['prefix']}TagRelations GROUP BY tag ORDER BY frequency ASC LIMIT 1");
-			list($max) = $db->pick("SELECT count(tag) as frequency FROM {$database['prefix']}TagRelations GROUP BY tag ORDER BY frequency DESC LIMIT 1");
+			list($min) = $db->pick("SELECT count(tag) as frequency FROM {$database['prefix']}TagRelations WHERE type = 'feed' GROUP BY tag ORDER BY frequency ASC LIMIT 1");
+			list($max) = $db->pick("SELECT count(tag) as frequency FROM {$database['prefix']}TagRelations WHERE type = 'feed' GROUP BY tag ORDER BY frequency DESC LIMIT 1");
 
 			return array('min'=>$min, 'max'=>$max);
 		}
@@ -208,21 +196,19 @@
 		}
 
 		function getTagCount() {		
-			global $db, $database;		
-		//	if (!list($totalTags) = $db->pick('SELECT count(i.id) AS count FROM '.$database['prefix'].'Tags i'.$filter))
-		//			$totalTags = 0;
-			if(!list($totalTags) = $db->pick('SELECT count(*) FROM (SELECT t.name, count(r.tag) AS count FROM '.$database['prefix'].'TagRelations r LEFT JOIN '.$database['prefix'].'Tags t ON t.id = r.tag GROUP BY r.tag) tags WHERE tags.count > 0'))
+			global $db, $database;
+			if(!list($totalTags) = $db->pick("SELECT count( DISTINCT tag ) FROM {$database['prefix']}TagRelations WHERE type = 'feed' "))
 					$totalTags = 0;
 			return $totalTags;
 		}
 
 		function getIssueTags($count) {
 			global $db, $database;
-			$linked = $db->queryCell("SELECT linked FROM {$database['prefix']}TagRelations WHERE linked > 0 ORDER BY linked ASC");
+			$linked = $db->queryCell("SELECT linked FROM {$database['prefix']}TagRelations WHERE linked > 0 AND type = 'feed' ORDER BY linked ASC");
 
 			if($linked) {
 				$day = date('Ymd', $linked);
-				$result = $db->queryAll("SELECT t.name, count(tr.tag) as count, ((count(tr.tag)*10)+sum((FROM_UNIXTIME(tr.linked,'%Y%m%d')-{$day})*1000)) as frequency FROM {$database['prefix']}TagRelations AS tr LEFT JOIN {$database['prefix']}Tags AS t ON (t.id = tr.tag) GROUP BY tr.tag ORDER BY frequency DESC LIMIT {$count}");
+				$result = $db->queryAll("SELECT t.name, count(tr.tag) as count, ((count(tr.tag)*10)+sum((FROM_UNIXTIME(tr.linked,'%Y%m%d')-{$day})*1000)) as frequency FROM {$database['prefix']}TagRelations AS tr LEFT JOIN {$database['prefix']}Tags AS t ON (t.id = tr.tag) WHERE (tr.type = 'feed') GROUP BY tr.tag ORDER BY frequency DESC LIMIT {$count}");
 			} else {
 				$result = array();
 			}

@@ -9,6 +9,7 @@
 	$response['message'] = '';
 	
 	$name = $_POST['name'];
+	$filter = isset($_POST['filter'])?$_POST['filter']:'';
 
 	if(empty($name)) {
 			$response['error'] = -1;
@@ -19,7 +20,7 @@
 			$response['message'] = _t('관리자만이 이 기능을 사용할 수 있습니다.');
 		} else {
 			requireComponent('Bloglounge.Data.Category');
-			if(!Category::add($name)) {
+			if(!Category::add($name, $filter)) {
 				$response['error'] = 2;
 				$response['message'] = _t('분류추가를 실패하였습니다.');
 			} else {

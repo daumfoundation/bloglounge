@@ -26,4 +26,32 @@
 		}
 	}
 
+	function array_to_lower($array,$round = 0){
+		foreach($array as $key => $value){
+			if(is_array($value)) $array[strtolower($key)] =  $this->arraytolower($value,$round+1);
+			else $array[strtolower($key)] = strtolower($value);
+		}
+		return $array;
+	} 
+
+	function implode_string($glue, $pieces) {
+		array_walk($pieces, create_function('&$elem','$elem = "\'".trim($elem)."\'";'));
+		return implode($glue, $pieces); 
+	}
+	
+
+	// from CackePHP
+	function debug($var = false, $showHtml = false, $showFrom = true) {
+		if ($showFrom) {
+			$calledFrom = debug_backtrace();
+			print "<strong>".substr(str_replace(ROOT, "", $calledFrom[0]['file']), 1)."</strong> (line <strong>".$calledFrom[0]['line']."</strong>)";
+		}
+		print "\n<pre class=\"cake-debug\">\n";
+		$var = print_r($var, true);
+
+		if ($showHtml) {
+			$var = str_replace('<', '&lt;', str_replace('>', '&gt;', $var));
+		}
+		print "{$var}\n</pre>\n";
+	}
 ?>

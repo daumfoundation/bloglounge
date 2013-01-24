@@ -7,7 +7,7 @@
 			if(count($feeds) > 0) {
 				$s_feeds_rep = '';
 				$src_feed_rep = $skin->cutSkinTag('feedlist_rep');		
-				$index == 0;
+				$index = 0;
 				foreach ($feeds as $feed) {	
 					$index ++;
 					$feed = $event->on('Data.feed', $feed);
@@ -32,10 +32,10 @@
 						if ($recents = FeedItem::getRecentFeedItemsByFeed($feed['id'], $skinConfig->feedListRecentFeedList)) {	
 							$sp_feedrecent_rep = '';
 							foreach($recents as $recent) {
-								$s_feedrecent_rep = $skin->parseTag('feeds_recent_url', $recent['url'], $src_feedrecent_rep);
+								$s_feedrecent_rep = $skin->parseTag('feeds_recent_url', $recent['permalink'], $src_feedrecent_rep);
 								$s_feedrecent_rep = $skin->parseTag('feeds_recent_linkurl', $service['path'].'/go/'.$recent['id'], $src_feedrecent_rep);
 								$s_feedrecent_rep = $skin->parseTag('feeds_recent_title', $recent['title'], $s_feedrecent_rep);
-								$s_feedrecent_rep = $skin->parseTag('feeds_recent_date', $recent['date'], $s_feedrecent_rep);
+								$s_feedrecent_rep = $skin->parseTag('feeds_recent_date', date('Y-m-d H:i',$recent['written']), $s_feedrecent_rep);
 								$sp_feedrecent_rep .= $s_feedrecent_rep;
 							}								
 							

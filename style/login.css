@@ -19,7 +19,11 @@ form { margin:0; padding:0; }
 #container { width:515px; margin:0 auto; margin-top:150px; }
 	.line { background:none; border:none; height:0; border-bottom:1px solid #eaeaea; font-size:0; padding:0; margin:0; margin-bottom:3px; }
 
-	#login_wrap { width:310px; float:left; border-right:1px dotted #e5e5e5; margin-left:10px; }
+	#login_wrap { width:310px; float:left; border-right:1px dotted #e5e5e5; }
+		#login_wrap .messages { height:90px; overflow:hidden; padding-top:4px; padding-right:10px; }
+			#login_wrap .messages .error { background:#ffeeee; padding:5px; }
+		#login_wrap .toolbar  { margin-top:10px; padding-top:10px; border-top:1px solid #eaeaea; margin-right:10px; }
+
 		#login_wrap table { margin-top:5px; }
 			#login_wrap table .input_td { height:28px; padding-right:10px; }
 			#login_wrap table .bt_td { padding-top:3px; }

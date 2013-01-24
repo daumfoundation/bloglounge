@@ -21,6 +21,7 @@
 	<script type="text/javascript">
 		function categoryAdd() {
 			var name = $("#categoryAddName");
+			var filter = $("#categoryAddFilter");
 			
 			if(name.val() == "") {
 				alert('<?php echo _t("분류명을 입력해주세요.");?>');
@@ -31,7 +32,7 @@
 			$.ajax({
 			  type: "POST",
 			  url: _path +'/service/feed/categoryAdd.php',
-			  data: 'name=' + name.val(),
+			  data: 'name=' + encodeURIComponent(name.val()) + '&filter=' + encodeURIComponent(filter.val()) + '&rand=' + Math.random(),
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();
@@ -50,6 +51,7 @@
 		
 		function categoryModify(id) {
 			var name = $("#categoryModifyName");
+			var filter = $("#categoryModifyFilter");
 			
 			if(name.val() == "") {
 				alert('<?php echo _t("분류명을 입력해주세요.");?>');
@@ -60,7 +62,7 @@
 			$.ajax({
 			  type: "POST",
 			  url: _path +'/service/feed/categoryModify.php',
-			  data: 'id=' + id + '&name=' + name.val(),
+			  data: 'id=' + id + '&name=' + encodeURIComponent(name.val()) + '&filter=' + encodeURIComponent(filter.val()) + '&rand=' + Math.random(),
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();
@@ -81,7 +83,7 @@
 			$.ajax({
 			  type: "POST",
 			  url: _path +'/service/feed/categoryMove.php',
-			  data: 'id=' + id + '&type=up',
+			  data: 'id=' + id + '&type=up' + '&rand=' + Math.random(),
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();
@@ -102,7 +104,7 @@
 			$.ajax({
 			  type: "POST",
 			  url: _path +'/service/feed/categoryMove.php',
-			  data: 'id=' + id + '&type=down',
+			  data: 'id=' + id + '&type=down' + '&rand=' + Math.random(),
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();
@@ -124,7 +126,7 @@
 				$.ajax({
 				  type: "POST",
 				  url: _path +'/service/feed/categoryDelete.php',
-				  data: 'id=' + id,
+				  data: 'id=' + id + '&rand=' + Math.random(),
 				  dataType: 'xml',
 				  success: function(msg){		
 					error = $("response error", msg).text();
@@ -230,6 +232,14 @@
 				<dl class="comments">
 					<dt></dt>
 					<dd><?php echo _t('분류명을 입력해주세요.');?></dd>
+				</dl>	
+				<dl>
+					<dt><label for="categoryModifyFilter"><?php echo _t('자동분류');?></label></dt>
+					<dd><input id="categoryModifyFilter" name="categoryFilter" type="text" class="input faderInput" value="<?php echo $selectCategory['filter'];?>" /></dd>
+				</dl>	
+				<dl class="comments">
+					<dt></dt>
+					<dd><?php echo _t('자동분류는 태그로 분류됩니다. 태그는 , 로 다중입력 가능합니다.');?></dd>
 				</dl>
 				<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('수정완료');?>" />
 			</form>
@@ -249,6 +259,15 @@
 					<dt></dt>
 					<dd><?php echo _t('분류명을 입력해주세요.');?></dd>
 				</dl>
+				<dl>
+					<dt><label for="categoryAddFilter"><?php echo _t('자동분류');?></label></dt>
+					<dd><input id="categoryAddFilter" name="categoryFilter" type="text" class="input faderInput" /></dd>
+				</dl>			
+				<dl class="comments">
+					<dt></dt>
+					<dd><?php echo _t('자동분류는 태그로 분류됩니다. 태그는 , 로 다중입력 가능합니다.');?></dd>
+				</dl>
+
 				<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_add.gif" alt="<?php echo _t('추가');?>" />
 			</form>
 <?php

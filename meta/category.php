@@ -1,12 +1,13 @@
 <?php
 	define('ROOT', '..');
 	include ROOT . '/lib/include.php';
-	include ROOT . '/lib/begin.php';
-
-	// 글 목록
 
 	$searchType = 'category';
 	$searchKeyword = func::decode($accessInfo['action']);
+
+	include ROOT . '/lib/begin.php';
+
+	// 글 목록
 
 	$pageCount = $skinConfig->postList; // 페이지갯수
 	list($posts, $totalFeedItems) = FeedItem::getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount);

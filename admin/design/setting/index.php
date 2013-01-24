@@ -10,6 +10,18 @@
 	// 현재 사용중인 스킨
 	$n_skinname = Settings::get('metaskin');
 	$n_skinpath = ROOT . '/skin/meta/'.$n_skinname;
+	
+	if(!file_exists($n_skinpath.'/index.xml')) {
+?>
+	<div class="accept_wrap wrap">
+			<?php echo drawGrayBoxBegin();?>	
+				<div class="accept_messages">
+					<?php echo _t('현재 사용중인 스킨이 없습니다.');?>
+				</div>
+			<?php echo drawGrayBoxEnd();?>
+	</div>
+<?php
+	} else {
 
 	$xml = file_get_contents($n_skinpath.'/index.xml');
 	$xmls = new XMLStruct();
@@ -473,7 +485,9 @@
 
 </div>
 
-
+<?php
+}
+?>
 
 <?php
 	include ROOT. '/lib/piece/adminFooter.php';

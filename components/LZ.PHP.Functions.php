@@ -176,7 +176,7 @@
 				return $str;
 		}
 
-		function printError($str) {
+		function printError($str, $type = 'normal', $button = 'logout') {
 			global $service;
 	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko">
@@ -203,11 +203,39 @@
 						<hr class="line" />
 						
 						<div id="login_wrap">
-							<?php echo $str; ?><br />
-							<p style="margin-top:15px;">
-								<a href="#" onclick="history.back(); return false();"><?php echo _t('뒤로');?></a>&nbsp;
-								<a href="<?php echo $service['path'];?>/logout/"><?php echo _t('로그아웃');?></a>&nbsp;
-							</p>
+							<div class="messages">
+								<div class="<?php echo $type;?>">
+<?php
+							switch($type) {
+								case 'error':
+?>	
+									<strong>오류 :</strong> 
+<?php
+								break;
+							}
+?>
+									<?php echo $str; ?>
+								</div>
+							</div>
+							<div class="toolbar">
+<?php
+						switch($button) {
+							case 'admin':
+?>
+								<a href="#" onclick="history.back(); return false();"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_back.gif" alt="<?php echo _t('뒤로');?>" /></a>								
+								<a href="<?php echo $service['path'];?>/admin/"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_admin.gif" alt="<?php echo _t('관리자');?>" /></a>&nbsp;
+<?php	
+							break;
+							case 'loglout':
+							default:
+?>
+								<a href="#" onclick="history.back(); return false();"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_back.gif" alt="<?php echo _t('뒤로');?>" /></a>								
+								<a href="<?php echo $service['path'];?>/logout/"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_logout.gif" alt="<?php echo _t('로그아웃');?>" /></a>&nbsp;
+<?php	
+							break;
+						}
+?>
+							</div>
 						</div>
 
 						<div id="temp_images">
@@ -572,6 +600,10 @@
 			$_url2 = func::firstSlashDelete($url2);
 
 			return 'http://' . $_url1 . '/' . $_url2;
+		}
+
+		function filterURLModel($url, $className = 'point') {
+			return preg_replace('/http:\/\/(.*)\//i', 'http://<span class="' . $className . '">$1</span>/', $url);
 		}
 
 		function isWhatBlog($url) {

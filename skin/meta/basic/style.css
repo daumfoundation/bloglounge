@@ -123,8 +123,10 @@ body { font:12px Dotum; color:#6d6d6d; background:#ffffff; }
 		.feedlist_wrap .feedlist .feedlist_more { border-top:1px solid #eee; padding-top:10px;}
 			.feedlist_wrap .feedlist .feedlist_more ul { list-style:none; margin:0; font-size:11px; background:#f8f8f8; padding:4px; }
 			.feedlist_wrap .feedlist .feedlist_more ul li { margin:0; padding:0; border:0; background:url(./images/bg_li2.gif) no-repeat 2px 5px; padding-left:10px; margin-bottom:4px; }
-			.feedlist_wrap .feedlist .feedlist_more ul li a { color:#888; text-decoration:none; }
+			.feedlist_wrap .feedlist .feedlist_more ul li a { color:#666; text-decoration:none; }
 			.feedlist_wrap .feedlist .feedlist_more ul li a:hover { text-decoration:underline; }
+			
+			.feedlist_wrap .feedlist .feedlist_more ul li .date { color:#aaa; }
 			
 			.feedlist_wrap .feedlist h4 { color:#666; font-size:11px; font-weight:bold; margin-bottom:8px; float:left; }
 			.feedlist_wrap .feedlist .more { font-size:11px; float:right; }

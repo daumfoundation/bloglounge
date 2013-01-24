@@ -1,7 +1,6 @@
 <?php
 	define('ROOT', '..');
 	include ROOT . '/lib/include.php';
-	include ROOT . '/lib/begin.php';
 
 	// 글 목록
 
@@ -20,6 +19,8 @@
 		$tStart = strtotime("$tDate 00:00:00");
 		$searchExtraValue = $tStart;
 	}
+	
+	include ROOT . '/lib/begin.php';
 
 	$pageCount = $skinConfig->postList; // 페이지갯수
 	list($posts, $totalFeedItems) = FeedItem::getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount);

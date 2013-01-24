@@ -8,7 +8,7 @@
 		$userInformation = getUsers();
 		if($userInformation['is_accepted'] == 'y') {
 			$visibility = isset($_POST['isVisible']) ? 'y' : 'n';
-			$filter = isset($_POST['useFilter'])?$_POST['filter']:'';
+			$filter = isset($_POST['useFilter'])&&isset($_POST['feedFilter'])?$_POST['feedFilter']:'';
 
 			$id = Feed::add($_POST['feedURL'], $visibility, $filter);	
 
@@ -65,7 +65,7 @@
 	<div class="accept_wrap wrap">
 			<?php echo drawGrayBoxBegin();?>	
 				<div class="accept_messages">
-					<?php echo _t('현재 페이지는 인증된 회원만이 사용하실 수 있습니다..');?>
+					<?php echo _t('현재 페이지는 인증된 회원만이 사용하실 수 있습니다.');?>
 				</div>
 			<?php echo drawGrayBoxEnd();?>
 	</div>
@@ -94,19 +94,19 @@
 			<input type="hidden" name="feedURL" value="<?php echo $feed['xmlURL'];?>" />
 			<dl>
 					<dt><?php echo _t('피드주소');?></dt>
-					<dd class="text"><?php echo $feed['xmlURL']; ?></dd>
+					<dd class="text xml_text"><?php echo func::filterURLModel($feed['xmlURL']); ?></dd>
 			</dl>				
 			<dl>
 					<dt><?php echo _t('제목');?></dt>
-					<dd class="text"><?php echo $feed['title']; ?></dd>
+					<dd class="text title_text"><?php echo stripslashes($feed['title']); ?></dd>
 			</dl>				
 			<dl>
 					<dt><?php echo _t('설명');?></dt>
-					<dd class="text"><?php echo $feed['description']; ?></dd>
+					<dd class="text description_text"><?php echo stripslashes($feed['description']); ?></dd>
 			</dl>		
 			<dl>
 					<dt><?php echo _t('주소');?></dt>
-					<dd class="text"><?php echo $feed['blogURL']; ?> <!--<?php echo $feed['blogTool'];?>--></dd>
+					<dd class="text url_text"><?php echo func::filterURLModel($feed['blogURL']); ?> <!--<?php echo $feed['blogTool'];?>--></dd>
 			</dl>
 <?php		
 	if(feed::doesExistXmlURL($feed['xmlURL'])) {
@@ -137,7 +137,7 @@
 						<?php if (empty($config->filter)) { ?><input type="radio" name="useFilter" id="useFilter_no" checked="checked" />&nbsp;<label for="useFilter_no"><?php echo _t('모든 글을 수집합니다');?></label><br /><?php } ?>
 						<input type="radio" name="useFilter" id="useFilter_yes" <?php if (!empty($config->filter)) { ?>checked="checked"<?php } ?>/>&nbsp;<label for="useFilter_yes"><?php echo _t('지정한 태그를 포함하는 글만 수집합니다');?></label>
 
-						<div><?php if (empty($config->filter)) { ?><input type="text" id="feedFilter" class="input faderInput" onfocus="document.getElementsByName('useFilter')[1].checked=true;" /><div class="help"><?php echo _t('각 단어의 구분은 쉼표(,)로 합니다.');?></div><?php } else { echo $config->filter;?> <div class="help"><?php echo _t('관리자가 설정한 수집 태그 필터 설정이 우선권을 갖습니다');?></div><?php } ?></div>
+						<div><?php if (empty($config->filter)) { ?><input type="text" id="feedFilter" name="feedFilter" class="input faderInput" onfocus="document.getElementsByName('useFilter')[1].checked=true;" /><div class="help"><?php echo _t('각 단어의 구분은 쉼표(,)로 합니다.');?></div><?php } else { echo $config->filter;?> <div class="help"><?php echo _t('관리자가 설정한 수집 태그 필터 설정이 우선권을 갖습니다');?></div><?php } ?></div>
 					</p>
 					<p>
 						<input type="checkbox" name="isVisible" id="isVisible" checked="true" /> <label for="isVisible"><?php echo _t('블로그공개');?></label>
@@ -174,7 +174,7 @@
 		<form method="get" onsubmit="onFeedCheck();">
 			<dl>
 				<dt><label for="feedAddName"><?php echo _t('피드주소 ');?></label></dt>
-				<dd><input id="feedAddName" name="feedURL" type="text" maxlength="100" class="input faderInput" /></dd>
+				<dd><input id="feedAddName" name="feedURL" type="text" class="input faderInput" /></dd>
 			</dl>			
 			<dl class="comments">
 				<dt></dt>

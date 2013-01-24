@@ -4,6 +4,8 @@
 	.memberlist .datas .member_created { text-align:center; font-size:11px; color:#999; }
 	.memberlist .headers .member_id { font-weight:bold; }
 	.memberlist .datas .member_id { text-align:center;  }
+		.memberlist .datas .member_id .not_accept { font-size:11px; color:#999; }
+
 	.memberlist .member_nickname { text-align:center;  }
 	.memberlist .member_blogs { padding-left:10px;  }
 		.memberlist .member_blogs .empty { font-size:11px; color:#999; }

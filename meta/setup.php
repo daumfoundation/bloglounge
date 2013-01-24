@@ -115,7 +115,7 @@
 				
 
 				// 테이블이 존재하는지 검사
-				$check = $db->doesExistTableArray($prefix, explode(',', "{$prefix}Booms,{$prefix}DailyStatistics,{$prefix}DeleteHistory,{$prefix}FeedItems,{$prefix}Feeds,{$prefix}Sessions,{$prefix}SessionsData,{$prefix}SessionVisits,{$prefix}Settings,{$prefix}SkinSettings,{$prefix}Users"));
+				$check = $db->doesExistTableArray($prefix, explode(',', "{$prefix}Booms,{$prefix}DailyStatistics,{$prefix}DeleteHistory,{$prefix}FeedItems,{$prefix}Feeds,{$prefix}ServiceSettings,{$prefix}Sessions,{$prefix}SessionsData,{$prefix}SessionVisits,{$prefix}Settings,{$prefix}SkinSettings,{$prefix}Users"));
 				if ($check['exist'] > 0) {
 					Header("Location: {$path}/setup/?step=" . $IV['type'] . "&error=4" . $redirectValues); 
 					exit;
@@ -137,12 +137,22 @@
 					CREATE TABLE `{$prefix}Categories` (
 					  `id` int(11) NOT NULL auto_increment,
 					  `name` varchar(255) NOT NULL,			
-					  `count` int(11) NOT NULL default '0',					
+					  `filter` TEXT NOT NULL default '',
+					  `count` int(11) NOT NULL default '0',			
+					  `countOnLogin` int(11) NOT NULL default '0',		
 					  `priority` int(11) NOT NULL,
 					  PRIMARY KEY  (`id`),
 					  UNIQUE KEY `name` (`name`)
 					){$charset};
 
+					CREATE TABLE `{$prefix}CategoryRelations` (
+					  `item` int(11) unsigned NOT NULL default '0',
+					  `category` int(11) unsigned NOT NULL default '0',	
+					  `linked` int(11) NOT NULL default '0',
+					  `custom` ENUM('y','n') NOT NULL default 'y',
+					  PRIMARY KEY  (`category`,`item`)
+					){$charset};
+					
 					CREATE TABLE `{$prefix}DailyStatistics` (
 					  `date` int(11) NOT NULL default '0',
 					  `visits` int(11) NOT NULL default '0',
@@ -152,7 +162,7 @@
 					CREATE TABLE `{$prefix}DeleteHistory` (
 					  `id` int(11) NOT NULL auto_increment,
 					  `feed` int(11) NOT NULL default '0',
-					  `permalink` varchar(255) NOT NULL default '',
+					  `permalink` TEXT NOT NULL default '',
 					  PRIMARY KEY  (`id`)
 					){$charset};
 
@@ -160,8 +170,7 @@
 					  `id` int(11) NOT NULL auto_increment,
 					  `feed` int(11) NOT NULL default '0',
 					  `author` varchar(255) NOT NULL default '',
-					  `category` int(11) NOT NULL default '0',
-					  `permalink` varchar(255) NOT NULL default '',
+					  `permalink` TEXT NOT NULL default '',
 					  `title` varchar(255) NOT NULL default '',
 					  `description` text NOT NULL,
 					  `tags` varchar(255) NOT NULL default '',
@@ -177,16 +186,15 @@
 					  `thumbnailId` int(11) NOT NULL default '0',
 					  PRIMARY KEY  (`id`),
 					  KEY `feed` (`feed`),
-					  KEY `written` (`written`),
-					  KEY `permalink` (`permalink`)
+					  KEY `written` (`written`)
 					){$charset};
 
 					CREATE TABLE `{$prefix}Feeds` (
 					  `id` int(11) NOT NULL auto_increment,
 					  `owner` int(11) NOT NULL default '0',
-					  `xmlURL` varchar(255) NOT NULL default '',
+					  `xmlURL` TEXT NOT NULL default '',
 					  `xmlType` varchar(10) NOT NULL default '',
-					  `blogURL` varchar(255) NOT NULL default '',
+					  `blogURL` TEXT NOT NULL default '',
 					  `author` varchar(255) NOT NULL default '',
 					  `title` varchar(255) NOT NULL default '',
 					  `description` varchar(255) NOT NULL default '',
@@ -200,15 +208,14 @@
 					  `autoUpdate` enum('y','n') NOT NULL default 'y',
 					  `allowRedistribute` enum('y','n') NOT NULL default 'y',	
 					  `everytimeUpdate` enum('y','n') NOT NULL default 'n',
-					  PRIMARY KEY  (`id`),
-					  UNIQUE KEY `xmlURL` (`xmlURL`)
+					  PRIMARY KEY  (`id`)
 					){$charset};
 
 					CREATE TABLE `{$prefix}Medias` (
 					  `id` int(11) NOT NULL auto_increment,
 					  `feeditem` int(11) NOT NULL,
 					  `thumbnail` varchar(255) NOT NULL default '',
-					  `source` varchar(255) NOT NULL default '',
+					  `source` TEXT NOT NULL default '',
 					  `width` int(11) NOT NULL default '0',
 					  `height` int(11) NOT NULL default '0',
 					  `type` enum('image','movie') NOT NULL default 'image',			
@@ -262,62 +269,23 @@
 					){$charset};
 
 					CREATE TABLE `{$prefix}Settings` (
-					  `id` int(11) unsigned NOT NULL auto_increment,
-					  `metaskin` varchar(200) NOT NULL default '',
-					  `linkskin` varchar(200) NOT NULL default '',
-					  `title` varchar(100) NOT NULL default '',
-					  `description` varchar(240) NOT NULL default '',
-					  `logo` varchar(100) NOT NULL default '',
-					  `updateCycle` int(6) NOT NULL default '60',
-					  `updateProcess` enum('repeat','random') NOT NULL default 'repeat',	
-					  `archivePeriod` int(6) NOT NULL default '0',
-					  `totalVisit` int(11) NOT NULL default '0',
-					  `filter` text NOT NULL,
-					  `blackfilter` text NOT NULL,
-					  `restrictJoin` enum('y','n') NOT NULL default 'n',
-					  `restrictBoom` enum('y','n') NOT NULL default 'n',
-					  `rankBy` enum('boom','click') NOT NULL default 'boom',
-					  `rankPeriod` int(6) NOT NULL default '6',
-					  `rankLife` int(11) unsigned NOT NULL default '30',
-					  `welcomePack` varchar(200) NOT NULL default 'default',
-					  `language` varchar(10) NOT NULL default 'ko',
-					  `boomDownReactor` enum('none','hide','delete') NOT NULL default 'none',
-					  `boomDownReactLimit` int(11) NOT NULL default '20',
-					  `useRssOut` enum('y','n') NOT NULL default 'y',
-					  `countRobotVisit` enum('y','n') NOT NULL default 'y',
-					  `cacheThumbnail` enum('y','n') NOT NULL default 'y',
-					  `thumbnailLimit` int(11) NOT NULL default '3',	
-					  PRIMARY KEY  (`id`)
+						`name` varchar(32) NOT NULL default '',
+						`value` text NOT NULL,
+						PRIMARY KEY (`name`)
 					){$charset};
 
 					CREATE TABLE `{$prefix}SkinSettings` (
-					  `id` int(11) NOT NULL auto_increment,  				
-					  `postList` int(11) NOT NULL default '10',
-					  `postTitleLength` int(11) NOT NULL default '40',
-					  `postDescLength` int(11) NOT NULL default '400',
-					  `postNewLife` int(3) unsigned NOT NULL default '6',
-					  `feedList` int(11) NOT NULL default '20',
-					  `feedOrder` enum('created','lastUpdate') NOT NULL default 'created',
-					  `feedTitleLength` int(11) NOT NULL default '40',
-					  `boomList` int(11) NOT NULL default '10',
-					  `boomTitleLength` int(11) NOT NULL default '40',
-					  `feedListPage` int(11) unsigned NOT NULL default '20',
-					  `feedListPageOrder` enum('created','lastUpdate') NOT NULL default 'created',
-					  `feedListPageTitleLength` int(11) unsigned NOT NULL default '40',		
-					  `feedListRecentFeedList` int(11) unsigned NOT NULL default '4',
-					  `focusList` int(11) unsigned NOT NULL default '4',
-					  `focusTitleLength` int(11) unsigned NOT NULL default '40',
-					  `focusDescLength` int(11) unsigned NOT NULL default '100',
-					  `tagCloudOrder` enum('name','frequency','random') NOT NULL default 'random',
-					  `tagCloudLimit` int(11) unsigned NOT NULL default '10',
-					  PRIMARY KEY  (`id`)
+						`name` varchar(32) NOT NULL default '',
+						`value` text NOT NULL,
+						PRIMARY KEY (`name`)
 					){$charset};
 
 					CREATE TABLE `{$prefix}TagRelations` (
 					  `item` int(11) unsigned NOT NULL default '0',
 					  `tag` int(11) unsigned NOT NULL default '0',	
 					  `linked` int(11) NOT NULL default '0',
-					  PRIMARY KEY  (`tag`,`item`)
+					  `type` enum('feed','category') NOT NULL default 'feed',
+					  PRIMARY KEY  (`tag`,`item`,`type`)
 					){$charset};
 
 					CREATE TABLE `{$prefix}Tags` (
@@ -342,8 +310,51 @@
 					  UNIQUE KEY `loginid` (`loginid`,`name`)
 					){$charset};
 
-					INSERT INTO {$prefix}Settings (metaskin,linkskin,title) VALUES ('basic','link_basic','{$defaultTitle}');
-					INSERT INTO {$prefix}SkinSettings (id) VALUES (1);
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('metaskin','basic');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('linkskin','');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('title','{$defaultTitle}');		
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('description','');	
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('logo','');						
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('updateCycle','60');						
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('updateProcess','repeat');						
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('archivePeriod','0');						
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('totalVisit','0');	
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('filter','');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('blackfilter','');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('restrictBoom','n');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('restrictJoin','n');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankBy','boom');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankPeriod','6');					
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankLife','30');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('welcomePack','default');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('language','ko');					
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('boomDownReactor','none');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('boomDownReactLimit','20');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('useRssOut','y');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('countRobotVisit','y');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('cacheThumbnail','y');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailLimit','3');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('feeditemsOnRss','10');
+
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postList','10');					
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postTitleLength','40');					
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postDescLength','400');					
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postNewLife','6');	
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedList','20');					
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedOrder','created');					
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedTitleLength','40');					
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('boomList','10');	
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('boomTitleLength','40');	
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedListPage','20');	
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedListPageOrder','created');	
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedListPageTitleLength','40');	
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedListRecentFeedList','4');	
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('focusList','4');
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('focusTitleLength','40');
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('focusDescLength','100');
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('tagCloudOrder','random');
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('tagCloudLimit','10');						
+									
 					INSERT INTO {$prefix}Users (loginid, password, name, email, created, is_admin) VALUES ('{$IV['userid']}', '{$IV['userpw']}', '{$IV['username']}', '{$IV['useremail']}', UNIX_TIMESTAMP(), 'y');
 				";
 
@@ -354,11 +365,13 @@
 						$db->execute("DROP TABLE 				
 									{$prefix}Booms,
 									{$prefix}Categories,
+									{$prefix}CategoryRelations,
 									{$prefix}DailyStatistics,
 									{$prefix}DeleteHistory,
 									{$prefix}FeedItems,
 									{$prefix}Feeds,
 									{$prefix}Medias,
+									{$prefix}ServiceSettings,
 									{$prefix}Sessions,
 									{$prefix}SessionsData,
 									{$prefix}SessionVisits,
@@ -442,11 +455,12 @@
 
 					// 모든 버전에 공통으로 존재하는 테이블의 확인
 					// 테이블이 존재하는지 검사
-					$tables = explode(',', "{$prefix}DailyStatistics,{$prefix}FeedItems,{$prefix}Feeds,{$prefix}Settings,{$prefix}Users");
+					$tables = explode(',', "{$prefix}FeedItems,{$prefix}Feeds,{$prefix}Settings,{$prefix}Users");
 					$check = $db->doesExistTableArray($prefix, $tables);
 					if ($check['exist'] != count($tables)) {
-							Header("Location: {$path}/setup/?step=" . $IV['type'] . "&error=9"); 
-							exit;
+						print_r($check);
+						//	Header("Location: {$path}/setup/?step=" . $IV['type'] . "&error=9"); 
+						//	exit;
 					}
 					
 					$IV2 = array();
@@ -515,50 +529,14 @@
 						$db->execute("ALTER TABLE {$prefix}SessionsData CHANGE address address varchar(11) NOT NULL default '0'");
 					}
 
-				/*	if (!$db->doesExistTable("{$prefix}BoomHistory")) { // alpha1
-						$db->execute("CREATE TABLE `{$prefix}BoomHistory` (
-						  `userid` int(11) NOT NULL default '0',
-						  `boomUp` text NOT NULL,
-						  `boomDown` text NOT NULL,
-						  PRIMARY KEY  (`userid`)
-						){$charset}");
-					} */
-
 					if (!$db->doesExistTable("{$prefix}DeleteHistory")) { // alpha1
 						$db->execute("CREATE TABLE `{$prefix}DeleteHistory` (
 						  `id` int(11) NOT NULL auto_increment,
 						  `feed` int(11) NOT NULL default '0',
-						  `permalink` varchar(255) NOT NULL default '',
+						  `permalink` TEXT NOT NULL default '',
 						  PRIMARY KEY  (`id`)
 						){$charset}");
 					}
-
-					if (!$db->doesExistTable("{$prefix}SkinSettings")) { // alpha1
-						$db->execute("CREATE TABLE `{$prefix}SkinSettings` (
-							  `id` int(11) NOT NULL auto_increment,  				
-							  `postList` int(11) NOT NULL default '10',
-							  `postTitleLength` int(11) NOT NULL default '40',
-							  `postDescLength` int(11) NOT NULL default '400',
-							  `postNewLife` int(3) unsigned NOT NULL default '6',
-							  `feedList` int(11) NOT NULL default '20',
-							  `feedOrder` enum('created','lastUpdate') NOT NULL default 'created',
-							  `feedTitleLength` int(11) NOT NULL default '40',
-							  `boomList` int(11) NOT NULL default '10',
-							  `boomTitleLength` int(11) NOT NULL default '40',
-							  `feedListPage` int(11) unsigned NOT NULL default '20',
-							  `feedListPageOrder` enum('created','lastUpdate') NOT NULL default 'created',
-							  `feedListPageTitleLength` int(11) unsigned NOT NULL default '40',		
-							  `feedListRecentFeedList` int(11) unsigned NOT NULL default '4',
-							  `focusList` int(11) unsigned NOT NULL default '4',
-							  `focusTitleLength` int(11) unsigned NOT NULL default '40',
-							  `focusDescLength` int(11) unsigned NOT NULL default '100',
-							  `tagCloudOrder` enum('name','frequency','random') NOT NULL default 'random',
-							  `tagCloudLimit` int(11) unsigned NOT NULL default '10',
-						  PRIMARY KEY  (`id`)
-						){$charset}");
-						$db->execute("INSERT INTO {$prefix}SkinSettings (id) value (1)");			  
-					}
-
 
 					// feedItems 
 					if (!$db->exists("DESC {$prefix}FeedItems `click`")) {
@@ -570,11 +548,8 @@
 					if (!$db->exists("DESC {$prefix}FeedItems `boomDown`")) {
 						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `boomDown` INT(11) NOT NULL default 0 AFTER `boomUp`");
 					}
-/*					if (!$db->exists("DESC {$prefix}FeedItems `comments`")) {
-						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `comments` INT(11) UNSIGNED NOT NULL default 0 AFTER `boomDown`");
-					}*/
 					if (!$db->exists("DESC {$prefix}FeedItems `visibility`")) {
-						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `visibility` ENUM('y','d','n') NOT NULL default 'y' AFTER `boomDown`");
+						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `visibility` ENUM('y','n','d') NOT NULL default 'y' AFTER `boomDown`");
 					}
 					if (!$db->exists("DESC {$prefix}FeedItems `autoUpdate`")) {
 						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `autoUpdate` ENUM('y','n') NOT NULL default 'y' AFTER `visibility`");
@@ -582,20 +557,12 @@
 					if (!$db->exists("DESC {$prefix}FeedItems `allowRedistribute`")) {
 						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `allowRedistribute` ENUM('y','n') NOT NULL default 'y' AFTER `autoUpdate`");
 					}
-				/*	if (!$db->exists("DESC {$prefix}FeedItems `thumbnail`")) {
-						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `thumbnail` VARCHAR(100) default NULL AFTER `allowRedistribute`");
-					}*/
+
 
 					// feeds
 					if (!$db->exists("DESC {$prefix}Feeds `filter`")) {
 						$db->execute("ALTER TABLE {$prefix}Feeds ADD `filter` TEXT NOT NULL AFTER `created`");
 					}
-				/*	if (!$db->exists("DESC {$prefix}Feeds `isVerified`")) {
-						$db->execute("ALTER TABLE {$prefix}Feeds ADD `isVerified` ENUM('y','n') NOT NULL default 'n' AFTER `filter`");
-					}
-					if (!$db->exists("DESC {$prefix}Feeds `verifier`")) {
-						$db->execute("ALTER TABLE {$prefix}Feeds ADD `isVerified` TEXT NOT NULL AFTER `isVerified`");
-					}*/
 					if (!$db->exists("DESC {$prefix}Feeds `autoUpdate`")) {
 						$db->execute("ALTER TABLE {$prefix}Feeds ADD `autoUpdate` ENUM('y','n') NOT NULL default 'y' AFTER `filter`");
 					}
@@ -603,131 +570,22 @@
 						$db->execute("ALTER TABLE {$prefix}Feeds ADD `allowRedistribute` ENUM('y','n') NOT NULL default 'y' AFTER `autoUpdate`");
 					}
 
-					// settings
-					if (!$db->exists("DESC {$prefix}Settings `blackfilter`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `blackfilter` TEXT NOT NULL AFTER `filter`");
-					}
-					if (!$db->exists("DESC {$prefix}Settings `restrictBoom`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `restrictBoom` ENUM('y','n') NOT NULL default 'n' AFTER `restrictJoin`");
-					}
-					if (!$db->exists("DESC {$prefix}Settings `rankBy`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `rankBy` ENUM('boom','click') NOT NULL default 'boom' AFTER `restrictBoom`");
-					}
-					if (!$db->exists("DESC {$prefix}Settings `rankPeriod`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `rankPeriod` INT(6) NOT NULL default 6 AFTER `rankBy`");
-					}
-					if (!$db->exists("DESC {$prefix}Settings `rankLife`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `rankLife` INT(11) UNSIGNED NOT NULL default 30 AFTER `rankPeriod`");
-					}
-					
-					/*if (!$db->exists("DESC {$prefix}Settings `useVerifier`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `useVerifier` ENUM('y','n') NOT NULL default 'n' AFTER `rankLife`");
-					}
-					if (!$db->exists("DESC {$prefix}Settings `verifierPack`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `verifierPack` VARCHAR(200) NOT NULL default 'default' AFTER `useVerifier`");
-					}*/
-
-					if (!$db->exists("DESC {$prefix}Settings `welcomePack`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `welcomePack` VARCHAR(200) NOT NULL default 'default' AFTER `rankLife`");
-					}
-					if (!$db->exists("DESC {$prefix}Settings `language`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `language` VARCHAR(10) NOT NULL default 'ko' AFTER `welcomePack`");
-					}
-					if (!$db->exists("DESC {$prefix}Settings `boomDownReactor`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `boomDownReactor` ENUM('none','hide','delete') NOT NULL default 'none' AFTER `language`");
-					}
-					if (!$db->exists("DESC {$prefix}Settings `boomDownReactLimit`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `boomDownReactLimit` INT(11) NOT NULL default 20 AFTER `boomDownReactor`");
-					} // from alpha1
-/*
-					if (!$db->exists("DESC {$prefix}Settings `collectComments`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `collectComments` ENUM('y','n') NOT NULL default 'y' AFTER `boomDownReactLimit`");
-					}*/
-					if (!$db->exists("DESC {$prefix}Settings `useRssOut`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `useRssOut` ENUM('y','n') NOT NULL default 'y' AFTER `boomDownReactLimit`");
-					}
-					if (!$db->exists("DESC {$prefix}Settings `countRobotVisit`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `countRobotVisit` ENUM('y','n') NOT NULL default 'y' AFTER `useRssOut`");
-					}
-					if (!$db->exists("DESC {$prefix}Settings `cacheThumbnail`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `cacheThumbnail` ENUM('y','n') NOT NULL default 'y' AFTER `countRobotVisit`");
-					} // from alpha2
-
-					if ($db->exists("DESC {$prefix}Settings `syncToEolin`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings DROP `syncToEolin`");
-					}
-
-					// skinSettings
-					if (!$db->exists("DESC {$prefix}SkinSettings `postNewLife`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD `postNewLife` INT(3) UNSIGNED NOT NULL default 6 AFTER `postDescLength`");
-					}
-					if (!$db->exists("DESC {$prefix}SkinSettings `feedListPage`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD `feedListPage` INT(11) UNSIGNED NOT NULL default 20 AFTER `boomTitleLength`");
-					}
-					if (!$db->exists("DESC {$prefix}SkinSettings `feedListPageOrder`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD `feedListPageOrder` ENUM('created','lastUpdate') NOT NULL default 'created' AFTER `feedListPage`");
-					}
-					if (!$db->exists("DESC {$prefix}SkinSettings `feedListPageTitleLength`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD `feedListPageTitleLength` INT(11) UNSIGNED NOT NULL default 40 AFTER `feedListPageOrder`");
-					}	
-
-					if (!$db->exists("DESC {$prefix}SkinSettings `tagCloudOrder`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD `tagCloudOrder` ENUM('name','frequency','random') NOT NULL default 'random' AFTER `feedListPageTitleLength`");
-					}
-					if (!$db->exists("DESC {$prefix}SkinSettings `tagCloudLimit`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD `tagCloudLimit` INT(11) UNSIGNED NOT NULL default 10 AFTER `tagCloudOrder`");
-					}
-
 					// users
 					if (!$db->exists("DESC {$prefix}Users `is_accepted`")) {
 						$db->execute("ALTER TABLE {$prefix}Users ADD `is_accepted` ENUM('y','n') NOT NULL default 'y' AFTER `is_admin`");
 					}
 
-					// SkinSettings 에 allowHTML 추가 (1.1 정식에서)
-					/*if (!$db->exists("DESC {$prefix}SkinSettings `allowHTML`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD `allowHTML` ENUM('y','n') NOT NULL default 'y' AFTER `tagCloudLimit`");
-					}*/
 
-					// 1.2 ncloud added ( Bloglounge )
+					// 0.1.2 ncloud added ( Bloglounge )
 					
 					$checkups = array();
-
-					if (!$db->exists("DESC {$prefix}SkinSettings `focusList`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD `focusList` int(11) unsigned NOT NULL default '4' AFTER `feedListPageTitleLength`");	
-						
-						array_push($checkups, array('success', _t('스킨설정 테이블에 포커스 개수 필드를 생성했습니다.')));
-					}
-
-					if (!$db->exists("DESC {$prefix}SkinSettings `focusTitleLength`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD `focusTitleLength` int(11) unsigned NOT NULL default '40' AFTER `focusList`");
-
-						array_push($checkups, array('success', _t('스킨설정 테이블에 포커스 제목 글수 필드를 생성했습니다.')));
-					}
-
-					if (!$db->exists("DESC {$prefix}SkinSettings `focusDescLength`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD  `focusDescLength` int(11) unsigned NOT NULL default '100' AFTER `focusTitleLength`");
-						
-						array_push($checkups, array('success', _t('스킨설정 테이블에 포커스 내용 글수 필드를 생성했습니다.')));
-					}				
-
-
-					if ($db->exists("DESC {$prefix}SkinSettings `allowHTML`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings DROP `allowHTML`");
-
-						array_push($checkups, array('success', _t('스킨설정 테이블에서 HTML허용여부 필드를 삭제했습니다.')));
-					}			
 					
-					if (!$db->exists("DESC {$prefix}SkinSettings `feedListRecentFeedList`")) {
-						$db->execute("ALTER TABLE {$prefix}SkinSettings ADD `feedListRecentFeedList` int(11) unsigned NOT NULL default '4'  AFTER `feedListPageTitleLength`");
-
-						array_push($checkups, array('success', _t('스킨설정 테이블에서 블로그의 최근 글 개수 필드를 삭제했습니다.')));
-					}
-
-					if (!$db->doesExistTable("{$prefix}Categories")) { // 1.2 ncloud
+					if (!$db->doesExistTable("{$prefix}Categories")) { // 0.1.2 ncloud
 						$db->execute("CREATE TABLE `{$prefix}Categories` (
 							  `id` int(11) NOT NULL auto_increment,
 							  `name` varchar(255) NOT NULL, 
-							  `count` int(11) NOT NULL default '0',					
+							  `count` int(11) NOT NULL default '0',	
+							  `countOnLogin` int(11) NOT NULL default '0',						
 							  `priority` int(11) NOT NULL,
 							  PRIMARY KEY  (`id`),
 							  UNIQUE KEY `name` (`name`)
@@ -736,7 +594,7 @@
 						array_push($checkups, array('success', _t('분류 테이블을 추가했습니다.')));
 					}			
 
-					if (!$db->doesExistTable("{$prefix}Plugins")) { // 1.2 ncloud
+					if (!$db->doesExistTable("{$prefix}Plugins")) { // 0.1.2 ncloud
 						$db->execute("CREATE TABLE `{$prefix}Plugins` (
 						  `id` int(11) unsigned NOT NULL auto_increment,
 						  `name` VARCHAR( 255 ) NOT NULL default '',
@@ -749,29 +607,23 @@
 						array_push($checkups, array('success', _t('플러그인 테이블을 추가했습니다.')));
 					}
 					
-					if (!$db->doesExistTable("{$prefix}ServiceSettings")) { // 1.2 ncloud
+					if (!$db->doesExistTable("{$prefix}ServiceSettings")) { // 0.1.2 ncloud
 						$db->execute("CREATE TABLE `{$prefix}ServiceSettings` (
-							 name varchar(64) NOT NULL default '',
-							 value text NOT NULL,
-							 PRIMARY KEY  (name)
+							 `name` varchar(64) NOT NULL default '',
+							 `value` text NOT NULL,
+							 PRIMARY KEY  (`name`)
 						) {$charset};");					
 
 						array_push($checkups, array('success', _t('서비스설정 테이블을 추가했습니다.')));
 					}
 
 
-					if (!$db->exists("DESC {$prefix}FeedItems `category`")) { // ncloud 1.2
-						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `category` INT(11) NOT NULL default 0 AFTER `author`");
-
-						array_push($checkups, array('success', _t('피드아이템 테이블에 카데고리필드를 추가했습니다.')));
-					}
-
-					if (!$db->exists("DESC {$prefix}FeedItems `focus`")) { // ncloud 1.2
+					if (!$db->exists("DESC {$prefix}FeedItems `focus`")) { // ncloud 0.1.2
 						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `focus`  enum('y','n') NOT NULL default 'n' AFTER `written`");
 						array_push($checkups, array('success', _t('피드아이템 테이블에 포커스필드를 추가했습니다.')));
 					}
 					
-					if (!$db->doesExistTable("{$prefix}Booms")) { // 1.2 ncloud
+					if (!$db->doesExistTable("{$prefix}Booms")) { // 0.1.2 ncloud
 						$db->execute("CREATE TABLE `{$prefix}Booms` (
 						  `userid` INT( 11 ) NOT NULL default '0',
 						  `feeditem` INT( 11 ) NOT NULL ,
@@ -785,12 +637,12 @@
 						array_push($checkups, array('success', _t('붐 테이블을 추가했습니다.')));
 
 					}
-					if (!$db->doesExistTable("{$prefix}Medias")) { // 1.2 ncloud
+					if (!$db->doesExistTable("{$prefix}Medias")) { // 0.1.2 ncloud
 						$db->execute("CREATE TABLE `{$prefix}Medias` (
 						  `id` int(11) NOT NULL auto_increment,
 						  `feeditem` int(11) NOT NULL,
 						  `thumbnail` varchar(255) NOT NULL default '',
-						  `source` varchar(255) NOT NULL default '',
+						  `source` TEXT NOT NULL default '',
 						  `width` int(11) NOT NULL default '0',
 						  `height` int(11) NOT NULL default '0',
 						  `type` enum('image','movie') NOT NULL default 'image',	
@@ -804,33 +656,12 @@
 
 					}					
 					
-					if (!$db->exists("DESC {$prefix}Settings `thumbnailLimit`")) { // ncloud 1.2
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `thumbnailLimit` int(11) NOT NULL default '3'");		
-						array_push($checkups, array('success', _t('설정 테이블에 썸네일저장개수 필드를 추가했습니다.')));
-					}	
-					
-					if (!$db->exists("DESC {$prefix}Settings `updateProcess`")) { // ncloud 1.2
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `updateProcess` enum('repeat','random') NOT NULL default 'repeat' AFTER `updateCycle`");		
-						array_push($checkups, array('success', _t('설정 테이블에 업데이트방식에 대한 필드를 추가했습니다.')));
-					}
-
-					if ($db->exists("DESC {$prefix}Settings `skin`")) { // ncloud 1.2
-						$db->execute("ALTER TABLE {$prefix}Settings CHANGE `skin` `metaskin` varchar(200)");	
-						array_push($checkups, array('success', _t('설정 테이블에 스킨필드를 메타스킨 필드명으로 변경했습니다.')));
-
-					}
-
-					if (!$db->exists("DESC {$prefix}Settings `linkskin`")) { // ncloud 1.2
-						$db->execute("ALTER TABLE {$prefix}Settings ADD `linkskin` varchar(200) NOT NULL default '' AFTER `metaskin`");		
-						array_push($checkups, array('success', _t('설정 테이블에 링크스킨 필드를 추가했습니다.')));
-					}
-
-					if (!$db->exists("DESC {$prefix}FeedItems `thumbnailId`")) { // ncloud 1.2
+					if (!$db->exists("DESC {$prefix}FeedItems `thumbnailId`")) { // ncloud 0.1.2
 						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `thumbnailId` INT(11) NOT NULL default '0' AFTER `allowRedistribute`");
 						array_push($checkups, array('success', _t('피드아이템 테이블에 대표썸네일 필드를 추가했습니다.')));
 					}		
 
-	  				if ($db->exists("DESC {$prefix}FeedItems `thumbnail`")) { // ncloud 1.2
+	  				if ($db->exists("DESC {$prefix}FeedItems `thumbnail`")) { // ncloud 0.1.2
 						// Thumbnail 이동
 
 						$thumbnails = array();
@@ -852,12 +683,12 @@
 					}
 					
 
-					if (!$db->exists("DESC {$prefix}Feeds `xmlType`")) { // ncloud 1.2
+					if (!$db->exists("DESC {$prefix}Feeds `xmlType`")) { // ncloud 0.1.2
 						$db->execute("ALTER TABLE {$prefix}Feeds ADD `xmlType` varchar(10) NOT NULL default '' AFTER `xmlURL`");
 						array_push($checkups, array('success', _t('피드 테이블에 XML 종류 필드를 추가했습니다.')));
 					}		
 
-					if ($db->doesExistTable("{$prefix}BoomHistory")) { // 1.2 ncloud
+					if ($db->doesExistTable("{$prefix}BoomHistory")) { // ncloud 0.1.2
 						$result = $db->queryAll("SELECT * FROM {$prefix}BoomHistory");
 						foreach($result as $item) {
 							$userid = $item['userid'];
@@ -875,66 +706,52 @@
 							}
 						}
 
-						$db->execute("DROP TABLE `{$prefix}BoomHistory`"); // 1.2
+						$db->execute("DROP TABLE `{$prefix}BoomHistory`"); // ncloud 0.1.2
 						array_push($checkups, array('success', _t('분류히스토리 테이블을 붐테이블로 옮긴후 삭제했습니다.')));
 					}
 
-					if ($db->exists("DESC {$prefix}FeedItems `comments`")) { // 1.2
+					if ($db->exists("DESC {$prefix}FeedItems `comments`")) { // ncloud 0.1.2
 						$db->execute("ALTER TABLE {$prefix}FeedItems DROP `comments`");
 						array_push($checkups, array('success', _t('피드 아이템 테이블에 댓글 필드를 삭제했습니다.')));
 					}
 
-					if ($db->exists("DESC {$prefix}Settings `collectComments`")) { // 1.2
-						$db->execute("ALTER TABLE {$prefix}Settings DROP `collectComments`");
-						array_push($checkups, array('success', _t('설정 테이블에 댓글수집여부 필드를 삭제했습니다.')));
-					}	
-
-					if ($db->queryCell("DESC {$prefix}FeedItems visibility", 'Type') != "enum('y','d','n')") { // 1.2
-						$db->execute("ALTER TABLE {$prefix}FeedItems CHANGE visibility visibility enum('y','d','n') NOT NULL default 'y'");
+					if ($db->queryCell("DESC {$prefix}FeedItems visibility", 'Type') != "enum('y','n','d')") { // ncloud 0.1.2
+						$db->execute("ALTER TABLE {$prefix}FeedItems CHANGE visibility visibility enum('y','n','d') NOT NULL default 'y'");
 						array_push($checkups, array('success', _t('피드 아이템 테이블의 보기필드의 옵션을 변경했습니다.')));
 					}
 
-					if ($db->exists("DESC {$prefix}Feeds `isVerified`")) { // 1.2
+					if ($db->exists("DESC {$prefix}Feeds `isVerified`")) { // ncloud 0.1.2
 						$db->execute("ALTER TABLE {$prefix}Feeds DROP `isVerified`");
 						$db->execute("ALTER TABLE {$prefix}Feeds DROP `verifier`");
 
 						array_push($checkups, array('success', _t('피드 테이블의 인증시스템과 관련된 필드를 삭제했습니다.')));
 					}
 					
-					if (!$db->exists("DESC {$prefix}Feeds `visibility`")) { // 1.2
+					if (!$db->exists("DESC {$prefix}Feeds `visibility`")) { // ncloud 0.1.2
 						$db->execute("ALTER TABLE {$prefix}Feeds ADD `visibility` ENUM('y','n') NOT NULL default 'y' AFTER `created`");
 
 						array_push($checkups, array('success', _t('피드 테이블에 보기옵션 필드를 생성했습니다.')));
 					}	
-					if (!$db->exists("DESC {$prefix}Feeds `everytimeUpdate`")) { // 1.2
+					if (!$db->exists("DESC {$prefix}Feeds `everytimeUpdate`")) { // ncloud 0.1.2
 						$db->execute("ALTER TABLE {$prefix}Feeds ADD `everytimeUpdate` enum('y','n') NOT NULL default 'n' AFTER `allowRedistribute`");
 						array_push($checkups, array('success', _t('피드 테이블에 매번 업데이트 여부 확인 필드를 생성했습니다.')));
 					}	
-
-					if ($db->exists("DESC {$prefix}Settings `useVerifier`")) {
-						$db->execute("ALTER TABLE {$prefix}Settings DROP `useVerifier`");					
-						$db->execute("ALTER TABLE {$prefix}Settings DROP `verifierPack`");
-						
-						array_push($checkups, array('success', _t('설정테이블의 인증시스템과 관련된 필드를 삭제했습니다.')));
-					}  					
-									
-					if ($db->doesExistTable("{$prefix}Notice")) { // 1.2 ncloud
-						$db->execute("DROP TABLE `{$prefix}Notice"); // 1.2
-						$db->execute("DROP TABLE `{$prefix}NoticeFeeds"); // 1.2
+		
+					if ($db->doesExistTable("{$prefix}Notice")) { // ncloud 0.1.2
+						$db->execute("DROP TABLE {$prefix}Notice"); // ncloud 0.1.2
+						$db->execute("DROP TABLE {$prefix}NoticeFeeds"); // ncloud 0.1.2
 									
 						array_push($checkups, array('success', _t('공지사항 테이블을 삭제했습니다.')));
 					}
 
-					if (!$db->exists("DESC {$prefix}TagRelations `linked`")) { // 1.2
+					if (!$db->exists("DESC {$prefix}TagRelations `linked`")) { // ncloud 0.1.2
 						$db->execute("ALTER TABLE {$prefix}TagRelations ADD `linked` int(11) NOT NULL default '0' AFTER `tag`");
-
 
 						array_push($checkups, array('success', _t('태그연관 테이블에 태그연결 날짜 필드를 생성했습니다.')));
 					}
+									  
 
-					  
-
-					if(!file_exists(ROOT.'/remove.lock')) { // 1.2
+					if(!file_exists(ROOT.'/remove.lock')) { // ncloud 0.1.2
 						$fp = fopen(ROOT.'/remove.lock','w+');
 						if($fp) {
 							fwrite($fp, 'remove lock');	
@@ -942,6 +759,203 @@
 							@chmod(ROOT . '/remove.lock', 0666);
 						}												
 					}
+
+					if ($db->exists("DESC {$prefix}Settings `id`")) { // ncloud 0.1.7
+						$query = "
+							CREATE TABLE {$prefix}SettingsMig (
+								`name` varchar(32) NOT NULL default '',
+								`value` text NOT NULL,
+								PRIMARY KEY (`name`)
+							){$charset}
+						";
+						if ($db->execute($query)) {
+							$result = $db->queryAll("SELECT * FROM {$prefix}Settings", MYSQL_ASSOC);
+							
+							foreach($result as $item) {
+								foreach($item as $name=>$value) {
+									$db->execute("INSERT INTO {$prefix}SettingsMig (`name`,`value`) VALUES ('{$name}', '{$value}')");
+								}											
+							}
+							
+							$db->execute("DROP TABLE {$prefix}Settings");	
+							$db->execute("RENAME TABLE {$prefix}SettingsMig TO {$prefix}Settings");	
+							
+						}	
+						
+					    $query = "
+							CREATE TABLE {$prefix}SkinSettingsMig (
+								`name` varchar(32) NOT NULL default '',
+								`value` text NOT NULL,
+								PRIMARY KEY (`name`)
+							){$charset}
+						";
+						if ($db->execute($query)) {
+							$result = $db->queryAll("SELECT * FROM {$prefix}SkinSettings", MYSQL_ASSOC);
+							
+							foreach($result as $item) {
+								foreach($item as $name=>$value) {
+									$db->execute("INSERT INTO {$prefix}SkinSettingsMig (`name`,`value`) VALUES ('{$name}', '{$value}')");
+								}											
+							}
+							
+							$db->execute("DROP TABLE {$prefix}SkinSettings");	
+							$db->execute("RENAME TABLE {$prefix}SkinSettingsMig TO {$prefix}SkinSettings");			
+						}
+
+						array_push($checkups, array('success', _t('설정 테이블과 스킨 설정 테이블의 구조를 변경했습니다.')));
+					}
+
+					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'id'")) {
+						$db->execute("DELETE FROM {$prefix}Settings WHERE name = 'id'");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'filter'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('filter','')");
+					}			
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'blackfilter'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('blackfilter','')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'restrictBoom'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('restrictBoom','n')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'rankBy'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankBy','boom')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'rankPeriod'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankPeriod','6')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'rankLife'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankLife','30')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'welcomePack'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('welcomePack','default')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'language'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('language','ko')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'boomDownReactor'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('boomDownReactor','none')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'boomDownReactLimit'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('boomDownReactLimit','20')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'useRssOut'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('useRssOut','y')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'feeditemsOnRss'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('feeditemsOnRss','10')");	
+						array_push($checkups, array('success', _t('설정테이블에 RSS 재출력 개수 필드를 생성했습니다.')));
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'countRobotVisit'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('countRobotVisit','y')");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'cacheThumbnail'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('cacheThumbnail','y')");
+					}
+					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'useVerifier'")) {
+						$db->execute("DELETE FROM {$prefix}Settings WHERE name = 'useVerifier'");	
+						$db->execute("DELETE FROM {$prefix}Settings WHERE name = 'verifierPack'");
+						array_push($checkups, array('success', _t('설정테이블의 인증시스템과 관련된 필드를 삭제했습니다.')));
+					}		
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'thumbnailLimit'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailLimit','3')");	
+						array_push($checkups, array('success', _t('설정 테이블에 썸네일저장개수 필드를 추가했습니다.')));
+					}									
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'updateProcess'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('updateProcess','repeat')");	
+						array_push($checkups, array('success', _t('설정 테이블에 업데이트방식에 대한 필드를 추가했습니다.')));
+					}					
+					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'skin'")) {
+						$db->execute("UPDATE {$prefix}Settings SET name = 'metaskin' WHERE name = 'skin'");	
+						array_push($checkups, array('success', _t('설정 테이블에 스킨필드를 메타스킨 필드명으로 변경했습니다.')));
+					}					
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'linkskin'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('linkskin','')");	
+						array_push($checkups, array('success', _t('설정 테이블에 링크스킨 필드를 추가했습니다.')));
+					}				
+					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'collectComments'")) {
+						$db->execute("DELETE FROM {$prefix}Settings WHERE name = 'collectComments'");	
+						array_push($checkups, array('success', _t('설정 테이블에 댓글수집여부 필드를 삭제했습니다.')));
+					}		
+					if ($db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'id'")) {
+						$db->execute("DELETE FROM {$prefix}SkinSettings WHERE name = 'id'");
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'focusList'")) {
+						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('focusList','4')");
+						array_push($checkups, array('success', _t('스킨설정 테이블에 포커스 개수 필드를 생성했습니다.')));
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'focusTitleLength'")) {
+						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('focusTitleLength','40')");
+						array_push($checkups, array('success', _t('스킨설정 테이블에 포커스 제목 글수 필드를 생성했습니다.')));
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'focusDescLength'")) {
+						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('focusDescLength','100')");
+						array_push($checkups, array('success', _t('스킨설정 테이블에 포커스 내용 글수 필드를 생성했습니다.')));
+					}
+					if ($db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'allowHTML'")) {
+						$db->execute("DELETE FROM {$prefix}SkinSettings WHERE name = 'allowHTML'");
+						array_push($checkups, array('success', _t('스킨설정 테이블에서 HTML허용여부 필드를 삭제했습니다.')));
+					}
+					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'feedListRecentFeedList'")) {
+						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedListRecentFeedList','4')");	
+						array_push($checkups, array('success', _t('스킨설정 테이블에서 블로그의 최근 글 개수 필드를 삭제했습니다.')));
+					}
+
+					if ($db->queryCell("DESC {$prefix}Feeds xmlURL", 'Type') != "text") { // ncloud 0.1.7
+						$db->execute("ALTER TABLE {$prefix}Feeds CHANGE xmlURL xmlURL text NOT NULL default ''");
+						$db->execute("ALTER TABLE {$prefix}Feeds CHANGE blogURL blogURL text NOT NULL default ''");
+						$db->execute("ALTER TABLE {$prefix}FeedItems CHANGE permalink permalink text NOT NULL default ''");
+						$db->execute("ALTER TABLE {$prefix}Medias CHANGE source source text NOT NULL default ''");		
+						$db->execute("ALTER TABLE {$prefix}DeleteHistory CHANGE permalink permalink text NOT NULL default ''");
+						array_push($checkups, array('success', _t('주소를 나타내는 모든 필드타입을 변경했습니다.')));
+					}
+					
+					if (!$db->exists("DESC {$prefix}Categories `filter`")) { // ncloud 0.1.8
+						$db->execute("ALTER TABLE {$prefix}Categories ADD `filter` TEXT NOT NULL default '' AFTER `name`");						
+						$db->execute("ALTER TABLE {$prefix}Categories ADD `countOnLogin` int(11) NOT NULL default '0' AFTER `count`");
+
+						array_push($checkups, array('success', _t('분류 테이블에 필터 필드를 생성했습니다.')));
+					}	
+					
+					if (!$db->exists("DESC {$prefix}TagRelations `type`")) { // ncloud 0.1.8
+						$db->execute("ALTER TABLE {$prefix}TagRelations ADD `type` enum('feed','category') NOT NULL default 'feed' AFTER `linked`"); 
+						$db->execute("ALTER TABLE {$prefix}TagRelations DROP PRIMARY KEY , ADD PRIMARY KEY ( `tag` , `item` , `type` )"); 
+
+						array_push($checkups, array('success', _t('태그연관 테이블에 태그종류 필드를 생성했습니다.')));
+					}
+					
+					
+					if (!$db->doesExistTable("{$prefix}CategoryRelations")) { // 0.1.8 ncloud
+						$db->execute("CREATE TABLE `{$prefix}CategoryRelations` (
+							  `item` int(11) unsigned NOT NULL default '0',
+							  `category` int(11) unsigned NOT NULL default '0',	
+							  `linked` int(11) NOT NULL default '0',		
+							  `custom` ENUM('y','n') NOT NULL default 'y',
+							  PRIMARY KEY  (`category`,`item`)
+							){$charset};
+						");					
+						
+						array_push($checkups, array('success', _t('분류연관 테이블을 추가했습니다.')));
+					}			
+					
+					if ($db->exists("DESC {$prefix}FeedItems `category`")) { // ncloud 0.1.8
+					   
+						$result = $db->queryAll("SELECT * FROM {$prefix}FeedItems WHERE category != 0", MYSQL_ASSOC);
+						foreach($result as $item) {
+							$db->execute("INSERT INTO {$prefix}CategoryRelations (`item`,`category`,`linked`,`custom`) VALUES ({$item['id']},{$item['category']},UNIX_TIMESTAMP(),'y')");	
+						}
+					
+						$db->execute("ALTER TABLE {$prefix}FeedItems DROP `category`");
+						
+						requireComponent('Bloglounge.Data.Category');
+						
+						$result = Category::getCategories();
+						foreach($result as $item) {
+							Category::rebuildCount($item);
+						}
+
+						array_push($checkups, array('success', _t('피드아이템 테이블에 카데고리필드를 삭제했습니다.')));
+					}					
+					
 					$result = '';
 					foreach($checkups as $checkup) {
 						$result .= '<li class="'.$checkup[0].'">'.$checkup[1].'</li>';
@@ -951,12 +965,12 @@
 						$result = '<ul>'.$result.'</ul>';
 					}
 
-					$fp = fopen(ROOT.'/cache/checkup','w+'); // 1.2
+					$fp = fopen(ROOT.'/cache/checkup','w+'); // ncloud 0.1.2
 					if($fp) {
 						fwrite($fp, $result);	
 						fclose($fp);				
 						@chmod(ROOT . '/cache/checkup', 0666);
-					}						
+					}					
 
 					// 마이그레이션 완료			
 					Header("Location: {$path}/setup/?step=upgrade");
@@ -1021,11 +1035,13 @@
 				$db->execute("DROP TABLE 
 									{$database['prefix']}Booms,
 									{$database['prefix']}Categories,
+									{$database['prefix']}CategoryRelations,
 									{$database['prefix']}DailyStatistics,
 									{$database['prefix']}DeleteHistory,
 									{$database['prefix']}FeedItems,
 									{$database['prefix']}Feeds,
 									{$database['prefix']}Medias,
+									{$database['prefix']}ServiceSettings,
 									{$database['prefix']}Sessions,
 									{$database['prefix']}SessionsData,
 									{$database['prefix']}SessionVisits,
@@ -1047,6 +1063,12 @@
 		break;
 		case 'complete':
 			$step_text = _t('설치') . ' - ' . _t('완료');
+		break;
+		case 'upgrade':
+			$step_text = _t('업그레이드') . ' - ' . _t('완료');
+		break;
+		default:
+			$step_text = '';
 		break;
 	}
 ?>
@@ -1132,6 +1154,7 @@
 		break;
 		case '2': // ** 두번째 단계
 			$removeLockExist = file_exists(ROOT . '/remove.lock');
+			$configFileExist = file_exists(ROOT . '/config.php');
 ?>
 			<div id="title">
 				<span class="stepNum"><?php echo _f('%1단계', 2);?>:</span>&nbsp;<span class="stepTitle"><?php echo _t('작업 유형을 선택해주세요');?></span>
@@ -1141,7 +1164,7 @@
 			<div class="indesc">
 				<ul id="setupType">
 <?php
-				if(!file_exists(ROOT . '/config.php')) {
+				if(!$configFileExist) {
 ?>
 					<li>
 						<input type="radio" name="type" value="install" id="install" checked="checked" />&nbsp;<label for="install"><?php echo _t('블로그라운지를 새롭게 설치합니다');?></label><br />
@@ -1157,14 +1180,14 @@
 				}
 ?>
 					<li>
-						<input type="radio" name="type" value="migration" id="migration" />&nbsp;<label for="migration"><?php echo _t('이전 버전의 블로그라운지를 업그레이드 합니다');?></label><br />
+						<input type="radio" name="type" value="migration" id="migration" <?php echo $configFileExist?'checked="checked"':'';?> />&nbsp;<label for="migration"><?php echo _t('이전 버전의 블로그라운지를 업그레이드 합니다');?></label><br />
 						<span class="help"><?php echo _t('이전 버전의 블로그라운지 혹은 날개툴을 덮어 씌우신 경우 이 항목을 선택하세요.');?></span>
 					</li>
 <?php
 					if(!$removeLockExist) {
 ?>
 					<li>
-						<input type="radio" name="type" value="uninstall" id="uninstall" <?php echo $removeLockExist?'checked="checked"':'';?> />&nbsp;<label for="uninstall"><?php echo _t('설치되어 있는 블로그라운지를 삭제합니다');?></label><br />
+						<input type="radio" name="type" value="uninstall" id="uninstall" />&nbsp;<label for="uninstall"><?php echo _t('설치되어 있는 블로그라운지를 삭제합니다');?></label><br />
 						<span class="help"><?php echo _t('현재 설치되어 있는 블로그라운지를 삭제하시려면 이 항목을 선택하세요,');?></span>
 					</li>
 <?php

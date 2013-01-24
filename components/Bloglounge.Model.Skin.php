@@ -8,10 +8,13 @@
 			global $service;
 
 			$this->url = "{$service['path']}/skin/$skinname/";
-
-			$this->output = file_get_contents(ROOT. "/skin/$skinname/skin.html");			
-			$this->output = str_replace('./', $this->url , $this->output);
-
+			
+			if(!file_exists(ROOT."/skin/$skinname/skin.html")) {
+				Func::printError(_f('%1 스킨이 존재하지 않습니다.',$skinname),'error','admin');
+			} else {
+				$this->output = file_get_contents(ROOT."/skin/$skinname/skin.html");			
+				$this->output = str_replace('./', $this->url , $this->output);
+			}
 		}
 
 		function cutSkinTag($tag, $contents = null) {

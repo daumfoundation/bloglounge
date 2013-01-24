@@ -1,7 +1,13 @@
 .add_wrap { margin-top:15px; }
+	.add_wrap dl dd .input { width:600px; }
+
 .add_detail_wrap { margin-top:15px; margin-bottom:10px; }
 	.add_detail_wrap dl { height:24px; }
-	.add_detail_wrap dt { font-weight:bold; }
+		.add_detail_wrap dt { font-weight:bold; }
+		.add_detail_wrap dd { width:936px; }
+			.add_detail_wrap dl dd.xml_text .point { color:#111; font-weight:normal; }
+			.add_detail_wrap dl dd.url_text .point { color:#111; font-weight:normal; }
+
 
 	.add_detail_wrap .options_wrap { border-top:1px solid #ccc; margin-top:10px; padding-top:4px; }
 		.add_detail_wrap .options_wrap p { margin-bottom:10px; }

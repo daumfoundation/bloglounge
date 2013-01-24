@@ -108,7 +108,6 @@
 			<div class="clear"></div>
 <?php
 		// 포커스 내용
-
 		if($config['useFocus']) {
 ?>
 			<ul id="_issueFocus_focus_item" class="item _issueFocus_item viewed">

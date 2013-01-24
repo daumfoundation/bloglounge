@@ -7,11 +7,23 @@
 		requireComponent('Bloglounge.Data.RSSOut');
 		RSSOut::refresh();
 	}
+	if (!file_exists(ROOT . '/cache/rss/0.xml')) {
+		requireComponent('Bloglounge.Data.RSSOut');
+		RSSOut::stop();
+	}
+
+	$config = new Settings;
 
 	header('Content-Type: text/xml; charset=utf-8');
-	$fp = fopen(ROOT . "/cache/rss/1.xml", 'r+');
-	$result = fread($fp, filesize(ROOT . "/cache/rss/1.xml"));
-	fclose($fp);
+	if(Validator::getBool($config->useRssOut)===true) {
+		$fp = fopen(ROOT . "/cache/rss/1.xml", 'r+');
+		$result = fread($fp, filesize(ROOT . "/cache/rss/1.xml"));
+		fclose($fp);
+	} else {
+		$fp = fopen(ROOT . "/cache/rss/0.xml", 'r+');
+		$result = fread($fp, filesize(ROOT . "/cache/rss/0.xml"));
+		fclose($fp);
+	}
 
 	echo $result;
 ?>

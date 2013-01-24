@@ -255,6 +255,10 @@
 					$value = (isset($field['.attributes']['value'])) ? $field['.attributes']['value'] : '';
 					$type = $field['.attributes']['type'];
 					$cdata = ($type == 'textarea') ? true : false;
+					if($type=='checkbox') {
+						$value = (isset($field['.attributes']['checked'])&&($field['.attributes']['checked']=='true')) ? true : false;
+					}
+					
 					array_push($configSet, array('name'=>$name, 'type'=>$type, 'value'=>$value, 'isCDATA'=>$cdata));
 				}
 			}

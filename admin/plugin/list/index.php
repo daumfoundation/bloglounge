@@ -184,7 +184,6 @@
 					array('title'=>_t('설명'),'class'=>'plugin_desc','width'=>'auto'),
 					array('title'=>_t('제작자'),'class'=>'plugin_maker','width'=>'100px'),
 					array('title'=>_t('설정'),'class'=>'plugin_config','width'=>'80px'));
-	
 	$datas = array();
 
 	if(count($plugins)>0) {
@@ -196,9 +195,6 @@
 			$plugin = $plugins[$index];
 			
 			$data = array();
-
-			$date = Func::dateToString($post['written']);
-			$feedvisibility = Feed::get($post['feed'], 'visibility');
 
 			$data['id'] = 'pluginItem'.$plugin['name'];
 			$data['class'] = $plugin['status']=='on'?' list_use':'';
@@ -256,7 +252,8 @@
 	} else {
 			array_push( $datas, array( 'class'=>"list_empty", 'datas'=>array(array('data'=>'플러그인이 존재하지 않습니다.') )) );
 	}
-
+	
+	$footers = '';
 	echo makeTableBox('pluginlist', $headers, $datas, $footers);	
 ?>
 </div>

@@ -9,6 +9,8 @@
 	$pageCount = 15; // 페이지갯수
 	$page = isset($_GET['page']) ? $_GET['page'] : 1;
 	if(!isset($page) || empty($page)) $page = 1;
+	
+	$read = isset($_GET['read']) ? $_GET['read'] : 0;
 
 	if($is_admin) {
 		list($posts, $totalFeedItems) = FeedItem::getFeedItems('','','',$page,$pageCount,true);		

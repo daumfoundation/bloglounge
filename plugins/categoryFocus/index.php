@@ -113,7 +113,7 @@ function printCategoryFocusView($categories, $index, $config) {
 	global $service, $event;
 	$pluginURL = $event->pluginURL;
 
-	if($index < 0 || $index > count($categories)) {
+	if($index < 0 || $index >= count($categories)) {
 		return false;
 	}
 	$category = $categories[$index];

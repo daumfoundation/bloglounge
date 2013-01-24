@@ -60,7 +60,7 @@
 ?>
 		<?php echo drawAdminBoxBegin('new_version');?>
 			<div class="title">
-				<a href="http://bloglounge.itcanus.net/bloglounge_download" target="_blank">다운로드</a>
+				<a href="http://bloglounge.itcanus.net/bloglounge_download" target="_blank"><?php echo _t('다운로드');?></a> <span class="subtitle"><?php echo _t('현재버전');?> v<?php echo BLOGLOUNGE_VERSION;?></span>
 			</div>
 			<div class="line"></div>
 			<div class="data">
@@ -74,7 +74,7 @@
 				}
 	} else {
 ?>
-			<li class="empty">글이 없습니다.</li>
+			<li class="empty"><?php echo _t('글이 없습니다.');?></li>
 <?php
 	}
 ?>
@@ -119,7 +119,7 @@
 ?>
 				<div class="contents_in_item1">
 					<div class="more_wrap">
-						<div class="title"><?php echo _t("최근 글");?></div>
+						<div class="title"><?php echo _t('최근 글');?></div>
 						<div class="more">
 							<a href="<?php echo $service['path'];?>/admin/blog/entrylist"><?php echo _t('더보기..');?></a>
 						</div>
@@ -166,7 +166,7 @@
 					</ul>
 					</div>
 					<div class="information">
-						<span class="name"><?php echo _t("전체글");?></span> <span class="sep">|</span> <span class="count"><?php echo $feedItemCount;?></span>개 &nbsp;&nbsp; <span class="name">마지막 업데이트</span> <span class="sep">|</span> <span class="date"><?php echo empty($feedItemUpdate)?'':date('y.m.d H:i:s', $feedItemUpdate);?> (<?php echo _f($feedItemUpdateText[0], $feedItemUpdateText[1]);?>)</span> 
+						<span class="name"><?php echo _t("전체글");?></span> <span class="sep">|</span> <span class="count"><?php echo $feedItemCount;?></span>개 &nbsp;&nbsp; <span class="name"><?php echo _t('마지막 업데이트');?></span> <span class="sep">|</span> <span class="date"><?php echo empty($feedItemUpdate)?'':date('y.m.d H:i:s', $feedItemUpdate);?> (<?php echo _f($feedItemUpdateText[0], $feedItemUpdateText[1]);?>)</span> 
 					</div>
 				</div>	
 				<!-- 최근 등록된 블로그.. -->
@@ -181,7 +181,7 @@
 ?>
 				<div class="contents_in_item2">
 					<div class="more_wrap">
-						<div class="title"><?php echo _t("최근 등록된 블로그");?></div>
+						<div class="title"><?php echo _t('최근 등록된 블로그');?></div>
 						<div class="more">
 							<a href="<?php echo $service['path'];?>/admin/blog/list"><?php echo _t('더보기..');?></a>
 						</div>

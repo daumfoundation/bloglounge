@@ -45,7 +45,8 @@
 			  data: "updateCycle="+$('#updateCycle').val()+
 							"&archivePeriod="+$('#archivePeriod').val()+
 							"&restrictJoin="+($('#restrictJoin').attr('checked')?'y':'n')+
-							"&useRssOut="+($('#useRssOut').attr('checked')?'y':'n')+
+							"&useRssOut="+($('#useRssOut').attr('checked')?'y':'n')+	
+							"&feeditemsOnRss="+$('#feeditemsOnRss').val()+
 							"&restrictBoom="+($('#restrictBoom').attr('checked')?'y':'n')+
 							"&rankBy="+$('#rankBy').val()+
 							"&rankPeriod="+$('#rankPeriod').val()+
@@ -127,12 +128,12 @@
 	</div>
 	<h4><?php echo _t('세부설정');?></h4>
 	<div class="setting">
-			<?php
+<?php
 				$updateCycle = $config->updateCycle;
 				$archivePeriod = $config->archivePeriod;
 				$thumbnailLimit = $config->thumbnailLimit;
 				$updateProcess = $config->updateProcess;
-			?>	
+?>	
 
 	<dl class="normal">
 		<dt><?php echo _t('수집');?></dt>
@@ -226,7 +227,9 @@
 		</dd>
 	</dl>	
 
-
+<?php
+	$feeditemsOnRss = $config->feeditemsOnRss;
+?>	
 	<dl class="normal">
 		<dt><?php echo _t('정책');?></dt>
 		<dd>
@@ -245,13 +248,37 @@
 			<input type="checkbox" <?php if ($config->useRssOut == 'y') { ?>checked="checked"<?php } ?> name="useRssOut" id="useRssOut" value="y" /><label for="useRssOut">&nbsp;<?php echo _t('수집된 글을 RSS 로 출력합니다.');?> (http://<?php echo $_SERVER['HTTP_HOST'].$service['path'];?>/rss/)</label>
 		</dd>
 	</dl>	
-	<dl class="normal comments last_item">
+	<dl class="normal comments">
 		<dt></dt>
 		<dd class="text checkbox_hint">
-			<?php echo _t('이 설정을 선택하면 사용자가 재배포를 허용한 최근 글 10개를 다시 RSS 피드로 출력할 수 있습니다.');?>
+			<?php echo _t('이 설정을 선택하면 사용자가 재배포를 허용한 최근 글을 다시 RSS 피드로 출력할 수 있습니다.');?>
 		</dd>
 	</dl>
 
+	<dl class="normal  last_item">
+		<dt></dt>
+		<dd>
+<?php
+			ob_start();
+?>
+				<select name="feeditemsOnRss" id="feeditemsOnRss">
+					<option value="5" <?php if ($feeditemsOnRss == '5') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 5);?></option>
+					<option value="10" <?php if ($feeditemsOnRss == '10') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 10);?></option>
+					<option value="30" <?php if ($feeditemsOnRss == '15') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 15);?></option>
+					<option value="60" <?php if ($feeditemsOnRss == '20') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 20);?></option>
+					<option value="150" <?php if ($feeditemsOnRss == '25') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 25);?></option>
+					<option value="360" <?php if ($feeditemsOnRss == '30') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 30);?></option>
+					<option value="480" <?php if ($feeditemsOnRss == '35') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 35);?></option>
+					<option value="720" <?php if ($feeditemsOnRss == '40') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 40);?></option>
+					<option value="960" <?php if ($feeditemsOnRss == '45') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 45);?></option>
+				</select>					
+<?php
+			$arg = ob_get_contents();
+			ob_end_clean();
+			echo _f('RSS피드로 수집된 글을 %1 출력합니다.', $arg);
+?>
+		</dd>
+	</dl>	
 
 	<dl class="normal">
 		<dt><?php echo _t('인기글');?></dt>

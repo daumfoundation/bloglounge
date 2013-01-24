@@ -122,6 +122,7 @@
 				return array(2, null, null);
 			}
 			$feed = array('xmlURL' => $url);
+			$encoding = '';
 			if (preg_match('/^<\?xml[^<]*\s+encoding=["\']?([\w-]+)["\']?/', $xml, $matches))
 				$encoding = $matches[1];
 			if (strcasecmp($encoding, 'utf-8') != 0) {
@@ -256,7 +257,7 @@
 						//	array_push($item['tags'],$tag);
 							$tags = explode('/', $tag); // allblog, blogkorea types
 							foreach($tags as $tag) {
-								array_push($item['tags'], $tag);
+								array_push($item['tags'], trim($tag));
 							}
 						}
 
@@ -266,7 +267,7 @@
 					if ($youtubeTags = $xmls->getValue("/rss/channel/item[$i]/media:category")) { // for Youtube Feed
 						array_push($item['tags'], ''); // blank. first tag not equals category
 						foreach (explode(' ', $youtubeTags) as $tag)
-							array_push($item['tags'], $tag);
+							array_push($item['tags'], trim($tag));
 					}
 					$item['enclosures']=array();
 					for ($j=1;$url=$xmls->getAttribute("/rss/channel/item[$i]/enclosure[$j]",'url');$j++)
@@ -304,10 +305,10 @@
 						$item['description']=$xmls->getValue("/feed/entry[$i]/summary");
 					$item['tags']=array();
 					for ($j=1;$tag=$xmls->getValue("/feed/entry[$i]/dc:subject[$j]");$j++) {
-						if (!empty($tag)) array_push($item['tags'],$tag);
+						if (!empty($tag)) array_push($item['tags'],trim($tag));
 					}
 					for ($j=1;$tag=$xmls->getAttribute("/feed/entry[$i]/category[$j]", 'term');$j++) {
-						if (!empty($tag)) array_push($item['tags'],$tag);
+						if (!empty($tag)) array_push($item['tags'],trim($tag));
 					}
 					$item['enclosures']=array();
 					for ($j=1;$url=$xmls->getAttribute("/feed/entry[$i]/enclosure[$j]",'url');$j++)
@@ -391,7 +392,7 @@
 		function updateNextFeed(){
 			global $database, $db;
 
-			list($updateCycle, $restrictJoin) = $db->pick("SELECT updateCycle, restrictJoin FROM {$database['prefix']}Settings");
+			list($updateCycle, $restrictJoin) = Settings::gets('updateCycle,restrictJoin');
 			if ($updateCycle!=0){
 				$notinStr = '';
 				if (Validator::getBool($restrictJoin)) {
@@ -414,7 +415,7 @@
 		function updateRandomFeed(){
 			global $database, $db;
 
-			list($updateCycle, $restrictJoin) = $db->pick("SELECT updateCycle, restrictJoin FROM {$database['prefix']}Settings");
+			list($updateCycle, $restrictJoin) = Settings::gets('updateCycle,restrictJoin');
 			if ($updateCycle!=0){
 				$notinStr = '';
 				if (Validator::getBool($restrictJoin)) {
@@ -474,15 +475,13 @@
 			if ($db->numRows() > 0) 
 				return false;
 	
-			list($cacheThumbnail, $useRssOut) = Settings::gets('cacheThumbnail, useRssOut');
+			list($cacheThumbnail, $useRssOut) = Settings::gets('cacheThumbnail,useRssOut');
 			list($feedCreated) = Feed::gets($feedId, 'created');
-	
 			$tagString=$db->escape($db->lessen(UTF8::correct(implode(', ',$item['tags']))));
 
 			list($globalFilter,$blackFilter) = Settings::gets('filter,blackfilter');
 			$localFilter = Feed::get($feedId, 'filter');
 			$filter = empty($globalFilter)?$localFilter:$globalFilter;
-
 
 			if (!Validator::is_empty($filter)) {
 				$filtered = true;
@@ -512,7 +511,6 @@
 				if ($filtered) return false;
 			}
 						
-
 			if (preg_match('/\((.[^\)]+)\)$/Ui', trim($item['author']), $_matches)) $item['author'] = $_matches[1];
 			$item['author']=$db->escape($db->lessen(UTF8::correct($item['author'])));
 			$item['permalink']=$db->escape($db->lessen(UTF8::correct($item['permalink'])));
@@ -565,6 +563,8 @@
 
 			if($isRebuildData) {
 				Tag::buildTagIndex($id, $item['tags'], $oldTags);
+				Category::buildCategoryRelations($id, $item['tags'], $oldTags);
+				
 				if (Validator::getBool($cacheThumbnail)) FeedItem::cacheThumbnail($id, $item);
 				if (Validator::getBool($useRssOut)) {
 					requireComponent('Bloglounge.Data.RSSOut');
@@ -810,6 +810,7 @@
 				$totalFeeds = 0;
 
 			if($page == 'all') {
+				$pageQuery = '';
 			} else {
 			 	$pageStart = ($page-1) * $pageCount; // 처음페이지 번호
 				$pageQuery = 'LIMIT '.$pageStart.','.$pageCount;
@@ -837,6 +838,7 @@
 				$totalFeeds = 0;
 			
 			if($page == 'all') {
+				$pageQuery = '';
 			} else {
 			 	$pageStart = ($page-1) * $pageCount; // 처음페이지 번호
 				$pageQuery = 'LIMIT '.$pageStart.','.$pageCount;
@@ -847,7 +849,7 @@
 			return array($feeds, $totalFeeds);	
 		}
 
-		function getFeedLastUpdate($fileter = '') {
+		function getFeedLastUpdate($filter = '') {
 			global $db, $database;		
 			if (!list($result) = $db->pick('SELECT i.lastUpdate FROM '.$database['prefix'].'Feeds i'.$filter.' ORDER BY i.lastUpdate DESC LIMIT 1'))
 					$result = 0;

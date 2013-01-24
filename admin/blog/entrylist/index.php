@@ -7,8 +7,29 @@
 	// 글수정
 	$msg = '';
 	if (isset($_POST['id']) || !empty($_POST['id']) || (isset($_POST['id']) && preg_match("/^[0-9]+$/", $_POST['id']))) {
-		if (FeedItem::editWithArray($_POST['id'], array("title"=>$_POST['title'], "category"=>(isset($_POST['category'])?$_POST['category']:0), "focus"=>(isset($_POST['isFocus']) ? 'y' : 'n'), "author"=>$_POST['author'], "permalink"=>$_POST['permalink'], "tags"=>$_POST['tags'],"autoUpdate"=>(isset($_POST['autoUpdate']) ? 'y' : 'n'), "visibility"=>(isset($_POST['visibility']) ? $_POST['visibility'] : NULL), "allowRedistribute"=>(isset($_POST['allowRedistribute']) ? 'y' : 'n')))) {
-			if(isset($_POST['category'])) Category::rebuildCount($_POST['category']);
+		$feedItem = FeedItem::getAll($_POST['id']);
+		if (FeedItem::editWithArray($_POST['id'], array("title"=>$_POST['title'], "focus"=>(isset($_POST['isFocus']) ? 'y' : 'n'), "author"=>$_POST['author'], "permalink"=>$_POST['permalink'], "tags"=>$_POST['tags'],"autoUpdate"=>(isset($_POST['autoUpdate']) ? 'y' : 'n'), "visibility"=>(isset($_POST['visibility']) ? $_POST['visibility'] : NULL), "allowRedistribute"=>(isset($_POST['allowRedistribute']) ? 'y' : 'n')))) {
+		  	
+		  	
+		  	if($_POST['tags'] != $feedItem['tags']) {
+		  		$tags = func::array_trim(explode(',', $_POST['tags']));
+		  		$oldTags = func::array_trim(explode(',', $feedItem['tags']));
+
+				Tag::buildTagIndex($_POST['id'], $tags, $oldTags);
+				Category::buildCategoryRelations($_POST['id'], $tags, $oldTags);
+				
+				if (Validator::getBool(Settings::get('useRssOut'))) {
+					requireComponent('Bloglounge.Data.RSSOut');
+					RSSOut::refresh();
+				}
+			}
+			
+			if(isset($_POST['category']))  {
+				Category::setItemCategory($_POST['id'], $_POST['category']);
+				Category::rebuildCount($_POST['category']);
+				Category::rebuildCount($feedItem['category']);
+			}
+			
 			$msg = _t('글 정보를 수정하였습니다.');
 		} else {
 			$msg = _t('글 정보수정을 실패했습니다.');
@@ -31,7 +52,6 @@
 	}
 
 	include ROOT. '/lib/piece/adminHeader.php';
-
 
 
 	$pageCount = 15; // 페이지갯수
@@ -60,8 +80,6 @@
 			list($posts, $totalFeedItems) = FeedItem::getFeedItemsByOwner(getLoggedId(),'','','',$page,$pageCount);			
 		}
 	}
-
-
 
 	$paging = Func::makePaging($page, $pageCount, $totalFeedItems);
 	
@@ -469,6 +487,10 @@
 
 	if(count($posts)>0) {
 		foreach($posts as $post) {		
+			if(!isset($post['category'])) {
+				$post['category'] = 0;
+			}
+			
 			$data = array();
 
 			$date = Func::dateToString($post['written']);
@@ -491,7 +513,7 @@
 			$content = ob_get_contents();
 			ob_end_clean();
 			array_push($data['datas'], array('class'=>'entrylist_date','data'=> $content ));
-			
+
 			// 글 분류
 			ob_start();
 ?>

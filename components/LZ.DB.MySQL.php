@@ -81,7 +81,6 @@
 		function fetchArray($result = null) {
 			if (isset($result)) 
 				return mysql_fetch_array($result);
-
 			if (!isset($this->resources[$this->resourceIndex]['resource']) || empty($this->resources[$this->resourceIndex]['resource']))
 				return false;
 			if (($this->resources[$this->resourceIndex]['length'] > 0)) {
@@ -186,10 +185,10 @@
 			return null;
 		}
 
-		function queryAll($query) {
+		function queryAll($query, $resultType = MYSQL_BOTH) {
 			$all = array();
 			if($result = $this->query($query)) {
-				while ($row = mysql_fetch_array($result))
+				while ($row = mysql_fetch_array($result,$resultType))
 					array_push($all, $row);
 				mysql_free_result($result);
 				return $all;
@@ -234,9 +233,14 @@
 			$response['exist'] = 0;
 			$response['names'] = array();
 
+			// Windows 등 대소문자 구분이 없는 옵션 사용시 제대로 체크할 수 있도록 모두 소문자로 변경
+			foreach($tables as $key=>$table) {
+				$tables[$key] = strtolower($table);
+			}
+
 			$query = mysql_query("SHOW TABLES LIKE '{$needle}%'");
 			while ($row = mysql_fetch_row($query)) {
-				if (in_array($row[0], $tables)) {
+				if (in_array(strtolower($row[0]), $tables)) {
 					$response['exist']++;
 					array_push($response['names'], $row[0]);
 				}

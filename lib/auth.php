@@ -5,9 +5,8 @@ function login($userid, $userpw, $saveId = false) {
 	if (!((strlen($userpw) == 40) && preg_match('/[0-9a-f]/i', $userpw))) $forceRaw = true;		
 	if (!isset($_SESSION['sslPublicKey']) && !$forceRaw) return false;
 	if (Validator::getBool($forceRaw) === true) $userid = sha1($userid);
-	//$sQuery = (Settings::get('restrictJoin')=='y') ? ' and is_accepted="y"' : '';
-
-	$db->query('SELECT id, loginid, password, email FROM '.$database['prefix'].'Users WHERE SHA1(loginid)="'.$db->escape($userid).'" '.$sQuery);
+	
+	$db->query('SELECT id, loginid, password, email FROM '.$database['prefix'].'Users WHERE SHA1(loginid)="'.$db->escape($userid).'"');
 	if ($db->numRows() != 0) {
 		list($uid, $loginid, $password, $email) = $db->fetchRow();
 		$db->free();

@@ -361,7 +361,6 @@
 					array('title'=>_t('최근 업데이트'),'class'=>'bloglist_update','width'=>'450px'),
 					array('title'=>_t('수집'),'class'=>'bloglist_count','width'=>'60px'),
 					array('title'=>_t('실행'),'class'=>'bloglist_execute','width'=>'auto'));
-	
 	$datas = array();
 
 	if(count($feeds)>0) {
@@ -438,7 +437,7 @@
 	} else {
 			array_push( $datas, array( 'class'=>"list_empty", 'datas'=>array(array('data'=>empty($keyword)?_t('등록된 블로그가 없습니다.'):_t('검색된 블로그가 없습니다.')) )) );
 	}
-
+	$footers = '';
 	echo makeTableBox('bloglist', $headers, $datas, $footers);	
 ?>
 </div>

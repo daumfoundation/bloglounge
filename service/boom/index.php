@@ -48,6 +48,7 @@
 					$response['message'] = _t('이미 추천한 글입니다.');
 				} else {
 					$response['message'] = 'isBoomedUp';
+					$response['rank'] = Boom::getRank($itemId);
 				}
 			}
 		break;
@@ -61,7 +62,8 @@
 			}	
 			if ($boomedDown) {
 				Boom::downReturn($itemId);
-				$response['message'] = 'isntBoomedDown';
+				$response['message'] = 'isntBoomedDown';	
+				$response['rank'] = Boom::getRank($itemId);
 			} else {
 				if (!Boom::down($_POST['itemId'])) {
 					$response['error'] = 1;

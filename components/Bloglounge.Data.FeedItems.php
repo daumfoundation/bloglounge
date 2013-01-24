@@ -28,7 +28,8 @@
 
 		function getAll($itemId) {
 			global $database, $db;
-			$db->query('SELECT * FROM '.$database['prefix'].'FeedItems WHERE id='.$itemId);
+			$db->query('SELECT i.*,c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item=i.id) WHERE i.id='.$itemId);
+			
 			return $db->fetchArray();
 		}
 
@@ -52,7 +53,7 @@
 			}
 
 			foreach ($arg as $key=>$value) {
-				if (!Validator::enum($key, 'author,permalink,title,autoUpdate,allowRedistribute,tags,category,focus,visibility')) {
+				if (!Validator::enum($key, 'author,permalink,title,autoUpdate,allowRedistribute,tags,focus,visibility')) {
 					return false;
 				}
 				if (!FeedItem::edit($itemId, $key, $value)) {
@@ -70,6 +71,8 @@
 	
 			requireComponent('LZ.PHP.Media');
 			Media::delete($itemId);
+			
+			$db->execute("DELETE FROM {$database['prefix']}CategoryRelations WHERE item = {$itemId}"); // clear CategoryRelations
 			
 			$db->execute("DELETE FROM {$database['prefix']}TagRelations WHERE item = {$itemId}"); // clear TagRelations
 
@@ -98,7 +101,10 @@
 					array_push($itemIds, $item['id']);			
 				}
 			
-				$itemStr = implode(',', $itemIds);
+				$itemStr = implode(',', $itemIds);	
+				
+				$db->execute("DELETE FROM {$database['prefix']}CategoryRelations WHERE item IN ($itemStr)"); // clear CategoryRelations
+
 				$db->execute("DELETE FROM {$database['prefix']}TagRelations WHERE item IN ($itemStr)"); // clear TagRelations
 				
 				if ($db->execute('DELETE FROM '.$database['prefix'].'FeedItems WHERE feed='.$feedId)) {
@@ -213,8 +219,9 @@
 
 		function getFeedItemCount($filter='') {
 			global $db, $database;		
-			if (!list($totalFeedItems) = $db->pick('SELECT count(i.id) FROM '.$database['prefix'].'FeedItems i '.$filter))
+			if (!list($totalFeedItems) = $db->pick('SELECT count(DISTINCT i.id) FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) '.$filter))
 					$totalFeedItems = 0;
+					
 			return $totalFeedItems;
 		}
 		
@@ -223,12 +230,17 @@
 		}
 
 		function getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount, $viewDelete = false, $owner = 0) {
-			global $db, $database, $config;
+			global $db, $database;
 			
 			$sQuery = FeedItem::getFeedItemsQuery($searchType, $searchKeyword, $searchExtraValue,$viewDelete,$owner);
 			
-			$pageStart = ($page-1) * $pageCount; // Ã³À½ÆäÀÌÁö ¹øÈ£
-			$feedList = $db->queryAll('SELECT i.id, i.feed, i.author, i.permalink, i.title, i.description, i.tags, i.written, i.click, i.thumbnailId, i.visibility, i.boomUp, i.boomDown, i.category, i.focus FROM '.$database['prefix'].'FeedItems i '.$sQuery.' ORDER BY i.written DESC LIMIT '.$pageStart.','.$pageCount);
+			$pageStart = ($page-1) * $pageCount; // ì²˜ìŒíŽ˜ì´ì§€ ë²ˆí˜¸
+			$categoryQuery = '';
+			if($searchType != 'category') {
+				 $categoryQuery = ' AND c.custom ="y"';
+			}
+			
+			$feedList = $db->queryAll('SELECT DISTINCT i.id, i.feed, i.author, i.permalink, i.title, i.description, i.tags, i.written, i.click, i.thumbnailId, i.visibility, i.boomUp, i.boomDown, c.category AS category, i.focus FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id'.$categoryQuery.') '.$sQuery.' ORDER BY i.written DESC LIMIT '.$pageStart.','.$pageCount);
 
 			$feedItemCount = FeedItem::getFeedItemCount($sQuery);
 			return array($feedList, $feedItemCount);
@@ -242,7 +254,7 @@
 				if (!list($tagId) = $db->pick('SELECT id FROM '.$database['prefix'].'Tags WHERE name="'.$db->escape($searchKeyword).'"')) {
 					return array(null,0);
 				} else {
-					$sQuery = ' LEFT JOIN '.$database['prefix'].'TagRelations r ON r.item = i.id WHERE r.tag="'.$tagId.'"';
+					$sQuery = ' LEFT JOIN '.$database['prefix'].'TagRelations r ON (r.item = i.id AND r.type = "feed") WHERE r.tag="'.$tagId.'"';
 				}
 
 			} else if ($searchType=='blogURL' && !Validator::is_empty($searchKeyword)){		
@@ -274,7 +286,7 @@
 			} else if ($searchType=='category') {
 				$category = Category::getByName($searchKeyword);
 				if($category) {
-					$sQuery = ' WHERE i.category = ' . $category['id'];
+					$sQuery = ' WHERE c.category = ' . $category['id'];
 				}
 			} else {
 				if (!Validator::is_empty($searchKeyword)) {
@@ -290,19 +302,21 @@
 			}
 
 
-			// boomDownReactor, boomDownReactorLimit : ¸®¾×ÅÍ°¡ ¼û±â±âÀÏ¶§ Äõ¸®¿¡¼­ Á¦¿Ü ÆÄÆ® Ãß°¡ ( Æ¯Á¤¼ö¸¸Å­ ºÕ´Ù¿î(ºñÃßÃµ)ÇÑ±ÛÀº Á¦¿ÜÇÏ°Å³ª Æ¯Á¤±â´É..
-			if (($config->boomDownReactor == 'hide') && ($config->boomDownReactLimit > 0)) {
-				$bQuery = ' WHERE (boomDown <= '.$config->boomDownReactLimit.') ';
-				if (strpos($sQuery, 'WHERE') !== false) {
-					$sQuery = str_replace('WHERE ', $bQuery.' AND (', $sQuery);
-					$sQuery .= ')';
-				} else {
-					$sQuery .= $bQuery;
+			// boomDownReactor, boomDownReactorLimit : ë¦¬ì•¡í„°ê°€ ìˆ¨ê¸°ê¸°ì¼ë•Œ ì¿¼ë¦¬ì—ì„œ ì œì™¸ íŒŒíŠ¸ ì¶”ê°€ ( íŠ¹ì •ìˆ˜ë§Œí¼ ë¶ë‹¤ìš´(ë¹„ì¶”ì²œ)í•œê¸€ì€ ì œì™¸í•˜ê±°ë‚˜ íŠ¹ì •ê¸°ëŠ¥..
+			if(isset($config)) {
+				if (($config->boomDownReactor == 'hide') && ($config->boomDownReactLimit > 0)) {
+					$bQuery = ' WHERE (boomDown <= '.$config->boomDownReactLimit.') ';
+					if (strpos($sQuery, 'WHERE') !== false) {
+						$sQuery = str_replace('WHERE ', $bQuery.' AND (', $sQuery);
+						$sQuery .= ')';
+					} else {
+						$sQuery .= $bQuery;
+					}
 				}
 			}
 
 
-			// ³¯Â¥ Á¦ÇÑ
+			// ë‚ ì§œ ì œí•œ
 			if (!empty($searchKeyword) && ($searchType == 'archive')) {
 				$tStart = $searchExtraValue;
 				$tEnd = $tStart + 86400;
@@ -318,14 +332,14 @@
 
 			if(empty($owner)) {
 				if($viewDelete) {
-					// °ø°³µÈ ºí·Î±×¸¸ »Ì±â		
+					// ê³µê°œëœ ë¸”ë¡œê·¸ë§Œ ë½‘ê¸°		
 					//if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (f.visibility = "y") ';
 					/*} else {
 						$bQuery = ' WHERE  (i.visibility = "d") ';
 					}*/
 				} else {
-					// °ø°³µÈ ºí·Î±×¸¸ »Ì±â		
+					// ê³µê°œëœ ë¸”ë¡œê·¸ë§Œ ë½‘ê¸°		
 				//	if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "y") AND (f.visibility = "y") ';
 				/*	} else {
@@ -334,14 +348,14 @@
 				}
 			} else {		
 				if($viewDelete) {
-					// °ø°³µÈ ºí·Î±×¸¸ »Ì±â		
+					// ê³µê°œëœ ë¸”ë¡œê·¸ë§Œ ë½‘ê¸°		
 				//	if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (f.visibility = "y") AND (f.owner = ' . $owner . ')';
 				/*	} else {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (f.owner = ' . $owner . ')';
 					}*/
 				} else {
-					// °ø°³µÈ ºí·Î±×¸¸ »Ì±â		
+					// ê³µê°œëœ ë¸”ë¡œê·¸ë§Œ ë½‘ê¸°		
 				//	if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "y") AND (f.visibility = "y") AND (f.owner = ' . $owner . ')';
 				/*	} else {
@@ -365,34 +379,34 @@
 
 		function getFeedItem($id) {		
 			global $db, $database;
-			return $db->queryRow('SELECT * FROM '.$database['prefix'].'FeedItems WHERE id='. $id);
+			return $db->queryRow('SELECT i.*,c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item=i.id) WHERE i.id='. $id);
 		}
 
 		function getFeedItemsByFeedId($feedId, $count) {		
 			global $db, $database;
-			return $db->queryAll('SELECT * FROM '.$database['prefix'].'FeedItems WHERE visibility = "y" AND feed = '. $feedId .' ORDER BY written DESC LIMIT '. $count);
+			return $db->queryAll('SELECT i.*,c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item=i.id) WHERE i.visibility = "y" AND i.feed = '. $feedId .' ORDER BY i.written DESC LIMIT '. $count);
 		}
 
 		function getRecentFeedItems($count) {		
 			global $db, $database;
-			return $db->queryAll('SELECT * FROM '.$database['prefix'].'FeedItems WHERE visibility = "y" ORDER BY written DESC LIMIT '. $count);
+			return $db->queryAll('SELECT i.*,c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item=i.id) WHERE i.visibility = "y" ORDER BY i.written DESC LIMIT '. $count);
 		}
 
 		function getRecentFeedItemsByFeed($feeds, $count) {		
 			global $db, $database;
 			if(is_array($feeds)) {
-				return $db->queryAll('SELECT * FROM '.$database['prefix'].'FeedItems WHERE feed IN ('. implode(',',$feeds) .') AND visibility = "y" ORDER BY written DESC LIMIT '. $count);
+				return $db->queryAll('SELECT i.*, c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) WHERE i.feed IN ('. implode(',',$feeds) .') AND i.visibility = "y" ORDER BY i.written DESC LIMIT '. $count);
 			} else {
-				return $db->queryAll('SELECT * FROM '.$database['prefix'].'FeedItems WHERE feed = ' . $feeds . ' AND visibility = "y" ORDER BY written DESC LIMIT '. $count);
+				return $db->queryAll('SELECT i.*, c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) WHERE i.feed = ' . $feeds . ' AND i.visibility = "y" ORDER BY i.written DESC LIMIT '. $count);
 			}
 		}	
 		
 		function getRecentFeedItemsByCategory($categories, $count) {		
 			global $db, $database;
 			if(is_array($categories)) {
-				return $db->queryAll('SELECT * FROM '.$database['prefix'].'FeedItems WHERE category IN ('. implode(',',$categories) .') AND visibility = "y" ORDER BY written DESC LIMIT '. $count);
+				return $db->queryAll('SELECT i.*, c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) WHERE c.category IN ('. implode(',',$categories) .') AND i.visibility = "y" ORDER BY i.written DESC LIMIT '. $count);
 			} else {
-				return $db->queryAll('SELECT * FROM '.$database['prefix'].'FeedItems WHERE category = ' . $categories . ' AND visibility = "y" ORDER BY written DESC LIMIT '. $count);
+				return $db->queryAll('SELECT i.*, c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) WHERE c.category = ' . $categories . ' AND i.visibility = "y" ORDER BY i.written DESC LIMIT '. $count);
 			}
 		}
 
@@ -402,7 +416,7 @@
 		}
 
 		function getTopFeedItems($count, $rankBy = 'boom') {		
-			global $db, $database, $config;	
+			global $db, $database;	
 			
 			switch ($rankBy) {
 				case 'click':
@@ -418,12 +432,12 @@
 			return $db->queryAll('SELECT i.permalink, i.title, i.description FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE f.visibility = "y"  '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
 		}	
 		
-		// -- ¾Æ·¡ÇüÅÂ·Î .. º¯°æ (ÃßÃµ¼ö) - ((¿À´Ã - ±ÛÀÌ µé¾î¿Â ³¯)³¯¼ö * 100000) // ¿À´ÃºÎÅÍ ¾îÁ¦.. ±×Á¦.. ±×²ôÀú²² ¼øÀ¸·Î ³ôÀº °ªÀ» Áà¼­.. ¼ø¼­¸¦ ¸Å±ä´Ù. 
-		// °¡Àå ÃÖ±ÙÀÇ ±ÛÀ» ¿ì¼±ÀûÀ¸·Î °ªÀ» ¸Å±è ( ´ÜÁ¡ ¾÷µ¥ÀÌÆ®°¡ ºó¹øÇÏÁö ¾ÊÀ»°æ¿ì ÃÖ±Ù±ÛÀÌ Ç×»ó ÀÎ±â±ÛÀÌ µÊ.. )
-		// ÃßÃµ È¤Àº ºñÃßÃµµÈ ³¯Â¥°¡ ¾Æ´Ñ ±Û¹ßÇàµÈ ³¯°ú °ü·ÃµÊ..
+		// -- ì•„ëž˜í˜•íƒœë¡œ .. ë³€ê²½ (ì¶”ì²œìˆ˜) - ((ì˜¤ëŠ˜ - ê¸€ì´ ë“¤ì–´ì˜¨ ë‚ )ë‚ ìˆ˜ * 100000) // ì˜¤ëŠ˜ë¶€í„° ì–´ì œ.. ê·¸ì œ.. ê·¸ë„ì €ê»˜ ìˆœìœ¼ë¡œ ë†’ì€ ê°’ì„ ì¤˜ì„œ.. ìˆœì„œë¥¼ ë§¤ê¸´ë‹¤. 
+		// ê°€ìž¥ ìµœê·¼ì˜ ê¸€ì„ ìš°ì„ ì ìœ¼ë¡œ ê°’ì„ ë§¤ê¹€ ( ë‹¨ì  ì—…ë°ì´íŠ¸ê°€ ë¹ˆë²ˆí•˜ì§€ ì•Šì„ê²½ìš° ìµœê·¼ê¸€ì´ í•­ìƒ ì¸ê¸°ê¸€ì´ ë¨.. )
+		// ì¶”ì²œ í˜¹ì€ ë¹„ì¶”ì²œëœ ë‚ ì§œê°€ ì•„ë‹Œ ê¸€ë°œí–‰ëœ ë‚ ê³¼ ê´€ë ¨ë¨..
 
 		function getTopFeedItemsByLastest($count, $rankBy = 'boom') {		
-			global $db, $database, $config;	
+			global $db, $database;	
 
 			$written = $db->queryCell('SELECT i.written FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE f.visibility = "y" ORDER BY i.written ASC');
 			if(!$written) $written = 0;

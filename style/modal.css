@@ -89,6 +89,8 @@ a.modalClose {
 .modal_title { padding:10px; background:#666; color:#ffffff; font-size:12px; font-weight:bold; }
 	.modal_title .title { float:left; }
 	.modal_title .close { float:right; }
+		.modal_title .close a { color:#ffffff; text-decoration:none; }
+		.modal_title .close a:hover { color:#aaa; }
 
 .modal_container { padding:10px; overflow:hidden; }
 

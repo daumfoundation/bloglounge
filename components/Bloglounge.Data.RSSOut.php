@@ -1,6 +1,35 @@
 <?php
 
 	class RSSOut {
+		function stop() {
+			requireComponent('LZ.PHP.XMLWriter');		
+			$rssDir = ROOT . '/cache/rss';
+			func::mkpath($rssDir);
+			if (!is_dir($rssDir) || !is_writeable($rssDir))
+				return false;		
+			
+			$myURL = 'http://'.$_SERVER['HTTP_HOST'].$service['path'];
+
+			$xml = new XMLFile($rssDir.'/0.xml');
+			$xml->startGroup('rss', array('version'=>'2.0'));
+
+			$xml->startGroup('channel');
+			$xml->write('title', htmlspecialchars($config->title));
+			$xml->write('link', htmlspecialchars($myURL));
+			$xml->write('description', htmlspecialchars($config->description));
+			$xml->write('language', $config->language);
+			$xml->write('pubDate', date("r", time()));
+			$xml->write('generator', BLOGLOUNGE.' '.BLOGLOUNGE_VERSION.' '.BLOGLOUNGE_NAME);
+
+				$xml->startGroup('item');		
+					$xml->write('title', _t('RSS 출력이 중지되었습니다.'));
+					$xml->write('link', $myURL);
+					$xml->write('description', _t('운영자가 RSS 출력을 중지하였습니다. 운영자는 이를 환경설정 / 정책에서 수정하실 수 있습니다.'));
+				$xml->endGroup();
+
+			$xml->endAllGroups();
+			$xml->close();
+		}
 		function refresh() {
 			global $database, $db, $service;
 			requireComponent('LZ.PHP.XMLWriter');		
@@ -11,6 +40,7 @@
 				return false;
 
 			$config = new Settings;
+			$rssCount = $config->feeditemsOnRss;
 			$myURL = 'http://'.$_SERVER['HTTP_HOST'].$service['path'];
 
 			$xml = new XMLFile($rssDir.'/1.xml');
@@ -35,7 +65,7 @@
 				$xml->endGroup();
 			}
 
-			if ($db->query("SELECT title, permalink, author, description, tags, written FROM {$database['prefix']}FeedItems WHERE allowRedistribute='y' ORDER BY written DESC LIMIT 0,10")) {
+			if ($db->query("SELECT title, permalink, author, description, tags, written FROM {$database['prefix']}FeedItems WHERE allowRedistribute='y' ORDER BY written DESC LIMIT 0,{$rssCount}")) {
 				while ($item = $db->fetch()) {
 					$xml->startGroup('item');
 					$xml->write('title', htmlspecialcharS($item->title));
