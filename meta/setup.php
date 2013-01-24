@@ -150,7 +150,8 @@
 					  `category` int(11) unsigned NOT NULL default '0',	
 					  `linked` int(11) NOT NULL default '0',
 					  `custom` ENUM('y','n') NOT NULL default 'y',
-					  PRIMARY KEY  (`category`,`item`)
+					  PRIMARY KEY  (`category`,`item`),
+					  INDEX ( `item` )
 					){$charset};
 					
 					CREATE TABLE `{$prefix}DailyStatistics` (
@@ -805,85 +806,85 @@
 						array_push($checkups, array('success', _t('설정 테이블과 스킨 설정 테이블의 구조를 변경했습니다.')));
 					}
 
-					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'id'")) {
-						$db->execute("DELETE FROM {$prefix}Settings WHERE name = 'id'");
+					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'id'")) {
+						$db->execute("DELETE FROM {$prefix}Settings WHERE `name` = 'id'");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'filter'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'filter'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('filter','')");
 					}			
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'blackfilter'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'blackfilter'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('blackfilter','')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'restrictBoom'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'restrictBoom'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('restrictBoom','n')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'rankBy'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'rankBy'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankBy','boom')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'rankPeriod'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'rankPeriod'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankPeriod','6')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'rankLife'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'rankLife'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankLife','30')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'welcomePack'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'welcomePack'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('welcomePack','default')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'language'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'language'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('language','ko')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'boomDownReactor'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'boomDownReactor'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('boomDownReactor','none')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'boomDownReactLimit'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'boomDownReactLimit'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('boomDownReactLimit','20')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'useRssOut'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'useRssOut'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('useRssOut','y')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'feeditemsOnRss'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'feeditemsOnRss'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('feeditemsOnRss','10')");	
 						array_push($checkups, array('success', _t('설정테이블에 RSS 재출력 개수 필드를 생성했습니다.')));
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'countRobotVisit'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'countRobotVisit'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('countRobotVisit','y')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'cacheThumbnail'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'cacheThumbnail'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('cacheThumbnail','y')");
 					}
-					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'useVerifier'")) {
-						$db->execute("DELETE FROM {$prefix}Settings WHERE name = 'useVerifier'");	
-						$db->execute("DELETE FROM {$prefix}Settings WHERE name = 'verifierPack'");
+					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'useVerifier'")) {
+						$db->execute("DELETE FROM {$prefix}Settings WHERE `name` = 'useVerifier'");	
+						$db->execute("DELETE FROM {$prefix}Settings WHERE `name` = 'verifierPack'");
 						array_push($checkups, array('success', _t('설정테이블의 인증시스템과 관련된 필드를 삭제했습니다.')));
 					}		
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'thumbnailLimit'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'thumbnailLimit'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailLimit','3')");	
 						array_push($checkups, array('success', _t('설정 테이블에 썸네일저장개수 필드를 추가했습니다.')));
 					}									
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'updateProcess'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'updateProcess'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('updateProcess','repeat')");	
 						array_push($checkups, array('success', _t('설정 테이블에 업데이트방식에 대한 필드를 추가했습니다.')));
 					}					
-					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'skin'")) {
-						$db->execute("UPDATE {$prefix}Settings SET name = 'metaskin' WHERE name = 'skin'");	
+					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'skin'")) {
+						$db->execute("UPDATE {$prefix}Settings SET `name` = 'metaskin' WHERE `name` = 'skin'");	
 						array_push($checkups, array('success', _t('설정 테이블에 스킨필드를 메타스킨 필드명으로 변경했습니다.')));
 					}					
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'linkskin'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'linkskin'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('linkskin','')");	
 						array_push($checkups, array('success', _t('설정 테이블에 링크스킨 필드를 추가했습니다.')));
 					}				
-					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE name = 'collectComments'")) {
-						$db->execute("DELETE FROM {$prefix}Settings WHERE name = 'collectComments'");	
+					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'collectComments'")) {
+						$db->execute("DELETE FROM {$prefix}Settings WHERE `name` = 'collectComments'");	
 						array_push($checkups, array('success', _t('설정 테이블에 댓글수집여부 필드를 삭제했습니다.')));
 					}		
-					if ($db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'id'")) {
-						$db->execute("DELETE FROM {$prefix}SkinSettings WHERE name = 'id'");
+					if ($db->exists("SELECT value FROM {$prefix}SkinSettings WHERE `name` = 'id'")) {
+						$db->execute("DELETE FROM {$prefix}SkinSettings WHERE `name` = 'id'");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'focusList'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE `name` = 'focusList'")) {
 						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('focusList','4')");
 						array_push($checkups, array('success', _t('스킨설정 테이블에 포커스 개수 필드를 생성했습니다.')));
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'focusTitleLength'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE `name` = 'focusTitleLength'")) {
 						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('focusTitleLength','40')");
 						array_push($checkups, array('success', _t('스킨설정 테이블에 포커스 제목 글수 필드를 생성했습니다.')));
 					}
@@ -891,18 +892,21 @@
 						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('focusDescLength','100')");
 						array_push($checkups, array('success', _t('스킨설정 테이블에 포커스 내용 글수 필드를 생성했습니다.')));
 					}
-					if ($db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'allowHTML'")) {
-						$db->execute("DELETE FROM {$prefix}SkinSettings WHERE name = 'allowHTML'");
+					if ($db->exists("SELECT value FROM {$prefix}SkinSettings WHERE `name` = 'allowHTML'")) {
+						$db->execute("DELETE FROM {$prefix}SkinSettings WHERE `name` = 'allowHTML'");
 						array_push($checkups, array('success', _t('스킨설정 테이블에서 HTML허용여부 필드를 삭제했습니다.')));
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'feedListRecentFeedList'")) {
+					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE `name` = 'feedListRecentFeedList'")) {
 						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedListRecentFeedList','4')");	
 						array_push($checkups, array('success', _t('스킨설정 테이블에서 블로그의 최근 글 개수 필드를 삭제했습니다.')));
 					}
 
 					if ($db->queryCell("DESC {$prefix}Feeds xmlURL", 'Type') != "text") { // ncloud 0.1.7
+						$db->execute("ALTER TABLE {$prefix}Feeds DROP INDEX xmlURL"); // type 변경을 위해 키제거
 						$db->execute("ALTER TABLE {$prefix}Feeds CHANGE xmlURL xmlURL text NOT NULL default ''");
 						$db->execute("ALTER TABLE {$prefix}Feeds CHANGE blogURL blogURL text NOT NULL default ''");
+
+						$db->execute("ALTER TABLE {$prefix}FeedItems DROP INDEX permalink"); // type 변경을 위해 키제거
 						$db->execute("ALTER TABLE {$prefix}FeedItems CHANGE permalink permalink text NOT NULL default ''");
 						$db->execute("ALTER TABLE {$prefix}Medias CHANGE source source text NOT NULL default ''");		
 						$db->execute("ALTER TABLE {$prefix}DeleteHistory CHANGE permalink permalink text NOT NULL default ''");
@@ -939,7 +943,7 @@
 					
 					if ($db->exists("DESC {$prefix}FeedItems `category`")) { // ncloud 0.1.8
 					   
-						$result = $db->queryAll("SELECT * FROM {$prefix}FeedItems WHERE category != 0", MYSQL_ASSOC);
+						$result = $db->queryAll("SELECT * FROM {$prefix}FeedItems WHERE `category` != 0", MYSQL_ASSOC);
 						foreach($result as $item) {
 							$db->execute("INSERT INTO {$prefix}CategoryRelations (`item`,`category`,`linked`,`custom`) VALUES ({$item['id']},{$item['category']},UNIX_TIMESTAMP(),'y')");	
 						}
@@ -955,6 +959,11 @@
 
 						array_push($checkups, array('success', _t('피드아이템 테이블에 카데고리필드를 삭제했습니다.')));
 					}					
+					
+					if(!$db->exists("SHOW INDEX FROM {$prefix}CategoryRelations WHERE `Key_name` = 'item'")) {
+						$db->execute("ALTER TABLE {$prefix}CategoryRelations ADD INDEX ( `item` )");
+						array_push($checkups, array('success', _t('분류연관 테이블에 아이템 필드를 인덱스로 추가했습니다.')));
+					}
 					
 					$result = '';
 					foreach($checkups as $checkup) {

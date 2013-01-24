@@ -173,12 +173,6 @@
 
 		function getFrequencyClass($myFrequency) {
 			$range = Tag::getFrequencyRange();
-			/*$grad = ($range['max'] - $range['min']) / 5;
-			$myGrade = 0;
-			 for ($i = $range['min']; $i < $myFrequency; $i+=$grad) {
-				 $myGrade++;
-			 }
-			return 'tagCloud'.strval(5-$myGrade);*/
 
 			$dist = $range['max'] / 3;
 			if ($myFrequency == $range['min'])

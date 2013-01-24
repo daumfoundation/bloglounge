@@ -2,6 +2,7 @@
 
 	class MySQL extends DB {
 		var $alive = false, $resources = array(), $resourceIndex = 0;
+		var $debugs = array();
 
 		function MySQL() {
 			global $database;
@@ -40,17 +41,38 @@
 			return $this->resources[$this->resourceIndex]['resource'];
 		}
 
+		function _microtime()
+		{
+			list($usec, $sec) = explode(" ", microtime());
+			return ((float)$usec + (float)$sec);
+		}
+
+		function _begin_debug() {
+			if(BLOGLOUNGE_QUERY_DEBUG) $this->_ms = $this->_microtime();
+		}
+
+		function _end_debug($str) {
+			if(BLOGLOUNGE_QUERY_DEBUG) array_push($this->debugs, array('title'=>$str, 'ms'=>($this->_microtime()-$this->_ms)));
+		}
+
 		function query($query) {
+			$this->_begin_debug();
 			if ($result = mysql_query($query)) {
 				array_push($this->resources, array('query'=>$query, 'resource'=>$result, 'length'=>((strpos(strtoupper($query), 'SELECT') !== false) ? mysql_num_rows($result) : mysql_affected_rows())));
 				$this->resourceIndex = (($na = count($this->resources) -1) < 0) ? 0 : $na;
+
+				$this->_end_debug($query);
 				return $this->resources[$this->resourceIndex]['resource'];
 			}
 			return false;
 		}
 
-		function execute($query) {
-			return mysql_query($query) ? true : false;
+		function execute($query) {			
+			$this->_begin_debug();
+			$result = mysql_query($query);
+			$this->_end_debug($query);
+
+			return $result ? true : false;
 		}
 
 		function fetch($result = null) { // fetchObject is default.
@@ -143,16 +165,25 @@
 		function pick($query) {
 			if (empty($query) || !isset($query)) 
 				return false;
-
+			
+			$this->_begin_debug();
 			if (!$result = mysql_query($query))
 				return false;
 
 			$rows  = mysql_fetch_row($result);
 			mysql_free_result($result);
+
+			$this->_end_debug($query);
 			return $rows;
 		}
 
 		function queryCell($query, $field = 0) {
+			$this->_begin_debug();
+			
+			if((strtolower(substr(trim($query),0,6)) == 'select') && (strpos(strtolower($query),'limit') === false)) {
+				$query .= ' LIMIT 1';
+			}
+
 			if ($result = mysql_query($query)) {
 				if (is_numeric($field)) {
 					$row = mysql_fetch_row($result);
@@ -162,37 +193,46 @@
 					$cell = @$row[$field];
 				}
 				mysql_free_result($result);
+				$this->_end_debug($query);
 				return $cell;
 			}
+			$this->_end_debug($query);
 			return null;
 		}
 
 		function queryCount($query) {
+			$this->_begin_debug();
 			$count = 0;
 			if ($result = mysql_query($query)) {
 				$count = mysql_num_rows($result);
 				mysql_free_result($result);
-			}
+			}$this->_end_debug($query);
 			return $count;
 		}
 
 		function queryRow($query) {
+			$this->_begin_debug();
 			if ($result = mysql_query($query)) {
 				$row = mysql_fetch_assoc($result);			
 				mysql_free_result($result);
+				$this->_end_debug($query);
 				return $row;
 			}
+			$this->_end_debug($query);
 			return null;
 		}
 
 		function queryAll($query, $resultType = MYSQL_BOTH) {
+			$this->_begin_debug();
 			$all = array();
 			if($result = $this->query($query)) {
 				while ($row = mysql_fetch_array($result,$resultType))
 					array_push($all, $row);
 				mysql_free_result($result);
+				$this->_end_debug($query);
 				return $all;
 			}
+			$this->_end_debug($query);
 			return null;
 		}
 

@@ -25,7 +25,6 @@
 				$response['error'] = 1;
 		break;
 	}
-	
 
 	// 매번 업데이트하는 피드를 업데이트 합니다.
 	if (!$feeder->updateEveryTimeFeed())

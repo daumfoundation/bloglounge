@@ -30,6 +30,7 @@
 			global $database, $db;
 			$db->query('SELECT i.*,c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item=i.id) WHERE i.id='.$itemId);
 			
+			
 			return $db->fetchArray();
 		}
 
@@ -72,6 +73,8 @@
 			requireComponent('LZ.PHP.Media');
 			Media::delete($itemId);
 			
+			
+			
 			$db->execute("DELETE FROM {$database['prefix']}CategoryRelations WHERE item = {$itemId}"); // clear CategoryRelations
 			
 			$db->execute("DELETE FROM {$database['prefix']}TagRelations WHERE item = {$itemId}"); // clear TagRelations
@@ -102,6 +105,7 @@
 				}
 			
 				$itemStr = implode(',', $itemIds);	
+				
 				
 				$db->execute("DELETE FROM {$database['prefix']}CategoryRelations WHERE item IN ($itemStr)"); // clear CategoryRelations
 
@@ -219,7 +223,7 @@
 
 		function getFeedItemCount($filter='') {
 			global $db, $database;		
-			if (!list($totalFeedItems) = $db->pick('SELECT count(DISTINCT i.id) FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) '.$filter))
+			if (!list($totalFeedItems) = $db->pick('SELECT count(DISTINCT i.id) FROM '.$database['prefix'].'FeedItems i '.$filter))
 					$totalFeedItems = 0;
 					
 			return $totalFeedItems;
@@ -235,12 +239,24 @@
 			$sQuery = FeedItem::getFeedItemsQuery($searchType, $searchKeyword, $searchExtraValue,$viewDelete,$owner);
 			
 			$pageStart = ($page-1) * $pageCount; // 처음페이지 번호
-			$categoryQuery = '';
-			if($searchType != 'category') {
-				 $categoryQuery = ' AND c.custom ="y"';
-			}
+
 			
-			$feedList = $db->queryAll('SELECT DISTINCT i.id, i.feed, i.author, i.permalink, i.title, i.description, i.tags, i.written, i.click, i.thumbnailId, i.visibility, i.boomUp, i.boomDown, c.category AS category, i.focus FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id'.$categoryQuery.') '.$sQuery.' ORDER BY i.written DESC LIMIT '.$pageStart.','.$pageCount);
+
+			if($searchType != 'category') {
+		
+				$categoryQuery = ' AND c.custom ="y" ';
+		
+			}
+ else {
+				$categoryQuery = '';
+			}
+
+			$feedList = $db->queryAll('SELECT i.id, i.feed, i.author, i.permalink, i.title, i.description, i.tags, i.written, i.click, i.thumbnailId, i.visibility, i.boomUp, i.boomDown,  c.category AS category,  i.focus FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id '.$categoryQuery.') '. $sQuery.' ORDER BY i.written DESC LIMIT '.$pageStart.','.$pageCount);
+			
+			if($searchType == 'category') {
+				$sQuery = ' LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) ' . $sQuery;
+			}
+
 
 			$feedItemCount = FeedItem::getFeedItemCount($sQuery);
 			return array($feedList, $feedItemCount);
@@ -303,9 +319,11 @@
 
 
 			// boomDownReactor, boomDownReactorLimit : 리액터가 숨기기일때 쿼리에서 제외 파트 추가 ( 특정수만큼 붐다운(비추천)한글은 제외하거나 특정기능..
+			
 			if(isset($config)) {
+				
 				if (($config->boomDownReactor == 'hide') && ($config->boomDownReactLimit > 0)) {
-					$bQuery = ' WHERE (boomDown <= '.$config->boomDownReactLimit.') ';
+					$bQuery = ' WHERE (i.boomDown <= '.$config->boomDownReactLimit.') ';
 					if (strpos($sQuery, 'WHERE') !== false) {
 						$sQuery = str_replace('WHERE ', $bQuery.' AND (', $sQuery);
 						$sQuery .= ')';
@@ -365,7 +383,7 @@
 			}
 
 			if(strpos($sQuery, 'Feeds f') === false ) {
-				$bQuery = ' LEFT JOIN '.$database['prefix'].'Feeds f ON f.id = i.feed ' . $bQuery;
+				$bQuery = ' LEFT JOIN '.$database['prefix'].'Feeds f ON (f.id = i.feed) ' . $bQuery;
 			}
 			if (strpos($sQuery, 'WHERE') !== false) {
 				$sQuery = str_replace('WHERE ', $bQuery.' AND (', $sQuery);
@@ -406,6 +424,7 @@
 			if(is_array($categories)) {
 				return $db->queryAll('SELECT i.*, c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) WHERE c.category IN ('. implode(',',$categories) .') AND i.visibility = "y" ORDER BY i.written DESC LIMIT '. $count);
 			} else {
+				
 				return $db->queryAll('SELECT i.*, c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) WHERE c.category = ' . $categories . ' AND i.visibility = "y" ORDER BY i.written DESC LIMIT '. $count);
 			}
 		}

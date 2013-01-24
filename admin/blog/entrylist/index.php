@@ -9,13 +9,14 @@
 	if (isset($_POST['id']) || !empty($_POST['id']) || (isset($_POST['id']) && preg_match("/^[0-9]+$/", $_POST['id']))) {
 		$feedItem = FeedItem::getAll($_POST['id']);
 		if (FeedItem::editWithArray($_POST['id'], array("title"=>$_POST['title'], "focus"=>(isset($_POST['isFocus']) ? 'y' : 'n'), "author"=>$_POST['author'], "permalink"=>$_POST['permalink'], "tags"=>$_POST['tags'],"autoUpdate"=>(isset($_POST['autoUpdate']) ? 'y' : 'n'), "visibility"=>(isset($_POST['visibility']) ? $_POST['visibility'] : NULL), "allowRedistribute"=>(isset($_POST['allowRedistribute']) ? 'y' : 'n')))) {
-		  	
-		  	
-		  	if($_POST['tags'] != $feedItem['tags']) {
-		  		$tags = func::array_trim(explode(',', $_POST['tags']));
-		  		$oldTags = func::array_trim(explode(',', $feedItem['tags']));
+		  if($_POST['tags'] != $feedItem['tags']) {
+		  
+				$tags = func::array_trim(explode(',', $_POST['tags']));
+		  		
+				$oldTags = func::array_trim(explode(',', $feedItem['tags']));
 
 				Tag::buildTagIndex($_POST['id'], $tags, $oldTags);
+				
 				Category::buildCategoryRelations($_POST['id'], $tags, $oldTags);
 				
 				if (Validator::getBool(Settings::get('useRssOut'))) {
@@ -23,12 +24,17 @@
 					RSSOut::refresh();
 				}
 			}
+		
 			
 			if(isset($_POST['category']))  {
+				
 				Category::setItemCategory($_POST['id'], $_POST['category']);
+				
 				Category::rebuildCount($_POST['category']);
+				
 				Category::rebuildCount($feedItem['category']);
 			}
+			
 			
 			$msg = _t('글 정보를 수정하였습니다.');
 		} else {
@@ -487,8 +493,11 @@
 
 	if(count($posts)>0) {
 		foreach($posts as $post) {		
+			
 			if(!isset($post['category'])) {
+			
 				$post['category'] = 0;
+			
 			}
 			
 			$data = array();
@@ -577,7 +586,8 @@
 			array_push($data['datas'], array('class'=>'entrylist_blog','data'=> $content ));
 			
 			// 글 랭크
-			array_push($data['datas'], array('class'=>'entrylist_rank','data'=> '<span class="rank'.Boom::getRank($post['id']).'">'.Boom::getRank($post['id']).'</span>' ));
+			$rank = Boom::getRank($post['id']);
+			array_push($data['datas'], array('class'=>'entrylist_rank','data'=> '<span class="rank'.$rank.'">'.$rank.'</span>' ));
 			
 			// 글 읽은 수
 			array_push($data['datas'], array('class'=>'entrylist_hit','data'=> $post['click']));

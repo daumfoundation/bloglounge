@@ -117,8 +117,8 @@
 					break;
 			}
 
-			$rankLife = Settings::get('rankLife') * 86400;
-			if (!list($topScore) = $db->pick('SELECT max('.$rankBy.') FROM '.$database['prefix'].'FeedItems WHERE written >= (UNIX_TIMESTAMP() - '.$rankLife.')'))
+			$rankLife = (mktime() - (Settings::get('rankLife') * 86400));
+			if (!list($topScore) = $db->pick('SELECT max('.$rankBy.') FROM '.$database['prefix'].'FeedItems WHERE written >= ('.$rankLife.')'))
 				return 0; // if failed, return 0 rank.
 			if (!$topScore) return 0;
 

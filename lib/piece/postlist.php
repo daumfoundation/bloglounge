@@ -20,7 +20,7 @@
 <?php
 		if($accessInfo['page'] > 1) {
 ?>
-					window.location = "<?php echo $accessInfo['path'];?>/?page=<?php echo $accessInfo['page']-1;?>";
+					window.location = "<?php echo $accessInfo['subpath'];?>/?page=<?php echo $accessInfo['page']-1;?>";
 <?php
 		} else {
 ?>	
@@ -33,7 +33,7 @@
 <?php
 		if($accessInfo['page'] < $paging['totalPages']) {
 ?>
-					window.location = "<?php echo $accessInfo['path'];?>/?page=<?php echo $accessInfo['page']+1;?>";
+					window.location = "<?php echo $accessInfo['subpath'];?>/?page=<?php echo $accessInfo['page']+1;?>";
 <?php
 		} else {
 ?>	
