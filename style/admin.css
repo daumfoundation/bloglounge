@@ -343,3 +343,14 @@ a.microbutton { background:url("../images/admin/bt_micro_button_right.gif") no-r
 a.microbutton[disabled] span { color:#bbb; }
 
 .boldbutton { font-weight:bold; }
+
+
+/* updateModal */
+
+.updateModalInput { width:500px; height:230px; padding:10px; }
+	.updateModalInput ul { list-style:none; height:180px; margin:0; padding:6px; margin-bottom:10px; border:1px solid #eee; overflow-y:scroll; } 
+		.updateModalInput ul li { margin-top:4px; margin-bottom:4px; }
+		.updateModalInput ul li .cnt { color:#aaa; font:11px Dotum; }
+
+	.updateModalInput .buttons { position:relative; }
+	.updateModalInput .buttons .progress { position:absolute; right:0px; top:8px; }

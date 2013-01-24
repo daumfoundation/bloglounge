@@ -83,7 +83,7 @@
 	 * onClose: (Function:null) The callback function used in place of SimpleModal's close
 	 */
 	$.modal.defaults = {
-		overlay: 10,
+		overlay: 25,
 		overlayId: 'modalOverlay',
 		overlayCss: {},
 		overlayClickClose: true,
@@ -470,7 +470,7 @@ function showModal(modalName, options) {
 		options = [];
 	}
 
-	modal.modal({containerId : modal.attr("id") + "Container", onShow : options.onShow, onClose : options.onClose, onOpen : options.onOpen, onMove : options.onMove });
+	modal.modal({containerId : modal.attr("id") + "Container", onShow : options.onShow, onClose : options.onClose, onOpen : options.onOpen, onMove : options.onMove, overlayClickClose : options.overlayClickClose });
 
 	if(typeof options.baseObject !=  "undefined") {
 		if(typeof options.position == "undefined") {

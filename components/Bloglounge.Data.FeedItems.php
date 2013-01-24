@@ -138,7 +138,6 @@
 					foreach($categoryIds as $categoryId) {
 						Category::rebuildCount($categoryId);
 					}
-
 					return true;
 				} else {
 					return false;
@@ -190,11 +189,11 @@
 			$media->set('outputPath', $cacheDir.'/'.$division);
 
 			$item['id'] = $itemId; // for uniqueId
-			
-			$thumbnailLimit = Settings::get('thumbnailLimit');
+
+			list($thumbnailLimit, $thumbnailSize) = Settings::gets('thumbnailLimit, thumbnailSize');
 			if($thumbnailLimit == 0) return false;
 
-			if (!$result = $media->get($item, $thumbnailLimit))
+			if (!$result = $media->get($item, $thumbnailSize, $thumbnailLimit))
 				return false;
 
 			foreach($result['movies'] as $m_item) {
@@ -204,8 +203,7 @@
 				if(!empty($tFilename)) {
 					$width = $m_item['width'];
 					$height = $m_item['height'];
-					$via = $m_item['via'];
-
+					$via = $m_item['via'];					
 					$insertId = $media->add($itemId, $tFilename, $tSource, $width, $height, 'movie', $via);
 				}
 			}
@@ -224,6 +222,8 @@
 			if(isset($insertId)) {
 				$db->execute("UPDATE {$database['prefix']}FeedItems SET thumbnailId='$insertId' WHERE id='$itemId'");
 			}
+
+			return true;
 		}
 
 		/** gets **/

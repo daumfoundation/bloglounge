@@ -99,11 +99,14 @@
 		}
 
 		function fetchArray($result = null) {
+			
 			if (isset($result)) 
 				return mysql_fetch_array($result);
+		
 			if (!isset($this->resources[$this->resourceIndex]['resource']) || empty($this->resources[$this->resourceIndex]['resource']))
 				return false;
 			if (($this->resources[$this->resourceIndex]['length'] > 0)) {
+				
 				if (($res = mysql_fetch_array($this->resources[$this->resourceIndex]['resource'])) === false) {
 					if (!is_null(array_pop($this->resources))) {
 						$this->resourceIndex = (($na = count($this->resources) -1) < 0) ? 0 : $na;

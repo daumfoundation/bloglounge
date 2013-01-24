@@ -16,7 +16,7 @@
 		$newSettings = array();
 
 		foreach ($_POST as $key=>$value) {
-			if (!Validator::enum($key, 'skin,title,description,logo,updateCycle,updateProcess,archivePeriod,totalVisit,filter,blackfilter,restrictJoin,restrictBoom,rankBy,rankPeriod,rankLife,welcomePack,language,boomDownReactor,boomDownReactLimit,useRssOut,countRobotVisit,thumbnailLimit,feeditemsOnRss,summarySave,filterType,blackfilterType,useVerifier,verifierType,verifier')) 
+			if (!Validator::enum($key, 'skin,title,description,logo,updateCycle,updateProcess,archivePeriod,totalVisit,filter,blackfilter,restrictJoin,restrictBoom,rankBy,rankPeriod,rankLife,welcomePack,language,boomDownReactor,boomDownReactLimit,useRssOut,countRobotVisit,thumbnailLimit,thumbnailSize,feeditemsOnRss,summarySave,filterType,blackfilterType,useVerifier,verifierType,verifier')) 
 				continue;
 			$newSettings[$key] = $db->escape($value);
 		}

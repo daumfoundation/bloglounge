@@ -13,7 +13,7 @@
 
 			
 			$priority = Category::getNextPriority();
-			$result = $db->execute('INSERT INTO '.$database['prefix'].'Categories (name, priority, filter) VALUES ("'.$categoryName.'",'.$priority.',"'.$categoryFilter.'"")');
+			$result = $db->execute('INSERT INTO '.$database['prefix'].'Categories (name, priority, filter) VALUES ("'.$categoryName.'",'.$priority.',"'.$categoryFilter.'")');
 			$id = $db->insertId();
 	
 				

@@ -64,13 +64,12 @@
 			$this->config[$f] = $v;
 		}
 
-		function get($item, $limit = -1) { // permalink, description
+		function get($item, $thumbnailSize = 150, $limit = -1) { // permalink, description
 			$result = array();
 			$result['type'] = 'local';
 
 			// use remote api if image functions unavailable
-			$requiredFunctions = array('imagetypes', 	'imagecreatetruecolor', 'imagecopyresampled', 'imagedestroy',
-														'getimagesize', 'imagesx', 'imagesy', 'imageinterlace', 'imagecreatefromstring');
+			$requiredFunctions = array('imagetypes', 	'imagecreatetruecolor', 'imagecopyresampled', 'imagedestroy','getimagesize', 'imagesx', 'imagesy', 'imageinterlace', 'imagecreatefromstring');
 			foreach ($requiredFunctions as $func) {
 				if (!function_exists($func)) {
 					$result['type'] = 'remote';
@@ -78,7 +77,7 @@
 				}
 			}
 
-			$medias = $this->detectMediaAndSave( stripslashes($item['description']), $item['id'], $limit );
+			$medias = $this->detectMediaAndSave( stripslashes($item['description']), $item['id'], $thumbnailSize, $limit );
 			if(count($medias['images']) == 0 && count($medias['movies']) == 0) {
 				return false;
 			} 
@@ -216,21 +215,21 @@
 			return array('filename'=>$result, 'source'=>$imageURL, 'width'=>$org_w, 'height'=>$org_h);
 		}
 
-		function detectMediaAndSave($content, $uniqueId, $limit = -1) {
+		function detectMediaAndSave($content, $uniqueId, $thumbnailSize, $limit = -1) {
 			$result = array();
 			$result['images'] = array();
 			$result['movies'] = array();
-	
-			if($images = $this->detectIMGsrc($content)) {		
+			
+			if($images = $this->detectIMGsrc($content)) {	
 				$count = count($images);
 				if($count>0) {		
 					if(($limit<0) || ($limit>$count)) {
 						$limit = $count;
 					}
 					for($i=0;$i<$limit;$i++) {
-						$item = $images[$i];					
+						$item = $images[$i];
 						$this->set('filename','i_' . md5($uniqueId . mktime() . $i));
-						$datas = $this->getThumbnail($item[0]);
+						$datas = $this->getThumbnail($item[0], $thumbnailSize, $thumbnailSize);
 						array_push($result['images'], $datas);
 					}
 				}
@@ -239,7 +238,7 @@
 			if($movies = $this->detectMovieIMGsrc($content)) {
 				foreach($movies as $movie) {
 					$this->set('filename', 'm_' . $uniqueId . md5(mktime() . $movie['url']));
-					$datas = $this->getThumbnail($movie['url']);
+					$datas = $this->getThumbnail($movie['url'], $thumbnailSize, $thumbnailSize);
 					$datas['via'] = $movie['via'];
 					array_push($result['movies'], $datas);
 				}
@@ -281,7 +280,6 @@
 					}
 				
 				}
-			
 			}
 			return $result;
 		}

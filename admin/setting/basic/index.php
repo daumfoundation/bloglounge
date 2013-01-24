@@ -60,6 +60,7 @@
 							"&boomDownReactor="+$('#boomDownReactor').val()+
 							"&boomDownReactLimit="+$('#boomDownReactLimit').val() +
 							"&thumbnailLimit="+$('#thumbnailLimit').val()+		
+							"&thumbnailSize="+$('#thumbnailSize').val()+		
 							"&updateProcess="+$('#updateProcess').val()+
 							"&summarySave="+($('#summarySave').attr('checked')?'y':'n')+
 			 			    "&useVerifier="+($('#useVerifier').attr('checked')?'y':'n')+
@@ -156,6 +157,7 @@
 				$updateCycle = $config->updateCycle;
 				$archivePeriod = $config->archivePeriod;
 				$thumbnailLimit = $config->thumbnailLimit;
+				$thumbnailSize = $config->thumbnailSize;
 				$updateProcess = $config->updateProcess;
 				$summarySave = $config->summarySave;
 ?>	
@@ -183,6 +185,36 @@
 
 		</dd>
 	</dl>	
+
+	<dl class="normal">
+		<dt></dt>
+		<dd>
+<?php
+			ob_start();
+?>
+				<select name="thumbnailSize" id="thumbnailSize">		
+<?php
+		for($size=50;$size<=1000;$size+=50) {
+?>
+					<option value="<?php echo $size;?>" <?php if ($thumbnailSize == $size) { ?>selected="selected"<?php } ?>><?php echo _f('%1px',$size);?></option>
+<?php
+		}
+?>
+				</select>				
+<?php
+			$arg = ob_get_contents();
+			ob_end_clean();
+			echo _f('미리보기 이미지의 크기를 %1 로 저장합니다.', $arg);
+?>
+
+		</dd>
+	</dl>	
+	<dl class="normal comments ">
+		<dt></dt>
+		<dd class="text">
+			<?php echo _t('저장되는 썸네일의 크기는 너비와 높이가 같은 정사각형으로 저장됩니다.');?>
+		</dd>
+	</dl>
 
 	<dl class="line"></dl>
 
@@ -223,6 +255,9 @@
 					<option value="480" <?php if ($updateCycle == '480') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간 이상', 8);?></option>
 					<option value="720" <?php if ($updateCycle == '720') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간 이상', 12);?></option>
 					<option value="960" <?php if ($updateCycle == '960') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간 이상', 16);?></option>
+					<option value="1080" <?php if ($updateCycle == '1080') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간 이상', 18);?></option>
+					<option value="1200" <?php if ($updateCycle == '1200') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간 이상', 20);?></option>
+					<option value="1440" <?php if ($updateCycle == '1440') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간 이상', 24);?></option>
 				</select>					
 <?php
 			$arg = ob_get_contents();

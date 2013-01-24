@@ -5,14 +5,14 @@ function addMessage(message, type) {
 	if(typeof(type) == 'undefined') {
 		type = 'information';
 	}
-
+	
 	var pm = $('#float_project_message ul');
 	var top = $('#float_project_message ul li').length;
 	top = top * 28;
 	var message = $('<li>').html(message);
 	pm.animate({'top':(-top)+'px'},'fast');
 	pm.append(message);
-
+	
 	$("#float_project_message").fadeTo('fast',0.8);
 
 	if(messageInterval!=0) {

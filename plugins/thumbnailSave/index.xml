@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="1.0">
+	<information>
+		<name>N,D 썸네일 저장</name>
+		<version>0.1</version>
+		<description><![CDATA[썸네일을 지원하지 않는 "네이버,다음"의 썸네일을 저장하는 플러그인입니다.]]></description>
+		<license><![CDATA[ 자유롭게 수정할 수 있으며, 원저자 표시하에 재배포 가능합니다<br /><a href="http://creativecommons.org/licenses/by-nc-sa/2.0/kr/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/2.0/kr/80x15.png" /></a>]]></license>
+		<author link="http://www.itcanus.net/" email="ncloud@daumfoundation.org">ITCanus (ncloud)</author>
+	</information>
+	<binding>
+		<listener event="Add.thumbnailSave">getNDBlogThumbnails</listener>
+	</binding>	
+</plugin>

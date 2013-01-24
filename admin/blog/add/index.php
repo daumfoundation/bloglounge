@@ -102,7 +102,7 @@
 				</div>
 			<?php echo drawGrayBoxEnd();?>		
 			<br />
-			<a href="<?php echo "http://{$_SERVER['HTTP_HOST']}{$service['path']}/admin/blog/list?id={$feedId}";?>" class="normalbutton boldbutton"><span><?php echo _t('확인');?></span><a>
+			<a href="<?php echo "http://{$_SERVER['HTTP_HOST']}{$service['path']}/admin/blog/list?id={$feedId}";?>" class="normalbutton boldbutton"><span><?php echo _t('확인');?></span></a>
 	</div>
 
 <?php

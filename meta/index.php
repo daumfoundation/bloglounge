@@ -8,8 +8,8 @@
 			exit;
 		}
 	}
-	include ROOT . '/lib/begin.php';
-	
+
+	include ROOT . '/lib/begin.php';	
 	$pageCount = $skinConfig->postList;
 	list($posts, $totalFeedItems) = FeedItem::getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount);
 	$paging = Func::makePaging($page, $pageCount, $totalFeedItems);

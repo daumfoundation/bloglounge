@@ -23,14 +23,15 @@ a.modalClose {
 
 .modalWrap {
 	background:#ffffff;
-	border:1px solid red;
+	border:1px solid #bbb;
 }
 
 .modalTitle {
 	 background-color:#555;
-	 text-align:right;
-	 padding:6px; 
-	 padding-top:4px;
+	 text-align:left;
+	 padding:6px; padding-left:10px; padding-right:10px;
+	 color:#ffffff;
+	 font:bold 13px Gulim;
 }
 
 .modalDataWrap {

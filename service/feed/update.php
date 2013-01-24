@@ -29,6 +29,7 @@
 					$feeder = new Feed;
 					$result = $feeder->updateFeed($feed['xmlURL']);
 					$response['feed'] = $result[1];
+					$response['updated'] = $result[2];
 				} else {
 					$response['error'] = -1;
 					$response['message'] = _t('잘못된 접근입니다.');

@@ -22,6 +22,7 @@
 				$response['message'] = $result[1];
 			} else {
 				$response['feed'] = $result[1];
+				$response['updated'] = $result[2];
 			}
 		break;
 		case 'repeat': // 순차
@@ -32,6 +33,7 @@
 				$response['message'] = $result[1];
 			} else {
 				$response['feed'] = $result[1];
+				$response['updated'] = $result[2];
 			}
 		break;
 	}

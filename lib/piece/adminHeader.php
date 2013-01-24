@@ -29,7 +29,7 @@
 <script type="text/javascript" src="<?php echo $service['path'];?>/scripts/modal.js"></script>
 
 <script type="text/javascript">
-
+/*
 	function updateGlobalFeed(type) {
 		 addMessage("<?php echo _t('블로그 업데이트를 시작합니다.');?>");
 		 $.ajax({
@@ -47,7 +47,7 @@
 		  }
 		});
 	};
-
+*/
 	function menuAction() {
 		$("#header .leftmenus ul li").each( function() {
 			$(this).mouseover( function() {
@@ -102,6 +102,88 @@
 		}
 	}
 
+<?php
+	if($is_admin) {
+?>
+	var blogIdList = [];
+	var nowBlogUpdating = false;
+	var nowBlogUpdatingCancel = false;
+
+	function updateAll() {
+		if(nowBlogUpdating) return;
+
+		nowBlogUpdatingCancel = false;
+
+		$("#updatingImg").show();
+		$("#updateList").empty();
+		$("#updateProgress").hide();
+		$("#updateModalButton").text("<?php echo _t('로딩중');?>");
+
+		makeModal("#updateModal", "", {overlayClickClose:false});
+		fnModalCenter();
+
+		$.ajax({
+		  type: "POST",
+		  url: _path +'/service/feed/list.php',
+		  success: function(msg){
+			blogIdList = $("response list", msg).text().split(",");
+			
+			$("#updateModalButton").text("<?php echo _t('업데이트 중지');?>");
+
+			$("#updateProgressNow").text('1');
+			$("#updateProgressMax").text(blogIdList.length);
+
+			$("#updateProgress").show();
+
+			nowBlogUpdating = true;
+			updateAllWork(blogIdList[0], 0, updateAllWorkFinish);
+		  },
+		  error: function(msg) {
+		  }
+		});
+	}
+
+	function updateAllWork(id, index, onFinish) {
+		if(nowBlogUpdatingCancel) return;
+
+		$.ajax({
+		  type: "POST",
+		  url: _path +'/service/feed/update.php',
+		  data: 'id=' + id,
+		  dataType: 'xml',
+		  success: function(msg){		
+			if(typeof(onFinish) != 'undefined') {
+				onFinish(index, $("response feed", msg).text(), $("response updated", msg).text());
+			}
+		  },
+		  error: function(msg) {
+		  }
+		});
+	}
+
+	function updateAllWorkFinish(index, feed, updated) {	
+		$("#updateProgressNow").text(index+1);
+
+		$("#updateList").append('<li><?php echo _t('업데이트 완료');?> : ' + feed + ' <span class="cnt">(' + updated + ')</span></li>');
+		$("#updateList").scrollTop(100000);
+
+		if(index >= blogIdList.length-1) {
+			nowBlogUpdating = false;
+			$("#updatingImg").hide();		
+			$("#updateModalButton").text("<?php echo _t('업데이트 완료');?>");
+		} else if(!nowBlogUpdatingCancel) {
+			updateAllWork(blogIdList[index+1], index+1, updateAllWorkFinish);
+		}
+	}
+
+	function updateAllModalClose() {
+		nowBlogUpdatingCancel = true;
+	}
+
+<?php
+	}
+?>
+
 	$(window).ready( function() {
 		menuAction();
 <?php 
@@ -116,6 +198,22 @@
 </head>
 
 <body>
+	<div class="makeModal" id="updateModal">	
+		<div class="modalTitle"><?php echo _t('블로그 업데이트');?></div>
+		<div class="modalWrap">
+			<div class="updateModalInput">
+				<ul id="updateList">
+				</ul>
+				<div class="buttons">
+					<a href="#" class="normalbutton boldbutton modalClose" onclick="updateAllModalClose();"><span id="updateModalButton" ><?php echo _t('업데이트 중지');?></span></a>
+					<div id="updateProgress" class="progress">
+						<img id="updatingImg" src="<?php echo $service['path'];?>/images/admin/ani_ajax_loading_small.gif" alt="loading.." align="absmiddle" />&nbsp;&nbsp;<span id="updateProgressNow">1</span> / <strong id="updateProgressMax">123</strong>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div id="header">
 	<div class="wrap">
 		<div class="leftmenus">
@@ -285,7 +383,13 @@
 		<div class="wrap">
 			<div id="project_message">
 				<ul>
-					<li><a href="#" onclick="updateGlobalFeed('repeat'); return false;"><?php echo _t('블로그 업데이트');?></a></li>
+<?php
+	if($is_admin) {
+?>
+					<li><a href="#" onclick="updateAll(); return false;"><?php echo _t('블로그 업데이트');?></a></li>
+<?php
+	}
+?>
 				</ul>
 			</div>
 			<div id="project_link">

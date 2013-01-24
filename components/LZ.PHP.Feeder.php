@@ -124,6 +124,15 @@
 			return $db->fetchArray();
 		}
 
+		function getIdList() {	
+			global $database, $db;
+			$ids = array();
+			$result = $db->queryAll('SELECT id FROM '.$database['prefix'].'Feeds');
+			foreach($result as $item)
+				array_push($ids, $item['id']);
+			return $ids;
+		}
+
 		function getRemoteFeed($url, $depth=0) {
 			global $db;
 			if($depth>3) {
@@ -418,8 +427,9 @@
 					}
 				}
 
+				$this->updated = 0;
 				$result = $this->saveFeedItems($feedId,$feedVisibility,$xml)?0:1;
-				return array($result, $feed['title']);
+				return array($result, $feed['title'], $this->updated);
 			}
 		}
 
@@ -462,7 +472,7 @@
 
 				if ($feedURL = $db->queryCell("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE {$notinStr} lastUpdate < ".(gmmktime()-($updateCycle*60))." ORDER BY lastUpdate ASC LIMIT 1")) {
 					$result = $this->updateFeed($feedURL);
-					return array(!$result[0],$result[1],$feedURL);
+					return array(!$result[0],$result[1],$result[2],$feedURL); // status, title, updated, feedUrl
 				}
 			}
 			return array(0,_t('모든 블로그가 최신상태입니다.'));
@@ -487,7 +497,7 @@
 
 				if ($feedURL = $db->queryCell("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE {$notinStr} lastUpdate < ".(gmmktime()-($updateCycle*60))." ORDER BY RAND() LIMIT 1")) {
 					$result = $this->updateFeed($feedURL);
-					return array($result[0],$result[1],$feedURL);
+					return array($result[0],$result[1],$result[2],$feedURL); // status, title, updated, feedUrl
 				}
 			}
 			return array(1,'No feeds to update');
@@ -691,19 +701,23 @@
 			if(count($item)==3) {
 				$item = $item[0];
 			}
-
+			
+			$result = false;
 			if($isRebuildData) {
 				Tag::buildTagIndex($id, $item['tags'], $oldTags);
 					
 
 				Category::buildCategoryRelations($id, $item['tags'], $oldTags);
 				
-				FeedItem::cacheThumbnail($id, $item);
+				$isSaveThumbnail = FeedItem::cacheThumbnail($id, $item);
 
-				return true;
+				// 썸네일 저장 이벤트
+				$event->on('Add.thumbnailSave',array($item, $feedId, $id, $isSaveThumbnail));
+				
+				$result = true;
 			}
 
-			return false;
+			return $result;
 		}
 
 		function parseDate($str){
