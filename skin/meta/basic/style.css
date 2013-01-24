@@ -9,6 +9,8 @@ body { font:12px Dotum; color:#6d6d6d; background:#ffffff; }
 
 #wrap { width:1010px; margin:0 auto; margin-top:10px; }
 
+#logo_image { margin-bottom:5px; }
+
 #menu { height:33px; background:url(./images/bg_menu.gif) repeat-x; }
 	#menu #logo_text { font-weight:bold; color:#ffffff; float:left; margin-left:10px; margin-top:10px; }
 		#menu #logo_text a { color:#ffffff; text-decoration:none; }

@@ -417,18 +417,26 @@
 			return $db->queryAll('SELECT i.permalink, i.title, i.description FROM '.$database['prefix'].'FeedItems i '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
 		}	
 		
-		// (추천수) - ((오늘 - 글이 들어온 날)날수 * 100000) // 오늘부터 어제.. 그제.. 그끄저께 순으로 높은 값을 줘서.. 순서를 매긴다. 
+		// -- 아래형태로 .. 변경 (추천수) - ((오늘 - 글이 들어온 날)날수 * 100000) // 오늘부터 어제.. 그제.. 그끄저께 순으로 높은 값을 줘서.. 순서를 매긴다. 
+		// 가장 최근의 글을 우선적으로 값을 매김 ( 단점 업데이트가 빈번하지 않을경우 최근글이 항상 인기글이 됨.. )
 		// 추천 혹은 비추천된 날짜가 아닌 글발행된 날과 관련됨..
+
 		function getTopFeedItemsByLastest($count, $rankBy = 'boom') {		
 			global $db, $database, $config;	
-			
+
+			$written = $db->queryCell('SELECT written FROM '.$database['prefix'].'FeedItems ORDER BY written ASC');
+			if(!$written) $written = 0;
+			$written = date('Ymd', $written);
+
 			switch ($rankBy) {
 				case 'click':
-					$rankBy = 'i.click-ROUND(('.gmmktime().'-i.written)/(24*60*60))*10000';
+				//	$rankBy = 'i.click-ROUND(('.gmmktime().'-i.written)/(24*60*60))*10000';
+					$rankBy = 'i.click+((FROM_UNIXTIME(i.written,"%Y%m%d")-'.$written.')*10000)';
 				break;
 				default:
 				case 'boom':
-					$rankBy = 'i.boomUp-i.boomDown-ROUND(('.gmmktime().'-i.written)/(24*60*60))*10000';
+				//	$rankBy = 'i.boomUp-i.boomDown-ROUND(('.gmmktime().'-i.written)/(24*60*60))*10000';
+					$rankBy = 'i.boomUp-i.boomDown+((FROM_UNIXTIME(i.written,"%Y%m%d")-'.$written.')*10000)';
 				break;
 			}
 			$qBoom = '';

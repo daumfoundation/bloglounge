@@ -10,6 +10,7 @@
 	$headerScript = '
 <script type="text/javascript">
 //<![CDATA[
+	[##_bloglounge_autoinput_script_##]
 	$(window).ready( function() {
 			updateFeed();
 	});

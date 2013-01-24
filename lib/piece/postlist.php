@@ -1,7 +1,52 @@
-<?php
-	
+<?php	
 	$src_posts = $skin->cutSkinTag('postlist');
 	if(isset($posts)) {
+		ob_start();
+?>		
+		$(document).keydown( function(event) {
+			if (event.altKey || event.ctrlKey)
+				return;
+			switch (event.target.nodeName) {
+				case "INPUT":
+				case "SELECT":
+				case "TEXTAREA":
+					return;
+			}		
+			switch (event.keyCode) {
+				case 81: //Q
+					window.location = "/admin";
+				break;
+				case 65: //A	
+<?php
+		if($accessInfo['page'] > 1) {
+?>
+					window.location = "<?php echo $accessInfo['fullpath'];?>/?page=<?php echo $accessInfo['page']-1;?>";
+<?php
+		} else {
+?>	
+					alert("<?php echo _t('이전 페이지가 없습니다.');?>");
+<?php
+		}
+?>
+				break;
+				case 83: //S
+<?php
+		if($accessInfo['page'] < $paging['totalPages']) {
+?>
+					window.location = "<?php echo $accessInfo['fullpath'];?>/?page=<?php echo $accessInfo['page']+1;?>";
+<?php
+		} else {
+?>	
+					alert("<?php echo _t('다음 페이지가 없습니다.');?>");
+<?php
+		}
+?>				break;
+			}
+		});
+<?php		
+			$shortCutCode = ob_get_contents();
+			ob_end_clean();
+			$skin->addJavascriptCode($shortCutCode);
 
 			requireComponent('LZ.PHP.Media');
 

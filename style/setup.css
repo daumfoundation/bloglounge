@@ -64,7 +64,8 @@ body {
 	text-align:center; 
 	letter-spacing:0pt;
 	color:#555; 
-	line-height:300%;
+	line-height:200%;
+	margin-top:20px;
 }
 
 #setupType {

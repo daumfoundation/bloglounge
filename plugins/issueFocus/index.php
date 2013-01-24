@@ -179,7 +179,7 @@
 				<div class="data <?php echo empty($thumbnailFile)?'data2':'';?>">
 					<h3><a href="<?php echo $service['path'];?>/go/<?php echo $feedItem['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['title']),60);?></a></h3>
 					<div class="desc">
-						<?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['description']),200);?>
+						<?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['description']),$config['issueDescLength']);?>
 					</div>
 				</div>
 

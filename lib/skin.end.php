@@ -37,8 +37,11 @@
 		}
 
 		$add = $service['path'];
-		if( $accessInfo['controller'] == 'feedlist' ) {
-			$add .= '/feedlist';
+		switch($accessInfo['controller']) {
+			case 'category':
+			case 'feedlist':
+				$add .= ('/' . $accessInfo['controller']);
+			break;
 		}
 
 		$s_paging = $skin->parseTag('prev_page', $add.$qSearch.'/?page='.$paging['pagePrev'], $src_paging);

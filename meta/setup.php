@@ -1125,7 +1125,6 @@
 ?>
 
 			<p id="setupStepWrap">
-				<?php echo _t('준비가 되셨으면 "다음" 버튼을 눌러 설치 과정을 시작하세요.');?><br /><br />
 				<a href="#" onclick="return false;"><img src="<?php echo $path;?>/images/setup/<?php echo Locale::get();?>/bt_disable_back.jpg" alt="<?php echo _t('이전');?>" /></a>&nbsp;&nbsp;<a href="<?php echo $path;?>/setup/?step=2"><img src="<?php echo $path;?>/images/setup/<?php echo Locale::get();?>/bt_next.jpg" alt="<?php echo _t('다음');?>" /></a>
 			</p>
 			<!-- 1단계 설치 끝 -->
@@ -1162,7 +1161,7 @@
 ?>
 					<li>
 						<input type="radio" name="type" value="migration" id="migration" checked="checked" />&nbsp;<label for="migration"><?php echo _t('이전 버전의 블로그라운지를 업그레이드 합니다');?></label><br />
-						<span class="help"><?php echo _t('이전 버전의 블로그라운지 혹은 날개툴 덮어 씌우신 경우 이 항목을 선택하세요.');?></span>
+						<span class="help"><?php echo _t('이전 버전의 블로그라운지 혹은 날개툴을 덮어 씌우신 경우 이 항목을 선택하세요.');?></span>
 					</li>
 <?php
 				} else {

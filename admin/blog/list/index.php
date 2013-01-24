@@ -357,7 +357,7 @@
 <div class="wrap">
 <?php 
 	$headers = array(array('title'=>_t('등록일'),'class'=>'bloglist_date','width'=>'100px'),
-					array('title'=>_t('블로그'),'class'=>'bloglist_title','width'=>'270px'),
+					array('title'=>_t('블로그'),'class'=>'bloglist_title','width'=>'280px'),
 					array('title'=>_t('최근 업데이트'),'class'=>'bloglist_update','width'=>'450px'),
 					array('title'=>_t('수집'),'class'=>'bloglist_count','width'=>'60px'),
 					array('title'=>_t('실행'),'class'=>'bloglist_execute','width'=>'auto'));

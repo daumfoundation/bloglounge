@@ -30,8 +30,13 @@
 		function css($content) {
 			$this->output = str_replace('</head>', $content . '</head>', $this->output);
 		}
+
 		function javascript($content) {
 			$this->output = str_replace('</head>', $content . '</head>', $this->output);
+		}
+
+		function addJavascriptCode($code) {
+			$this->output = str_replace('[##_bloglounge_autoinput_script_##]', $code . "\n[##_bloglounge_autoinput_script_##]", $this->output);
 		}
 
 		function replace($tag, $value) {

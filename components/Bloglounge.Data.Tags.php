@@ -218,9 +218,14 @@
 
 		function getIssueTags($count) {
 			global $db, $database;
-			$today = date('Ymd', mktime());
-			$result = $db->queryAll("SELECT t.name, count(tr.tag) as count, ((count(tr.tag)*10)+sum(({$today}-FROM_UNIXTIME(tr.linked,'%Y%m%d')))*1000) as frequency FROM {$database['prefix']}TagRelations AS tr LEFT JOIN {$database['prefix']}Tags AS t ON (t.id = tr.tag) GROUP BY tag ORDER BY frequency DESC LIMIT {$count}");
+			$linked = $db->queryCell("SELECT linked FROM {$database['prefix']}TagRelations ORDER BY linked ASC");
 
+			if($linked) {
+				$day = date('Ymd', $linked);
+				$result = $db->queryAll("SELECT t.name, count(tr.tag) as count, ((count(tr.tag)*10)+sum((FROM_UNIXTIME(tr.linked,'%Y%m%d')-{$day})*1000)) as frequency FROM {$database['prefix']}TagRelations AS tr LEFT JOIN {$database['prefix']}Tags AS t ON (t.id = tr.tag) GROUP BY tr.tag ORDER BY frequency DESC LIMIT {$count}");
+			} else {
+				$result = array();
+			}
 			return $result;
 		}
 	}
