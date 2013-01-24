@@ -51,7 +51,9 @@
 				bu.addClass(classname);
 			}
 
-			bc.text( boomCount);
+			bc.text(boomCount);
+			bc.attr('class','boomCount boomCount' + boomCount);
+
 			br.removeClass('boom_rank_0').removeClass('boom_rank_1').removeClass('boom_rank_2').removeClass('boom_rank_3').removeClass('boom_rank_4').removeClass('boom_rank_5');
 			br.addClass('boom_rank_' + rank);
 
@@ -175,6 +177,16 @@
 		} else {
 			div1.height( div2.height() );
 		}
+	}
+
+	function openPopup(url,width,height) {	
+		var sw=screen.width;
+		var sh=screen.height;
+
+		var px=(sw-width)/2;
+		var py=(sh-height)/2;
+
+		window.open(url,'_blank',"width=" + width + ",height=" + height + ",top=" + py + ",left=" + px + ",scrollbars=yes" ); 
 	}
 
 	function faderInputEffects() {

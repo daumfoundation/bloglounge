@@ -28,6 +28,9 @@
 		$toEdit['allowRedistribute'] = (isset($_POST['allowRedistribute']) ? 'y' : 'n');
 		$toEdit['visibility'] = (isset($_POST['visibility']) ? $_POST['visibility'] : NULL);
 		$toEdit['everytimeUpdate'] = (isset($_POST['everytimeUpdate']) ? 'y' : 'n');
+		if(!$is_admin) { // 회원만 가능한 기능
+			$toEdit['everytimeUpdate'] = 'n';
+		}
 
 		if (!preg_match("/^[0-9]+$/", $_POST['id']) || !Feed::edit($_POST['id'], $toEdit)) {
 			$msg = _t('블로그 정보수정을 실패했습니다.');
@@ -220,10 +223,10 @@
 				<h2><?php echo $readFeed['title'];?></h2>
 				<div class="extra">		
 				
-					<?php echo _t('수집일');?> : <span class="date"><?php echo date('y.m.d H:i:s', $readFeed['created']);?></span> <span class="date_text">(<?php echo _f($date[0],$date[1]);?>)</span> &nbsp;
+					<?php echo _t('수집일');?> : <span class="date"><?php echo date('y.m.d H:i:s', $readFeed['created']);?></span> <span class="date_text">(<?php echo $date;?>)</span> &nbsp;
 					<?php echo _t('주소');?> : <a href="<?php echo $readFeed['blogURL'];?>" target="_blank"><?php echo Func::longURLtoShort($readFeed['blogURL'],35,20,15);?></a> <br />
 
-					<?php echo _t('마지막업데이트');?> : <span class="date"><?php echo date('y.m.d H:i:s', $readFeed['lastUpdate']);?></span> <span class="date_text">(<?php echo _f($date2[0],$date2[1]);?>)</span> 
+					<?php echo _t('마지막업데이트');?> : <span class="date"><?php echo date('y.m.d H:i:s', $readFeed['lastUpdate']);?></span> <span class="date_text">(<?php echo $date2;?>)</span> 
 					&nbsp;
 					<?php echo _t('수집된 글수');?> :  <span class="count"><?php echo $readFeed['feedCount'];?></span>
 				</div>
@@ -248,12 +251,9 @@
 ?>
 							<li class="empty"><?php echo _t('수집된 글이 없습니다.');?></li>
 <?php	} 
-					if(count($posts)<$readFeed['feedCount']) {
 ?>
 							 <li class="more"><a href="<?php echo $service['path'];?>/admin/blog/entrylist/?type=blogURL&keyword=<?php echo rawurlencode($readFeed['blogURL']);?>"><?php echo _t('전체보기..');?></a></li>
-<?php
-					}
-?>
+
 						</ul>
 					</div>
 				</div>
@@ -326,11 +326,16 @@
 						<input type="checkbox" name="allowRedistribute" id="allowRedistribute" <?php if (Validator::getBool($readFeed['allowRedistribute'])) { ?>checked="checked"<?php } ?> /> <label for="allowRedistribute"><?php echo _t('이 블로그에서 수집된 글의 RSS 재출력과 외부 검색 노출을 허용합니다.');?></label>
 						<div class="help checkbox_help"><?php echo _t('RSS 출력, 외부 검색엔진 수집등의 기능에 이 블로그에서 수집된 글이 포함됩니다.');?></div>
 					</p>				
-					
+<?php
+				if($is_admin) {
+?>
 					<p class="checkbox_wrap">
 						<input type="checkbox" name="everytimeUpdate" id="everytimeUpdate" <?php if (Validator::getBool($readFeed['everytimeUpdate'])) { ?>checked="checked"<?php } ?> /> <label for="everytimeUpdate"><?php echo _t('이 블로그를 매번 최신화 합니다.');?></label>
 						<div class="help checkbox_help"><?php echo _t('이 옵션을 사용하는 블로그가 많아질수록 동작 속도를 저하시킬 수 있습니다.');?></div>
 					</p>
+<?php
+					}
+?>
 										
 					<br />
 										
@@ -399,7 +404,7 @@
 			ob_start();
 			if(!empty($lastPost)) {
 ?>
-					<a href="<?php echo $service['path'];?>/admin/blog/entrylist/?read=<?php echo $lastPost['id'];?>"><?php echo UTF8::lessenAsEm(stripcslashes(func::stripHTML($lastPost['title'])),40);?></a> <span class="date"> : <?php echo date('y.m.d H:i:s', $feed['lastUpdate']);?> (<?php echo _f($stringDate[0],$stringDate[1]);?>) </span>
+					<a href="<?php echo $service['path'];?>/admin/blog/entrylist/?read=<?php echo $lastPost['id'];?>"><?php echo UTF8::lessenAsEm(stripcslashes(func::stripHTML($lastPost['title'])),40);?></a> <span class="date"> : <?php echo date('y.m.d H:i:s', $feed['lastUpdate']);?> (<?php echo $stringDate;?>) </span>
 <?php
 			} else {
 ?>
@@ -413,7 +418,7 @@
 			array_push($data['datas'], array('class'=>'bloglist_update','data'=> $content ));
 			
 			// 블로그 등록 글 수
-			array_push($data['datas'], array('class'=>'bloglist_count','data'=> $feed['feedCount'] ));
+			array_push($data['datas'], array('class'=>'bloglist_count','data'=> '<a href="'.$service['path'].'/admin/blog/entrylist/?type=blogURL&keyword='.rawurlencode($feed['blogURL']).'" title="'._t('전체보기').'">'.$feed['feedCount'].'</a>' ));
 			
 			// 블로그 실행
 			ob_start();

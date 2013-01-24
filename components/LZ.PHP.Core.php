@@ -274,11 +274,13 @@
 				case 'y':
 				case 'yes':
 				case 'on':
+				case 'true':
 					return true;
 					break;
 				case 'n':
 				case 'no':
 				case 'off':
+				case 'false':
 					return false;
 					break;
 			}

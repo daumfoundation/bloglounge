@@ -315,7 +315,7 @@
 ?> 
 		<select id="postList">
 <?php
-			for ($i=1; $i <= 30; $i++) {
+			for ($i=1; $i <= 100; $i++) {
 ?>
 			<option value="<?php echo $i;?>" <?php if ($i == $skinConfig->postList) {?> selected="selected"<?php } ?>><?php echo $i;?></option>
 <?php
@@ -414,7 +414,7 @@
 ?>
 		<select id="feedListPage">
 <?php
-			for ($i=5; $i <= 30; $i+=5) {
+			for ($i=5; $i <= 100; $i+=5) {
 ?>
 			<option value="<?php echo $i;?>" <?php if ($i == $skinConfig->feedListPage) {?> selected="selected"<?php } ?>><?php echo $i;?></option>
 <?php 

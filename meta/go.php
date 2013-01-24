@@ -20,8 +20,7 @@
 		include ROOT.'/lib/link/skin.end.php';
 	} else {
 		if(isset($linker_post)) {	
-			// 한글주소 문제없이..
-			header('Location: ' . $linker_post['permalink']);
+			header('Location: ' . func::translate_uri($linker_post['permalink'])); // 한글주소 문제없이..
 		}
 	}
 	

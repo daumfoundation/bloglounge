@@ -12,7 +12,7 @@ function getCategoryFocus($input, $config) {
 
 	switch($config['categoryType']) {
 		case 'random':
-			$categories = Category::getRandomCategories($config['categoryCount']);
+			$categories = Category::getRandomList($config['categoryCount']);
 		break;
 		case 'custom':
 			$categoryNames = explode(',', $config['customCategory']);
@@ -26,7 +26,7 @@ function getCategoryFocus($input, $config) {
 		break;
 		case 'recent':
 		default:
-			$categories = Category::getCategories($config['categoryCount']);
+			$categories = Category::getList($config['categoryCount']);
 		break;
 	}
 

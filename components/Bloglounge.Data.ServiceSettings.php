@@ -23,9 +23,10 @@
 			global $database, $db;
 			
 			$names = explode(',',$names);
-			if (!$data = $db->queryAll('SELECT name, value FROM '.$database['prefix'].'ServiceSettings WHERE name IN ('.implode_string(',',$names).')',MYSQL_ASSOC))
+			if (!$data = $db->queryAll('SELECT name, value FROM '.$database['prefix'].'ServiceSettings WHERE name IN ('.func::implode_string(',',$names).')',MYSQL_ASSOC))
 				return false;
 		
+
 			$result = array();
 		
 			foreach($names as $name) {
@@ -56,16 +57,27 @@
 
 		function getAsArray($names) {
 			global $database, $db;
+			
 			$names = explode(',',$names);
-			if (!$data = $db->queryAll('SELECT name, value FROM '.$database['prefix'].'ServiceSettings WHERE name IN ('.implode_string(',',$names).')',MYSQL_ASSOC))
+			if (!$data = $db->queryAll('SELECT name, value FROM '.$database['prefix'].'ServiceSettings WHERE name IN ('.func::implode_string(',',$names).')',MYSQL_ASSOC))
 				return false;
+		
+				
 			$result = array();
+		
 			foreach($names as $name) {
+		
 				$result[trim($name)] = '';
+			
 			}
+
 			foreach($data as $item) {
+			
 				$result[$item['name']] = $item['value'];
+	
 			}
+		
+				
 			return $result;
 		}
 		

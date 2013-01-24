@@ -1,5 +1,4 @@
 <?php
-
 	class RSSOut {
 		function stop() {
 			requireComponent('LZ.PHP.XMLWriter');		

@@ -58,13 +58,15 @@
 			foreach ($feeds as $feed) {	
 				$index ++;
 				$feed = $event->on('Data.feed', $feed);
-				$sp_feeds = $skin->parseTag('feeds_title', $event->on('Text.feedTitle', UTF8::lessenAsByte($feed['title'], $skinConfig->feedListPageTitleLength)), $src_feed_rep);
 
 				$src_feedlogo = $skin->cutSkinTag('cond_feedlogo');
 				$feedlogoFile = (!file_exists(ROOT . '/cache/feedlogo/' . $feed['logo']) || empty($feed['logo'])) ? '' : $service['path']. '/cache/feedlogo/'.$feed['logo'];
 				$s_feedlogo = (!Validator::is_empty($feed['logo'])) ? $skin->parseTag('feeds_logo', $feedlogoFile, $src_feedlogo) : '';
-				$sp_feeds = $skin->dressOn('cond_feedlogo', $src_feedlogo, $s_feedlogo, $sp_feeds);
-			
+				$sp_feeds = $skin->dressOn('cond_feedlogo', $src_feedlogo, $s_feedlogo, $src_feed_rep);
+				
+				$sp_feeds = $skin->parseTag('feeds_title', $event->on('Text.feedTitle', UTF8::lessenAsByte($feed['title'], $skinConfig->feedListPageTitleLength)), $sp_feeds);
+
+
 				if(!empty($feedlogoFile)) {
 					$sp_feeds = $skin->parseTag('feed_logo_exist', 'feed_logo_exist', $sp_feeds);
 				} else {
@@ -92,7 +94,7 @@
 						$s_feedrecent = '';
 					}
 
-				$sp_feeds = $skin->parseTag('feed_position', ($index==0?'firstItem':($index==count($feeds)?'lastItem':'')), $sp_feeds);
+				$sp_feeds = $skin->parseTag('feed_position', ($index==1?'firstItem':($index==count($feeds)?'lastItem':'')), $sp_feeds);
 
 				$sp_feeds = $skin->dressOn('feedrecent', $src_feedrecent, $s_feedrecent, $sp_feeds);
 

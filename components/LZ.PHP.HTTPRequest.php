@@ -221,7 +221,6 @@
 			if (!$this->send()) {
 				return false;
 			}
-		
 			return $this->responseText;
 		}
 	}

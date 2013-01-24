@@ -61,6 +61,7 @@ body.entry_view { background:#ffffff; }
 				.entrylist .entrylist_title .thumbnail img { width:28px; border:1px solid #bbb; padding:1px; }
 		
 		.entrylist .entrylist_title .data	   { float:left; width:242px; overflow:hidden; }	
+			.entrylist .entrylist_title .no_thumbnail_data { width:280px; }
 
 				.entrylist .entrylist_title .data  a { color:#888; }
 				.entrylist .entrylist_title .data .title { font-weight:bold; padding-top:2px; font-size:12px; padding-bottom:4px; }

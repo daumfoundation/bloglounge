@@ -50,7 +50,6 @@
 			if (!isset($itemId) || !is_array($arg)) {
 				return false;
 			}
-
 			foreach ($arg as $key=>$value) {
 				if (!Validator::enum($key, 'author,permalink,title,autoUpdate,allowRedistribute,tags,focus,visibility')) {
 					return false;
@@ -497,12 +496,10 @@
 
 			switch ($rankBy) {
 				case 'click':
-				//	$rankBy = 'i.click-ROUND(('.gmmktime().'-i.written)/(24*60*60))*10000';
 					$rankBy = 'i.click+((FROM_UNIXTIME(i.written,"%Y%m%d")-'.$written.')*10000)';
 				break;
 				default:
 				case 'boom':
-				//	$rankBy = 'i.boomUp-i.boomDown-ROUND(('.gmmktime().'-i.written)/(24*60*60))*10000';
 					$rankBy = 'i.boomUp-i.boomDown+((FROM_UNIXTIME(i.written,"%Y%m%d")-'.$written.')*10000)';
 				break;
 			}

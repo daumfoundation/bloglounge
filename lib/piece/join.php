@@ -86,7 +86,7 @@
 
 									<table class="join_table" cellspacing="0" cellpadding="0">
 <?php
-	$is_error = array_keys_exist(array('username'), $errors);
+	$is_error = func::array_keys_exist(array('username'), $errors);
 ?>
 										<tr>
 											<td class="title"><label for="username"><?php echo _t('이름');?></label></td>
@@ -107,7 +107,7 @@
 										</tr>
 <?php
 			}
-	$is_error = array_keys_exist(array('userid1','userid2','userid3','userid4'), $errors);
+	$is_error = func::array_keys_exist(array('userid1','userid2','userid3','userid4'), $errors);
 ?>
 										<tr>
 											<td class="title"><label for="userid"><?php echo _t('아이디');?></label></td>
@@ -136,7 +136,7 @@
 										</tr>
 <?php
 			}
-			$is_error = array_keys_exist(array('userpw1','userpw2','userpw3','userpw4'), $errors);
+			$is_error = func::array_keys_exist(array('userpw1','userpw2','userpw3','userpw4'), $errors);
 ?>
 										<tr>
 											<td class="title"><label for="userpw"><?php echo _t('비밀번호');?></label></td>
@@ -169,7 +169,7 @@
 										</tr>
 <?php
 			}
-			$is_error = array_keys_exist(array('useremail1','useremail2'), $errors);
+			$is_error = func::array_keys_exist(array('useremail1','useremail2'), $errors);
 ?>
 										<tr>
 											<td class="title"><label for="useremail"><?php echo _t('이메일주소');?></label></td>

@@ -3,17 +3,14 @@
 /// All rights reserved. Licensed under the GPL.
 /// See the GNU General Public License for more details. (/doc/LICENSE, /doc/COPYRIGHT)
 
-class Po2php
-{
+class Po2php {
 	var $msgs;
 	var $nomsgs;
 	var $comments;
 
-	function open( $source_file )
-	{
+	function open( $source_file ) {
 		$fsource = fopen( $source_file, "r" );
-		if( !$fsource )
-		{
+		if( !$fsource ) {
 			return 0;
 		}
 
@@ -22,51 +19,39 @@ class Po2php
 		$this->nomsgs = array();
 		$this->comments = array();
 		$comment = '';
-		while( !feof( $fsource ) )
-		{
+		while( !feof( $fsource ) ) {
 			$line = fgets( $fsource, 4096 );
 			$line = rtrim($line);
-			if( substr($line,0,1) == "#" )
-			{
+			if( substr($line,0,1) == "#" ) {
 				$comment .= "$line\r\n";
 				continue;
 			}
 
-			if( $state == 0 )
-			{
-				if( preg_match( '/^msgid\s+"(.*)"/', $line, $container ) )
-				{
+			if( $state == 0 ) {
+				if( preg_match( '/^msgid\s+"(.*)"/', $line, $container ) ) {
 					$state = 1;
 					$msgid = $container[1];
 					continue;
 				}
 			}
-			else if( $state == 1 )
-			{
-				if( preg_match( '/^msgstr\s+"(.*)"/', $line, $container ) )
-				{
+			else if( $state == 1 ) {
+				if( preg_match( '/^msgstr\s+"(.*)"/', $line, $container ) ) {
 					$msgstr = $container[1];
 					$state = 2;
 				}
-				else
-				{
+				else {
 					$line = preg_replace( '/^"|"$/', "", $line );
 					$msgid .= $line;
 				}
 				continue;
 			}
-			else if( $state == 2 )
-			{
-				if( preg_match( '/^\s*$/', $line ) )
-				{
-					if( $msgid != "" )
-					{
-						if( $msgstr == "" )
-						{
+			else if( $state == 2 ) {
+				if( preg_match( '/^\s*$/', $line ) ) {
+					if( $msgid != "" ) {
+						if( $msgstr == "" ) {
 							$this->nomsgs[$msgid] = "";
 						}
-						else
-						{
+						else {
 							$this->msgs[$msgid] = $msgstr;
 						}
 						$this->comments[$msgid] = $comment;
@@ -74,8 +59,7 @@ class Po2php
 					$comment = "";
 					$state = 0;
 				}
-				else
-				{
+				else {
 					$line = preg_replace( '/^"|"$/', "", $line );
 					$msgstr .= $line;
 				}
@@ -88,30 +72,25 @@ class Po2php
 		return 1;
 	}
 
-	function save( $target_file )
-	{
+	function save( $target_file ) {
 		if( !is_writable( $target_file ) ) {
 			return 0;
 		}
 		$ftarget = fopen( $target_file, "w+" );
-		if( !$ftarget )
-		{
+		if( !$ftarget ) {
 			return 0;
 		}
 
 		$msgs = array_merge( $this->msgs, $this->nomsgs );
 		ksort( $msgs );
 		fwrite( $ftarget, "<?php\r\n" );
-		foreach( $msgs as $msgid => $msgstr )
-		{
+		foreach( $msgs as $msgid => $msgstr ) {
 			$comment = $this->comments[$msgid];
 
-			if( $msgstr == "" )
-			{
+			if( $msgstr == "" ) {
 				$pass = "//";
 			}
-			else
-			{
+			else {
 				$pass = "";
 			}
 
@@ -131,11 +110,9 @@ class Po2php
 		return 1;
 	}
 
-	function saveMsgstrAsMsgid( $target_file )
-	{
+	function saveMsgstrAsMsgid( $target_file ) {
 		$ftarget = fopen( $target_file, "w+" );
-		if( !$ftarget )
-		{
+		if( !$ftarget ) {
 			return 0;
 		}
 
@@ -156,8 +133,7 @@ class Po2php
 		fwrite( $ftarget, "\r\n" );
 
 
-		foreach( $msgs as $msgid => $msgstr )
-		{
+		foreach( $msgs as $msgid => $msgstr ) {
 			$comment = $this->comments[$msgid];
 
 			fwrite( $ftarget, $comment );

@@ -1,5 +1,4 @@
 <?php
-
 	class DB {
 		function start($mode = 'mysql') { // initialize
 			switch (strtolower($mode)) {

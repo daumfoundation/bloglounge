@@ -44,19 +44,18 @@
 				return false;
 			}
 			
-			$feedVisibilityCahnged = false;
+			$feedVisibilityChanged = false;
 
 			$modStack = array();
-		//	$arguments = func::array_trim($arguments);
 			foreach ($arguments as $key=>$value) {
-				if (!Validator::enum($key, 'xmlURL,blogURL,title,description,language,lastUpdate,filter,autoUpdate,allowRedistribute,author,visibility,feedCount,everytimeUpdate')) 
+				if (!Validator::enum($key, 'xmlURL,blogURL,title,description,language,lastUpdate,filter,autoUpdate,allowRedistribute,author,visibility,feedCount,everytimeUpdate,logo')) 
 					continue;
 				if ($key == 'filter') {
 					$filterArray = func::array_trim((explode(',', $value)));
 					$value = implode(',', array_slice($filterArray, 0, 3));
 					;
 				} else if($key == 'visibility') {
-					$feedVisibilityCahnged = $value;
+					$feedVisibilityChanged = $value;
 				}
 
 				if (!Validator::enum(strtolower($value), 'unix_timestamp(),time(),date()')) {
@@ -68,8 +67,8 @@
 			if (!count($modStack)) 
 				return false;
 
-			if($feedVisibilityCahnged !== false) {
-				$db->execute('UPDATE '.$database['prefix'].'FeedItems SET feedVisibility = "'.$feedVisibilityCahnged .'" WHERE feed='.$feedId);
+			if($feedVisibilityChanged !== false) {
+				$db->execute('UPDATE '.$database['prefix'].'FeedItems SET feedVisibility = "'.$feedVisibilityChanged .'" WHERE feed='.$feedId);
 			}
 
 			$modQuery = implode(',', $modStack);
@@ -360,27 +359,32 @@
 		}
 
 		function updateFeed($feedURL){
-			global $database, $db;
+			global $database, $db, $event;
 
 			if (preg_match("/^[0-9]+$/", $feedURL))
 				$feedURL = $db->queryCell('SELECT xmlURL FROM '.$database['prefix'].'Feeds WHERE id="'.$feedURL.'"');
 
-			list($feedId, $lastUpdate, $autoUpdate, $feedLogo, $feedVisibility) = $db->pick('SELECT id, lastUpdate, autoUpdate, logo, visibility FROM '.$database['prefix'].'Feeds WHERE xmlURL="'.$feedURL.'"');
+			list($feedId, $lastUpdate, $autoUpdate, $feedVisibility) = $db->pick('SELECT id, lastUpdate, autoUpdate, visibility FROM '.$database['prefix'].'Feeds WHERE xmlURL="'.$feedURL.'"');
 
 		/*	
 			if ($lastUpdate > gmmktime()-300) {
 				return array(0,_t('업데이트시기가 아닙니다.'));
 			}
 		*/
-	
-			list($status, $feed, $xml)= Feed::getRemoteFeed($feedURL);						
+			$result = $event->on('Add.checkFeed', array($feedURL, $feedId));
+			if(is_array($result) && count($result)>=3) {
+				list($status, $feed, $xml) = $result;
+			} else {
+				$feedURL = trim('http://' . str_replace('http://','',$feedURL));
+				list($status, $feed, $xml) = feed::getRemoteFeed($feedURL);
+			}
+
 			if ($status > 0){
 				$db->execute("UPDATE {$database['prefix']}Feeds SET lastUpdate = ".gmmktime()." WHERE xmlURL = '{$feedURL}'");
 				return array($status, $db->pick('SELECT title FROM '.$database['prefix'].'Feeds WHERE xmlURL = "' . $feedURL . '"'), $feedURL);
 			} else{
-				$feed['logo'] = (empty($feedLogo) || (!empty($feedLogo) && !file_exists(ROOT . '/cache/feedlogo/'.$feedLogo)))? '' : $feedLogo;
 				$sQuery = (Validator::getBool($autoUpdate)) ? "title = '{$feed['title']}', description = '{$feed['description']}', " : '';
-				$db->execute("UPDATE {$database['prefix']}Feeds SET blogURL = '{$feed['blogURL']}', $sQuery language = '{$feed['language']}', lastUpdate = ".gmmktime().", logo='{$feed['logo']}' WHERE xmlURL = '{$feedURL}'");
+				$db->execute("UPDATE {$database['prefix']}Feeds SET blogURL = '{$feed['blogURL']}', $sQuery language = '{$feed['language']}', lastUpdate = ".gmmktime()." WHERE xmlURL = '{$feedURL}'");
 				$result = $this->saveFeedItems($feedId,$feedVisibility,$xml)?0:1;
 				return array($result, $feed['title']);
 			}
@@ -488,7 +492,7 @@
 		}
 
 		function saveFeedItem($feedId,$feedVisibility,$item){
-			global $database, $db;
+			global $database, $db, $event;
 
 			$db->query("SELECT id FROM {$database['prefix']}DeleteHistory WHERE feed='$feedId' and permalink='{$item['permalink']}'");
 			if ($db->numRows() > 0) 
@@ -529,6 +533,8 @@
 
 				if ($filtered) return false;
 			}
+
+
 			
 			if (preg_match('/\((.[^\)]+)\)$/Ui', trim($item['author']), $_matches)) $item['author'] = $_matches[1];
 			$item['author']=$db->escape($db->lessen(UTF8::correct($item['author'])));
@@ -593,6 +599,11 @@
 					if (isset($this)) $this->updated++;
 				}
 				$isRebuildData = true;
+			}			
+			
+			$item = $event->on('Add.updateFeedItem', array($item, $feedId, $id));
+			if(count($item)==3) {
+				$item = $item[0];
 			}
 
 			if($isRebuildData) {
@@ -715,11 +726,11 @@
 			$autoUpdate = array();
 			$title['result'] = $item['title'];
 
-			list($autoUpdate['feed'], $title['feed']) = Feed::gets($feedId, 'autoUpdate,title');
+			/*list($autoUpdate['feed'], $title['feed']) = Feed::gets($feedId, 'autoUpdate,title');
 			$autoUpdate['feed'] = Validator::getBool($autoUpdate['feed']);
 
 			if (!$autoUpdate['feed'] && !Validator::is_empty($title['feed']))
-				$title['result'] = $title['feed'];
+				$title['result'] = $title['feed'];*/ // 피드의 제목을 피드아이템 제목에 덮어 씌우는일이 없도록..
 
 			if (isset($feedItemId) || ($feedItemId !== false)) { // update
 				requireComponent('Bloglounge.Data.FeedItems');
@@ -739,10 +750,16 @@
 			return $db->exists("SELECT id FROM {$database['prefix']}Feeds WHERE id='{$feedId}'");
 		}		
 		
+		function doesExistBlogURL($blogURL) {
+			global $database, $db;
+			if (empty($blogURL)) return false;
+			return $db->exists("SELECT id FROM {$database['prefix']}Feeds WHERE blogURL='{$blogURL}'");
+		}	
+
 		function doesExistXmlURL ($XmlURL) {
 			global $database, $db;
 			if (empty($XmlURL)) return false;
-			return $db->exists("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE xmlURL='{$XmlURL}'");
+			return $db->exists("SELECT id FROM {$database['prefix']}Feeds WHERE xmlURL='{$XmlURL}'");
 		}
 
 		function blogURL2Id($blogURL) {
@@ -785,13 +802,13 @@
 		function getRecentFeeds($count, $feedOrder = 'created') {
 			global $db, $database;	
 			$qFeeds = 'WHERE visibility="y"';
-			return $db->queryAll('SELECT id,blogURL, title, created FROM '.$database['prefix'].'Feeds '.$qFeeds.' ORDER BY '.$feedOrder.' DESC LIMIT 0,'.$count);		
+			return $db->queryAll('SELECT id,blogURL, title, created, logo FROM '.$database['prefix'].'Feeds '.$qFeeds.' ORDER BY '.$feedOrder.' DESC LIMIT 0,'.$count);		
 		}
 
 		function getRecentFeedsByOwner($owner, $count, $feedOrder = 'created') {
 			global $db, $database;	
 			$qFeeds = 'WHERE visibility="y" AND owner='.$owner;
-			return $db->queryAll('SELECT id,blogURL, title, created FROM '.$database['prefix'].'Feeds '.$qFeeds.' ORDER BY '.$feedOrder.' DESC LIMIT 0,'.$count);		
+			return $db->queryAll('SELECT id,blogURL, title, created,logo FROM '.$database['prefix'].'Feeds '.$qFeeds.' ORDER BY '.$feedOrder.' DESC LIMIT 0,'.$count);		
 		}
 
 		function getFeedCount($filter='') {

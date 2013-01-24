@@ -42,7 +42,7 @@
 
 			$xmls = new XMLStruct();
 			$xmls->openFile($opmlCacheDir.'/'.$tmpFilename, true);
-			$xmlURLs = multiarray_values($xmls->selectNodes("/opml/body/outline"), 'xmlUrl');
+			$xmlURLs = func::multiarray_values($xmls->selectNodes("/opml/body/outline"), 'xmlUrl');
 
 			if (count($xmlURLs)==0) {
 				echo '<script type="text/javascript">alert("'._t('바른 형식의 OPML 파일이 아닙니다.').'");</script>';

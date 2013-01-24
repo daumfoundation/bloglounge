@@ -121,7 +121,7 @@ body { font:12px Dotum; color:#6d6d6d; background:#ffffff; margin:0; padding:0; 
 				.postlist_wrap .postlist .data .extra a:hover { text-decoration:underline; }
 
 				.postlist_wrap .postlist .data .vote { float:left; font-size:11px; color:#97ae26; margin-top:8px;  }
-					.postlist_wrap .postlist .data .vote .count { font-weight:bold; }
+					.postlist_wrap .postlist .data .vote .boomCount { font-weight:bold; }
 				
 				.postlist_wrap .postlist .data .vote_button { float:left; margin-left:6px; margin-top:7px; }
 					.postlist_wrap .postlist .data .vote_button .isntBoomedUp span,
@@ -229,7 +229,7 @@ body { font:12px Dotum; color:#6d6d6d; background:#ffffff; margin:0; padding:0; 
 	margin-bottom:5px;
 	overflow:hidden;
 	height:13px;
-	line-height:13px;
+	line-height:14px;
 }
 
 #left_sidebar .sidebar_item ul li a { 

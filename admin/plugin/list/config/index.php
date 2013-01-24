@@ -94,18 +94,21 @@
 	}
 
 	$(function() {
+		var buttonHeight = $("#plugin_config_button_wrap").height() + parseInt($("#plugin_config_button_wrap").css('padding-top')) + parseInt($("#plugin_config_button_wrap").css('padding-bottom'));
+
 		if($(document.body).height()==0) {
+			var height = $("#plugin_wrap").height() + buttonHeight;
+			$(document.body).height(height);
+		} else {
+			$("#plugin_config_wrap").height($(document.body).height() - buttonHeight);
 			var h = $("#plugin_information_wrap").height();
 			if(h<$("#plugin_config_wrap").height()) {
 				h = $("#plugin_config_wrap").height();
-			} 
-
-			var height = h + $("#plugin_config_button_wrap").height() + 20;
-			$(document.body).height(height);
-			parent.resizePluginConfig('<?php echo $pluginName;?>',height);
-		} else {
-			$("#plugin_config_wrap").height($(document.body).height() - $("#plugin_config_button_wrap").height() - 20);
+			}
+			var height = h + buttonHeight;
 		}
+		
+		parent.resizePluginConfig('<?php echo $pluginName;?>',height);
 	});
 </script>
 </head>

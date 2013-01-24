@@ -64,7 +64,7 @@
 						$item['thumbnail'] = $media['thumbnail'];	
 					}
 					$src_thumbnail = $skin->cutSkinTag('cond_thumbnail');
-					$thumbnailFile = Media::getMediaFile($item['thumbnail']);
+					$thumbnailFile =  $event->on('Text.postThumbnail', Media::getMediaFile($item['thumbnail']));
 
 					if(!empty($thumbnailFile)) {
 						$s_thumbnail = (!Validator::is_empty($thumbnailFile)) ? $skin->parseTag('post_thumbnail', $thumbnailFile, $src_thumbnail) : '';
@@ -75,13 +75,27 @@
 						$sp_posts = $skin->parseTag('post_thumbnail_exist', 'post_thumbnail_nonexistence', $sp_posts);
 					}
 
-					$sp_posts = $skin->parseTag('post_position', ($index==0?'firstItem':($index==count($posts)?'lastItem':'')), $sp_posts);
+					// v0.2.6
+					$src_logo = $skin->cutSkinTag('cond_logo');
+					$logoFile = Feed::get($item['feed'], 'logo');
+					$logoFile = $event->on('Text.postLogo', (!file_exists(ROOT . '/cache/feedlogo/' . $logoFile) || empty($logoFile)) ? '' : $service['path']. '/cache/feedlogo/'.$logoFile);
+				
+					if(!empty($logoFile)) {
+						$s_logo = (!Validator::is_empty($logoFile)) ? $skin->parseTag('post_logo', $logoFile, $src_logo) : '';
+						$sp_posts = $skin->dressOn('cond_logo', $src_logo, $s_logo, $sp_posts);		
+						$sp_posts = $skin->parseTag('post_logo_exist', 'post_logo_exist', $sp_posts);
+					} else {
+						$sp_posts = $skin->dressOn('cond_logo', $src_logo, '', $sp_posts);
+						$sp_posts = $skin->parseTag('post_logo_exist', 'post_logo_nonexistence', $sp_posts);
+					}
+
+					$sp_posts = $skin->parseTag('post_position', ($index==1?'firstItem':($index==count($posts)?'lastItem':'')), $sp_posts);
 
 					$sp_posts = $skin->parseTag('post_id', $item['id'], $sp_posts);
 
 					$sp_posts = $skin->parseTag('post_url',  $service['path'].'/go/'.$item['id'], $sp_posts);			
 					$sp_posts = $skin->parseTag('post_permalink',  htmlspecialchars($item['permalink']), $sp_posts);
-					
+
 					$sp_posts = $skin->parseTag('post_visibility', (($item['visibility'] == 'n' || $item['feedVisibility'] == 'n') ? 'hidden' : 'visible' ), $sp_posts);
 
 					$sp_posts = $skin->parseTag('post_title', UTF8::clear($event->on('Text.postTitle', UTF8::lessen(func::stripHTML($item['title']), $skinConfig->postTitleLength))), $sp_posts);
@@ -97,12 +111,15 @@
 					$post_description = UTF8::lessenAsByte(func::htmltrim($item['description']), $skinConfig->postDescLength);
 					if (strlen($post_description) == 0) $post_description = '<span class="empty">'._t('(글의 앞부분이 이미지 혹은 HTML 태그만으로 되어있습니다)').'</span>';					
 
-					if(!empty($searchKeyword)) {
-						$post_description = str_replace($searchKeyword, '<span class="point">' . $searchKeyword . '</span>', $post_description);
+					$post_description = $event->on('Text.postDescription', $post_description);
+
+					if(!empty($searchKeyword) && in_array($searchType,array('title','description','title+description'))) {
+						$keyword_pattern = "/([^<]*)".str_replace("\0","\\0",preg_quote($searchKeyword,"/"))."([^>]*)/i";
+						$post_description = preg_replace($keyword_pattern, "\\1<span class=\"point\">" . $searchKeyword . "</span>\\2", $post_description);
 					}
 
 					$sp_posts = $skin->parseTag('post_description_slashed', addslashes($post_description), $sp_posts);
-					$sp_posts = $skin->parseTag('post_description', $event->on('Text.postDescription', $post_description), $sp_posts);
+					$sp_posts = $skin->parseTag('post_description', $post_description, $sp_posts);
 					$sp_posts = $skin->parseTag('post_blogname', UTF8::clear(Feed::get($item['feed'], 'title')), $sp_posts);
 					$sp_posts = $skin->parseTag('post_blogurl', htmlspecialchars(Feed::get($item['feed'], 'blogURL')), $sp_posts);
 					//$sp_posts = $skin->parseTag('post_blogurl_search', htmlspecialchars('?blogURL='.Func::lastSlashDelete(str_replace('http://', '', Feed::get($item['feed'], 'blogURL')))), $sp_posts);
@@ -121,6 +138,7 @@
 
 					$sp_posts = $skin->parseTag('boom_count_id', 'boomCount'.$item['id'], $sp_posts);
 					$sp_posts = $skin->parseTag('boom_count', $item['boomUp'] - $item['boomDown'], $sp_posts);
+					$sp_posts = $skin->parseTag('boom_count_class', 'boomCount boomCount'.($item['boomUp'] - $item['boomDown']), $sp_posts);
 
 					$sp_posts = $skin->parseTag('boomup_onclick', 'boom(\''.$item['id'].'\',\'up\');', $sp_posts);
 					$sp_posts = $skin->parseTag('boomdown_onclick', 'boom(\''.$item['id'].'\',\'down\');', $sp_posts);
@@ -163,7 +181,6 @@
 						if ($skin->doesScopeExists('tags'))
 							$sp_posts = $skin->dressOn('tags', $skin->cutSkinTag('tags'), '', $sp_posts);
 					}
-
 					$s_posts_rep .= $event->on('Text.post', $sp_posts);
 					$sp_posts = '';
 				}

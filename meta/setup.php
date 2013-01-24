@@ -1053,7 +1053,7 @@
 						
 						requireComponent('Bloglounge.Data.Category');
 						
-						$result = Category::getCategories();
+						$result = Category::getList();
 						foreach($result as $item) {
 							Category::rebuildCount($item);
 						}

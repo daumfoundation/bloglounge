@@ -24,6 +24,7 @@
 		case 'focus':
 		case 'category':
 		case 'day':
+		case 'calling':
 			include_once(ROOT.'/meta/'.$accessInfo['controller'].'.php');
 		break;
 		case 'admin':

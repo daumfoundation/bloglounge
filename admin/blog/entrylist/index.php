@@ -8,7 +8,7 @@
 	$msg = '';
 	if (isset($_POST['id']) || !empty($_POST['id']) || (isset($_POST['id']) && preg_match("/^[0-9]+$/", $_POST['id']))) {
 		$feedItem = FeedItem::getAll($_POST['id']);
-		if (FeedItem::editWithArray($_POST['id'], array("title"=>$_POST['title'], "focus"=>(isset($_POST['isFocus']) ? 'y' : 'n'), "author"=>$_POST['author'], "permalink"=>$_POST['permalink'], "tags"=>$_POST['tags'],"autoUpdate"=>(isset($_POST['autoUpdate']) ? 'y' : 'n'), "visibility"=>(isset($_POST['visibility']) ? $_POST['visibility'] : NULL), "allowRedistribute"=>(isset($_POST['allowRedistribute']) ? 'y' : 'n')))) {
+		if (FeedItem::editWithArray($_POST['id'], array("title"=>$_POST['title'], "focus"=>((isset($_POST['isFocus']) && $is_admin) ? 'y' : 'n'), "author"=>$_POST['author'], "permalink"=>$_POST['permalink'], "tags"=>$_POST['tags'],"autoUpdate"=>(isset($_POST['autoUpdate']) ? 'y' : 'n'), "visibility"=>(isset($_POST['visibility']) ? $_POST['visibility'] : NULL), "allowRedistribute"=>(isset($_POST['allowRedistribute']) ? 'y' : 'n')))) {
 		  if($_POST['tags'] != $feedItem['tags']) {
 		  
 				$tags = func::array_trim(explode(',', $_POST['tags']));
@@ -89,7 +89,7 @@
 
 	$paging = Func::makePaging($page, $pageCount, $totalFeedItems);
 	
-	$categories = Category::getCategories();
+	$categories = Category::getList();
 
 	$categoryList = array();
 	$categoryList[0] = array('id'=>'0', 'name'=>_t('분류없음'));
@@ -124,7 +124,9 @@
 				break;
 			}
 		}
-
+<?php
+	if($is_admin) {
+?>
 		function setFocus(id) {
 			var focusImage = $("#focusImage" + id);
 			var on = 'n';
@@ -154,7 +156,9 @@
 			  }
 			});
 		}
-
+<?php
+	}
+?>
 		function changeCategory(id, value, text) {
 			$.ajax({
 			  type: "POST",
@@ -448,7 +452,7 @@
 				<h2><?php echo $readFeedItem['title'];?></h2>
 				<div class="extra">		
 				
-					<?php echo _t('수집일');?> : <span class="date"><?php echo date('y.m.d H:i:s', $readFeedItem['written']);?></span> <span class="date_text">(<?php echo _f($date[0],$date[1]);?>)</span> &nbsp;
+					<?php echo _t('수집일');?> : <span class="date"><?php echo date('y.m.d H:i:s', $readFeedItem['written']);?></span> <span class="date_text">(<?php echo $date;?>)</span> &nbsp;
 					<?php echo _t('주소');?> : <a href="<?php echo $readFeedItem['permalink'];?>" target="_blank"><?php echo Func::longURLtoShort($readFeedItem['permalink'],34,24,10);?></a>
 				</div>
 				<div class="data">	
@@ -550,11 +554,16 @@
 					</p>
 
 					<div class="grayline"></div>
-
+<?php
+			if($is_admin) {
+?>
 					<p class="checkbox_wrap">
 						<input type="checkbox" name="isFocus" id="isFocus" <?php if (Validator::getBool($readFeedItem['focus'])) { ?>checked="checked"<?php } ?> /> <label for="isFocus"><?php echo _t('이 글을 포커스로 설정합니다.');?></label>
 						<div class="help checkbox_help"><?php echo _t('현재 글을 포커스로 사용하시려면 선택하세요.');?></div>
 					</p>
+<?php
+			}
+?>
 					<p class="checkbox_wrap">
 						<input type="checkbox" name="autoUpdate" id="autoUpdate" <?php if (Validator::getBool($readFeedItem['autoUpdate'])) { ?>checked="checked"<?php } ?> /> <label for="autoUpdate"><?php echo _t('피드 정보로부터 제목, 글쓴이 이름을 자동으로 업데이트 합니다.');?></label>
 						<div class="help checkbox_help"><?php echo _t('글 제목이나 글쓴이 이름을 고정하고 싶은 경우 이 기능을 해제하세요');?></div>
@@ -620,7 +629,7 @@
 			ob_start();
 ?>
 			<?php echo date('y.m.d H:i:s', $post['written']);?><br />
-			<span class="date_text">(<?php echo _f($date[0],$date[1]);?>)</span>
+			<span class="date_text">(<?php echo $date;?>)</span>
 <?php
 			$content = ob_get_contents();
 			ob_end_clean();
@@ -640,7 +649,7 @@
 			ob_start();
 ?>
 				<div class="focus">
-					<?php if($is_admin) { echo '<a href="#" onclick="setFocus(\'' . $post['id'] . '\'); return false;">'; } ?><img id="focusImage<?php echo $post['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_focus_<?php echo $post['focus']=='y'?'on':'off';?>.png" alt="focus" align="absmiddle" /><?php if($is_admin) { echo '</a>'; }?>
+					<?php if($is_admin) { echo '<a href="#" onclick="setFocus(\'' . $post['id'] . '\'); return false;">'; } ?><img id="focusImage<?php echo $post['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_focus_<?php echo $post['focus']=='y'?'on':'off';?>.png" alt="focus" align="absmiddle" <?php echo $is_admin?'':'title="'._t('포커스기능은 관리자만 사용하실 수 있습니다.').'"';?>/><?php if($is_admin) { echo '</a>'; }?>
 				</div>
 <?php
 				if(!empty($post['thumbnailId'])) {
@@ -666,7 +675,7 @@
 					$isNew = Func::isNew($post['written'],1);
 
 ?>
-					<div class="data">
+					<div class="data<?php echo !empty($thumbnailFile)?'':' no_thumbnail_data';?>">
 						<div class="title"><a href="<?php echo $service['path'];?>/admin/blog/entrylist?read=<?php echo $post['id'];?>"><?php echo UTF8::lessenAsEm(stripcslashes(func::stripHTML($post['title'])), 36);?></a><?php echo ($isNew?'<img src="'.$service['path'].'/images/admin/icon_new.gif" alt="new" align="absmiddle" class="new" />':'');?></div>
 						<a href="<?php echo $service['path'];?>/admin/blog/entrylist?read=<?php echo $post['id'];?>"><?php echo $desc?></a>
 					</div>

@@ -29,11 +29,11 @@
 	class Media {
 		var $request = null, $config = array();
 
-		function downloadFile($url, $toDirectory) {						
+		function downloadFile($url, $toDirectory, $overwrite = false) {						
 				$filename = 'logo_' . md5($url);
-				
-				if(!file_exists($toDirectory.$filename)) {
-					$file = $this->getRemoteFile($url, true);
+				$url = func::translate_uri($url);
+				if(($overwrite === true) || ($overwrite===false && !file_exists($toDirectory.$filename))) {
+					$file = $this->getRemoteFile($url, true);					
 
 					$fp = fopen($toDirectory.$filename,'w+');
 					fwrite($fp, $file);
@@ -297,15 +297,12 @@
 						case IMG_GIF:
 						$typeExt = 'gif';
 						break;
-
 						case IMG_JPG:
 						$typeExt = 'jpg';
 						break;
-
 						case IMG_PNG:
 						$typeExt = 'png';
 						break;
-
 						case IMG_WBMP:
 						$typeExt = 'bmp';
 						break;

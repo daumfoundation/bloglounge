@@ -8,7 +8,7 @@
 	.pluginlist .datas .plugin_maker { font-size:11px; text-align:center; }
 	.pluginlist .plugin_config { text-align:center; padding-top:2px; }
 		.pluginlist .plugin_config a { display:none; }	
-		.pluginlist .list_use .plugin_config a { display:inline; }
+		.pluginlist .list_use .plugin_config a { display:inline-block; }
 
 .pluginlist .plugin_config_view { display:none; }
 .pluginlist .plugin_config_view .pluginDetail { border:3px solid #ccc; }

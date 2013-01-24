@@ -7,7 +7,7 @@
 	requireComponent('Bloglounge.Data.Category');
 
 	include ROOT. '/lib/piece/adminHeader.php';
-	$categories = Category::getCategories();
+	$categories = Category::getList();
 	$categoryCount = count($categories);
 
 	$selectCategory = null;

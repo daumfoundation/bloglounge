@@ -114,10 +114,10 @@
 
 					<br />
 
-					<?php echo _t('가입일');?> : <span class="date"><?php echo date('y.m.d H:i:s', $readUser['created']);?></span> <span class="date_text">(<?php echo _f($date[0],$date[1]);?>)</span> 
+					<?php echo _t('가입일');?> : <span class="date"><?php echo date('y.m.d H:i:s', $readUser['created']);?></span> <span class="date_text">(<?php echo $date;?>)</span> 
 					&nbsp;			
 
-					<?php echo _t('최근로그인');?> : <span class="date"><?php echo date('y.m.d H:i:s', $readUser['lastLogin']);?></span> <span class="date_text">(<?php echo _f($date2[0],$date2[1]);?>)</span> 
+					<?php echo _t('최근로그인');?> : <span class="date"><?php echo date('y.m.d H:i:s', $readUser['lastLogin']);?></span> <span class="date_text">(<?php echo $date2;?>)</span> 
 					
 					<div class="data">	
 						<div class="recent_feeds">
@@ -235,7 +235,6 @@
 	if(count($members)>0) {
 
 		foreach($members as $member) {	
-			$stringDate = Func::dateToString($member['created']);
 			list($feeds, $totalFeeds) = Feed::getFeedsByOwner($member['id'], 'all');
 			$totalFeedItems = 0;
 			if($totalFeeds>0) {

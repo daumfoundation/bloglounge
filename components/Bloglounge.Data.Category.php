@@ -1,106 +1,6 @@
 <?php
 	Class Category {	
-		function buildCategoryRelations($itemId, $tags, $oldtags = null) {		
-		
-	global $database, $db;
-		
-			if(empty($tags) || !isset($tags) || !isset($itemId) || !Validator::getBool($itemId))
-	
-				return false;
-	
-			
-			$tagChunk = array();
-	
-			foreach ($tags as $tag) {
-				if (!Validator::is_empty($tag)) {
-			
-					$tag = trim($tag);
-					array_push($tagChunk, "'$tag'");
-				}
-			
-			}	
-			
-	
-			
-			$tagString = implode(',', $tagChunk);
-	
-			if(!$db->query('SELECT id FROM '.$database['prefix'].'Tags WHERE name IN ('.$tagString.')')) return false;
-	
-			
-			$tagIds = array();
-			
-			while($taglist = $db->fetchRow()) {
-		
-				array_push($tagIds, $taglist[0]);
-			
-			}
-			
-				
-			if(!$db->query('SELECT item FROM '.$database['prefix'].'TagRelations WHERE tag IN ('. implode(',', $tagIds) .') AND type = "category"')) return false;
-				$categoryIds = array();
-		
-				while ($categorylist = $db->fetchRow()) { 
-					array_push($categoryIds, $categorylist[0]); 
-				}
-				$db->free();
 
-	
-				$relationList = array();	
-				foreach ($categoryIds as $categoryId) {
-					array_push($relationList, "('$itemId', '$categoryId', UNIX_TIMESTAMP(), 'n')");
-				}
-				$relationStr = implode(',', $relationList); // ('itemId','tagId'),('itemId','tagId')...
-
-				$db->execute("INSERT IGNORE INTO {$database['prefix']}CategoryRelations (item, category, linked, custom) VALUES $relationStr");
-			
-			foreach($categoryIds as $categoryId) {
-		
-					Category::rebuildCount($categoryId);
-		
-				}
-			
-	
-				
-				if (!isset($oldtags) || empty($oldtags)) return true;
-
-				$deletedTags = array_diff($oldtags, $tags);
-				if (count($deletedTags) > 0) {
-				$delTags = array();
-					$dTagStr = '\'' . implode('\' , \'', $deletedTags) . '\'';
-					if (!$db->query("SELECT id FROM {$database['prefix']}Tags WHERE name IN ($dTagStr)")) return false;
-					while ($dlist = $db->fetchRow()) { 
-						array_push($delTags, $dlist[0]); 
-					}
-					$db->free();
-				
-					$delTagStr = implode(', ', $delTags);
-				
-						if(!$db->query('SELECT item FROM '.$database['prefix'].'TagRelations WHERE tag IN ('.$delTagStr.') AND type = "category"')) return false;
-				
-						$delCategories = array();
-				
-						while ($dlist = $db->fetchRow()) { 
-			
-							array_push($delCategories, $dlist[0]); 
-						}
-					$db->free();
-				
-				
-					$delCategoryStr = implode(', ', $delCategories);
-			
-					$db->execute("DELETE FROM {$database['prefix']}CategoryRelations WHERE item='$itemId' AND category IN ($delCategoryStr)");
-				
-		
-					foreach($delCategories as $categoryId) {
-					
-						Category::rebuildCount($categoryId);
-			
-					}
-			
-			}
-
-		}
-		
 		function add($categoryName, $categoryFilter) {
 			global $database, $db;
 			if (empty($categoryName)) {
@@ -173,6 +73,149 @@
 			return $result;
 		}
 		
+		function get($id, $field) {
+			global $database, $db;
+
+			if (empty($id) || !isset($id)) 
+				return false;
+			if (!preg_match("/^[0-9]+$/", $id)) 
+				return false;
+
+			$result = $db->queryCell('SELECT '.$field.' FROM '.$database['prefix'].'Categories WHERE id="'.$db->escape($id).'"');
+			return $result;
+		}
+
+		function getById($id) {
+			global $database, $db;		
+
+			if (empty($id) || !isset($id)) 
+				return false;
+			if (!preg_match("/^[0-9]+$/", $id)) 
+				return false;
+
+			$db->query('SELECT * FROM '.$database['prefix'].'Categories WHERE id="'.$db->escape($id).'"');
+			$result = $db->fetchArray();
+			$db->free();
+			return $result;
+		}	
+		
+		function getByName($name) {
+			global $database, $db;		
+
+			if (empty($name) || !isset($name)) 
+				return false;
+
+			$db->query('SELECT * FROM '.$database['prefix'].'Categories WHERE name="'.$db->escape($name).'"');
+			$result = $db->fetchArray();
+			$db->free();
+			return $result;
+		}		
+
+		function getAll($itemId) {
+			global $database, $db;
+			$db->query('SELECT * FROM '.$database['prefix'].'Categories WHERE id='.$itemId);
+			return $db->fetchArray();
+		}				
+		
+		function getList($count = -1) {		
+			global $db, $database;
+			if($count!=-1) {
+				$count = ' LIMIT ' . $count;
+			} else {
+				$count = '';
+			}
+			return $db->queryAll('SELECT * FROM '.$database['prefix'].'Categories ORDER BY priority ASC'. $count);
+		}		
+		
+		function getRandomList($count = -1) {		
+			global $db, $database;
+			if($count!=-1) {
+				$count = ' LIMIT ' . $count;
+			} else {
+				$count = '';
+			}
+			return $db->queryAll('SELECT * FROM '.$database['prefix'].'Categories ORDER BY RAND()'. $count);
+		}
+
+		
+		function buildCategoryRelations($itemId, $tags, $oldtags = null) {		
+			global $database, $db;
+			if(empty($tags) || !isset($tags) || !isset($itemId) || !Validator::getBool($itemId))
+				return false;
+	
+			$tagChunk = array();
+			foreach ($tags as $tag) {
+				if (!Validator::is_empty($tag)) {
+					$tag = trim($tag);
+					array_push($tagChunk, "'$tag'");
+				}
+			}	
+			
+			$tagString = implode(',', $tagChunk);
+			if(!$db->query('SELECT id FROM '.$database['prefix'].'Tags WHERE name IN ('.$tagString.')')) return false;
+	
+			$tagIds = array();
+			
+			while($taglist = $db->fetchRow()) {
+				array_push($tagIds, $taglist[0]);
+			}
+				
+			if(!$db->query('SELECT item FROM '.$database['prefix'].'TagRelations WHERE tag IN ('. implode(',', $tagIds) .') AND type = "category"')) return false;
+			
+			$categoryIds = array();
+	
+			while ($categorylist = $db->fetchRow()) { 
+				array_push($categoryIds, $categorylist[0]); 
+			}
+			$db->free();
+
+			$relationList = array();	
+			foreach ($categoryIds as $categoryId) {
+				array_push($relationList, "('$itemId', '$categoryId', UNIX_TIMESTAMP(), 'n')");
+			}
+			$relationStr = implode(',', $relationList); // ('itemId','tagId'),('itemId','tagId')...
+
+			$db->execute("INSERT IGNORE INTO {$database['prefix']}CategoryRelations (item, category, linked, custom) VALUES $relationStr");
+		
+			foreach($categoryIds as $categoryId) {
+				Category::rebuildCount($categoryId);
+			}
+			
+			if (!isset($oldtags) || empty($oldtags)) return true;
+
+			$deletedTags = array_diff($oldtags, $tags);
+			if (count($deletedTags) > 0) {
+				$delTags = array();
+				$dTagStr = '\'' . implode('\' , \'', $deletedTags) . '\'';
+				if (!$db->query("SELECT id FROM {$database['prefix']}Tags WHERE name IN ($dTagStr)")) return false;
+				while ($dlist = $db->fetchRow()) { 
+					array_push($delTags, $dlist[0]); 
+				}
+				$db->free();
+			
+				$delTagStr = implode(', ', $delTags);
+			
+				if(!$db->query('SELECT item FROM '.$database['prefix'].'TagRelations WHERE tag IN ('.$delTagStr.') AND type = "category"')) return false;
+			
+				$delCategories = array();
+		
+				while ($dlist = $db->fetchRow()) { 
+					array_push($delCategories, $dlist[0]); 
+				}
+
+				$db->free();
+			
+				$delCategoryStr = implode(', ', $delCategories);
+		
+				$db->execute("DELETE FROM {$database['prefix']}CategoryRelations WHERE item='$itemId' AND category IN ($delCategoryStr)");
+			
+				foreach($delCategories as $categoryId) {
+					Category::rebuildCount($categoryId);
+				}
+			}
+
+		}
+	
 
 		function move($id, $type = 'up') {
 			global $database, $db;
@@ -357,72 +400,7 @@
 			if(!$result) $result = 0;
 
 			return $result + 1;
-		}
-
-		function get($id, $field) {
-			global $database, $db;
-
-			if (empty($id) || !isset($id)) 
-				return false;
-			if (!preg_match("/^[0-9]+$/", $id)) 
-				return false;
-
-			$result = $db->queryCell('SELECT '.$field.' FROM '.$database['prefix'].'Categories WHERE id="'.$db->escape($id).'"');
-			return $result;
-		}
-
-		function getById($id) {
-			global $database, $db;		
-
-			if (empty($id) || !isset($id)) 
-				return false;
-			if (!preg_match("/^[0-9]+$/", $id)) 
-				return false;
-
-			$db->query('SELECT * FROM '.$database['prefix'].'Categories WHERE id="'.$db->escape($id).'"');
-			$result = $db->fetchArray();
-			$db->free();
-			return $result;
 		}	
-		
-		function getByName($name) {
-			global $database, $db;		
-
-			if (empty($name) || !isset($name)) 
-				return false;
-
-			$db->query('SELECT * FROM '.$database['prefix'].'Categories WHERE name="'.$db->escape($name).'"');
-			$result = $db->fetchArray();
-			$db->free();
-			return $result;
-		}		
-
-		function getAll($itemId) {
-			global $database, $db;
-			$db->query('SELECT * FROM '.$database['prefix'].'Categories WHERE id='.$itemId);
-			return $db->fetchArray();
-		}			
-		
-		function getCategories($count = -1) {		
-			global $db, $database;
-			if($count!=-1) {
-				$count = ' LIMIT ' . $count;
-			} else {
-				$count = '';
-			}
-			return $db->queryAll('SELECT * FROM '.$database['prefix'].'Categories ORDER BY priority ASC'. $count);
-		}		
-		
-		function getRandomCategories($count = -1) {		
-			global $db, $database;
-			if($count!=-1) {
-				$count = ' LIMIT ' . $count;
-			} else {
-				$count = '';
-			}
-			return $db->queryAll('SELECT * FROM '.$database['prefix'].'Categories ORDER BY RAND()'. $count);
-		}
-		
 		
 			
 		function setItemCategory($itemId, $category) {

@@ -1,7 +1,5 @@
 <?php
-
 	// Event handler
-
 	// Attention : All functions requires valid instance.
 	// Do not use '::' operator like as Event::loadMap()
 	// Do not use '::' operator like as Event::loadAdminMap()
@@ -15,10 +13,10 @@
 			$this->cacheDir = ROOT . '/cache/events';
 
 			if($accessInfo['controller'] == 'admin') {
-				$this->loadAdminMap();
-			} else {
-				$this->loadMap();
+				$this->loadAdminMap();	
 			}
+
+			$this->loadMap();
 		}
 
 		function on($event, $input = null) {

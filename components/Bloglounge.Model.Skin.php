@@ -1,5 +1,4 @@
 <?php
-
 	Class Skin {
 		var $output;
 		var $url;

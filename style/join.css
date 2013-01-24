@@ -29,7 +29,7 @@ form { margin:0; padding:0; }
 
 			#join_wrap table .title { width:80px; padding-right:10px; font-size:11px; color:#444; }
 			
-			#join_wrap table ol { margin:0; list-style:none; }
+			#join_wrap table ol { margin:0; padding:0; list-style:none; }
 		#join_wrap .input { width:202px; padding-left:4px; padding-right:4px; background:#f2f2f2; border-left:1px solid #cacaca; border-top:1px solid #cacaca; border-right:1px solid #d7d7d7; border-bottom:1px solid #d7d7d7; }
 			#join_wrap .errorInput { border:1px solid #f39292; border-right:1px solid #feb2b2; border-bottom:1px solid #feb2b2; background:#fbe2e2; }
 

@@ -1,5 +1,4 @@
 <?php
-
 	// Copyright of each part belongs its author.
 	// LZ.XMLStruct class based on XMLStruct class in Eolin.PHP.Core component of TextCube 1.5.
 	// Tatter Network Foundation / NeedleWorks has all legal rights of Textcube 1.5/ license under GPL.

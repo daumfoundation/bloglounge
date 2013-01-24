@@ -22,7 +22,7 @@
 			global $database, $db;
 		
 			$names = explode(',',$names);
-			if (!$data = $db->queryAll('SELECT name, value FROM '.$database['prefix'].'SkinSettings WHERE name IN ('.implode_string(',',$names).')',MYSQL_ASSOC))
+			if (!$data = $db->queryAll('SELECT name, value FROM '.$database['prefix'].'SkinSettings WHERE name IN ('.func::implode_string(',',$names).')',MYSQL_ASSOC))
 				return false;
 		
 				
@@ -61,7 +61,7 @@
 			
 			$names = explode(',',$names);
 
-			if (!$data = $db->queryAll('SELECT name, value FROM '.$database['prefix'].'SkinSettings WHERE name IN ('.implode_string(',',$names).')',MYSQL_ASSOC))
+			if (!$data = $db->queryAll('SELECT name, value FROM '.$database['prefix'].'SkinSettings WHERE name IN ('.func::implode_string(',',$names).')',MYSQL_ASSOC))
 				return false;
 		
 				

@@ -160,13 +160,13 @@
 				if(!empty($feedItemUpdate)) {
 					$feedItemUpdateText = Func::dateToString($feedItemUpdate);
 				} else {
-					$feedItemUpdateText = array(_t('업데이트 없음'),'');
+					$feedItemUpdateText = _t('업데이트 없음');
 				}
 ?>
 					</ul>
 					</div>
 					<div class="information">
-						<span class="name"><?php echo _t("전체글");?></span> <span class="sep">|</span> <span class="count"><?php echo $feedItemCount;?></span>개 &nbsp;&nbsp; <span class="name"><?php echo _t('마지막 업데이트');?></span> <span class="sep">|</span> <span class="date"><?php echo empty($feedItemUpdate)?'':date('y.m.d H:i:s', $feedItemUpdate);?> (<?php echo _f($feedItemUpdateText[0], $feedItemUpdateText[1]);?>)</span> 
+						<span class="name"><?php echo _t("전체글");?></span> <span class="sep">|</span> <span class="count"><?php echo $feedItemCount;?></span>개 &nbsp;&nbsp; <span class="name"><?php echo _t('마지막 업데이트');?></span> <span class="sep">|</span> <span class="date"><?php echo empty($feedItemUpdate)?'':date('y.m.d H:i:s', $feedItemUpdate);?> (<?php echo $feedItemUpdateText;?>)</span> 
 					</div>
 				</div>	
 				<!-- 최근 등록된 블로그.. -->

@@ -1,5 +1,4 @@
 <?php
-
 	Class User {
 
 		function add($loginId, $password, $name, $email) {
@@ -51,22 +50,37 @@
 			return Validator::getBool($n);
 		}
 
-		function getBlog($id) {
+		function get($id, $field) {
 			global $database, $db;
-			if (!preg_match("/^[0-9]+$/", $id)) {
-				$id = User::loginid2id($id);
-			}
+			if (!preg_match("/^[0-9]+$/", $id)) 
+				return false;
+			$result = $db->queryCell('SELECT '.$field.' FROM '.$database['prefix'].'Users WHERE id="'.$db->escape($id).'"');
+			return $result;
+		}
 
-			if (empty($id) || !isset($id)) {
+		function getAll($id) {
+			global $database, $db;
+			if (empty($id) || !preg_match("/^[0-9]+$/", $id)) {
 				return false;
 			}
+			$db->query('SELECT * FROM '.$database['prefix'].'Users WHERE id='.$id);
+			return $db->fetchArray();
+		}
 
-			if ($db->query('SELECT * FROM '.$database['prefix'].'Feeds WHERE owner="'.$id.'" ORDER BY id ASC LIMIT 1')) {
-				$data = $db->fetchArray();
-				$db->free();
-				return $data;
-			}
-			return false;
+		function getById($id) {
+			global $database, $db;
+			$db->query('SELECT * FROM '.$database['prefix'].'Users WHERE id="'.$db->escape($id).'"');
+			$result = $db->fetchArray();
+			$db->free();
+			return $result;
+		}
+
+		function getByloginId($loginId) {
+			global $database, $db;
+			$db->query('SELECT * FROM '.$database['prefix'].'Users WHERE loginid="'.$db->escape($loginId).'"');
+			$result = $db->fetchArray();
+			$db->free();
+			return $result;
 		}
 
 		function getId($loginid) {
@@ -83,6 +97,24 @@
 				return false;
 			}
 			return $db->queryCell('SELECT id FROM '.$database['prefix'].'Users WHERE name="'.$db->escape($name).'"');;
+		}
+
+		function getBlog($id) {
+			global $database, $db;
+			if (!preg_match("/^[0-9]+$/", $id)) {
+				$id = User::loginid2id($id);
+			}
+
+			if (empty($id) || !isset($id)) {
+				return false;
+			}
+
+			if ($db->query('SELECT * FROM '.$database['prefix'].'Feeds WHERE owner="'.$id.'" ORDER BY id ASC LIMIT 1')) {
+				$data = $db->fetchArray();
+				$db->free();
+				return $data;
+			}
+			return false;
 		}
 
 		function delete($id) {
@@ -129,39 +161,6 @@
 			}
 			$updateStr = implode(',', $updateArr);
 			return $db->execute('UPDATE '.$database['prefix'].'Users SET '.$updateStr.' WHERE id='.$id);
-		}
-
-		function get($id, $field) {
-			global $database, $db;
-			if (!preg_match("/^[0-9]+$/", $id)) 
-				return false;
-			$result = $db->queryCell('SELECT '.$field.' FROM '.$database['prefix'].'Users WHERE id="'.$db->escape($id).'"');
-			return $result;
-		}
-
-		function getAll($id) {
-			global $database, $db;
-			if (empty($id) || !preg_match("/^[0-9]+$/", $id)) {
-				return false;
-			}
-			$db->query('SELECT * FROM '.$database['prefix'].'Users WHERE id='.$id);
-			return $db->fetchArray();
-		}
-
-		function getById($id) {
-			global $database, $db;
-			$db->query('SELECT * FROM '.$database['prefix'].'Users WHERE id="'.$db->escape($id).'"');
-			$result = $db->fetchArray();
-			$db->free();
-			return $result;
-		}
-
-		function getByloginId($loginId) {
-			global $database, $db;
-			$db->query('SELECT * FROM '.$database['prefix'].'Users WHERE loginid="'.$db->escape($loginId).'"');
-			$result = $db->fetchArray();
-			$db->free();
-			return $result;
 		}
 
 		function loginid2id($loginid) {

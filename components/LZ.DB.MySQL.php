@@ -1,5 +1,4 @@
 <?php
-
 	class MySQL extends DB {
 		var $alive = false, $resources = array(), $resourceIndex = 0;
 		var $debugs = array();
@@ -71,7 +70,6 @@
 			$this->_begin_debug();
 			$result = mysql_query($query);
 			$this->_end_debug($query);
-
 			return $result ? true : false;
 		}
 

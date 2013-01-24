@@ -161,7 +161,7 @@
 			ob_start();
 ?>
 			<?php echo date('y.m.d H:i:s', $post['written']);?><br />
-			<span class="date_text">(<?php echo _f($date[0],$date[1]);?>)</span>
+			<span class="date_text">(<?php echo $date;?>)</span>
 <?php
 			$content = ob_get_contents();
 			ob_end_clean();

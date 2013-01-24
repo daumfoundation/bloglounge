@@ -1,7 +1,5 @@
 <?php
-
 	class Stats {
-
 		function visit($countRobotVisit = 'y') {
 			global $database, $db;
 			if ($countRobotVisit == 'n' && Stats::isKnownBot($_SERVER["HTTP_USER_AGENT"])) return;

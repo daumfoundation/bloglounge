@@ -1,5 +1,4 @@
 <?php
-
 	Class func {
 		function printRespond($result) {
 				header('Content-Type: text/xml; charset=utf-8');
@@ -375,6 +374,46 @@
 			exit;
 		}
 
+		function implode_string($glue, $pieces) {
+			array_walk($pieces, create_function('&$elem','$elem = "\'".trim($elem)."\'";'));
+			return implode($glue, $pieces); 
+		}
+
+		function multiarray_keys($ar) {				
+			foreach($ar as $k => $v) {
+				$keys[] = $k;
+				if (is_array($ar[$k]))
+					$keys = array_merge($keys, func::multiarray_keys($ar[$k]));
+			}
+			return $keys;
+		}
+
+		function multiarray_values($ar,$key) {		
+			$values = array();
+			foreach($ar as $k => $v) {
+				if($k === $key) {
+					$values[] = $v;
+				}
+				if (is_array($ar[$k]))
+					$values = array_merge($values, func::multiarray_values($ar[$k],$key));
+			}
+			return $values;
+		}
+
+		function array_to_lower($array,$round = 0){
+			foreach($array as $key => $value){
+				if(is_array($value)) $array[strtolower($key)] =  func::array_to_lower($value,$round+1);
+				else $array[strtolower($key)] = strtolower($value);
+			}
+			return $array;
+		} 
+
+		function array_keys_exist($keys,$array) {
+			if(count(array_intersect($keys,array_keys($array)))>0) {
+				return true;
+			}
+		}
+
 		function array_trim($arr) {
 			$result = array();
 			foreach ($arr as $key=>$value) {
@@ -566,26 +605,26 @@
 			$result = null;
 
 			if($day == 0) {
-				if($hour == 0) {
-					if($min == 0) {
+				if($min < 60) {
+					if($sec < 60) {
 						if($sec == 0) {
-							$result = array(_t('방금'), '');
+							$result = _f('방금', '');
 						} else {
-							$result = array(_t('%1초 전'), $sec);
+							$result = _f('%1초 전', $sec);
 						}
 					} else {
-						$result = array(_t('%1분 전'), $min);
+						$result = _f('%1분 전', $min);
 					}
 				} else {
-					$result = array(_t('%1시간 전'), $hour);
+					$result = _f('%1시간 전', $hour);
 				}
 			} else {
 				switch($day) {
-					case 1: $result = array(_t('어제'),''); break;
-					case 2: $result = array(_t('그저께'),''); break;
-					case 3: $result = array(_t('그끄저께'),''); break;
+					case 1: $result = _t('어제'); break;
+					case 2: $result = _t('그저께'); break;
+					case 3: $result = _t('그끄저께'); break;
 					default:
-						$result = array(_t('%1일 전'), $day);
+						$result = _f('%1일 전', $day);
 					break;
 				}
 			}
@@ -640,6 +679,15 @@
 
 		function decode($str) {
 			return urldecode(str_replace('%252F', '%2F', $str));
+		}
+		
+		function translate_uri($uri) {
+			$uri = str_replace('http://','',$uri);
+			$parts = explode('/', $uri);
+			for ($i = 0; $i < count($parts); $i++) {
+			  $parts[$i] = rawurlencode($parts[$i]);
+			}
+			return 'http://'.implode('/', $parts);
 		}
 	}
 ?>

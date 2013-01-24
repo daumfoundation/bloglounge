@@ -20,7 +20,7 @@
 
 	$paging = Func::makePaging($page, $pageCount, $totalFeedItems);
 	
-	$categories = Category::getCategories();
+	$categories = Category::getList();
 
 	$categoryList = array();
 	$categoryList[0] = array('id'=>'0', 'name'=>_t('분류없음'));
@@ -204,7 +204,7 @@
 			ob_start();
 ?>
 			<?php echo date('y.m.d H:i:s', $post['written']);?><br />
-			<span class="date_text">(<?php echo _f($date[0],$date[1]);?>)</span>
+			<span class="date_text">(<?php echo $date;?>)</span>
 <?php
 			$content = ob_get_contents();
 			ob_end_clean();

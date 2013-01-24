@@ -185,7 +185,8 @@
 <?php
 			ob_start();
 ?>
-				<select name="updateCycle" id="updateCycle">
+				<select name="updateCycle" id="updateCycle">					
+					<option value="1" <?php if ($updateCycle == '1') { ?>selected="selected"<?php } ?>><?php echo _f('%1분 이상', 1);?></option>
 					<option value="5" <?php if ($updateCycle == '5') { ?>selected="selected"<?php } ?>><?php echo _f('%1분 이상', 5);?></option>
 					<option value="10" <?php if ($updateCycle == '10') { ?>selected="selected"<?php } ?>><?php echo _f('%1분 이상', 10);?></option>
 					<option value="30" <?php if ($updateCycle == '30') { ?>selected="selected"<?php } ?>><?php echo _f('%1분 이상', 30);?></option>

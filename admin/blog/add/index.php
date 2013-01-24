@@ -3,14 +3,18 @@
 	include ROOT . '/lib/includeForAdmin.php';
 
 	requireMembership();
+	$userInformation = getUsers();
 
 	if(isset($_POST['feedURL']) && !empty($_POST['feedURL'])) { 
-		$userInformation = getUsers();
+		
 		if($userInformation['is_accepted'] == 'y') {
 			$visibility = isset($_POST['isVisible']) ? 'y' : 'n';
 			$filter = isset($_POST['useFilter'])&&isset($_POST['feedFilter'])?$_POST['feedFilter']:'';
-
-			$id = Feed::add($_POST['feedURL'], $visibility, $filter);	
+			
+			$id = $event->on('Add.addFeed', array($_POST['feedURL'], $visibility, $filter));
+			if($id === false || !is_numeric($id) || empty($id)) {
+				$id = Feed::add($_POST['feedURL'], $visibility, $filter);	
+			}
 
 			addAppMessage(_t('블로그를 추가했습니다.'));
 
@@ -79,8 +83,14 @@
 
 <?php
 	if(!empty($feedURL)) {
-		$feedURL = trim('http://' . str_replace('http://','',$feedURL));
-		list($status, $feed, $xml) = feed::getRemoteFeed($feedURL);
+		$result = $event->on('Add.checkFeed', $feedURL);
+		if(!is_array($result)) {
+			$feedURL = trim('http://' . str_replace('http://','',$feedURL));
+			list($status, $feed, $xml) = feed::getRemoteFeed($feedURL);
+		} else {
+			list($status, $feed, $xml) = $result;
+			
+		}
 ?>
 	<div class="wrap add_detail_wrap">
 		<div class="messagebox">
@@ -120,13 +130,17 @@
 		</div>
 <?php
 	} else {
-		$result = feed::getFeedItems($xml);
+		$result = $event->on('Add.getFeed', $xml);
+		if(!is_array($result)) {
+			$result = feed::getFeedItems($xml);
+		}
+
 		if(count($result)>0) {
 ?>
 			<dl>
 					<dt><?php echo _t('글');?></dt>
 					<dd class="text">
-						<?php echo _f('가장 최신의 글 "%1"(을)를 포함한 %2개의 글이 존재합니다.','<span class="point">'.$result[0]['title'].'</span>', '<span class="cnt">'.count($result).'</span>');?>
+						<?php echo _f('가장 최신의 글 "%1"(을)를 포함한 %2개의 글이 존재합니다.','<span class="point">'.UTF8::lessen($result[0]['title'],40).'</span>', '<span class="cnt">'.count($result).'</span>');?>
 					</dd>
 			</dl>
 <?php

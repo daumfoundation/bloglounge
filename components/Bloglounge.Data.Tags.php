@@ -1,5 +1,4 @@
 <?php
-
 	class Tag {
 		function buildTagIndex($itemId, $tags, $oldtags = null, $firstDelete = true) {
 			global $database, $db;

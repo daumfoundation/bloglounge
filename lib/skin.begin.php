@@ -92,7 +92,7 @@
 	// 카테고리 ( 분류 )
 
 	$src_cattegory = $skin->cutSkinTag('category');
-	$categories = Category::getCategories();
+	$categories = Category::getList();
 	if(count($categories) > 0) {
 		$sp_category = "<ul>\n";
 			foreach($categories as $category) {
@@ -113,7 +113,20 @@
 		$s_feed_rep = '';
 		$src_feed_rep = $skin->cutSkinTag('feed_rep');
 		foreach($result as $item) {
-			$sp_feed = $skin->parseTag('feed_blogURL', htmlspecialchars($item['blogURL']), $src_feed_rep);
+			$src_thumbnail = $skin->cutSkinTag('cond_feed_logo');
+			
+			$thumbnailFile = (file_exists(ROOT . '/cache/feedlogo/' . $item['logo'])) ? $accessInfo['path'] . '/cache/feedlogo/' . $item['logo']:'';
+
+			if(!empty($thumbnailFile)) {
+				$s_thumbnail = (!Validator::is_empty($thumbnailFile)) ? $skin->parseTag('feed_logo', $thumbnailFile, $src_thumbnail) : '';
+				$sp_feed = $skin->dressOn('cond_feed_logo', $src_thumbnail, $s_thumbnail, $src_feed_rep);		
+				$sp_feed = $skin->parseTag('feed_logo_exist', 'feed_logo_exist', $sp_feed);
+			} else {
+				$sp_feed = $skin->dressOn('cond_feed_logo', $src_thumbnail, '', $src_feed_rep);
+				$sp_feed = $skin->parseTag('feed_logo_exist', 'feed_logo_exist_nonexistence', $sp_feed);
+			}
+
+			$sp_feed = $skin->parseTag('feed_blogURL', htmlspecialchars($item['blogURL']), $sp_feed);
 			$sp_feed = $skin->parseTag('feed_link_url', $servicePath.'/blog/'.$item['id'], $sp_feed);
 			$sp_feed = $skin->parseTag('feed_title', UTF8::clear(UTF8::lessenAsByte($item['title'],$skinConfig->feedTitleLength)), $sp_feed);
 			$s_feed_rep .= $sp_feed;
