@@ -23,6 +23,7 @@
 		case 'search':
 		case 'focus':
 		case 'category':
+		case 'day':
 			include_once(ROOT.'/meta/'.$accessInfo['controller'].'.php');
 		break;
 		case 'admin':

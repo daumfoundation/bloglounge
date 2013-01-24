@@ -161,9 +161,6 @@
 			});
 		}
 
-		function changeAction() {
-		}
-
 	</script>
 	<link rel="stylesheet" href="<?php echo $service['path'];?>/style/admin_blog.css" type="text/css" />
 	<div class="wrap title_wrap">
@@ -284,7 +281,7 @@
 					<a href="#" onclick="restoreItem(<?php echo $post['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_restore.gif" alt="복원" /></a>
 				</div>
 				<div class="trash">				
-					<a href="#" onclick="deleteItem(<?php echo $feed['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_delete.gif" alt="<?php echo _t('삭제');?>" /></a>
+					<a href="#" onclick="deleteItem(<?php echo $post['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_delete.gif" alt="<?php echo _t('삭제');?>" /></a>
 				</div>
 				<div class="clear"></div>
 <?php
@@ -305,7 +302,7 @@
 ?>
 			<select id="action_list" align="absmiddle">
 				<option class="default" value="default"><?php echo _t('어떻게 하시겠습니까?');?></option>
-				<optgroup class="restore" label="<?php echo _t('복원여부');?>">
+				<optgroup class="restore" label="<?php echo _t('처리');?>">
 					<option class="restore_action" value="restore"><?php echo _t('복원합니다.');?></option>	
 					<option class="restore_action" value="delete"><?php echo _t('삭제합니다.');?></option>
 				</optgroup>		

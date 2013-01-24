@@ -54,7 +54,28 @@
 			$value = substr($str, 0, $end);
 		}
 	}
-	
+
+	$pass = array();
+	if(!empty($controller) && !empty($action) && !empty($value)) {
+		$pos_value = $controller . '/' . $action . '/' . $value . '/';
+		$i = 10; // 무한루프 예방 ( pass 최대 10 )
+		while(--$i>0) {
+			$pos = strpos($request_uri, $pos_value);
+			if($pos !== false) {
+				$str = substr($request_uri, $pos + strlen($pos_value));
+				$end = strpos($str,'/');
+				if($end === false) $end = strlen($str);
+
+				$v = substr($str, 0, $end);
+				$pos_value .= $v . '/';		
+				
+				array_push($pass, $v);
+			} else {
+				break;
+			}
+		}
+	}
+
 	$page = 1;
 	if(isset($_GET['page'])) {
 		$page = $_GET['page'];
@@ -70,6 +91,7 @@
 		'controller'	   => $controller,
 		'action'	=> $action,
 		'value'		=> $value,
+		'pass'		=> $pass,
 		'page'		=> $page,
 		'subpath' =>  rtrim($request_uri, '/'),
 		'position' => $_SERVER["SCRIPT_NAME"],

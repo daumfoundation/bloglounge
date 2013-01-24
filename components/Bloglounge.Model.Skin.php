@@ -90,17 +90,25 @@
 			$str = $haystack;
 			preg_match_all("/\[##_{$tag}(.[^_##]+)*_##\]/i", $haystack, $matches);
 			for ($i=0, $n = count($matches[0]); $i < $n; $i++) {
-				if (!empty($matches[1][$i])) {
-					$options = array();
-					$options = array_slice(explode(':', $matches[1][$i]), 1);
-					for ($j=0, $m = count($options); $j < $m; $j++) {
-						$arguments = str_replace('#'.($j+1), $options[$j], $arguments);
+				$args = explode('/', $arguments);
+				$replace_str = '';
+				$argNum = 1;
+				foreach($args as $arg) {							
+					if (!empty($matches[1][$i])) {
+						$options = array();
+						$options = array_slice(explode(':', $matches[1][$i]), 1);
+						if(count($options)>=$argNum) {
+							for ($j=0, $m = count($options); $j < $m; $j++) {
+								$arg = str_replace('#'.($j+1), $options[$j], $arg);
+							}
+							$replace_str .= call_user_func_array($callback, explode(',', $arg));
+						}
+					} else { // No Arguments
+						$replace_str .= call_user_func_array($callback, $defaultOption);
 					}
-					$result = call_user_func_array($callback, explode(',', $arguments));
-				} else { // No Arguments
-					$result = call_user_func_array($callback, $defaultOption);
+					$argNum ++;
 				}
-				$str = str_replace($matches[0][$i], $result, $str);
+				$str = str_replace($matches[0][$i], $replace_str, $str);
 			}
 			return $str;
 		}

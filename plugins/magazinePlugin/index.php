@@ -263,7 +263,7 @@
 						$tagItem = $tag['feedItems'][$i];
 ?>
 							<li class="title_only">
-								<a href="<?php echo $service['path'];?>/go/<?php echo $feedItem['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($tagItem['title']),60);?></a> <span class="sep">|</span> <span class="feedTitle"><?php echo Feed::get($tagItem['feed'],'title');?></span>
+								<a href="<?php echo $service['path'];?>/go/<?php echo $tagItem['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($tagItem['title']),60);?></a> <span class="sep">|</span> <span class="feedTitle"><?php echo Feed::get($tagItem['feed'],'title');?></span>
 							</li>
 <?php			
 					}

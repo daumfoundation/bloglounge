@@ -30,7 +30,11 @@
 					$qSearch = '/search/keyword/' . func::encode(trim($searchKeyword));
 				break;
 				case 'archive':
-					$qSearch = '/search/archive/' . func::encode(trim($searchKeyword));
+					if($accessInfo['controller'] == 'day') {
+						$qSearch = '/day/' . $accessInfo['action'];						
+					} else {
+						$qSearch = '/search/archive/' . func::encode(trim($searchKeyword));
+					}
 				break;
 			}
 		} else {

@@ -31,6 +31,101 @@
 				exit;
 			}
 		break;
+		case 'config_make':
+			if(file_exists(ROOT.'/config.php')) {
+				Header("Location: {$path}/setup");
+				exit;
+			}
+
+			$step_text = _t('생성') . ' - ' . _t('첫번째 단계') . ' : 1/2';			
+			$step_desc = _t('블로그라운지의 설정파일을 생성합니다.');
+		break;
+		case 'config_make_do':
+			/*
+			if (!isset($_POST['type'])) {
+				header("Location: {$path}/setup/?step=config_make&error=1");
+				exit;
+			}	
+
+			$IV = array();
+			$IV['type'] = $_POST['type'];
+
+			foreach ($_POST as $key=>$value) {
+				if (Validator::enum($key, 'dbtype,dbserver,dbuserid,dbuserpw,dbname,dbprefix'))
+					$IV[$key] = addslashes($value);
+			}
+
+			$_GET = array();
+			$_POST = array();
+				
+			$redirectValues = '';
+			foreach (explode(',', 'dbtype,dbserver,dbuserid,dbname,dbprefix,userid,username,useremail') as $item) {
+				if (!isset($IV[$item]) || !Validator::is_empty($IV[$item])) {
+					$redirectValues .= '&' . $item . '=' . urlencode($IV[$item]);
+				}
+			}
+
+			foreach (explode(',', 'dbtype,dbserver,dbuserid,dbuserpw,dbname,dbprefix') as $item) {
+				if (!isset($IV[$item]) || Validator::is_empty($IV[$item])) {
+					Header("Location: {$path}/setup/?step=" . $IV['type'] . "&error=2" . $redirectValues . '&value=' . $item); 
+					exit;
+				}
+			}
+
+			$database['type'] = $IV['dbtype'];
+			$database['server'] = $IV['dbserver'];
+			$database['database']  = $IV['dbname'];
+			$database['username'] = $IV['dbuserid'];
+			$database['password'] = $IV['dbuserpw'];
+			$database['prefix'] = $IV['dbprefix'];
+
+			if (!preg_match('/[a-z0-9_]+$/i', $IV['dbprefix'])) {						
+				Header("Location: {$path}/setup/?step=" . $IV['type'] . "&error=3" . $redirectValues); 
+				exit;
+			}
+
+			$db = DB::start($database['type']);
+			if (!$db->alive) {					
+				Header("Location: {$path}/setup/?step=" . $IV['type'] . "&error=4" . $redirectValues); 
+				exit;
+			}
+
+			$charset = '';
+			switch ($database['type']) { // DBMS 별 Charset 세팅 구문
+				default:
+				case 'mysql':
+					$charset = 'TYPE=MyISAM DEFAULT CHARSET=utf8';
+					if (!$database['utf8']) $charset = 'TYPE=MyISAM';
+					@$db->execute('SET SESSION collation_connection = \'utf8_general_ci\'');
+					break;
+			}
+*/
+			// config.php 생성
+				
+			$fp = fopen(ROOT.'/config.php', 'w+');
+			if ($fp) {
+				$confCon = "<?php
+					\$database['type'] = '".$IV['dbtype']."';
+					\$database['server'] = '".$IV['dbserver']."';
+					\$database['database']  = '".$IV['dbname']."';
+					\$database['username'] = '".$IV['dbuserid']."';
+					\$database['password'] = '".$IV['dbuserpw']."';
+					\$database['prefix'] = '".$IV['dbprefix']."';
+
+					\$service['path'] = '".$path."';
+					\$service['timeout'] = 3600;
+				?>";
+				fwrite($fp, $confCon);	
+				fclose($fp);
+				@chmod(ROOT . '/config.php', 0666);
+			} else {
+				Header("Location: {$path}/setup/?step=" . $IV['type'] . "&error=5" . $redirectValues); 
+				exit;
+			}
+
+			$step_text = _t('생성') . ' - ' . _t('완료') . ' : 2/2';
+			$step_desc = _t('블로그라운지의 설정파일을 생성하였습니다.');
+		break;
 		case 'migration':
 			$step_text = _t('업그레이드') . ' - ' . _t('세번째 단계') . ' : 3/4';
 			$step_desc = _t('블로그라운지를 새로운 버전으로 업그레이드합니다.');
@@ -1245,6 +1340,108 @@
 
 <?php
 		break;
+		case 'config_make': // 설정파일 생성
+?>
+		<div id="title">
+			<span class="stepNum"><?php echo _t('유틸리티');?>:</span>&nbsp;<span class="stepTitle"><?php echo _t('설정파일 생성');?></span> 
+<?php
+		if(!empty($step_desc)) {
+?>
+			<br />
+			<div class="stepDesc"><?php echo $step_desc;?></div>
+<?php
+		}
+?>
+		</div>
+
+		<ul id="setupCheck">
+				<li>
+					<h3><?php echo _t('폴더 쓰기 권한을 확인합니다.');?>  &nbsp;
+					<?php if ($iswritable = is_writable(ROOT)) { ?>
+						<span class="sblue"><?php echo _t('성공');?></span></h3>
+					<?php } else { ?>
+						<span class="sopera"><?php echo _t('실패');?></span></h3>
+						<p>
+						<?php echo _t('블로그라운지가 설치된 폴더의 권한(퍼미션)을 777 로 설정해주세요.');?>
+						</p>
+					<?php  }  ?>
+				</li>
+		</ul>
+
+<?php
+		if($error > 0) {
+?>
+			<div id="errorBox">
+				<?php echo errorPrintForConfigMake($error); ?>
+			</div>
+<?php
+		}
+?>
+
+		<form action="<?php echo $path;?>/setup/?step=config_make_do" method="post">
+			<input type="hidden" name="type" value="<?php echo $step;?>"/>
+			<div class="inputForm">
+				<h3><?php echo _t('서버 접속 정보를 입력해주세요');?></h3>
+
+				<div id="dbinfoInputForm">
+					<input type="hidden" name="dbtype" value="mysql" />
+					<dl>
+						<dt><?php echo _t('데이터베이스 서버');?></dt>
+						<dd>&nbsp;<input type="text" class="inputText faderInput" name="dbserver" tabindex="1"  value="<?php echo isset($_GET['dbserver'])?$_GET['dbserver']:'localhost';?>"  /></dd>
+					</dl>
+					<dl>
+						<dt><?php echo _t('데이터베이스 사용자명');?></dt>
+						<dd>&nbsp;<input type="text" class="inputText faderInput" name="dbuserid" value="<?php echo isset($_GET['dbuserid'])?$_GET['dbuserid']:'';?>" tabindex="2" onblur="if (document.getElementById('dbname').value == '') { document.getElementById('dbname').value = this.value; }"/></dd>
+					</dl>
+					<dl>
+						<dt><?php echo _t('데이터베이스 비밀번호');?></dt>
+						<dd>&nbsp;<input type="password" class="inputText faderInput" name="dbuserpw" value=""  tabindex="3" /></dd>
+					</dl>
+					<dl>
+						<dt><?php echo _t('데이터베이스 이름');?></dt>
+						<dd>&nbsp;<input type="text" id="dbname" class="inputText faderInput" name="dbname" value="<?php echo isset($_GET['dbname'])?$_GET['dbname']:'';?>" tabindex="4" /></dd>
+					</dl>
+					<dl>
+						<dt><?php echo _t('테이블 식별자');?></dt>
+						<dd>&nbsp;<input type="text" id="prefix"  class="inputText faderInput" name="dbprefix" tabindex="5"  value="<?php echo isset($_GET['dbprefix'])?$_GET['dbprefix']:'bl_';?>"  /></dd>
+					</dl>
+				</div>
+			</div>
+			
+			<div class="alertBox">
+				 <?php echo _t('이전에 설치된 블로그라운지 혹은 날개툴이 있을때만 이 유틸리티를 사용해주십시오.');?>
+			</div>
+
+			<div class="installButtons">
+				<?php if ($iswritable) { ?><?php echo _t('계속하시려면 "다음" 버튼을 눌러주세요.');?> <?php } else { ?><?php echo _t('권한(퍼미션)을 조정하시고 "다음" 버튼을 눌러 다시 시도해주세요.');?><?php } ?><br />
+				<a href="#" onclick="javascript: history.back();"><img src="<?php echo $path;?>/images/setup/<?php echo Locale::get();?>/bt_back.jpg" alt="<?php echo _t('이전');?>" /></a>&nbsp;&nbsp;<input type="image" src="<?php echo $path;?>/images/setup/<?php echo Locale::get();?>/bt_next.jpg" alt="<?php echo _t('다음');?>" />
+			</div>
+		</form>
+<?php
+		break;
+		case 'config_make_do':
+?>
+		<div id="title">
+			<span class="stepNum"><?php echo _t('유틸리티');?>:</span>&nbsp;<span class="stepTitle"><?php echo _t('설정파일 생성');?></span> 
+<?php
+		if(!empty($step_desc)) {
+?>
+			<br />
+			<div class="stepDesc"><?php echo $step_desc;?></div>
+<?php
+		}
+?>
+		</div>
+
+		<div class="indesc">
+			<?php echo _t('아래 다음을 클릭하여 설치를 계속 진행하여 주십시오.');?><br />
+		</div>
+
+		<div class="installButtons">
+			<a href="#"><img src="<?php echo $path;?>/images/setup/<?php echo Locale::get();?>/bt_disable_back.jpg" alt="<?php echo _t('이전');?>" /></a>&nbsp;&nbsp;<a href="<?php echo $path;?>"><img src="<?php echo $path;?>/images/setup/<?php echo Locale::get();?>/bt_next.jpg" alt="<?php echo _t('다음');?>" /></a>
+		</div>
+<?php
+		break;
 		case 'install': // ** 세번째 단계 ( 설치 )			
 		case 'migration':
 ?>
@@ -1282,7 +1479,7 @@
 					<?php } else { ?>
 						<span class="sopera"><?php echo _t('실패');?></span></h3>
 						<p>
-						<?php echo _t('여기를 클릭하시면 설정파일을 지금 만들 수 있습니다.');?>
+						<a href="<?php echo $path;?>/setup/?step=config_make"><?php echo _t('여기를 클릭하시면 설정파일을 지금 만들 수 있습니다.');?></a>
 						</p>
 					<?php  }  ?>
 				</li>
@@ -1338,7 +1535,7 @@
 ?>
 			<form action="<?php echo $path;?>/setup/?step=4" method="post">
 			<input type="hidden" name="type" value="<?php echo $step;?>"/>
-			<div id="inputForm">
+			<div class="inputForm">
 				<h3><?php echo _t('서버 접속 정보를 입력해주세요');?></h3>
 
 				<div id="dbinfoInputForm">
@@ -1378,7 +1575,9 @@
 						<dd>&nbsp;<input type="text" id="prefix"  class="inputText faderInput" name="dbprefix" tabindex="5"  value="<?php echo isset($_GET['dbprefix'])?$_GET['dbprefix']:'bl_';?>"  /></dd>
 					</dl>
 				</div>
+			</div>
 
+			<div class="inputForm">
 				<div id="admininfoInputForm">
 					<h3><?php echo _t('관리자 정보를 입력해주세요.');?></h3>
 					<dl>
@@ -1450,7 +1649,7 @@
 			<div class="installButtons">
 				<?php echo _t('계속하시려면 "다음" 버튼을 눌러주세요.');?> <br />
 				<a href="#" onclick="javascript: history.back();"><img src="<?php echo $path;?>/images/setup/<?php echo Locale::get();?>/bt_back.jpg" alt="<?php echo _t('이전');?>" /></a>&nbsp;&nbsp;<input type="image" src="<?php echo $path;?>/images/setup/<?php echo Locale::get();?>/bt_next.jpg" alt="<?php echo _t('다음');?>" />
-			</p>
+			</div>
 			</form>
 <?php
 		break;
@@ -1463,8 +1662,9 @@
 
 			<div class="indesc">
 				<?php echo _t('아래의 "관리자" 버튼을 눌러 관리자 모드로 이동하거나');?>,<br />
-				<?php echo _t('"홈" 버튼을 눌러 첫페이지로 이동할 수 있습니다.');?><br />
+				<?php echo _t('"홈" 버튼을 눌러 첫 페이지로 이동할 수 있습니다.');?><br />
 			</div>
+
 			<div class="installButtons">
 				<a href="<?php echo $path;?>/"><img src="<?php echo $path;?>/images/setup/<?php echo Locale::get();?>/bt_home.jpg" alt="<?php echo _t('홈');?>" /></a>&nbsp;&nbsp;<a href="<?php echo $path;?>/admin/"><img src="<?php echo $path;?>/images/setup/<?php echo Locale::get();?>/bt_admin.jpg" alt="<?php echo _t('관리자페이지');?>" /></a>
 			</div>
@@ -1511,8 +1711,8 @@
 			</div>
 
 			<div class="indesc">
-				<?php echo _t('블로그라운지 삭제가 완료되었습니다.');?><br />
 				<?php echo _t('나머지 파일들은 직접 삭제해주세요.');?><br />
+				<?php echo _t('감사합니다.');?>
 			</div>
 
 <?php

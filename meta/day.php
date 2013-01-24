@@ -2,37 +2,41 @@
 	define('ROOT', '..');
 	include ROOT . '/lib/include.php';
 
-	// ê¸€ ëª©ë¡
+	// ±Û ¸ñ·Ï
+	$action = func::decode($accessInfo['action']);
 
-	$searchType = $accessInfo['action'];
-	$searchKeyword = func::decode($accessInfo['value']);
-
-	if ($searchType=='tag') {
-    } else if ($searchType=='blogURL') { // ë¸”ë¡œê·¸ì£¼ì†Œ			
-		if(!empty($searchKeyword)) {
-			$searchFeedId = Feed::blogURL2Id('http://'.str_replace('http://', '', $searchKeyword));
-			$searchExtraValue = $searchFeedId;
-		}
-	} else if($searchType=='archive') { // ë‚ ì§œ..
-		$targetDate = (!Validator::is_digit($searchKeyword) || strlen($searchKeyword) != 8) ? date("Ymd") : $searchKeyword;
+	$searchType = 'archive';
+	
+	if((Validator::is_digit($action) && strlen($action) == 8)) {
+		$targetDate = $searchKeyword = $action;
 		$tDate = substr($targetDate, 0, 4).'-'.substr($targetDate, 4, 2).'-'.substr($targetDate, 6, 2);
 		$tStart = strtotime("$tDate 00:00:00");
-
-		if(isset($accessInfo['pass'][0]) && Validator::is_digit($accessInfo['pass'][0]) && strlen($accessInfo['pass'][0]) == 8) {
-			$targetDate = $accessInfo['pass'][0];
+		
+		if(isset($accessInfo['value']) && Validator::is_digit($accessInfo['value']) && strlen($accessInfo['value']) == 8) {
+			$targetDate = $accessInfo['value'];
 			$tDate = substr($targetDate, 0, 4).'-'.substr($targetDate, 4, 2).'-'.substr($targetDate, 6, 2);
 			$tEnd = strtotime("$tDate 00:00:00");
 			$searchExtraValue = array('start'=>$tStart,'end'=>$tEnd);
 		} else {
 			$searchExtraValue = $tStart;
 		}
+	} else {
+		switch($action) {
+			case 'yesterday':		
+				$searchKeyword = date('Ymd',mktime()-86400);
+				$searchExtraValue = strtotime( $searchKeyword . ' 00:00:00');
+			break;
+			case 'today':	
+			default:
+				$searchKeyword = date('Ymd',mktime());
+				$searchExtraValue = strtotime( $searchKeyword . ' 00:00:00');
+			break;			
+		}
 	}
-	
-	
 
 	include ROOT . '/lib/begin.php';
 
-	$pageCount = $skinConfig->postList; // í˜ì´ì§€ê°¯ìˆ˜
+	$pageCount = $skinConfig->postList; // ÆäÀÌÁö°¹¼ö
 	list($posts, $totalFeedItems) = FeedItem::getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount);
 	$paging = Func::makePaging($page, $pageCount, $totalFeedItems);
 

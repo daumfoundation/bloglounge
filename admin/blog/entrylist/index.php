@@ -740,7 +740,7 @@
 	}
 ?>
 				</optgroup>		
-				<optgroup class="delete" label="<?php echo _t('삭제');?>">
+				<optgroup class="delete" label="<?php echo _t('휴지통');?>">
 					<option class="delete_action" value="trash"><?php echo _t('휴지통으로 보냅니다.');?></option>
 				</optgroup>
 			</select>

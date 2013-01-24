@@ -146,12 +146,14 @@ body {
 	background:url('../images/setup/icon_information.gif') no-repeat left center;
 }
 
-#inputForm {
-	margin:20px;
+.inputForm {
+	margin-top:15px;
+	padding:20px;
 	margin-bottom:15px;
+	border:1px solid #eee;
 }
 
-#inputForm h3 {
+.inputForm h3 {
 	margin:0; 
 	font-size:12px; 
 	font-weight:bold;
@@ -165,6 +167,7 @@ body {
 #dbinfoInputForm {
 	margin:20px;
 	margin-top:0px;
+	margin-bottom:0px;
 
 	display:block; clear:both;
 }
@@ -199,7 +202,7 @@ body {
 
 .alertBox {
 	margin-top:20px;
-	margin-bottom:20px;
+	margin-bottom:10px;
 	margin-left:0px;
 	margin-right:0px;
 	line-height:140%;

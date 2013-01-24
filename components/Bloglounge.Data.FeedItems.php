@@ -1,7 +1,5 @@
 <?php
-
 	class FeedItem {
-		
 		function get($itemId, $field) { // return as single value
 			global $database, $db;
 			if (list($value) = $db->pick('SELECT '.$field.' FROM '.$database['prefix'].'FeedItems WHERE id='.$itemId))
@@ -69,14 +67,13 @@
 			list($feedId, $permalink) = FeedItem::gets($itemId, 'feed,permalink');
 			if (!$db->execute("INSERT INTO {$database['prefix']}DeleteHistory (feed, permalink) VALUES ('$feedId', '$permalink')"))
 				return false;
-	
+
 			requireComponent('LZ.PHP.Media');
 			Media::delete($itemId);
 			
 			
 
 			requireComponent('Bloglounge.Data.Category');
-
 			$result = $db->queryAll('SELECT category FROM '.$database['prefix'].'Categoryrelations WHERE item = ' . $itemId,MYSQL_ASSOC);
 			$categoryIds = array();
 			foreach($result as $item) {
@@ -88,7 +85,6 @@
 			$db->execute("DELETE FROM {$database['prefix']}CategoryRelations WHERE item = {$itemId}"); // clear CategoryRelations
 			
 			$db->execute("DELETE FROM {$database['prefix']}TagRelations WHERE item = {$itemId}"); // clear TagRelations
-
 			if ($db->execute('DELETE FROM '.$database['prefix'].'FeedItems WHERE id='.$itemId)) {
 				if (Validator::getBool(Settings::get('useRssOut'))) {
 					requireComponent('Bloglounge.Data.RSSOut');
@@ -297,6 +293,7 @@
 			global $db, $database, $config;
 
 			$sQuery = '';
+
 			if ($searchType=='tag' && !Validator::is_empty($searchKeyword)) {		
 				if (!list($tagId) = $db->pick('SELECT id FROM '.$database['prefix'].'Tags WHERE name="'.$db->escape($searchKeyword).'"')) {
 					return array(null,0);
@@ -336,6 +333,23 @@
 				if($category) {
 					$sQuery = ' WHERE c.category = ' . $category['id'];
 				}
+			} else if ($searchType == 'archive' && !Validator::is_empty($searchKeyword)) {
+				if(is_array($searchExtraValue) && array_key_exists('start',$searchExtraValue) && array_key_exists('end',$searchExtraValue)) {
+					$tStart = $searchExtraValue['start'];
+					$tEnd = $searchExtraValue['end'] + 86400;
+				} else {
+					$tStart = $searchExtraValue;
+					$tEnd = $tStart + 86400;
+				}
+
+				$tQuery = ' WHERE i.written > '.$tStart.' AND i.written < '.$tEnd.' ';
+				if (strpos($sQuery, 'WHERE') !== false) {
+					$sQuery = str_replace('WHERE ', $tQuery.' AND (', $sQuery);
+					$sQuery .= ')';
+				} else {
+					$sQuery .= $tQuery;
+				}
+
 			} else {
 				if (!Validator::is_empty($searchKeyword)) {
 					$searchKeyword = UTF8::bring($searchKeyword);
@@ -343,7 +357,7 @@
 					
 					if(empty($searchExtraValue)) { // all : title, description, tags, permlink						
 						$sQuery =  ' WHERE i.author LIKE "%'.$keyword.'%" OR i.title LIKE "%'.$keyword.'%" OR i.description LIKE "%'.$keyword.'%" OR i.tags LIKE "%'.$keyword.'%" OR i.permalink LIKE "%'.$keyword.'%"';					
-					} else { // custom
+					} else { // custom					
 						$sQuery = ' WHERE ' . $searchExtraValue;
 					}
 				}
@@ -365,21 +379,7 @@
 				}
 			
 			}
-
-
-			// 날짜 제한
-			if (!empty($searchKeyword) && ($searchType == 'archive')) {
-				$tStart = $searchExtraValue;
-				$tEnd = $tStart + 86400;
-
-				$tQuery = ' WHERE i.written > '.$tStart.' AND i.written < '.$tEnd.' ';
-				if (strpos($sQuery, 'WHERE') !== false) {
-					$sQuery = str_replace('WHERE ', $tQuery.' AND (', $sQuery);
-					$sQuery .= ')';
-				} else {
-					$sQuery .= $tQuery;
-				}
-			}
+								
 
 			if(empty($owner)) {
 				if($viewDelete) {

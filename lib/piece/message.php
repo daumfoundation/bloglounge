@@ -65,8 +65,13 @@
 				$condMessage = true;
 			} else if ($searchType=='archive') { // date
 				$src_condSearchDate = $skin->cutSkinTag('cond_search_date');			
+				
+				if(is_array($searchExtraValue)) {
+					$sp_date = $skin->parseTagWithArgument('search_date', 'date', "#1,{$searchExtraValue['start']}/#2,{$searchExtraValue['end']}", $src_condSearchDate, 'Y-m-d');
+				} else {
+					$sp_date = $skin->parseTagWithArgument('search_date', 'date', "#1,$searchExtraValue", $src_condSearchDate, 'Y-m-d');
+				}
 
-				$sp_date = $skin->parseTagWithArgument('search_date', 'date', "#1,$searchExtraValue", $src_condSearchDate, 'Y-m-d');
 				$sp_date = $skin->parseTag('search_count', $totalFeedItems, $sp_date);
 
 				$src_condMessage = $skin->dressOn('cond_search_date', $src_condSearchDate, $sp_date, $src_condMessage);

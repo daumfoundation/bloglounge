@@ -29,40 +29,12 @@ http://bloglounge.itcanus.net/bloglounge_notice/6981
 변경사항
 ===========
 
-- IE6 호환 : 관리자 로그인시 스크립트 에러, 관리자페이지 상단메뉴 에러 수정
+- 오류수정 : 휴지통의 글이 삭제, 복원이 되지않던 문제
 
-- 추가 : /lib/config.php ADMIN_MENU_CLICK_VIEW 추가 
-       
-true 시 관리자페이지 상단메뉴 클릭하여 메뉴 이동,  false 시 마우스 오버시 메뉴이동 ( 기본 false )
+- 오류수정 : 매거진플러그인의 링크오류 수정
 
-- 추가 : 리스트에 보여지는 글만 저장하는 옵션 추가 ( 관리자/설정 )  최대 1000자의 본문만 저장하는 기능 
-       
-http://bloglounge.itcanus.net/bloglounge_qna/17381/
+- 기능추가 : 오늘의 글, 어제의 글만 리스트화하는 주소(?) 추가 ( 도메인/day/today, 도메인/day/yesterday )
 
-- 수정 : 관리자페이지 디자인/스킨설정에서 포커스, 글 본문 갯수 최대 3000자에서 1000자로 변경
+- 기능수정 : Basic 스킨 실시간으로 랭크확인 ( 기존에는 버튼 클릭시 하단의 랭크는 표시되지 않았음 )
 
-- 오류 : 분류갯수 오류 수정 ( 글, 블로그 삭제시 숫자오류 )
-
-- 오류 : 스킨 다음 클릭시 현페이지에서 다음페이지가 아닌,  + 5페이지로 이동하는 문제 수정
-
-- 오류 : 간혹 글의 썸네일이 겹쳐지는 문제 해결
-
-http://bloglounge.itcanus.net/?mid=bloglounge_qna&document_srl=17724&rnd=17883
-
-- 오류 : RSS 재출력 개수 오류 수정
-
-http://bloglounge.itcanus.net/bloglounge_qna/17821
-
-- 오류 : 매거진 플러그인 작성자 오류 수정
-
-http://bloglounge.itcanus.net/bloglounge_qna/17771
-
-- 그외 : 세세한 버그수정, 코드수정으로 안정화하였습니다.
-
-- 오류 : PHP4 호환성 추가 ( htmlspecialchars_decode )
-
-http://bloglounge.itcanus.net/bloglounge_qna/17855
-
-- 오류 : 분류설정이 목록보기와, 자세히 보기가 달라.. 제대로 분류변경이 되지 않던 문제 수정
-
-http://bloglounge.itcanus.net/bloglounge_qna/17794
+- 기능수정 : 설치화면 CSS 일부변경, 업그레이드시 config.php 없을시 설정파일 생성기능 추가

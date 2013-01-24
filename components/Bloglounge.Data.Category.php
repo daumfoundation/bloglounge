@@ -1,7 +1,5 @@
 <?php
-	Class Category {		
-		
-	
+	Class Category {	
 		function buildCategoryRelations($itemId, $tags, $oldtags = null) {		
 		
 	global $database, $db;

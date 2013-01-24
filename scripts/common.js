@@ -18,7 +18,7 @@
 		  success: function(msg){
 			error = $("response error", msg).text();
 			if(error == "0") {
-				boomImageSet(itemId,direction, $("response message", msg).text(), $("response boom_count", msg).text());
+				boomImageSet(itemId,direction, $("response message", msg).text(), $("response boom_count", msg).text(), $("response rank", msg).text());
 			} else {
 				alert($("response message", msg).text());
 			}
@@ -30,13 +30,15 @@
 
 	};
 
-	function boomImageSet(itemId, direction, classname, boomCount) {
+	function boomImageSet(itemId, direction, classname, boomCount, rank) {
 		if(typeof classname == "undefined") return false;
 
 		try {
 			var bu = $('#boomUp'+itemId);
 			var bd = $('#boomDown'+itemId);
 			var bc = $('#boomCount'+itemId);
+			var br = $('#boomRank'+itemId);
+
 			if (direction == 'down') {
 				bd.removeClass('isntBoomedDown');		
 				bd.removeClass('isBoomedDown');
@@ -50,6 +52,9 @@
 			}
 
 			bc.text( boomCount);
+			br.removeClass('boom_rank_0').removeClass('boom_rank_1').removeClass('boom_rank_2').removeClass('boom_rank_3').removeClass('boom_rank_4').removeClass('boom_rank_5');
+			br.addClass('boom_rank_' + rank);
+
 		} catch (e) { };
 	};
 
