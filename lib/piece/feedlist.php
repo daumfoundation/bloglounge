@@ -2,6 +2,7 @@
 	if(isset($feeds)) {
 		$s_feeds = '';
 		$src_feeds = $skin->cutSkinTag('feedlist');	
+		$subpath = empty($accessInfo['subpath'])?'':'/'.func::firstSlashDelete($accessInfo['subpath']);
 		ob_start();
 
 ?>		
@@ -22,7 +23,7 @@
 <?php
 		if($accessInfo['page'] > 1) {
 ?>
-					window.location = "<?php echo $accessInfo['subpath'];?>/?page=<?php echo $accessInfo['page']-1;?>";
+					window.location = "<?php echo $accessInfo['path'];?><?php echo $subpath;?>/?page=<?php echo $accessInfo['page']-1;?>";
 <?php
 		} else {
 ?>	
@@ -35,7 +36,7 @@
 <?php
 		if($accessInfo['page'] < $paging['totalPages']) {
 ?>
-					window.location = "<?php echo $accessInfo['subpath'];?>/?page=<?php echo $accessInfo['page']+1;?>";
+					window.location = "<?php echo $accessInfo['path'];?><?php echo $subpath;?>/?page=<?php echo $accessInfo['page']+1;?>";
 <?php
 		} else {
 ?>	

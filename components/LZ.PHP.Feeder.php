@@ -38,6 +38,8 @@
 			if (empty($feedId) || !preg_match("/^[0-9]+$/", $feedId) || empty($arguments) || !is_array($arguments)) {
 				return false;
 			}
+			
+			$feedVisibilityCahnged = false;
 
 			$modStack = array();
 		//	$arguments = func::array_trim($arguments);
@@ -48,7 +50,10 @@
 					$filterArray = func::array_trim((explode(',', $value)));
 					$value = implode(',', array_slice($filterArray, 0, 3));
 					;
+				} else if($key == 'visibility') {
+					$feedVisibilityCahnged = $value;
 				}
+
 				if (!Validator::enum(strtolower($value), 'unix_timestamp(),time(),date()')) {
 					$value = '"'.$db->escape($value).'"';
 				}
@@ -57,6 +62,10 @@
 
 			if (!count($modStack)) 
 				return false;
+
+			if($feedVisibilityCahnged !== false) {
+				$db->execute('UPDATE '.$database['prefix'].'FeedItems SET feedVisibility = "'.$feedVisibilityCahnged .'" WHERE feed='.$feedId);
+			}
 
 			$modQuery = implode(',', $modStack);
 			return ($db->execute('UPDATE '.$database['prefix'].'Feeds SET '.$modQuery.' WHERE id='.$feedId))?true:false;
@@ -69,6 +78,7 @@
 			}
 			if (!$db->execute("DELETE FROM {$database['prefix']}DeleteHistory WHERE feed='$feedId'"))
 				return false;
+
 			requireComponent('Bloglounge.Data.FeedItems');
 			FeedItem::deleteByFeedId($feedId);
 
@@ -250,7 +260,7 @@
 						$item['author']=$xmls->getValue("/rss/channel/item[$i]/dc:creator");
 					$item['title']=$xmls->getValue("/rss/channel/item[$i]/title");
 					if (!$item['description']=$xmls->getValue("/rss/channel/item[$i]/content:encoded"))
-						$item['description']=$xmls->getValue("/rss/channel/item[$i]/description");
+						$item['description']=htmlspecialchars_decode($xmls->getValue("/rss/channel/item[$i]/description"));
 					$item['tags']=array();
 					for ($j=1;$tag=$xmls->getValue("/rss/channel/item[$i]/category[$j]");$j++)
 						if (!empty($tag)) {
@@ -302,7 +312,7 @@
 					$item['author']=$xmls->getValue("/feed/entry[$i]/author/name");
 					$item['title']=$xmls->getValue("/feed/entry[$i]/title");
 					if (!$item['description']=$xmls->getValue("/feed/entry[$i]/content"))
-						$item['description']=$xmls->getValue("/feed/entry[$i]/summary");
+						$item['description']=htmlspecialchars_decode($xmls->getValue("/feed/entry[$i]/summary"));
 					$item['tags']=array();
 					for ($j=1;$tag=$xmls->getValue("/feed/entry[$i]/dc:subject[$j]");$j++) {
 						if (!empty($tag)) array_push($item['tags'],trim($tag));
@@ -332,7 +342,7 @@
 						$item['author']=$xmls->getValue("/rdf:RDF/item[$i]/author"); // for NaverBlog rss 1.0
 					$item['title']=$xmls->getValue("/rdf:RDF/item[$i]/title");
 					if (!$item['description']=$xmls->getValue("/rdf:RDF/item[$i]/content:encoded"))
-						$item['description']=$xmls->getValue("/rdf:RDF/item[$i]/description");
+						$item['description']=htmlspecialchars_decode($xmls->getValue("/rdf:RDF/item[$i]/description"));
 					$item['tags']=array();
 					$item['enclosures']=array();
 					$item['written']=Feed::parseDate($xmls->getValue("/rdf:RDF/item[$i]/dc:date"));
@@ -351,7 +361,7 @@
 			if (preg_match("/^[0-9]+$/", $feedURL))
 				$feedURL = $db->queryCell('SELECT xmlURL FROM '.$database['prefix'].'Feeds WHERE id="'.$feedURL.'"');
 
-			list($feedId, $lastUpdate, $autoUpdate, $feedLogo) = $db->pick('SELECT id, lastUpdate, autoUpdate, logo FROM '.$database['prefix'].'Feeds WHERE xmlURL="'.$feedURL.'"');
+			list($feedId, $lastUpdate, $autoUpdate, $feedLogo, $feedVisibility) = $db->pick('SELECT id, lastUpdate, autoUpdate, logo, visibility FROM '.$database['prefix'].'Feeds WHERE xmlURL="'.$feedURL.'"');
 
 			if ($lastUpdate > gmmktime()-300) {
 				//return true;
@@ -365,7 +375,7 @@
 				$feed['logo'] = (empty($feedLogo) || (!empty($feedLogo) && !file_exists(ROOT . '/cache/feedlogo/'.$feedLogo)))? '' : $feedLogo;
 				$sQuery = (Validator::getBool($autoUpdate)) ? "title = '{$feed['title']}', description = '{$feed['description']}', " : '';
 				$db->execute("UPDATE {$database['prefix']}Feeds SET blogURL = '{$feed['blogURL']}', $sQuery language = '{$feed['language']}', lastUpdate = ".gmmktime().", logo='{$feed['logo']}' WHERE xmlURL = '{$feedURL}'");
-				return $this->saveFeedItems($feedId, $xml)?0:1;
+				return $this->saveFeedItems($feedId,$feedVisibility,$xml)?0:1;
 			}
 		}
 
@@ -436,7 +446,7 @@
 			return array(1,'No feeds to update');
 		}
 
-		function saveFeedItems($feedId, $xml, $callbackName = null){
+		function saveFeedItems($feedId,	$feedVisibility, $xml, $callbackName = null){
 			global $database, $db;
 
 			if (isset($callbackName)) {
@@ -450,7 +460,7 @@
 			else {
 				foreach($result as $item) {
 					if (!isset($callback))
-						$this->saveFeedItem($feedId,$item);
+						$this->saveFeedItem($feedId, $feedVisibility, $item);
 					else
 						call_user_func($callback, $feedId, $item);
 				}
@@ -468,7 +478,7 @@
 			return true;
 		}
 
-		function saveFeedItem($feedId,$item){
+		function saveFeedItem($feedId,$feedVisibility,$item){
 			global $database, $db;
 
 			$db->query("SELECT id FROM {$database['prefix']}DeleteHistory WHERE feed='$feedId' and permalink='{$item['permalink']}'");
@@ -476,6 +486,7 @@
 				return false;
 	
 			list($cacheThumbnail, $useRssOut) = Settings::gets('cacheThumbnail,useRssOut');
+		
 			list($feedCreated) = Feed::gets($feedId, 'created');
 			$tagString=$db->escape($db->lessen(UTF8::correct(implode(', ',$item['tags']))));
 
@@ -483,13 +494,12 @@
 			$localFilter = Feed::get($feedId, 'filter');
 			$filter = empty($globalFilter)?$localFilter:$globalFilter;
 
+
 			if (!Validator::is_empty($filter)) {
 				$filtered = true;
 				$allowTags = explode(',', $filter);
 				foreach ($allowTags as $ftag) {
-						
 					if (Validator::enum($ftag, $tagString)) {
-
 						$filtered = false;
 						break;
 					}
@@ -510,7 +520,7 @@
 
 				if ($filtered) return false;
 			}
-						
+								
 			if (preg_match('/\((.[^\)]+)\)$/Ui', trim($item['author']), $_matches)) $item['author'] = $_matches[1];
 			$item['author']=$db->escape($db->lessen(UTF8::correct($item['author'])));
 			$item['permalink']=$db->escape($db->lessen(UTF8::correct($item['permalink'])));
@@ -551,9 +561,8 @@
 				if ($item['written']==0)
 					$item['written']=gmmktime();
 				if ($item['written']>$deadLine) {
+					$db->execute("INSERT INTO {$database['prefix']}FeedItems (feed, author, permalink, title, description, tags, enclosure, written, feedVisibility) VALUES ($feedId, '{$item['author']}', '{$item['permalink']}', '{$item['title']}', '{$item['description']}', '$tagString', '$enclosureString', {$item['written']},'{$feedVisibility}')");
 
-					$db->execute("INSERT INTO {$database['prefix']}FeedItems (feed, author, permalink, title, description, tags, enclosure, written) VALUES ($feedId, '{$item['author']}', '{$item['permalink']}', '{$item['title']}', '{$item['description']}', '$tagString', '$enclosureString', {$item['written']})");
-			
 					$id =$db->insertId();
 					$db->execute('UPDATE '.$database['prefix'].'Feeds SET feedCount=feedCount+1 WHERE id="'.$feedId.'"');
 					if (isset($this)) $this->updated++;
@@ -563,6 +572,8 @@
 
 			if($isRebuildData) {
 				Tag::buildTagIndex($id, $item['tags'], $oldTags);
+					
+
 				Category::buildCategoryRelations($id, $item['tags'], $oldTags);
 				
 				if (Validator::getBool($cacheThumbnail)) FeedItem::cacheThumbnail($id, $item);

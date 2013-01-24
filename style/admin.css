@@ -92,7 +92,7 @@ img { border:0; }
 	.wrap select { font-size:11px; margin-top:2px; }
 
 	.wrap .help  { font-size:11px; color:#888; }
-	.wrap .information { font-size:11px; color:666;}
+	.wrap .information { font-size:11px; color:#666;}
 	.wrap .checkbox_help { margin-left:27px; }
 	.wrap .checkbox_input { margin-left:27px; margin-bottom:6px; }
 		.wrap .checkbox_input .input { width:300px; }
@@ -251,7 +251,7 @@ img.new { margin-left:4px; }
 			.admin_table .headers td { padding-top:4px; _height:32px; *height:32px; }
 	
 	.admin_table .datas { color:#5B5B5B; }
-	.admin_table .datas .list_first { background:url(../images/admin/bg_table_box_first_item.gif) repeat-x; }
+	.admin_table .datas .list_first { /* background:url(../images/admin/bg_table_box_first_item.gif) repeat-x; */ }
 	
 	.admin_table .datas .list_item  { width:100%; height:32px; color:#5b5b5b;   }
 		.admin_table .datas .list_item  a { color:#5b5b5b; text-decoration:none; }
@@ -268,5 +268,6 @@ img.new { margin-left:4px; }
 
 	.admin_table .datas .list_item.list_empty { height:32px; font-size:11px; text-align:center; color:#999; }
 
-	.admin_table .footers  { width:100%; height:34px; margin-left:1px; margin-right:1px; padding-bottom:5px; background:url(../images/admin/bg_table_box_footer.gif) repeat-x;  }
-		.admin_table .footers td { border-top:1px solid #ddd; }
+	.admin_table .footers  { width:100%; margin-left:1px; margin-right:1px; vertical-align:top; background:url(../images/admin/bg_table_box_footer.gif) repeat-x;  }
+		.admin_table .footers td { border-top:1px solid #ddd; padding-top:10px; padding-bottom:20px; }
+ 

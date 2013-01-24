@@ -29,7 +29,6 @@
 					FeedItem::edit($id,'visibility', 'd');
 					Feed::edit($feed['id'],array('feedCount'=>$feed['feedCount']-1));				
 					if(!empty($feed['category'])) Catregory::rebuildCount($feed['category']);
-
 					if($admin_mode) {
 						include_once( ROOT . '/lib/admin.php' );
 						addAppMessage(_t('선택하신 글을 휴지통으로 옮겼습니다.'));
@@ -39,6 +38,12 @@
 					$response['message'] = _t('잘못된 접근입니다.');
 					break;
 				}
+			}
+
+			if (Validator::getBool(Settings::get('useRssOut'))) {
+				requireComponent('Bloglounge.Data.RSSOut');
+				RSSOut::refresh();
+				RSSOut::refresh('focus');
 			}
 		}
 	}

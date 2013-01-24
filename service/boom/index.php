@@ -41,14 +41,26 @@
 
 			if ($boomedUp ) {
 				Boom::upReturn($itemId);
-				$response['message'] = 'isntBoomedUp';
+				$response['message'] = 'isntBoomedUp';	
+
+				$response['rank'] = Boom::getRank($itemId);		
+				list($boomUp,$boomDown,$boomCount) = Boom::getBoomCount($itemId);
+				$response['boom_up_count'] = $boomUp;
+				$response['boom_down_count'] = $boomDown;
+				$response['boom_count'] = $boomCount;
 			} else {
 				if (!Boom::up($itemId)) {
 					$response['error'] = 1;
 					$response['message'] = _t('이미 추천한 글입니다.');
 				} else {
 					$response['message'] = 'isBoomedUp';
-					$response['rank'] = Boom::getRank($itemId);
+	
+						
+					$response['rank'] = Boom::getRank($itemId);		
+					list($boomUp,$boomDown,$boomCount) = Boom::getBoomCount($itemId);
+					$response['boom_up_count'] = $boomUp;
+					$response['boom_down_count'] = $boomDown;
+					$response['boom_count'] = $boomCount;
 				}
 			}
 		break;
@@ -63,7 +75,13 @@
 			if ($boomedDown) {
 				Boom::downReturn($itemId);
 				$response['message'] = 'isntBoomedDown';	
+				
 				$response['rank'] = Boom::getRank($itemId);
+
+				list($boomUp,$boomDown,$boomCount) = Boom::getBoomCount($itemId);
+				$response['boom_up_count'] = $boomUp;
+				$response['boom_down_count'] = $boomDown;
+				$response['boom_count'] = $boomCount;
 			} else {
 				if (!Boom::down($_POST['itemId'])) {
 					$response['error'] = 1;
@@ -77,7 +95,14 @@
 						if ($limit < $myBoomDown) {
 							FeedItem::delete($_POST['itemId']);
 						}
-					}
+					}				
+					
+					$response['rank'] = Boom::getRank($itemId);
+
+					list($boomUp,$boomDown,$boomCount) = Boom::getBoomCount($itemId);
+					$response['boom_up_count'] = $boomUp;
+					$response['boom_down_count'] = $boomDown;
+					$response['boom_count'] = $boomCount;
 				}		
 			}
 			break;

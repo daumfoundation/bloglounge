@@ -291,7 +291,6 @@
 		<dd>
 <?php
 		$rankBy = $config->rankBy;
-		$rankPeriod = $config->rankPeriod;
 		$rankLife = $config->rankLife;
 		ob_start();
 ?>
@@ -300,23 +299,10 @@
 			<option value="boom" <?php if ($rankBy == 'boom') { ?>selected="selected"<?php } ?>><?php echo _t('추천한 사람');?></option>
 		</select>
 <?php
-			$arg1 = ob_get_contents();
-			ob_end_clean();
-			ob_start();
-?>
-		<select name="rankPeriod" id="rankPeriod">
-			<option value="6" <?php if ($rankPeriod == '6') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간', 6);?></option>
-			<option value="12" <?php if ($rankPeriod == '12') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간', 12);?></option>
-			<option value="15" <?php if ($rankPeriod == '15') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간', 15);?></option>
-			<option value="48" <?php if ($rankPeriod == '24') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간', 24);?></option>
-			<option value="48" <?php if ($rankPeriod == '36') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간', 36);?></option>
-			<option value="48" <?php if ($rankPeriod == '48') { ?>selected="selected"<?php } ?>><?php echo _f('%1시간', 48);?></option>
-		</select>
-<?php
-			$arg2 = ob_get_contents();
+			$arg = ob_get_contents();
 			ob_end_clean();
 
-			echo _f('%1 이 많고, 작성된 지 %2 이내인 글을 인기글로 선정합니다', $arg1, $arg2);
+			echo _f('%1 이 많은 글을 인기글로 선정합니다', $arg);
 			unset($arg1); unset($arg2);
 ?>
 		</dd>

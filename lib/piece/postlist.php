@@ -1,6 +1,7 @@
 <?php	
 	$src_posts = $skin->cutSkinTag('postlist');
 	if(isset($posts)) {
+		$subpath = empty($accessInfo['subpath'])?'':'/'.func::firstSlashDelete($accessInfo['subpath']);
 		ob_start();
 ?>		
 		$(document).keydown( function(event) {
@@ -20,7 +21,7 @@
 <?php
 		if($accessInfo['page'] > 1) {
 ?>
-					window.location = "<?php echo $accessInfo['subpath'];?>/?page=<?php echo $accessInfo['page']-1;?>";
+					window.location = "<?php echo $accessInfo['path'];?><?php echo $subpath;?>/?page=<?php echo $accessInfo['page']-1;?>";
 <?php
 		} else {
 ?>	
@@ -33,7 +34,7 @@
 <?php
 		if($accessInfo['page'] < $paging['totalPages']) {
 ?>
-					window.location = "<?php echo $accessInfo['subpath'];?>/?page=<?php echo $accessInfo['page']+1;?>";
+					window.location = "<?php echo $accessInfo['path'];?><?php echo $subpath;?>/?page=<?php echo $accessInfo['page']+1;?>";
 <?php
 		} else {
 ?>	
@@ -52,7 +53,6 @@
 
 			$s_posts_rep = '';
 			$src_post_rep = $skin->cutSkinTag('post_rep');
-
 			if (count($posts)>0) {
 				$index = 0;
 				foreach($posts as $item) {
@@ -82,7 +82,7 @@
 					$sp_posts = $skin->parseTag('post_url',  $service['path'].'/go/'.$item['id'], $sp_posts);			
 					$sp_posts = $skin->parseTag('post_permalink',  htmlspecialchars($item['permalink']), $sp_posts);
 					
-					$sp_posts = $skin->parseTag('post_visibility', ($item['visibility'] == 'n' ? 'hidden' : 'visible' ), $sp_posts);
+					$sp_posts = $skin->parseTag('post_visibility', (($item['visibility'] == 'n' || $item['feedVisibility'] == 'n') ? 'hidden' : 'visible' ), $sp_posts);
 
 					$sp_posts = $skin->parseTag('post_title', UTF8::clear($event->on('Text.postTitle', UTF8::lessen(func::stripHTML($item['title']), $skinConfig->postTitleLength))), $sp_posts);
 					$sp_posts = $skin->parseTag('post_author', UTF8::clear($event->on('Text.postAuthor',$item['author'])), $sp_posts);
@@ -96,6 +96,10 @@
 					if (substr($item['description'], -1) == '>') $item['description'] = substr($item['description'], 0, strlen($item['description']) - 1);
 					$post_description = func::htmltrim(UTF8::lessenAsByte($item['description'], $skinConfig->postDescLength));
 					if (strlen($post_description) == 0) $post_description = '<span class="empty">'._t('(글의 앞부분이 이미지 혹은 HTML 태그만으로 되어있습니다)').'</span>';					
+
+					if(!empty($searchKeyword)) {
+						$post_description = str_replace($searchKeyword, '<span class="point">' . $searchKeyword . '</span>', $post_description);
+					}
 
 					$sp_posts = $skin->parseTag('post_description_slashed', addslashes($post_description), $sp_posts);
 					$sp_posts = $skin->parseTag('post_description', $event->on('Text.postDescription', $post_description), $sp_posts);
@@ -113,7 +117,10 @@
 					$sp_posts = $skin->parseTag('boom_rank_id', 'boomRank'.$item['id'], $sp_posts);
 					$sp_posts = $skin->parseTag('boom_rank_class', 'boom_rank_'.Boom::getRank($item['id']), $sp_posts);
 					$sp_posts = $skin->parseTag('boomup_count', $item['boomUp'], $sp_posts);		
-					$sp_posts = $skin->parseTag('boomdown_count', $item['boomDown'], $sp_posts);		
+					$sp_posts = $skin->parseTag('boomdown_count', $item['boomDown'], $sp_posts);
+
+					$sp_posts = $skin->parseTag('boom_count_id', 'boomCount'.$item['id'], $sp_posts);
+					$sp_posts = $skin->parseTag('boom_count', $item['boomUp'] - $item['boomDown'], $sp_posts);
 
 					$sp_posts = $skin->parseTag('boomup_onclick', 'boom(\''.$item['id'].'\',\'up\');', $sp_posts);
 					$sp_posts = $skin->parseTag('boomdown_onclick', 'boom(\''.$item['id'].'\',\'down\');', $sp_posts);

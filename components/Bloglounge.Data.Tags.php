@@ -1,14 +1,17 @@
 <?php
 
 	class Tag {
-		function buildTagIndex($itemId, $tags, $oldtags = null) {
+		function buildTagIndex($itemId, $tags, $oldtags = null, $firstDelete = true) {
 			global $database, $db;
 			if (!isset($tags) || !is_array($tags) || !isset($itemId) || !Validator::getBool($itemId))
 				return false;
 			
 			$tagChunk = array();
 			$tagInsertChunk = array();
-			@array_shift($tags); // first tag is category.
+			
+			if($firstDelete) 
+				@array_shift($tags); // first tag is category
+
 			if (empty($tags)) return false;
 			foreach ($tags as $tag) {
 				if (!Validator::is_empty($tag)) {
@@ -198,11 +201,20 @@
 
 		function getIssueTags($count) {
 			global $db, $database;
-			$linked = $db->queryCell("SELECT linked FROM {$database['prefix']}TagRelations WHERE linked > 0 AND type = 'feed' ORDER BY linked ASC");
 
+			$linked = $db->queryCell("SELECT linked FROM {$database['prefix']}TagRelations WHERE linked > 0 AND type = 'feed' ORDER BY linked ASC");
+			
 			if($linked) {
+				$sQuery = '';
+
+				if(!isAdmin()) {
+					$sQuery = ' AND (i.visibility = "y") AND (i.feedVisibility = "y") ';
+				} else {
+					$sQuery = ' AND (i.visibility != "d") ';
+				}
+	
 				$day = date('Ymd', $linked);
-				$result = $db->queryAll("SELECT t.name, count(tr.tag) as count, ((count(tr.tag)*10)+sum((FROM_UNIXTIME(tr.linked,'%Y%m%d')-{$day})*1000)) as frequency FROM {$database['prefix']}TagRelations AS tr LEFT JOIN {$database['prefix']}Tags AS t ON (t.id = tr.tag) WHERE (tr.type = 'feed') GROUP BY tr.tag ORDER BY frequency DESC LIMIT {$count}");
+				$result = $db->queryAll("SELECT t.name, count(DISTINCT i.feed) as count, ((count(DISTINCT i.feed)*10)+sum((FROM_UNIXTIME(tr.linked,'%Y%m%d')-{$day})*1000)) as frequency FROM {$database['prefix']}TagRelations AS tr LEFT JOIN {$database['prefix']}Tags AS t ON (t.id = tr.tag) LEFT JOIN {$database['prefix']}FeedItems i ON (i.id = tr.item) WHERE (tr.type = 'feed') {$sQuery} GROUP BY tr.tag ORDER BY frequency DESC LIMIT {$count}");
 			} else {
 				$result = array();
 			}

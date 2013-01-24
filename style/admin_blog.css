@@ -24,6 +24,19 @@
 
 	.entrylist .datas .list_item { height:50px; }
 
+	.entrylist .datas .list_item1 td { border-top:3px solid #ffffff; padding-bottom:3px; }
+	.entrylist .datas .list_item1 td.entrylist_select { border-left:3px solid #ffffff; }
+	.entrylist .datas .list_item1 td.entrylist_execute { border-right:3px solid #ffffff; }
+	
+	.entrylist .datas .list_item2 td { border-top:3px solid #F2F2F2; padding-bottom:3px; }
+	.entrylist .datas .list_item2 td.entrylist_select { border-left:3px solid #F2F2F2; }
+	.entrylist .datas .list_item2 td.entrylist_execute { border-right:3px solid #F2F2F2; }		
+	
+	.entrylist .datas .show_preview td { border-top:3px solid #ccc; }
+
+	.entrylist .datas .show_preview td.entrylist_select { border-left:3px solid #ccc; }
+	.entrylist .datas .show_preview td.entrylist_execute { border-right:3px solid #ccc; }
+
 	.entrylist .entrylist_select { text-align:center; }
 	.entrylist .entrylist_date { text-align:center; color:#888; font-size:11px; line-height:16px; }
 		.entrylist .entrylist_date .date_text { color:#999; }
@@ -59,20 +72,28 @@
 		.entrylist .entrylist_hit { text-align:center;  }
 		.entrylist .entrylist_execute { text-align:center; padding-left:10px; padding-right:10px;  }
 			.entrylist .entrylist_execute .tools { float:left; }
-			.entrylist .entrylist_execute .trash { float:right; }
+			.entrylist .entrylist_execute .more { float:right; }
+		
+		.entrylist .entry_preview { display:none; }
+		.entrylist .entry_preview_detail { border:3px solid #ccc; border-top:0; }
 
 	.entrylist .footers	{ }
-		.entrylist .footers .select { float:left; width:50px; text-align:center; }
-		.entrylist .footers .action { float:left; padding-top:4px; color:#707070; font-size:11px; padding-left:5px; }
-			.entrylist .footers .action .sep { color:#d0d0d0; }
-			.entrylist .footers .action a { color:#707070; text-decoration:none; }
-			.entrylist .footers .action a:hover { text-decoration:underline; }		
-			
+		.entrylist .footers .select { float:left; width:56px; text-align:center; padding-top:4px; }
+		.entrylist .footers .action { float:left; padding-top:4px; color:#707070; font-size:12px; padding-left:5px; }
+			.entrylist .footers .action select	{ margin-left:5px; margin-right:3px; font-size:12px; }
+			.entrylist .footers .action select optgroup { font-weight:bold; font-style:normal }
+			.entrylist .footers .action select option { font-weight:normal; }
+
+		.entrylist .footers .action a { color:#707070; text-decoration:none; }
 		
 	/* hide */
 		.entrylist .datas .list_item_hide,
-		.bloglist .datas .list_item_hide		{ background:url(../images/admin/bg_hide_list.gif) repeat-x #f8f8f8; color:#aaa; }
-			
+		.bloglist .datas .list_item_hide		{ background:#f8f8f8; color:#aaa; }
+		
+		.entrylist .datas .list_item_hide td {  border-top:3px solid #f8f8f8; padding-bottom:3px; }
+			.entrylist .datas .list_item_hide td.entrylist_select { border-left:3px solid #f8f8f8; }
+			.entrylist .datas .list_item_hide td.entrylist_execute { border-right:3px solid #f8f8f8; }	
+
 			.entrylist .datas .list_item_hide a,
 			.bloglist .datas .list_item_hide a { color:#aaa; }
 			
@@ -90,6 +111,12 @@
 			.entrylist .datas .list_item_hide .entrylist_rank .rank3,
 			.entrylist .datas .list_item_hide .entrylist_rank .rank4,
 			.entrylist .datas .list_item_hide .entrylist_rank .rank5 { color:#aaa; font-weight:normal; }
+
+	/* use */
+
+	.entrylist .datas .list_use td { border-top:3px solid #F3FFCD; padding-bottom:3px; }
+	.entrylist .datas .list_use td.entrylist_select { border-left:3px solid #F3FFCD; }
+	.entrylist .datas .list_use td.entrylist_execute { border-right:3px solid #F3FFCD; }	
 
 	/* */
 	.read_item { margin-top:14px; }
@@ -128,3 +155,19 @@
 			
 			.read_item .recent_posts { margin-top:10px; }
 				.read_item .recent_posts h2 { font-size:11px; }
+
+	/* previe */
+
+	#entry_preview_wrap {
+		border-top:1px solid #ddd;
+	}
+
+	#entry_preview_data	{
+		padding:10px;
+		line-height:18px;
+		font-size:12px;
+	}
+
+	#entry_preview_button_wrap {
+		text-align:center; padding-top:10px; padding-bottom:10px; border-top:1px solid #eee;
+	}

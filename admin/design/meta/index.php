@@ -24,8 +24,6 @@
 		$xmls->open($xml);
 	}
 
-
-
 	$pageCount = 15; // 페이지갯수
 	$page = isset($_GET['page']) ? $_GET['page'] : 1;
 	if(!isset($page) || empty($page)) $page = 1;

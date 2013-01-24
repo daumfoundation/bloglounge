@@ -78,7 +78,7 @@
 				}
 			}
 
-			$medias = $this->detectMediaAndSave( $item['permalink'], stripslashes($item['description']), $limit );
+			$medias = $this->detectMediaAndSave( stripslashes($item['description']), $limit );
 			if(count($medias['images']) == 0 && count($medias['movies']) == 0) {
 				return false;
 			} 
@@ -110,7 +110,7 @@
 			$db->execute('DELETE FROM '.$database['prefix'].'Medias WHERE feeditem='.$id);
 		}
 
-		function getThumbnail($permalink, $imageURL) {
+		function getThumbnail($imageURL, $width = 150, $height = 150, $outputPath = '', $outputFilename = '', $resizeType = 'resize') {
 			$result = array(null, null);
 			if(empty($imageURL)) return $result;
 
@@ -120,25 +120,69 @@
 				return false;
 			if (!$imageSrc = imagecreatefromstring($cont))
 				return false;	
-			
-			$w = 150;
-			$h = 150;
-			$org_w = imagesx($imageSrc);
-			$org_h = imagesy($imageSrc);
 
-			$imageDes = imagecreatetruecolor($w, $h);
+			if(empty($outputPath)) {
+				$outputPath = isset($this->config['outputPath'])?$this->config['outputPath']:$outputPath;
+			}
 
-			if($org_w < $org_h) {
-				$temp = $h;
-				$h = $temp * ($org_h / $org_w);
-			} else {
-				$temp = $w;
-				$w = $temp * ($org_w / $org_h);
+			if(empty($outputFilename)) {
+				$outputFilename = isset($this->config['filename'])?$this->config['filename']:$outputFilename;
 			}
 			
+			$w_fix = $w = $width;
+			$h_fix = $h = $height;
+			$org_w = imagesx($imageSrc);
+			$org_h = imagesy($imageSrc);
+			
+			$x = 0;
+			$y = 0;
+			$org_x = 0;
+			$org_y = 0;
+
+			$imageDes = imagecreatetruecolor($w, $h);
+			
+			switch($resizeType) {	
+				case 'crop':
+					if($h > $org_h) {
+						$org_h = round($h * ($org_w / $w));
+					} else {
+						$h = round($org_h * ($w / $org_w));
+					}
+				break;
+				case 'cropCenter':
+					if($h > $org_h) {
+						$org_h = round($h * ($org_w / $w));
+					} else {
+						$h = round($org_h * ($w / $org_w));
+					}
+					if($w > $org_w) {
+						$org_w = round($w * ($org_h / $h));
+					} else {
+						$w = round($org_w * ($h / $org_h));
+					}
+			
+					$x = round(($w_fix / 2) - ($w / 2));
+					$y = round(($h_fix / 2) - ($h / 2));
+					
+				break;
+				case 'resizeBaseWidth':
+					$h = $w * ($org_h / $org_w);
+				break;
+				case 'resize':
+				default:
+					if($org_w < $org_h) {
+						$temp = $h;
+						$h = $temp * ($org_h / $org_w);
+					} else {
+						$temp = $w;
+						$w = $temp * ($org_w / $org_h);
+					}
+				break;
+			}
+
 			if(!imagecopyresampled(
 			  $imageDes, $imageSrc,             // destination, source
-			  0, 0, 0, 0,           // dstX, dstY, srcX, srcY
+			  $x, $y, $org_x, $org_y,           // dstX, dstY, srcX, srcY
 			  $w, $h,				// dstW, dstH
 			  $org_w, $org_h)) {    // srcW, srcH
 			  return false;
@@ -147,19 +191,19 @@
 			imagedestroy($imageSrc);
 			imageinterlace($imageDes);
 
-			$filename = (isset($this->config['filename']) && !empty($this->config['filename'])) ? $this->config['filename'] : 't_'.md5($permalink);
-			if (!isset($this->config['outputPath']) || empty($this->config['outputPath']) || !func::mkpath($this->config['outputPath']))
+			$filename = !empty($outputFilename) ? $outputFilename : 't_'.md5(mktime());
+			if (empty($outputPath) || !func::mkpath($outputPath))
 				return false;
 
 			$supportedTypes = $this->getSupportedImageTypes();
 			if (in_array('jpg', $supportedTypes)) {
-				$result['fullpath'] = $this->config['outputPath'].'/'.$filename.'.jpg';
+				$result['fullpath'] = $outputPath.'/'.$filename.'.jpg';
 				imagejpeg($imageDes, $result['fullpath'], 100);
 			} else if (in_array('gif', $supportedTypes)) {
-				$result['fullpath'] = $this->config['outputPath'].'/'.$filename.'.gif';
+				$result['fullpath'] = $outputPath.'/'.$filename.'.gif';
 				imagegif($imageDes, $result['fullpath']);
 			} else if (in_array('png', $supportedTypes)) {
-				$result['fullpath'] = $this->config['outputPath'].'/'.$filename.'.png';
+				$result['fullpath'] = $outputPath.'/'.$filename.'.png';
 				imagepng($imageDes, $result['fullpath']);
 			} else {
 				imagedestroy($imageDes);
@@ -172,7 +216,7 @@
 			return array('filename'=>$result, 'source'=>$imageURL, 'width'=>$org_w, 'height'=>$org_h);
 		}
 
-		function detectMediaAndSave($permalink, $content, $limit = -1) {
+		function detectMediaAndSave($content, $limit = -1) {
 			$result = array();
 			$result['images'] = array();
 			$result['movies'] = array();
@@ -185,8 +229,8 @@
 					}
 					for($i=0;$i<$limit;$i++) {
 						$item = $images[$i];					
-						$this->set('filename','i_' . md5($permalink . $i));
-						$datas = $this->getThumbnail($permalink,$item[0]);
+						$this->set('filename','i_' . md5(mktime() . $i));
+						$datas = $this->getThumbnail($item[0]);
 						array_push($result['images'], $datas);
 					}
 				}
@@ -194,8 +238,8 @@
 
 			if($movies = $this->detectMovieIMGsrc($content)) {
 				foreach($movies as $movie) {
-					$this->set('filename', 'm_' . md5($permalink . $movie['url']));
-					$datas = $this->getThumbnail($permalink, $movie['url']);
+					$this->set('filename', 'm_' . md5(mktime() . $movie['url']));
+					$datas = $this->getThumbnail($movie['url']);
 					$datas['via'] = $movie['via'];
 					array_push($result['movies'], $datas);
 				}

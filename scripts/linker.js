@@ -18,7 +18,7 @@
 		  success: function(msg){		
 			error = $("response error", msg).text();
 			if(error == "0") {
-				boomImageSet(itemId,direction, $("response message", msg).text());
+				boomImageSet(itemId,direction, $("response message", msg).text(), $("response boom_count", msg).text());
 			} else {
 				alert($("response message", msg).text());
 			}
@@ -30,12 +30,13 @@
 
 	};
 
-	function boomImageSet(itemId, direction, classname) {
+	function boomImageSet(itemId, direction, classname, boomCount) {
 		if(typeof classname == "undefined") return false;
 
 		try {
 			var bu = $('#boomUp'+itemId);
 			var bd = $('#boomDown'+itemId);
+			var bc = $('#boomCount'+itemId);
 
 			if (direction == 'down') {
 				bd.removeClass('isntBoomedDown');		
@@ -48,6 +49,8 @@
 
 				bu.addClass(classname);
 			}
+
+			bc.text( boomCount);
 		} catch (e) { };
 	};
 

@@ -22,6 +22,7 @@
 				if (Validator::getBool(Settings::get('useRssOut'))) {
 					requireComponent('Bloglounge.Data.RSSOut');
 					RSSOut::refresh();
+					RSSOut::refresh('focus');
 				}
 			}
 		
@@ -101,12 +102,28 @@
 
 ?>
 	<script type="text/javascript">
-		var is_checked = false;
-		function toggleCheckAll(className) {
-			is_checked = !is_checked;
+		function toggleCheckAll(obj, className) {
+			var is_checked = obj.checked;
 			$("."+className).each( function() {
 					this.checked = is_checked;
 			});
+		}
+
+		function changeAction() {
+			var list = $("#action_list");
+			var now = $(list.attr('options')[list.attr('selectedIndex')]);						
+			var value = now.val();
+			switch(now.attr('class')) {
+				case 'visibility_action':
+					changeAllVisibility('postid', value);
+				break;
+				case 'category_action':
+					changeAllCategory('postid', value, now.text());
+				break;
+				case 'delete_action':
+					deleteAllItem('postid');
+				break;
+			}
 		}
 
 		function setFocus(id) {
@@ -128,6 +145,70 @@
 						$("#focusImage" + id).attr('src', "<?php echo $service['path'];?>/images/admin/bt_focus_on.png");
 					} else {
 						$("#focusImage" + id).attr('src', "<?php echo $service['path'];?>/images/admin/bt_focus_off.png");
+					}
+				} else {
+					alert($("response message", msg).text());
+				}
+			  },
+			  error: function(msg) {
+				 alert('unknown error');
+			  }
+			});
+		}
+
+		function changeCategory(id, value, text) {
+			$.ajax({
+			  type: "POST",
+			  url: _path +'/service/entry/category.php',
+			  data: 'id=' + id + "&value=" + encodeURIComponent(value),
+			  dataType: 'xml',
+			  success: function(msg){		
+				error = $("response error", msg).text();
+				if(error == "0") {
+					if(value == 0) {
+						$("#entryCategory"+id).html('<span class="empty">' + text + '</span>');
+					} else {
+						$("#entryCategory"+id).text(text);
+					}
+				} else {
+					alert($("response message", msg).text());
+				}
+			  },
+			  error: function(msg) {
+				 alert('unknown error');
+			  }
+			});
+		}
+
+		function changeAllCategory(className, value, text) {	
+			var ids = '';
+			$("."+className).each( function() {
+					if(this.checked) {
+						ids += $(this).val() + ',';
+					}
+			});
+
+			if(ids == '') {
+				return false;
+			}		
+
+			$.ajax({
+			  type: "POST",
+			  url: _path +'/service/entry/category.php',
+			  data: 'id=' + ids + "&value=" + encodeURIComponent(value),
+			  dataType: 'xml',
+			  success: function(msg){		
+				error = $("response error", msg).text();
+				if(error == "0") {		
+					ids = ids.split(',');
+					for(i=0;i<ids.length;i++) {
+						id = ids[i];
+						if(id=='') continue;
+						if(value == 0) {
+							$("#entryCategory"+id).html('<span class="empty">' + text + '</span>');
+						} else {
+							$("#entryCategory"+id).text(text);
+						}
 					}
 				} else {
 					alert($("response message", msg).text());
@@ -271,29 +352,49 @@
 				});
 		}
 
-		function showEntryView(id, width, height) {
-			try {
-				var isDialogAlreadyExists = ($('#entryDetail').length==0) ? false : true;
+		function showEntryView(id) {
+				var height = 0;
 				
-				if (!isDialogAlreadyExists) {
-						$(document.body).append($("<div>").attr('id', 'entryDetail').css ( {
-							"width":width+"px",
-							"height":height+"px"
-						} ).addClass('adminModal'));
-						
-						$('<iframe frameborder="0" scrolling="no">').attr('id', 'entryDetailFrame').css( {
-							"width":width+"px",
-							"height":height+"px"
-						}).addClass('adminModalFrame').appendTo('#entryDetail'); 
+				if($("#entryPreviewDetail" + id).length==0) {
+					$("#entryPreview" + id + " td").append($("<div>").attr('id', 'entryPreviewDetail' + id).css ( {
+						"width":"100%",
+						"height":height+"px"
+					} )).addClass('entry_preview_detail');
+					
+					$('<iframe frameborder="0" scrolling="no">').attr('id', 'entryPreviewDetailFrame' + id).css( {
+						"width":"100%",
+						"height":height+"px"
+					}).addClass('entry_preview_detail_frame').appendTo('#entryPreviewDetail' + id); 
+
+					$('#entryPreviewDetailFrame' + id).attr('src', "./view/?id="+id).css('height', height + 'px');
+				} 
+
+				if($("#entryPreview" + id).css('display') == 'none') {		
+					$("#icon_view_more_"+id).attr('src',"<?php echo $service['path'];?>/images/admin/bt_view_more_hide.gif");
+					$("#entryPreview" + id).show();
+					$("#list_item_" + id).addClass('show_preview');
+				} else {
+					$("#icon_view_more_"+id).attr('src',"<?php echo $service['path'];?>/images/admin/bt_view_more.gif");
+					$("#entryPreview" + id).hide();	
+					$("#list_item_" + id).removeClass('show_preview');
 				}
-				$('#entryDetailFrame').attr('src', "./view/?id="+id).css('height', height + 'px');
-				showModal('#entryDetail',{onShow:fnModalCenter});		
-
-			} catch (e) {
-				window.open('./view/?id='+id, 'entryDetail', 'width='+width+', height='+height+', scrollbars=1, status=0, resizable=1');
-			}
 		}
+		
+		function hideEntryView(id) {
+			$("#icon_view_more_"+id).attr('src',"<?php echo $service['path'];?>/images/admin/bt_view_more.gif");
+			$("#entryPreview" + id).hide();	
+			$("#list_item_" + id).removeClass('show_preview');
 
+			if(typeof(parent)!='undefined')
+				$(parent.window).scrollTop(0);
+			else 
+				$(window).scrollTop(0);
+		}		
+		
+		function resizeEntryView(id, height) {
+			$("#entryPreviewDetail" + id).height(height);
+			$("#entryPreviewDetailFrame" + id).height(height);
+		}
 <?php
 	if(!empty($read)) {
 ?>
@@ -495,9 +596,7 @@
 		foreach($posts as $post) {		
 			
 			if(!isset($post['category'])) {
-			
 				$post['category'] = 0;
-			
 			}
 			
 			$data = array();
@@ -531,7 +630,7 @@
 			$content = ob_get_contents();
 			ob_end_clean();
 
-			array_push($data['datas'], array('class'=>'entrylist_category','data'=> $content ));
+			array_push($data['datas'], array('id'=>'entryCategory'.$post['id'],'class'=>'entrylist_category','data'=> $content ));
 			
 			// 글 제목
 			ob_start();
@@ -596,10 +695,10 @@
 			ob_start();
 ?>
 				<div class="tools">
-					<a href="#" onclick="changeVisibility(<?php echo $post['id'];?>, 'n'); return false;"><img id="lockImage<?php echo $post['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_lock_<?php echo $post['visibility']=='n'?'on':'off';?>.gif" alt="비공개" /></a><a href="#" onclick="changeVisibility(<?php echo $post['id'];?>, 'y'); return false;"><img id="unlockImage<?php echo $post['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_unlock_<?php echo $post['visibility']=='y'?'on':'off';?>.gif" alt="공개" /></a> <a href="#" onclick="showEntryView(<?php echo $post['id'];?>,800,600); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_view.gif" alt="미리보기.." /></a>
+					<a href="#" onclick="changeVisibility(<?php echo $post['id'];?>, 'n'); return false;"><img id="lockImage<?php echo $post['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_lock_<?php echo $post['visibility']=='n'?'on':'off';?>.gif" alt="<?php echo _t('비공개');?>" /></a><a href="#" onclick="changeVisibility(<?php echo $post['id'];?>, 'y'); return false;"><img id="unlockImage<?php echo $post['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_unlock_<?php echo $post['visibility']=='y'?'on':'off';?>.gif" alt="<?php echo _t('공개');?>" /></a> <a href="#" onclick="deleteItem(<?php echo $post['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_trash.gif" alt="<?php echo _t('휴지통으로');?>" /></a>
 				</div>
-				<div class="trash">				
-					<a href="#" onclick="deleteItem(<?php echo $post['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_trash.gif" alt="휴지통으로" /></a>
+				<div class="more">				
+					<a href="#" onclick="showEntryView(<?php echo $post['id'];?>); return false;"><img id="icon_view_more_<?php echo $post['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_view_more.gif" alt="<?php _t('내용 미리보기');?>" /></a>
 				</div>
 				<div class="clear"></div>
 <?php
@@ -610,19 +709,52 @@
 			array_push($data['datas'], array('class'=>'entrylist_execute','data'=> $content ));
 			
 			array_push($datas, $data);
+
+			// 내용 미리보기
+			array_push($datas, array('empty'=>true, 'id'=>'entryPreview'.$post['id'],'class'=>'entry_preview'));
+
 		}
 
 	} else {
 			array_push( $datas, array( 'class'=>"list_empty", 'datas'=>array(array('data'=>empty($keyword)?_t('수집된 글이 없습니다.'):_t('검색된 글이 없습니다.')) )) );
 	}
+	ob_start();
+?>
+			<select id="action_list" align="absmiddle">
+				<option class="default" value="default"><?php echo _t('어떻게 하시겠습니까?');?></option>
+				<optgroup class="visibility" label="<?php echo _t('공개여부');?>">
+					<option class="visibility_action" value="y"><?php echo _t('공개합니다.');?></option>	
+					<option class="visibility_action" value="n"><?php echo _t('비공개합니다.');?></option>
+				</optgroup>		
+				<optgroup class="category" label="<?php echo _t('분류변경');?>">
+<?php
+	foreach($categoryList as $category) {
+?>
+					<option class="category_action" value="<?php echo $category['id'];?>"><?php echo $category['name'];?></option>
+<?php
+	}
+?>
+				</optgroup>		
+				<optgroup class="delete" label="<?php echo _t('삭제');?>">
+					<option class="delete_action" value="trash"><?php echo _t('휴지통으로 보냅니다.');?></option>
+				</optgroup>
+			</select>
+
+			<a href="#" onclick="changeAction(); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_apply_select.gif" alt="<?php echo _t('적용');?>" align="top" /></a>
+<?php
+	$select = ob_get_contents();
+	ob_end_clean();
 
 	ob_start();
 ?>
 		<div class="select">
-			<a href="#" onclick="toggleCheckAll('postid'); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_arrow.gif" /></a>
+			<input type="checkbox" onclick="toggleCheckAll(this,'postid');" />
 		</div>
 		<div class="action">
+			<!--
 			<a href="#" onclick="changeAllVisibility('postid', 'y'); return false;"><?php echo _t('공개');?></a> <span class="sep">|</span> <a href="#" onclick="changeAllVisibility('postid', 'n'); return false;"><?php echo _t('비공개');?></a> <span class="sep">|</span> <strong><a href="#" onclick="deleteAllItem('postid'); return false;"><?php echo _t('삭제');?></a></strong>
+			-->
+			<?php echo _f('선택한 글을 %1', $select);?>
 		</div>				
 		<div class="clear"></div>
 <?php

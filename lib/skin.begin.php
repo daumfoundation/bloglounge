@@ -28,11 +28,15 @@
 	$skin->replace('base_url', empty($service['path'])?'/':$service['path']);
 	$skin->replace('index_url', empty($service['path'])?'':$service['path']);
 	$skin->replace('rss_url', $service['path'].'/rss');
+	$skin->replace('focus_rss_url', $service['path'].'/rss/focus');
+
 	$skin->replace('base_domain', $_SERVER['HTTP_HOST'].(($service['path']=='/')?'':$service['path']));
 	$skin->replace('bloglounge_name', BLOGLOUNGE);
 	$skin->replace('bloglounge_version', BLOGLOUNGE_NAME);
 
 	$skin->replace('random_blog', $service['path'] . '/random');
+
+	$skin->replace('position', empty($accessInfo['controller'])?'index':$accessInfo['controller']);
 
 	// ** 갯수 정보
 	$skin->replace('feed_count', Feed::getFeedCount());
@@ -122,19 +126,38 @@
 
 	// 포커스 : ncloud	
 	
+	requireComponent('LZ.PHP.Media');
+
 	$src_focuses = $skin->cutSkinTag('focus');
 	$result = FeedItem::getRecentFocusFeedItems($skinConfig->focusList);
 	if(count($result) > 0) {	
 		$s_focus_rep = '';
 		$src_focus_rep = $skin->cutSkinTag('focus_rep');
 
-		foreach($result as $item) {		
-			$sp_focus = $skin->parseTag('focus_url', htmlspecialchars($item['permalink']), $src_focus_rep);
+		foreach($result as $item) {	
+			$item['thumbnail'] = '';
+			if($media = Media::getMedia($item['thumbnailId'])) {
+				$item['thumbnail'] = $media['thumbnail'];	
+			}
+			$src_thumbnail = $skin->cutSkinTag('cond_focus_thumbnail');
+			$thumbnailFile = Media::getMediaFile($item['thumbnail']);
+
+			if(!empty($thumbnailFile)) {
+				$s_thumbnail = (!Validator::is_empty($thumbnailFile)) ? $skin->parseTag('focus_thumbnail', $thumbnailFile, $src_thumbnail) : '';
+				$sp_focus = $skin->dressOn('cond_focus_thumbnail', $src_thumbnail, $s_thumbnail, $src_focus_rep);		
+				$sp_focus = $skin->parseTag('focus_thumbnail_exist', 'focus_thumbnail_exist', $sp_focus);
+			} else {
+				$sp_focus = $skin->dressOn('cond_focus_thumbnail', $src_thumbnail, '', $src_focus_rep);
+				$sp_focus = $skin->parseTag('focus_thumbnail_exist', 'focus_thumbnail_nonexistence', $sp_focus);
+			}
+
+			$sp_focus = $skin->parseTag('focus_url', htmlspecialchars($item['permalink']), $sp_focus);
 			$sp_focus = $skin->parseTag('focus_link_url', $service['path'].'/go/'.$item['id'], $sp_focus);
 			$sp_focus = $skin->parseTag('focus_title', UTF8::clear(UTF8::lessenAsByte(func::stripHTML($item['title']),$skinConfig->focusTitleLength)), $sp_focus);		
 
-			$sp_focus = $skin->parseTag('focus_desc', UTF8::clear(UTF8::lessenAsByte($item['description'],$skinConfig->focusDescLength)), $sp_focus);
+			$sp_focus = $skin->parseTag('focus_description', UTF8::clear(UTF8::lessenAsByte(func::htmltrim(func::stripHTML($item['description'])),$skinConfig->focusDescLength)), $sp_focus);
 			$sp_focus = $skin->parseTag('focus_author', UTF8::clear($item['author']), $sp_focus);
+			$sp_focus = $skin->parseTag('focus_date', (Validator::is_digit($item['written']) ? date('Y-m-d', $item['written']) : $item['written']), $sp_focus);
 
 			$s_focus_rep .= $sp_focus;
 			$sp_focus = '';
@@ -155,10 +178,31 @@
 		$s_booms_rep = '';
 		$src_booms_rep = $skin->cutSkinTag('boom_rep');
 
-		foreach($result as $item) {
-			$sp_booms = $skin->parseTag('boom_url', htmlspecialchars($item['permalink']), $src_booms_rep);		
+		foreach($result as $item) {		
+			$item['thumbnail'] = '';
+			if($media = Media::getMedia($item['thumbnailId'])) {
+				$item['thumbnail'] = $media['thumbnail'];	
+			}
+			$src_thumbnail = $skin->cutSkinTag('cond_boom_thumbnail');
+			$thumbnailFile = Media::getMediaFile($item['thumbnail']);
+
+			if(!empty($thumbnailFile)) {
+				$s_thumbnail = (!Validator::is_empty($thumbnailFile)) ? $skin->parseTag('boom_thumbnail', $thumbnailFile, $src_thumbnail) : '';
+				$sp_booms = $skin->dressOn('cond_boom_thumbnail', $src_thumbnail, $s_thumbnail, $src_booms_rep);		
+				$sp_booms = $skin->parseTag('boom_thumbnail_exist', 'boom_thumbnail_exist', $sp_booms);
+			} else {
+				$sp_booms = $skin->dressOn('cond_boom_thumbnail', $src_thumbnail, '', $src_booms_rep);
+				$sp_booms = $skin->parseTag('boom_thumbnail_exist', 'boom_thumbnail_nonexistence', $sp_booms);
+			}
+
+			$sp_booms = $skin->parseTag('boom_url', htmlspecialchars($item['permalink']), $sp_booms);		
 			$sp_booms = $skin->parseTag('boom_link_url', $service['path'].'/go/'.$item['id'] , $sp_booms);
 			$sp_booms = $skin->parseTag('boom_title', UTF8::clear(UTF8::lessenAsByte(func::stripHTML($item['title']), $skinConfig->boomTitleLength)), $sp_booms);
+
+			$sp_booms = $skin->parseTag('boom_description', UTF8::clear(UTF8::lessenAsByte(func::htmltrim(func::stripHTML($item['description'])),$skinConfig->boomDescLength)), $sp_booms);
+			$sp_booms = $skin->parseTag('boom_author', UTF8::clear($item['author']), $sp_booms);
+			$sp_booms = $skin->parseTag('boom_date', (Validator::is_digit($item['written']) ? date('Y-m-d', $item['written']) : $item['written']), $sp_booms);
+
 			$s_booms_rep .= $sp_booms;
 			$sp_booms = '';
 		}		

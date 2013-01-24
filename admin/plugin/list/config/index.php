@@ -78,7 +78,8 @@
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();
-				if(error == "0") {
+				if(error == "0") {					
+					parent.addMessage("<?php echo _t('플러그인설정을 수정하였습니다.');?>");
 					parent.hidePluginConfig('<?php echo $pluginName;?>');
 				} else {
 					alert($("response message", msg).text());

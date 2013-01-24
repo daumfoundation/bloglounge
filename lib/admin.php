@@ -164,7 +164,7 @@
 			<tr>
 				<td colspan="<?php echo count($headers);?>">			
 <?php
-		if(isset($footers)) {
+		if(isset($footers) && !empty($footers)) {
 				echo $footers;
 		} else {
 				echo '&nbsp';

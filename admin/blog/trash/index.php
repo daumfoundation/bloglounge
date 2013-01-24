@@ -176,7 +176,11 @@
 			$data['id'] = 'list_item_'.$post['id'];
 			$data['class'] = ($post['visibility']=='n'?'list_item_hide':'').($post['id']==$read?' list_item_select':'');
 			
-			$data['datas'] = array();
+			$data['datas'] = array();			
+			
+			if(!isset($post['category'])) {
+				$post['category'] = 0;
+			}
 			
 			// 글 선택
 			array_push($data['datas'], array('class'=>'entrylist_select','data'=> '<input type="checkbox" class="postid" value="'.$post['id'].'" />' ));

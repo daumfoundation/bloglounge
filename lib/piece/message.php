@@ -67,6 +67,8 @@
 				$src_condSearchDate = $skin->cutSkinTag('cond_search_date');			
 
 				$sp_date = $skin->parseTagWithArgument('search_date', 'date', "#1,$searchExtraValue", $src_condSearchDate, 'Y-m-d');
+				$sp_date = $skin->parseTag('search_count', $totalFeedItems, $sp_date);
+
 				$src_condMessage = $skin->dressOn('cond_search_date', $src_condSearchDate, $sp_date, $src_condMessage);
 				$src_condMessage = $event->on('Text.searchDate', $src_condMessage);
 

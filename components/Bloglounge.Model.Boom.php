@@ -104,6 +104,15 @@
 			return $db->queryCell('SELECT userid FROM '.$database['prefix'].'Booms WHERE type="down" AND feeditem=' . $itemId . ' AND '.$type.'="' . $value . '"')!=NULL;
 		}
 
+		function getBoomCount($itemId) {
+			global $database, $db;
+
+			if (list($boomUp,$boomDown) = $db->pick('SELECT boomUp, boomDown FROM '.$database['prefix'].'FeedItems WHERE id="'.$itemId.'"')) {
+				return array($boomUp,$boomDown,$boomUp-$boomDown);
+			}
+			return false;
+		}
+
 		function getRank($itemId) {
 			global $database, $db;
 

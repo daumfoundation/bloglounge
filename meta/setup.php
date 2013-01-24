@@ -181,7 +181,8 @@
 					  `click` int(11) unsigned NOT NULL default '0',
 					  `boomUp` int(11) NOT NULL default '0',
 					  `boomDown` int(11) NOT NULL default '0',
-					  `visibility` enum('y','n','d') default 'y',
+					  `visibility` enum('y','n','d') default 'y',	
+					  `feedVisibility` enum('y','n','d') default 'y',
 					  `autoUpdate` enum('y','n') NOT NULL default 'y',
 					  `allowRedistribute` enum('y','n') NOT NULL default 'y',
 					  `thumbnailId` int(11) NOT NULL default '0',
@@ -325,7 +326,6 @@
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('restrictBoom','n');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('restrictJoin','n');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankBy','boom');
-					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankPeriod','6');					
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankLife','30');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('welcomePack','default');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('language','ko');					
@@ -346,6 +346,8 @@
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedTitleLength','40');					
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('boomList','10');	
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('boomTitleLength','40');	
+					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('boomDescLength','100');	
+	
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedListPage','20');	
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedListPageOrder','created');	
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedListPageTitleLength','40');	
@@ -821,9 +823,9 @@
 					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'rankBy'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankBy','boom')");
 					}
-					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'rankPeriod'")) {
+					/*if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'rankPeriod'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankPeriod','6')");
-					}
+					}*/
 					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'rankLife'")) {
 						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('rankLife','30')");
 					}
@@ -896,6 +898,10 @@
 						$db->execute("DELETE FROM {$prefix}SkinSettings WHERE `name` = 'allowHTML'");
 						array_push($checkups, array('success', _t('스킨설정 테이블에서 HTML허용여부 필드를 삭제했습니다.')));
 					}
+					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE name = 'boomDescLength'")) {
+						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('boomDescLength','100')");
+						array_push($checkups, array('success', _t('스킨설정 테이블에 인기글 내용 글수 필드를 생성했습니다.')));
+					}
 					if (!$db->exists("SELECT value FROM {$prefix}SkinSettings WHERE `name` = 'feedListRecentFeedList'")) {
 						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('feedListRecentFeedList','4')");	
 						array_push($checkups, array('success', _t('스킨설정 테이블에서 블로그의 최근 글 개수 필드를 삭제했습니다.')));
@@ -963,6 +969,22 @@
 					if(!$db->exists("SHOW INDEX FROM {$prefix}CategoryRelations WHERE `Key_name` = 'item'")) {
 						$db->execute("ALTER TABLE {$prefix}CategoryRelations ADD INDEX ( `item` )");
 						array_push($checkups, array('success', _t('분류연관 테이블에 아이템 필드를 인덱스로 추가했습니다.')));
+					}
+
+					if (!$db->exists("DESC {$prefix}FeedItems `feedVisibility`")) {  // 0.2.1
+						$db->execute("ALTER TABLE {$prefix}FeedItems ADD `feedVisibility` enum('y','n','d') NOT NULL default 'y' AFTER `visibility`");
+						
+						$result = $db->queryAll("SELECT id,visibility FROM {$prefix}Feeds", MYSQL_ASSOC);							
+						foreach($result as $item) {
+							$db->execute("UPDATE {$prefix}FeedItems SET feedVisibility = '{$item['visibility']}' WHERE feed = {$item['id']}");	
+						}	
+						array_push($checkups, array('success', _t('피드아이템 테이블에 피드공개 필드를 생성했습니다.'))); // 속도 최적화를 위해..
+					}
+					
+					if ($db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'rankPeriod'")) {
+						$db->execute("DELETE FROM {$prefix}Settings WHERE `name` = 'rankPeriod'");	
+						
+						array_push($checkups, array('success', _t('설정 테이블에 인기글 설정시간 값을 삭제했습니다.')));
 					}
 					
 					$result = '';

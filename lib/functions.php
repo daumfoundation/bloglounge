@@ -54,4 +54,10 @@
 		}
 		print "{$var}\n</pre>\n";
 	}
+
+	function debug_log($error) {
+		$fp = fopen(ROOT.'/cache/log.txt','w');
+		fwrite($fp, $error);
+		fclose($fp);
+	}
 ?>

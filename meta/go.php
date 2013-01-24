@@ -12,17 +12,16 @@
 	}
 
 	if(!empty($config->linkskin)) {	
-
 		$skin = new Skin;	
 		$skin->load('link/'.$config->linkskin);
 
 		include ROOT.'/lib/link/skin.begin.php';
 			include ROOT . '/lib/piece/linker.php';	
 		include ROOT.'/lib/link/skin.end.php';
-
 	} else {
 		if(isset($linker_post)) {	
-			header("Location: {$linker_post['permalink']}");
+			// 한글주소 문제없이..
+			header('Location: ' . $linker_post['permalink']);
 		}
 	}
 	

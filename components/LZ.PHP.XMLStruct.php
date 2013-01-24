@@ -45,7 +45,7 @@
 				return null;
 			
 			if (isset($matched['.value']))
-				return $matched['.value'];
+				return str_replace('&amp;','&',$matched['.value']);
 			return null;
 		}
 		
@@ -81,7 +81,10 @@
 			} else {
 				if (substr($xml, 0, 3) == "\xEF\xBB\xBF")
 					$xml = substr($xml, 3);
-			}
+			}			
+			
+			$xml = str_replace('&', '&amp;', $xml); // for parse error code 23 (&)
+
 			$this->nsenabled = $nsenabled;
 			$p = ($nsenabled) ? xml_parser_create_ns() : xml_parser_create();
 			xml_set_object($p, $this);
@@ -140,20 +143,23 @@
 							}
 						}
 					}
-					if (!xml_parse($p, UTF8::correct($chunk, '?'), false)) {
+					$xml = str_replace('&','&amp;',UTF8::correct($chunk, '?'));
+					if (!xml_parse($p, $xml, false)) {
 						fclose($fp);
 						return $this->_error($p);
 					}
 				}
 			} else {
 				while (!feof($fp)) {
-					if (!xml_parse($p, fread($fp, 10240), false)) {
+					$xml = str_replace('&','&amp;',fread($fp, 10240));
+					if (!xml_parse($p, $xml, false)) {
 						fclose($fp);
 						return $this->_error($p);
 					}
 				}
 			}
-			fclose($fp);
+			fclose($fp);	
+			
 			if (!xml_parse($p, '', true))
 				return $this->_error($p);
 			unset($this->_cursor);
@@ -293,14 +299,14 @@
 		function getAttribute($path, $name, $default = null) {
 			$n = &$this->selectNode($path);
 			if (($n !== null) && isset($n['.attributes'][$name]))
-				return $n['.attributes'][$name];
+				return str_replace('&amp;','&',$n['.attributes'][$name]);
 			else
 				return $default;
 		}
 
 		function getValue($path) {
 			$n = &$this->selectNode($path);
-			return (isset($n['.value']) ? $n['.value'] : null);
+			return (isset($n['.value']) ? str_replace('&amp;','&',$n['.value']) : null);
 		}
 		
 		function getNodeCount($path) {

@@ -39,6 +39,12 @@
 					$response['message'] = _t('잘못된 접근입니다.');
 					break;
 				}
+			}	
+			
+			if (Validator::getBool(Settings::get('useRssOut'))) {
+				requireComponent('Bloglounge.Data.RSSOut');
+				RSSOut::refresh();
+				RSSOut::refresh('focus');
 			}
 		}
 	}

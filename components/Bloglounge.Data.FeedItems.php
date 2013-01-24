@@ -204,7 +204,6 @@
 			global $db, $database;
 
 			$page = 1;
-
 			$sQuery = FeedItem::getFeedItemsQuery($searchType, $searchKeyword, $searchExtraValue, $viewDelete, $owner);
 			$written = FeedItem::get($id,'written');
 
@@ -246,12 +245,11 @@
 		
 				$categoryQuery = ' AND c.custom ="y" ';
 		
-			}
- else {
+			} else {
 				$categoryQuery = '';
 			}
 
-			$feedList = $db->queryAll('SELECT i.id, i.feed, i.author, i.permalink, i.title, i.description, i.tags, i.written, i.click, i.thumbnailId, i.visibility, i.boomUp, i.boomDown,  c.category AS category,  i.focus FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id '.$categoryQuery.') '. $sQuery.' ORDER BY i.written DESC LIMIT '.$pageStart.','.$pageCount);
+			$feedList = $db->queryAll('SELECT i.id, i.feed, i.author, i.permalink, i.title, i.description, i.tags, i.written, i.click, i.thumbnailId, i.visibility, i.feedVisibility, i.boomUp, i.boomDown,  c.category AS category,  i.focus FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id '.$categoryQuery.') '. $sQuery.' ORDER BY i.written DESC LIMIT '.$pageStart.','.$pageCount);
 			
 			if($searchType == 'category') {
 				$sQuery = ' LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) ' . $sQuery;
@@ -331,6 +329,7 @@
 						$sQuery .= $bQuery;
 					}
 				}
+			
 			}
 
 
@@ -352,14 +351,14 @@
 				if($viewDelete) {
 					// 공개된 블로그만 뽑기		
 					if(!isAdmin()) {
-						$bQuery = ' WHERE  (i.visibility = "d") AND (f.visibility = "y") ';
+						$bQuery = ' WHERE  (i.visibility = "d") AND (i.feedVisibility = "y") ';
 					} else {
 						$bQuery = ' WHERE  (i.visibility = "d") ';
 					}
 				} else {
 					// 공개된 블로그만 뽑기		
 					if(!isAdmin()) {
-						$bQuery = ' WHERE  (i.visibility = "y") AND (f.visibility = "y") ';
+						$bQuery = ' WHERE  (i.visibility = "y") AND (i.feedVisibility = "y") ';
 					} else {
 						$bQuery = ' WHERE  (i.visibility != "d") ';
 					}
@@ -368,14 +367,14 @@
 				if($viewDelete) {
 					// 공개된 블로그만 뽑기		
 					if(!isAdmin()) {
-						$bQuery = ' WHERE  (i.visibility = "d") AND (f.visibility = "y") AND (f.owner = ' . $owner . ')';
+						$bQuery = ' WHERE  (i.visibility = "d") AND (i.feedVisibility = "y") AND (f.owner = ' . $owner . ')';
 					} else {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (f.owner = ' . $owner . ')';
 					}
 				} else {
 					// 공개된 블로그만 뽑기		
 					if(!isAdmin()) {
-						$bQuery = ' WHERE  (i.visibility = "y") AND (f.visibility = "y") AND (f.owner = ' . $owner . ')';
+						$bQuery = ' WHERE  (i.visibility = "y") AND (i.feedVisibility = "y") AND (f.owner = ' . $owner . ')';
 					} else {
 						$bQuery = ' WHERE  (i.visibility != "d") AND (f.owner = ' . $owner . ')';
 					}
@@ -431,7 +430,7 @@
 
 		function getRecentFocusFeedItems($count) {
 			global $db, $database;
-			return $db->queryAll('SELECT id,permalink,title,description,author,thumbnailId FROM '.$database['prefix'].'FeedItems WHERE focus = "y" AND visibility = "y" ORDER BY written DESC LIMIT '. $count);
+			return $db->queryAll('SELECT id,permalink,title,description,author,thumbnailId,written FROM '.$database['prefix'].'FeedItems WHERE focus = "y" AND visibility = "y" ORDER BY written DESC LIMIT '. $count);
 		}
 
 		function getTopFeedItems($count, $rankBy = 'boom') {		
@@ -448,7 +447,7 @@
 			}
 
 			$qBoom = '';
-			return $db->queryAll('SELECT i.permalink, i.title, i.description FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE f.visibility = "y"  '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
+			return $db->queryAll('SELECT i.permalink, i.title, i.description FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE i.feedVisibility = "y"  '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
 		}	
 		
 		// -- 아래형태로 .. 변경 (추천수) - ((오늘 - 글이 들어온 날)날수 * 100000) // 오늘부터 어제.. 그제.. 그끄저께 순으로 높은 값을 줘서.. 순서를 매긴다. 
@@ -458,7 +457,7 @@
 		function getTopFeedItemsByLastest($count, $rankBy = 'boom') {		
 			global $db, $database;	
 
-			$written = $db->queryCell('SELECT i.written FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE f.visibility = "y" ORDER BY i.written ASC');
+			$written = $db->queryCell('SELECT i.written FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE i.feedVisibility = "y" ORDER BY i.written ASC');
 			if(!$written) $written = 0;
 			$written = date('Ymd', $written);
 
@@ -474,7 +473,7 @@
 				break;
 			}
 			$qBoom = '';
-			return $db->queryAll('SELECT i.id, i.permalink, i.title, i.description FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE f.visibility = "y" '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
+			return $db->queryAll('SELECT i.id, i.permalink, i.title, i.description, i.author, i.thumbnailId, i.written FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE i.feedVisibility = "y" '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
 		}
 	}
 ?>

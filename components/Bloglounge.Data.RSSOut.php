@@ -30,7 +30,7 @@
 			$xml->endAllGroups();
 			$xml->close();
 		}
-		function refresh() {
+		function refresh($type = 'recent') {
 			global $database, $db, $service;
 			requireComponent('LZ.PHP.XMLWriter');		
 
@@ -43,11 +43,16 @@
 			$rssCount = $config->feeditemsOnRss;
 			$myURL = 'http://'.$_SERVER['HTTP_HOST'].$service['path'];
 
-			$xml = new XMLFile($rssDir.'/1.xml');
+			if($type == 'focus') {
+				$xml = new XMLFile($rssDir.'/1_focus.xml');
+			} else {
+				$xml = new XMLFile($rssDir.'/1.xml');
+			}
+
 			$xml->startGroup('rss', array('version'=>'2.0'));
 
 			$xml->startGroup('channel');
-			$xml->write('title', htmlspecialchars($config->title));
+			$xml->write('title', htmlspecialchars($config->title) . ($type=='focus'?' : ' . _t('포커스 목록'):''));
 			$xml->write('link', htmlspecialchars($myURL));
 			$xml->write('description', htmlspecialchars($config->description));
 			$xml->write('language', $config->language);
@@ -65,7 +70,13 @@
 				$xml->endGroup();
 			}
 
-			if ($db->query("SELECT title, permalink, author, description, tags, written FROM {$database['prefix']}FeedItems WHERE allowRedistribute='y' ORDER BY written DESC LIMIT 0,{$rssCount}")) {
+			if($type == 'focus') { 
+				$result = $db->query("SELECT title, permalink, author, description, tags, written FROM {$database['prefix']}FeedItems WHERE allowRedistribute='y' AND focus='y' AND visibility = 'y' ORDER BY written DESC LIMIT 0,{$rssCount}");
+			} else {
+				$result = $db->query("SELECT title, permalink, author, description, tags, written FROM {$database['prefix']}FeedItems WHERE allowRedistribute='y' AND visibility = 'y' ORDER BY written DESC LIMIT 0,{$rssCount}");
+			}
+
+			if ($result) {
 				while ($item = $db->fetch()) {
 					$xml->startGroup('item');
 					$xml->write('title', htmlspecialcharS($item->title));
