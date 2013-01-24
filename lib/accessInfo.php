@@ -14,6 +14,8 @@
 	if(substr($request_uri,0,strlen($path)) == $path) {
 		$request_uri = substr($request_uri,strlen($path));
 	}
+	
+	$request_uri = str_replace('/?', '?', $request_uri);
 
 	$controller = '';
 	if(!empty($request_uri) && ($request_uri != '/')) {
@@ -31,6 +33,10 @@
 		$controller = substr($request_uri, $start, $end);
 	}
 
+	if(strpos($controller,'?') !== false) {
+		$controller = substr($controller,0,strpos($controller,'?'));
+	}
+
 	$action = '';
 	if(!empty($controller)) {
 		$pos = strpos($request_uri, $controller . '/');
@@ -41,6 +47,10 @@
 
 			$action = substr($str, 0, $end);
 		}
+	}
+
+	if(strpos($action,'?') !== false) {
+		$action = substr($action,0,strpos($action,'?'));
 	}
 
 	$value = '';
@@ -55,9 +65,20 @@
 		}
 	}
 
+	if(strpos($value,'?') !== false) {
+		$value = substr($value,0,strpos($value,'?'));
+	}
+
 	$pass = array();
-	if(!empty($controller) && !empty($action) && !empty($value)) {
-		$pos_value = $controller . '/' . $action . '/' . $value . '/';
+	if(!empty($controller)) {
+		$pos_value = $controller;
+		if(!empty($action)) {
+			$pos_value .=  '/' . $action;
+			if(!empty($value)) {
+				$pos_value .=  '/' . $value;
+			}
+		}
+
 		$i = 10; // 무한루프 예방 ( pass 최대 10 )
 		while(--$i>0) {
 			$pos = strpos($request_uri, $pos_value);
@@ -68,7 +89,8 @@
 
 				$v = substr($str, 0, $end);
 				$pos_value .= $v . '/';		
-				
+				if(empty($v)) continue;
+
 				array_push($pass, $v);
 			} else {
 				break;

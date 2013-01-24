@@ -43,10 +43,9 @@
 			if (!preg_match("/^[0-9]+$/", $id)) 
 				return false;
 
-			$db->execute('DELETE FROM '.$database['prefix'].'CategoryRelations WHERE category ="'.$id.'"');
-	
-			$db->execute('DELETE FROM '.$database['prefix'].'TagRelations WHERE item = "'.$id.'" AND type = "category"');
-			return $db->execute('DELETE FROM '.$database['prefix'].'Categories WHERE id="'.$id.'"');
+			return $db->execute('DELETE FROM '.$database['prefix'].'CategoryRelations WHERE category ="'.$id.'"') && 
+			$db->execute('DELETE FROM '.$database['prefix'].'TagRelations WHERE item = "'.$id.'" AND type = "category"') && 
+			$db->execute('DELETE FROM '.$database['prefix'].'Categories WHERE id="'.$id.'"');
 		}
 
 		function edit($id, $name, $filter) {
@@ -75,7 +74,7 @@
 			return $result;
 		}
 		
-		function get($id, $field) {
+		function get($id, $field = '*') {
 			global $database, $db;
 
 			if (empty($id) || !isset($id)) 
@@ -83,7 +82,7 @@
 			if (!preg_match("/^[0-9]+$/", $id)) 
 				return false;
 
-			$result = $db->queryCell('SELECT '.$field.' FROM '.$database['prefix'].'Categories WHERE id="'.$db->escape($id).'"');
+			$result = $db->queryCell('SELECT '.$field.' FROM '.$database['prefix'].'Categories WHERE id="'.$id.'"');
 			return $result;
 		}
 
@@ -95,7 +94,7 @@
 			if (!preg_match("/^[0-9]+$/", $id)) 
 				return false;
 
-			$db->query('SELECT * FROM '.$database['prefix'].'Categories WHERE id="'.$db->escape($id).'"');
+			$db->query('SELECT * FROM '.$database['prefix'].'Categories WHERE id="'.$id.'"');
 			$result = $db->fetchArray();
 			$db->free();
 			return $result;
@@ -113,12 +112,17 @@
 			return $result;
 		}		
 
-		function getAll($itemId) {
+		function getAll($id) {
 			global $database, $db;
-			$db->query('SELECT * FROM '.$database['prefix'].'Categories WHERE id='.$itemId);
+			$db->query('SELECT * FROM '.$database['prefix'].'Categories WHERE id='.$id);
 			return $db->fetchArray();
-		}				
-		
+		}			
+			
+		function getCategoriesAll($fields = 'id, name') {	
+			global $database, $db;
+			return $db->queryAll('SELECT '.$fields.' FROM '.$database['prefix'].'Categories');
+		}
+
 		function getList($count = -1) {		
 			global $db, $database;
 			if($count!=-1) {

@@ -210,7 +210,7 @@
 				
 
 				// 테이블이 존재하는지 검사
-				$check = $db->doesExistTableArray($prefix, explode(',', "{$prefix}Booms,{$prefix}DailyStatistics,{$prefix}DeleteHistory,{$prefix}FeedItems,{$prefix}Feeds,{$prefix}ServiceSettings,{$prefix}Sessions,{$prefix}SessionsData,{$prefix}SessionVisits,{$prefix}Settings,{$prefix}SkinSettings,{$prefix}Users"));
+				$check = $db->doesExistTableArray($prefix, explode(',', "{$prefix}Booms,{$prefix}DailyStatistics,{$prefix}DeleteHistory,{$prefix}Exports,{$prefix}FeedItems,{$prefix}Feeds,{$prefix}ServiceSettings,{$prefix}Sessions,{$prefix}SessionsData,{$prefix}SessionVisits,{$prefix}Settings,{$prefix}SkinSettings,{$prefix}Users"));
 				if ($check['exist'] > 0) {
 					Header("Location: {$path}/setup/?step=" . $IV['type'] . "&error=4" . $redirectValues); 
 					exit;
@@ -260,6 +260,17 @@
 					  `feed` int(11) NOT NULL default '0',
 					  `permalink` TEXT NOT NULL default '',
 					  PRIMARY KEY  (`id`)
+					){$charset};
+					
+					CREATE TABLE `{$prefix}Exports` (
+					  `id` int(11) NOT NULL auto_increment,
+					  `domain` varchar(255) NOT NULL,
+					  `program` varchar(255) NOT NULL,
+					  `settings` TEXT NOT NULL,
+					  `count` int(11) NOT NULL default '0',
+					  `status` ENUM( 'on', 'off' ) NOT NULL default 'off',
+					  PRIMARY KEY  (`id`),
+					  UNIQUE KEY `domain` (`domain`)
 					){$charset};
 
 					CREATE TABLE `{$prefix}FeedItems` (
@@ -475,6 +486,7 @@
 									{$prefix}CategoryRelations,
 									{$prefix}DailyStatistics,
 									{$prefix}DeleteHistory,
+									{$prefix}Exports,
 									{$prefix}FeedItems,
 									{$prefix}Feeds,
 									{$prefix}Medias,
@@ -1128,6 +1140,21 @@
 						array_push($checkups, array('success', _t('설정 테이블에 썸네일 크기 필드를 추가했습니다.')));
 					}	
 
+					if (!$db->doesExistTable("{$prefix}Exports")) {
+						$db->execute("CREATE TABLE `{$prefix}Exports` (
+									  `id` int(11) NOT NULL auto_increment,
+									  `domain` varchar(255) NOT NULL,
+									  `program` varchar(255) NOT NULL,
+									  `settings` TEXT NOT NULL,
+									  `count` int(11) NOT NULL default '0',
+									  `status` ENUM( 'on', 'off' ) NOT NULL default 'off',
+									  PRIMARY KEY  (`id`),
+									  UNIQUE KEY `domain` (`domain`)
+									){$charset};
+						");	
+						array_push($checkups, array('success', _t('익스포트 테이블을 추가했습니다.')));
+					}	
+
 					$result = '';
 					foreach($checkups as $checkup) {
 						$result .= '<li class="'.$checkup[0].'">'.$checkup[1].'</li>';
@@ -1209,7 +1236,8 @@
 									{$database['prefix']}Categories,
 									{$database['prefix']}CategoryRelations,
 									{$database['prefix']}DailyStatistics,
-									{$database['prefix']}DeleteHistory,
+									{$database['prefix']}DeleteHistory,		
+									{$database['prefix']}Exports,
 									{$database['prefix']}FeedItems,
 									{$database['prefix']}Feeds,
 									{$database['prefix']}Medias,

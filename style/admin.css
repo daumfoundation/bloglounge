@@ -193,6 +193,10 @@ img { border:0; }
 	.wrap .borderbox { background:#f6f6f6; border:1px solid #ddd; padding:8px; font-size:11px; color:#888; line-height:16px; margin-top:10px; text-align:center;  }
 		.wrap .borderbox a { color:#666; text-decoration:none; }
 		.wrap .borderbox a:hover { text-decoration:underline; }
+	
+	.wrap .warning_messages_title { font-weight:bold; margin-top:10px; padding-bottom:10px; color:#666; }
+		.wrap .warning_messages_title span { font-weight:normal; }
+	.wrap .warning_messages_wrap { border-top:1px solid #ccc; margin-top:10px; padding-top:2px; line-height:20px; }
 
 .paging { margin:0 auto; margin-bottom:20px; text-align:center; font:12px Tahoma, Gulim, Dutum; }
 	.paging a { color:#888; text-decoration:none; font-weight:bold; padding-left:4px; padding-right:8px; margin-right:4px; border-right:1px solid #ddd; }
@@ -272,7 +276,10 @@ img { border:0; }
 .more_wrap .more { float:right; padding-top:12px; padding-right:10px; font-size:11px; color:#888; }
 	.more_wrap .more a { color:#888; text-decoration:none; }
 	.more_wrap .more a:hover { text-decoration:underline; }
-.title_wrap { margin-top:10px; }
+
+.title_wrap { margin-top:10px; position:relative; }
+	.title_right { position:absolute; top:-8px; right:0px; }
+
 .search_wrap { margin-top:0; }
 	.search_wrap h3 { float:left; margin-top:10px; }
 	.search_wrap .search { float:right; }
@@ -343,7 +350,7 @@ a.microbutton { background:url("../images/admin/bt_micro_button_right.gif") no-r
 a.microbutton[disabled] span { color:#bbb; }
 
 .boldbutton { font-weight:bold; }
-
+a.alertbutton span { color:#FF7200; }
 
 /* updateModal */
 

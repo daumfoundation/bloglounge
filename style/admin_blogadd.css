@@ -15,7 +15,6 @@
 			.add_detail_wrap dl dd.xml_text .point { color:#111; font-weight:normal; }
 			.add_detail_wrap dl dd.url_text .point { color:#111; font-weight:normal; }
 
-
 	.add_detail_wrap .options_wrap { border-top:1px solid #ccc; margin-top:10px; padding-top:4px; }
 		.add_detail_wrap .options_wrap p { margin-bottom:10px; }
 		.add_detail_wrap .options_wrap .help { margin-top:5px; }

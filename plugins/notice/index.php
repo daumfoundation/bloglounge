@@ -190,7 +190,7 @@
 			// 글 실행
 			ob_start();
 ?>
-			<a href="#" class="normalbutton" onclick="deleteItem(<?php echo $post['id'];?>); return false;"><span><?php echo _t('삭제');?></span></a>
+			<a href="#" class="microbutton alertbutton" onclick="deleteItem(<?php echo $post['id'];?>); return false;"><span><?php echo _t('삭제');?></span></a>
 <?php
 
 			$content = ob_get_contents();
@@ -225,7 +225,7 @@
 <div class="wrap">
 	<br />
 	<div class="paging">
-		<?php echo outputPaging($paging, $params);?>
+		<?php echo func::printPaging($paging, $params);?>
 	</div>
 </div>
 <?php

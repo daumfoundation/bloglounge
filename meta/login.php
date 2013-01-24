@@ -17,12 +17,12 @@
 	if (isset($_POST['enci'])) {
 		if (Validator::is_empty($_POST['enci']))
 			$errorMsg = _t('아이디를 입력해주세요');
-		if (Validator::is_empty($_POST['encp']))
+		else if (Validator::is_empty($_POST['encp']))
 			$errorMsg = _t('비밀번호를 입력해주세요');
 	} else if (isset($_POST['useridin'])) { // for none-javascript environment
 		if (Validator::is_empty($_POST['useridin']))
 			$errorMsg = _t('아이디를 입력해주세요');
-		if (Validator::is_empty($_POST['userpwin']))
+		else if (Validator::is_empty($_POST['userpwin']))
 			$errorMsg = _t('비밀번호를 입력해주세요');
 
 		$_POST['enci'] = $_POST['useridin'];

@@ -85,7 +85,7 @@
 					<dd class="text"><?php echo nl2br($xmls->getValue('/skin/information/license[lang()]'));?></dd>
 				</dl>	
 				<div class="tools">
-					<a href="#" class="normalbutton" onclick="saveSkin(''); return false;"><span class="boldbutton"><?php echo _t('스킨설정');?></span></a>
+					<a href="#" class="normalbutton" onclick="saveSkin(''); return false;"><span class="boldbutton"><?php echo _t('사용안함');?></span></a>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -156,7 +156,7 @@
 	<div class="innerline"></div>
 
 	<div class="paging">
-		<?php echo outputPaging($paging);?>
+		<?php echo func::printPaging($paging);?>
 	</div>
 
 </div>

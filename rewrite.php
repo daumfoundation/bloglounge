@@ -31,6 +31,10 @@
 		case 'admin':
 			include_once(ROOT.'/admin/custom/page.php');
 		break;
+		case 'e':
+		case 'export':
+			include_once(ROOT.'/meta/export.php');
+		break;
 		default:
 			// error or custom page »ðÀÔ
 			include_once(ROOT.'/meta/custom.php');

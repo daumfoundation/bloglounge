@@ -184,31 +184,6 @@
 
 		return $content;
 	}
-	
-	function outputPaging($paging, $param = '') {
-			global $accessInfo, $service;
-			$path = $service['path'] . $accessInfo['subpath'];
-			$result = '';
-			if($paging['pagePrev'] != $paging['page']) {
-				$result .= '<a href="'.$path.'/?page='.$paging['pagePrev'].$param.'" class="page_prev">'._t('이전').'</a>';
-			}else {
-				$result .= '<a href="#" class="page_prev page_disable">'._t('이전').'</a>';
-			}
-
-			for ($p=$paging['pageStart']; $p < $paging['pageEnd']+1; $p++) { 	
-				if($p == $paging['page']) {
-					$result .= '<a href="'.$path.'/?page='.$p.$param.'" class="selected">'.$p.'</a>';
-				} else {
-					$result .= '<a href="'.$path.'/?page='.$p.$param.'">'.$p.'</a>';
-				}
-			}
-			if($paging['pageNext'] != $paging['page']) {
-				$result .= '<a href="'.$path.'/?page='.$paging['pageNext'].$param.'" class="page_next">'._t('다음').'</a>';
-			} else {
-				$result .= '<a href="#" class="page_next page_disable">'._t('다음').'</a>';
-			}
-			return $result;
-	}
 
 	function addAppMessage($message) {
 		global $session,$_SESSION;

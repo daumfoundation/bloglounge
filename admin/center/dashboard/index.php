@@ -12,11 +12,12 @@
 		<!-- notice -->
 		<div id="notice_sidebar" class="sidebar_item">
 <?php
-	list($feedItems, $totalFeedItems) = FeedItem::getFeedItems('blogURL','bloglounge.itcanus.net/bloglounge_notice',Feed::blogURL2Id('http://bloglounge.itcanus.net/bloglounge_notice'),1,10);
+	list($feedItems, $totalFeedItems) = FeedItem::getFeedItems('blogURL','itcanus.net/bloglounge_notice',Feed::blogURL2Id('http://itcanus.net/bloglounge_notice'),1,10);
 	if($totalFeedItems==0) { // 등록된 공지사항 피드를 삭제하거나 등록되지 않았을경우 .. 동적으로 읽어 온다.
-		list($status, $feed, $xml) = Feed::getRemoteFeed('http://bloglounge.itcanus.net/bloglounge_notice/rss');
+		list($status, $feed, $xml) = Feed::getRemoteFeed('http://itcanus.net/bloglounge_notice/rss');
 		if($status == 0) {
 			$feedItems = Feed::getFeedItems($xml);
+			if(count($feedItems) > 10) $feedItems = array_slice($feedItems, 0,10);
 			$totalFeedItems = count($feedItems);
 		}
 	}
@@ -49,18 +50,19 @@
 		<!-- new version -->
 		<div id="new_version_sidebar" class="sidebar_item">
 <?php
-	list($feedItems, $totalFeedItems) = FeedItem::getFeedItems('blogURL','bloglounge.itcanus.net/bloglounge_download',Feed::blogURL2Id('http://bloglounge.itcanus.net/bloglounge_download'),1,10);
+	list($feedItems, $totalFeedItems) = FeedItem::getFeedItems('blogURL','itcanus.net/bloglounge_download',Feed::blogURL2Id('http://itcanus.net/bloglounge_download'),1,10);
 	if($totalFeedItems==0) { // 자동등록된 공지사항 피드를 삭제하였을경우 .. 동적으로 읽어 온다.
-		list($status, $feed, $xml) = Feed::getRemoteFeed('http://bloglounge.itcanus.net/bloglounge_download/rss');
+		list($status, $feed, $xml) = Feed::getRemoteFeed('http://itcanus.net/bloglounge_download/rss');
 		if($status == 0) {
 			$feedItems = Feed::getFeedItems($xml);
+			if(count($feedItems) > 10) $feedItems = array_slice($feedItems, 0,10);
 			$totalFeedItems = count($feedItems);
 		}
 	}
 ?>
 		<?php echo drawAdminBoxBegin('new_version');?>
 			<div class="title">
-				<a href="http://bloglounge.itcanus.net/bloglounge_download" target="_blank"><?php echo _t('다운로드');?></a> <span class="subtitle"><?php echo _t('현재버전');?> v<?php echo BLOGLOUNGE_VERSION;?></span>
+				<a href="http://itcanus.net/bloglounge_download" target="_blank"><?php echo _t('다운로드');?></a> <span class="subtitle"><?php echo _t('현재버전');?> v<?php echo BLOGLOUNGE_VERSION;?></span>
 			</div>
 			<div class="line"></div>
 			<div class="data">

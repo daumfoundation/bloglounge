@@ -155,7 +155,7 @@
 	<div class="innerline"></div>
 
 	<div class="paging">
-		<?php echo outputPaging($paging);?>
+		<?php echo func::printPaging($paging);?>
 	</div>
 
 </div>

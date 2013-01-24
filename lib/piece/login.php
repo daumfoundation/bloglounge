@@ -12,17 +12,32 @@
 </head>
 
 <body>
+	<script type="text/javascript">
+		function checkLogin() {
+			if($("#member_id").val()=="") {
+				alert("<?php echo _t('아이디를 입력해주세요');?>");
+				$("#member_id").focus();
+				return false;
+			}
+			if($("#member_password").val()=="") {
+				alert("<?php echo _t('비밀번호를 입력해주세요');?>");
+				$("#member_password").focus();
+				return false;
+			}
+
+			return true;
+		}
 <?php
 	if(!empty($errorMsg)) {
 ?>
-	<script type="text/javascript">
+
 		$(window).ready( function() {
 			alert("<?php echo $errorMsg;?>");
 		});
-	</script>
 <?php
 	}
 ?>
+	</script>
 	<div id="container">
 		<div class="box">
 			<div class="box_l"><div class="box_r"><div class="box_t"><div class="box_b">
@@ -37,7 +52,7 @@
 						
 						<div id="login_wrap">
 							<img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/login_title.gif" alt="<?php echo _t('회원로그인');?>" />
-								<form method="post">
+								<form method="post" onsubmit="return checkLogin();">
 									<table cellspacing="0" cellpadding="0">
 										<tr>
 											<td class="input_td">

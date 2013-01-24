@@ -336,7 +336,9 @@
 
 			<!-- plugin -->
 			<ul id="submenu_plugin" class="submenu_plugin<?php echo $action=='plugin'?' viewed':'';?>">
-				<li class="lastChild <?php echo $value=='pluginlist'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/plugin/list"><?php echo _t("플러그인 목록");?></a></span></li>
+				<li class="<?php echo $value=='pluginlist'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/plugin/list"><?php echo _t("플러그인");?></a></span></li>
+				<li class="sep"></li>
+				<li class="lastChild <?php echo $value=='export'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/plugin/export"><?php echo _t("익스포트");?></a></span></li>
 <?php
 				func::printPluginMenu('plugin',$value);
 ?>
@@ -386,14 +388,14 @@
 <?php
 	if($is_admin) {
 ?>
-					<li><a href="#" onclick="updateAll(); return false;"><?php echo _t('블로그 업데이트');?></a></li>
+					<li><a href="#" onclick="updateAll(); return false;"><?php echo _t('전체 업데이트');?></a></li>
 <?php
 	}
 ?>
 				</ul>
 			</div>
 			<div id="project_link">
-				<a href="http://bloglounge.itcanus.net/" target="_blank"><?php echo _t("블로그라운지");?></a> <span class="sep">|</span> <a href="http://bloglounge.itcanus.net/bloglounge_download"  target="_blank"><?php echo _t("배포페이지");?></a> <span class="sep">|</span> <a href="http://bloglounge.itcanus.net/bloglounge_qna" target="_blank"><?php echo _t("Q&A");?></a>
+				<a href="http://bloglounge.itcanus.net/" target="_blank"><?php echo _t("블로그라운지 홈페이지");?></a>
 			</div>
 			<div class="clear"></div>
 		</div>

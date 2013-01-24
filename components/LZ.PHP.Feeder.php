@@ -124,6 +124,11 @@
 			return $db->fetchArray();
 		}
 
+		function getFeedsAll($fields = 'id, title, blogURL') {	
+			global $database, $db;
+			return $db->queryAll('SELECT '.$fields.' FROM '.$database['prefix'].'Feeds');
+		}
+
 		function getIdList() {	
 			global $database, $db;
 			$ids = array();
@@ -1004,11 +1009,6 @@
 			if (!list($result) = $db->pick('SELECT i.lastUpdate FROM '.$database['prefix'].'Feeds i '.$filter.' ORDER BY i.lastUpdate DESC LIMIT 1'))
 				$result = 0;
 			return $result;
-		}
-
-		function getFeedsAll($fields = 'id, title, blogURL') {	
-			global $database, $db;
-			return $db->queryAll('SELECT '.$fields.' FROM '.$database['prefix'].'Feeds');
 		}
 	}
 ?>

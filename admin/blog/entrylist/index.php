@@ -779,7 +779,7 @@
 <div class="wrap">
 	<br />
 	<div class="paging">
-		<?php echo outputPaging($paging, $params);?>
+		<?php echo func::printPaging($paging, $params);?>
 	</div>
 </div>
 

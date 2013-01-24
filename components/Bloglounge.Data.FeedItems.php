@@ -332,7 +332,12 @@
 					$sQuery =  ' WHERE i.focus = "'.$searchKeyword.'"';				
 			} else if ($searchType=='category') {
 				requireComponent('Bloglounge.Data.Category');
-				$category = Category::getByName($searchKeyword);
+				if(is_numeric($searchKeyword)) {
+					$category = Category::getById($searchKeyword);
+				} else {
+					$category = Category::getByName($searchKeyword);
+				}
+
 				if($category) {
 					$sQuery = ' WHERE c.category = ' . $category['id'];
 				}
@@ -386,14 +391,14 @@
 
 			if(empty($owner)) {
 				if($viewDelete) {
-					// 공개된 블로그만 뽑기		
+					// 공개된 블로그만 뽑기 + 삭제된 글 보이기		
 					if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (i.feedVisibility = "y") ';
 					} else {
 						$bQuery = ' WHERE  (i.visibility = "d") ';
 					}
 				} else {
-					// 공개된 블로그만 뽑기		
+					// 공개된 블로그만 뽑기
 					if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "y") AND (i.feedVisibility = "y") ';
 					} else {

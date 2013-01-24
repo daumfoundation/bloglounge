@@ -26,7 +26,7 @@
 
 			addAppMessage(_t('블로그를 추가했습니다.'));
 
-			if($config->useVerifier && !isAdmin()) {
+			if(Validator::getBool($config->useVerifier) && !isAdmin()) {
 				$targetURL = "http://{$_SERVER['HTTP_HOST']}{$service['path']}/admin/blog/add?feedId={$id}&feedURL=".$_POST['feedURL'].'&verifyMode=true';
 			} else {
 				$targetURL = "http://{$_SERVER['HTTP_HOST']}{$service['path']}/admin/blog/list?id={$id}";
@@ -70,7 +70,13 @@
 		}
 
 		function onFeedCheck() {
+			if($("#feedAddName").val() == "") {
+				alert("<?php echo _t('피드주소를 입력해주세요');?>");
+				$("#feedAddName").focus();
+				return false;
+			}
 			addMessage("<?php echo _t('입력하신 피드를 검사중입니다.');?>");
+			return true;
 		}
 	</script>
 <?php
@@ -166,7 +172,7 @@
 <?php		
 	if(feed::doesExistXmlURL($feed['xmlURL'])) {
 ?>			
-		<div class="options_wrap">
+		<div class="warning_messages_wrap">
 			<br />
 				<?php echo _t('이 블로그는 이미 등록되어 있어 재등록 하실 수 없습니다.');?>		
 			<br /><br />
@@ -217,7 +223,7 @@
 		}
 	} else {
 ?>
-		<div class="options_wrap">
+		<div class="warning_messages_wrap">
 			<br />
 				<?php echo _t('잘못된 피드이거나 피드주소를 찾을 수 없습니다. 올바른 피드주소를 입력해주세요.');?>
 			<br /><br />
@@ -233,9 +239,9 @@
 	} else {
 ?>
 	<div class="wrap add_wrap">
-		<form method="get" onsubmit="onFeedCheck();">
+		<form method="get" onsubmit="return onFeedCheck();">
 			<dl>
-				<dt><label for="feedAddName"><?php echo _t('피드주소 ');?></label></dt>
+				<dt><label for="feedAddName"><?php echo _t('피드주소');?></label></dt>
 				<dd><input id="feedAddName" name="feedURL" type="text" class="input faderInput" /></dd>
 			</dl>			
 			<dl class="comments">

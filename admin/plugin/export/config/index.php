@@ -1,42 +1,47 @@
 <?php
-	// show plugin info
+	// show export info
 	define('ROOT', '../../../..');
 	include ROOT . '/lib/includeForAdmin.php';
 
 	requireAdmin();
-	$pluginName = $_GET['pluginName'];
+	$domainName = $_GET['domainName'];
 
-	if (!is_dir(ROOT . '/plugins/'.$pluginName)) {
-		func::alert(_t('플러그인이 존재하지 않습니다'), 'dialog');
+	requireComponent('Bloglounge.Model.Exports');
+
+	$programName = Export::getProgramNameByDomain($domainName);
+
+	if (!is_dir(ROOT . '/exports/'.$programName)) {
+		func::alert(_t('프로그램이 존재하지 않습니다'), 'dialog');
 	}
 
-	if (!file_exists(ROOT .'/plugins/'.$pluginName.'/index.xml')) {
-		func::alert(_t('플러그인 정보를 찾을 수 없습니다'), 'dialog');
+	if (!file_exists(ROOT .'/exports/'.$programName.'/index.xml')) {
+		func::alert(_t('프로그램 정보를 찾을 수 없습니다'), 'dialog');
 	}
 
 	requireComponent('LZ.PHP.XMLStruct');
 	$xmls = new XMLStruct;
-	if (!$xmls->openFile(ROOT . '/plugins/'.$pluginName.'/index.xml')) {
-		func::alert(_t('플러그인 정보를 읽을 수 없습니다'), 'dialog');
+	if (!$xmls->openFile(ROOT . '/exports/'.$programName.'/index.xml')) {
+		func::alert(_t('프로그램 정보를 읽을 수 없습니다'), 'dialog');
 	}
 
-	$pluginInfo = array();
-	$pluginInfo['name'] = $pluginName;
-	$pluginInfo['title'] = $xmls->getValue('/plugin/information/name[lang()]');
-	$pluginInfo['config'] = $xmls->selectNode('/plugin/config[lang()]');
-	$pluginInfo['description'] = func::filterJavascript($xmls->getValue('/plugin/information/description[lang()]'));
-	$pluginInfo['license'] = func::filterJavascript($xmls->getValue('/plugin/information/license[lang()]'));
-	$pluginInfo['version'] = func::filterJavascript($xmls->getValue('/plugin/information/version'));
-	$pluginInfo['author'] = func::filterJavascript($xmls->getValue('/plugin/information/author[lang()]'));
-	$pluginInfo['email'] = func::filterJavascript($xmls->getAttribute('/plugin/information/author[lang()]', 'email'));
-	$pluginInfo['homepage'] = func::filterJavascript($xmls->getAttribute('/plugin/information/author[lang()]', 'link'));
-	$pluginInfo['status'] = Validator::getBool($db->queryCell("SELECT status FROM {$database['prefix']}Plugins WHERE name='{$pluginName}'"));
+	$exportInfo = array();
+	$exportInfo['domain'] = $domainName;
+	$exportInfo['program'] = $programName;
+	$exportInfo['title'] = $xmls->getValue('/export/information/name[lang()]');
+	$exportInfo['config'] = $xmls->selectNode('/export/config[lang()]');
+	$exportInfo['description'] = func::filterJavascript($xmls->getValue('/export/information/description[lang()]'));
+	$exportInfo['license'] = func::filterJavascript($xmls->getValue('/export/information/license[lang()]'));
+	$exportInfo['version'] = func::filterJavascript($xmls->getValue('/export/information/version'));
+	$exportInfo['author'] = func::filterJavascript($xmls->getValue('/export/information/author[lang()]'));
+	$exportInfo['email'] = func::filterJavascript($xmls->getAttribute('/export/information/author[lang()]', 'email'));
+	$exportInfo['homepage'] = func::filterJavascript($xmls->getAttribute('/export/information/author[lang()]', 'link'));
+	$exportInfo['status'] = Validator::getBool($db->queryCell("SELECT status FROM {$database['prefix']}Exports WHERE domain='{$domainName}'"));
 
-	$pluginInfo['tags'] = array();
-	$sNode = $xmls->selectNode('/plugin/binding');
+	$exportInfo['tags'] = array();
+	$sNode = $xmls->selectNode('/export/binding');
 	if(isset($sNode['tag'])) {
 		foreach($sNode['tag'] as $tag) {
-			array_push($pluginInfo['tags'], '[##_'.$tag['.attributes']['name'].'_##]');
+			array_push($exportInfo['tags'], '[##_'.$tag['.attributes']['name'].'_##]');
 		}
 	}
 ?>
@@ -44,7 +49,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title><?php echo $pluginInfo['title'];?></title>
+<title><?php echo $exportInfo['title'];?></title>
 <link rel="stylesheet" media="screen" type="text/css" href="<?php echo $service['path'];?>/style/common.css" />
 <link rel="stylesheet" media="screen" type="text/css" href="<?php echo $service['path'];?>/style/admin.css" />
 <link rel="stylesheet" media="screen" type="text/css" href="<?php echo $service['path'];?>/style/admin_plugin.css" />
@@ -74,14 +79,14 @@
 		var queryTypes = '&fieldTypes=' + eTypes.join('|');
 		$.ajax({
 			  type: "POST",
-			  url: '<?php echo $service['path'];?>/service/plugin/save.php',
-			  data: 'pluginName=<?php echo $pluginName;?>'+queryTypes+'&'+query,				  
+			  url: '<?php echo $service['path'];?>/service/export/save.php',
+			  data: 'domainName=<?php echo $domainName;?>'+queryTypes+'&'+query,				  
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();
 				if(error == "0") {					
-					parent.addMessage("<?php echo _t('플러그인설정을 수정하였습니다.');?>");
-					parent.hidePluginConfig('<?php echo $pluginName;?>');
+					parent.addMessage("<?php echo _t('프로그램 설정을 수정하였습니다.');?>");
+					parent.hideExportConfig('<?php echo $domainName;?>');
 				} else {
 					alert($("response message", msg).text());
 				}
@@ -94,69 +99,70 @@
 	}
 
 	$(function() {
-		var buttonHeight = $("#plugin_config_button_wrap").height() + parseInt($("#plugin_config_button_wrap").css('padding-top')) + parseInt($("#plugin_config_button_wrap").css('padding-bottom'));
+		var buttonHeight = $("#export_config_button_wrap").height() + parseInt($("#export_config_button_wrap").css('padding-top')) + parseInt($("#export_config_button_wrap").css('padding-bottom'));
 
 		if($(document.body).height()==0) {
-			var height = $("#plugin_wrap").height() + buttonHeight;
+			var height = $("#export_wrap").height() + buttonHeight;
 			$(document.body).height(height);
 		} else {
-			$("#plugin_config_wrap").height($(document.body).height() - buttonHeight);
-			var h = $("#plugin_information_wrap").height();
-			if(h<$("#plugin_config_wrap").height()) {
-				h = $("#plugin_config_wrap").height();
+			$("#export_config_wrap").height($(document.body).height() - buttonHeight);
+			var h = $("#export_information_wrap").height();
+			if(h<$("#export_config_wrap").height()) {
+				h = $("#export_config_wrap").height();
 			}
 			var height = h + buttonHeight;
 		}
 		
-		parent.resizePluginConfig('<?php echo $pluginName;?>',height);
+		parent.resizeExportConfig('<?php echo $domainName;?>',height);
 	});
 </script>
 </head>
-<body class="plugin_body">
+<body class="export_body">
 <?php
-		$plugConfig = new XMLStruct;
-		$plugSettings = array();
-		$plugSettingsStr = $db->queryCell("SELECT settings FROM {$database['prefix']}Plugins WHERE name='{$pluginName}'");
-		if ($plugConfig->open($plugSettingsStr)) {
-			$pluginConfigs = $plugConfig->selectNode('/config');
-			if(isset($pluginConfigs['field'])) {
-				foreach ($pluginConfigs['field'] as $field) {
+		$exportConfig = new XMLStruct;
+		$exportSettings = array();
+		$exportSettingsStr = $db->queryCell("SELECT settings FROM {$database['prefix']}Exports WHERE domain='{$domainName}'");
+		if ($exportConfig->open($exportSettingsStr)) {
+			$exportConfigs = $exportConfig->selectNode('/config');
+			if(isset($exportConfigs['field'])) {
+				foreach ($exportConfigs['field'] as $field) {
 					$name = $field['.attributes']['name'];
 					$type = $field['.attributes']['type'];
 					$value = $field['.value'];
 
-					$plugSettings[$name] = array();
-					$plugSettings[$name]['value'] = $value;
-					$plugSettings[$name]['type'] = $type;
+					$exportSettings[$name] = array();
+					$exportSettings[$name]['value'] = $value;
+					$exportSettings[$name]['type'] = $type;
 				}
 			}	
 		}
+
 ?>
-<div id="plugin_wrap">
-<div id="plugin_information_wrap">
+<div id="export_wrap">
+<div id="export_information_wrap">
 			<fieldset>
 				<legend><?php echo _t('정보');?></legend><br class="margin" />
 					<dl>
 						<dt><?php echo _t('버전');?> :</dt>
 						<dd>
-							<?php echo $pluginInfo['version'];?>
+							<?php echo $exportInfo['version'];?>
 						</dd>
 					</dl>
-<?php if(!empty($pluginInfo['email'])) { ?>
+<?php if(!empty($exportInfo['email'])) { ?>
 					<div class="clear"></div>
 					<dl>
 						<dt><?php echo _t('이메일주소');?> :</dt>
 						<dd>
-							<a href="mailto:<?php echo $pluginInfo['email'];?>"><?php echo $pluginInfo['email'];?></a>
+							<a href="mailto:<?php echo $exportInfo['email'];?>"><?php echo $exportInfo['email'];?></a>
 						</dd>
 					</dl>
 <?php } ?>
-<?php if(!empty($pluginInfo['homepage'])) { ?>
+<?php if(!empty($exportInfo['homepage'])) { ?>
 					<div class="clear"></div>
 					<dl>
 						<dt><?php echo _t('홈페이지');?> :</dt>
 						<dd>
-							<a href="<?php echo $pluginInfo['homepage'];?>" target="_blank"><?php echo $pluginInfo['homepage'];?></a>
+							<a href="<?php echo $exportInfo['homepage'];?>" target="_blank"><?php echo $exportInfo['homepage'];?></a>
 						</dd>
 					</dl>
 <?php } ?>	
@@ -164,7 +170,7 @@
 				<dl>
 					<dt><?php echo _t('설명');?> :</dt>
 					<dd>
-						<?php echo $pluginInfo['description'];?>
+						<?php echo $exportInfo['description'];?>
 					</dd>
 				</dl>	
 
@@ -172,7 +178,7 @@
 				<dl>
 					<dt><?php echo _t('라이센스');?> :</dt>
 					<dd>
-						<?php echo $pluginInfo['license'];?>
+						<?php echo $exportInfo['license'];?>
 					</dd>
 				</dl>		
 
@@ -180,17 +186,17 @@
 				<dl>
 					<dt><?php echo _t('위치');?> :</dt>
 					<dd>
-						<?php echo _f('이 플러그인은 %1 에 설치되어 있습니다.', htmlspecialchars($service['path'].'/plugins/'.$pluginInfo['name']));?>
+						<?php echo _f('이 프로그램은 %1 에 설치되어 있습니다.', htmlspecialchars($service['path'].'/exports/'.$exportInfo['program']));?>
 					</dd>
 				</dl>
 <?php
-	if(count($pluginInfo['tags']) > 0) {
+	if(count($exportInfo['tags']) > 0) {
 ?>
 				<div class="clear"></div>
 				<dl>
 					<dt><?php echo _t('치환자');?> :</dt>
 					<dd>
-						<?php echo _f('사용하는 스킨에 %1 이 포함되어 있어야 합니다.', '<span class="strong">'.implode(', ', $pluginInfo['tags']).'</span>');?>
+						<?php echo _f('사용하는 스킨에 %1 이 포함되어 있어야 합니다.', '<span class="strong">'.implode(', ', $exportInfo['tags']).'</span>');?>
 					</dd>
 				</dl>	
 <?php
@@ -198,16 +204,16 @@
 ?>
 </div>
 
-<div id="plugin_config_wrap">
-	<div class="plugin_config_container">
+<div id="export_config_wrap">
+	<div class="export_config_container">
 
-		<div class="plugin_config_description">
+		<div class="export_config_description">
 <?php
-		if (!isset($pluginInfo['config']['fieldset'])) { // 설정이 없는데 이 파일이 호출된거면
+		if (!isset($exportInfo['config']['fieldset'])) { // 설정이 없는데 이 파일이 호출된거면
 ?>
 			<fieldset>
 				<legend><?php echo _t('설정');?></legend><br class="margin" />
-				<div class="plugin_config_empty">
+				<div class="export_config_empty">
 					<?php echo _t('설정할 수 있는 항목이 없습니다');?>
 				</div>
 			</fieldset>
@@ -216,17 +222,17 @@
 ?>
 			<form id="configForm" onsubmit="saveConfig(); return false;">
 <?php
-			for($i=0;$i<count($pluginInfo['config']['fieldset']);$i++) {
-			$fieldset = $pluginInfo['config']['fieldset'][$i];
+			for($i=0;$i<count($exportInfo['config']['fieldset']);$i++) {
+			$fieldset = $exportInfo['config']['fieldset'][$i];
 ?>
-			<fieldset<?php echo ($i==count($pluginInfo['config']['fieldset'])-1)?' class="lastChild"':'';?>>
+			<fieldset<?php echo ($i==count($exportInfo['config']['fieldset'])-1)?' class="lastChild"':'';?>>
 				<legend><?php echo $fieldset['.attributes']['legend'];?></legend><br class="margin" />
 <?php
 					foreach ($fieldset['field'] as $field) {
 						if (!isset($field['.attributes']) || empty($field['.attributes'])) continue;
 						$attributes = $field['.attributes'];
 						$pName = $attributes['name'];
-						$pConfig = (isset($plugSettings[$pName]) && is_array($plugSettings[$pName])) ? $plugSettings[$pName] : $field;
+						$pConfig = (isset($exportSettings[$pName]) && is_array($exportSettings[$pName])) ? $exportSettings[$pName] : $field;
 ?>
 				<div class="field">
 					<dl>
@@ -247,7 +253,7 @@
 ?>									
 								</select>
 <?php
-								break;						
+								break;
 								case 'category':
 									$categories = Category::getCategoriesAll();
 ?>
@@ -335,9 +341,9 @@
 <div class="clear"></div>
 </div>
 
-<div id="plugin_config_button_wrap">
-	<?php if (!is_null($pluginInfo['config'])) { ?><a href="#" class="normalbutton" onclick="saveConfig(); return false;"><span class="boldbutton"><?php echo _t('수정완료');?></span></a>&nbsp;<?php } ?>
-	<a href="#" class="normalbutton" onclick="parent.hidePluginConfig('<?php echo $pluginName;?>'); return false;"><span><?php echo _t('닫기');?></span></a>
+<div id="export_config_button_wrap">
+	<?php if (!is_null($exportInfo['config'])) { ?><a href="#" class="normalbutton" onclick="saveConfig(); return false;"><span class="boldbutton"><?php echo _t('수정완료');?></span></a>&nbsp;<?php } ?>
+	<a href="#" class="normalbutton" onclick="parent.hideExportConfig('<?php echo $domainName;?>'); return false;"><span><?php echo _t('닫기');?></span></a>
 </div>	
 
 </body>

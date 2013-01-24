@@ -357,6 +357,33 @@
 			}
 		}
 
+		
+	
+		function printPaging($paging, $param = '') {
+				global $accessInfo, $service;
+				$path = $service['path'] . $accessInfo['subpath'];
+				$result = '';
+				if($paging['pagePrev'] != $paging['page']) {
+					$result .= '<a href="'.$path.'/?page='.$paging['pagePrev'].$param.'" class="page_prev">'._t('이전').'</a>';
+				}else {
+					$result .= '<a href="#" class="page_prev page_disable">'._t('이전').'</a>';
+				}
+
+				for ($p=$paging['pageStart']; $p < $paging['pageEnd']+1; $p++) { 	
+					if($p == $paging['page']) {
+						$result .= '<a href="'.$path.'/?page='.$p.$param.'" class="selected">'.$p.'</a>';
+					} else {
+						$result .= '<a href="'.$path.'/?page='.$p.$param.'">'.$p.'</a>';
+					}
+				}
+				if($paging['pageNext'] != $paging['page']) {
+					$result .= '<a href="'.$path.'/?page='.$paging['pageNext'].$param.'" class="page_next">'._t('다음').'</a>';
+				} else {
+					$result .= '<a href="#" class="page_next page_disable">'._t('다음').'</a>';
+				}
+				return $result;
+		}
+
 		function alert($str, $closeType = null) {
 			echo '<script type="text/javascript">';
 			echo 'alert("'.$str.'");';
@@ -520,7 +547,7 @@
 			}
 		} // end rmpath
 
-		function makePaging($page, $pageCount, $totalCount) {
+		function makePaging($page, $pageCount, $totalCount, $pageCut = 5) {
 			$paging = array();
 			
 			$paging['page'] = $page;
@@ -529,7 +556,7 @@
 			$paging['totalPages'] = intval(($totalCount - 1) / $pageCount) + 1;
 			if ($paging['totalPages'] == 0) $paging['totalPages'] = 1;
 
-			$paging['pageCut'] = 5;
+			$paging['pageCut'] = $pageCut - 1;
 
 			$paging['pageStart'] = ($paging['pageCut'] * floor($page/$paging['pageCut']));
 			if ($paging['pageStart'] == 0) $paging['pageStart'] = 1;
@@ -681,13 +708,18 @@
 			return urldecode(str_replace('%252F', '%2F', $str));
 		}
 		
-		function translate_uri($uri) {
-			$uri = str_replace('http://','',$uri);
-			$parts = explode('/', $uri);
+		function translate_uri($url) {
+			$url = str_replace('http://','',$url);
+			$parts = explode('/', $url);
 			for ($i = 0; $i < count($parts); $i++) {
 			  $parts[$i] = rawurlencode($parts[$i]);
 			}
-			return 'http://'.implode('/', $parts);
+			$url = 'http://'.implode('/', $parts);
+
+			$url = str_replace('%3F','?',$url);
+			$url = str_replace('%3D','=',$url);
+			$url = str_replace('%26','&',$url);
+			return $url;
 		}
 	}
 ?>
