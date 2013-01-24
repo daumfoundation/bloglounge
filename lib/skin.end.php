@@ -24,6 +24,9 @@
 					$qSearch = '/search/tag/' . func::encode(trim($searchKeyword));
 				break;
 				case 'all':
+					$qSearch = '/search/all/' . func::encode(trim($searchKeyword));
+				break;
+				case 'keyword':
 					$qSearch = '/search/keyword/' . func::encode(trim($searchKeyword));
 				break;
 				case 'archive':

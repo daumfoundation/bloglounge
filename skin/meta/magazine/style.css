@@ -299,7 +299,7 @@ body { font:12px Dotum; color:#6d6d6d; background:#ffffff; margin:0; padding:0; 
 
 /* paging */
 
-#paging { position:relative; text-align:center; width:100%; margin-top:10px; margin-bottom:10px; color:#777; font-size:11px; /*border-top:1px solid #ededed;*/ padding-top:14px; _padding-bottom:4px; }
+#paging { position:relative; text-align:center; width:100%; padding-bottom:4px; margin-top:10px; margin-bottom:10px; color:#777; font-size:11px; /*border-top:1px solid #ededed;*/ padding-top:14px; _padding-bottom:4px; }
 	#paging .num { text-decoration:none; color:#777; margin-left:2px; margin-right:2px; border:1px solid #eee; padding:5px; padding-top:2px; padding-bottom:2px; }
 	#paging .num:hover { background:#f8f8f8; }
 	#paging .selected { color:#ffffff; font-weight:bold; border:1px solid #666; background:#666; }

@@ -83,7 +83,7 @@
 					$xml->write('link', htmlspecialchars($item->permalink));
 					$xml->write('description', htmlspecialchars($item->description));
 					foreach (explode(',', $item->tags) as $tag) {
-						$xml->write('category', $tag);
+						$xml->write('category', htmlspecialchars($tag));
 					}
 					$xml->write('author', htmlspecialchars($item->author));
 					$xml->write('guid', htmlspecialchars($item->permalink));

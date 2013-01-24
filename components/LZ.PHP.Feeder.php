@@ -431,7 +431,6 @@
 				}
 				if ($feedURL = $db->queryCell("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE {$notinStr} lastUpdate < ".(gmmktime()-($updateCycle*60))." ORDER BY lastUpdate ASC LIMIT 1")) {
 					$result = $this->updateFeed($feedURL);
-					debug_log($result[0]);
 					return array(!$result[0],$result[1],$feedURL);
 				}
 			}
@@ -537,13 +536,14 @@
 
 				if ($filtered) return false;
 			}
-								
+			
 			if (preg_match('/\((.[^\)]+)\)$/Ui', trim($item['author']), $_matches)) $item['author'] = $_matches[1];
 			$item['author']=$db->escape($db->lessen(UTF8::correct($item['author'])));
 			$item['permalink']=$db->escape($db->lessen(UTF8::correct($item['permalink'])));
 			$item['title']=$db->escape($db->lessen(UTF8::correct($item['title'])));
 			$item['description']=$db->escape($db->lessen(UTF8::correct(trim($item['description'])),65535));
 			$enclosureString=$db->escape($db->lessen(UTF8::correct(implode('|',$item['enclosures']))));
+			
 			if ($item['written']>gmmktime()+86400)
 				return false;
 
@@ -554,7 +554,6 @@
 			requireComponent('Bloglounge.Data.FeedItems');
 
 			$oldTags = null;
-			
 			$id = FeedItem::getIdByURL($item['permalink']);
 			if($id === false && isset($item['guid'])) {
 				$item['guid']=$db->escape($db->lessen(UTF8::correct($item['guid'])));
@@ -566,8 +565,8 @@
 
 			$affected = 0;
 			$isRebuildData = false;
-
-			if (preg_match("/^[0-9]+$/",$id) && ($item['written'] != 0)) {
+			
+			if (preg_match("/^[0-9]+$/",$id)) {
 				$baseItem = FeedItem::getFeedItem($id);
 				$baseItem['title']=$db->escape(UTF8::correct($baseItem['title']));
 				$baseItem['description']=$db->escape(UTF8::correct(trim($baseItem['description'])));
