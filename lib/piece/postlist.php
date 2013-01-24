@@ -94,7 +94,7 @@
 
 					$item['description'] = func::stripHTML($item['description'].'>');
 					if (substr($item['description'], -1) == '>') $item['description'] = substr($item['description'], 0, strlen($item['description']) - 1);
-					$post_description = func::htmltrim(UTF8::lessenAsByte($item['description'], $skinConfig->postDescLength));
+					$post_description = UTF8::lessenAsByte(func::htmltrim($item['description']), $skinConfig->postDescLength);
 					if (strlen($post_description) == 0) $post_description = '<span class="empty">'._t('(글의 앞부분이 이미지 혹은 HTML 태그만으로 되어있습니다)').'</span>';					
 
 					if(!empty($searchKeyword)) {

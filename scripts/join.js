@@ -1,6 +1,5 @@
 $(window).ready( function() {
 
-	/* input 배경색변경 */
 	$(".faderInput").each(function() {
 		$(this).focus( function() {
 			$(this).animate({backgroundColor:'#fafafa'}, 400);

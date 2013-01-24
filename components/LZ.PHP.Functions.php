@@ -497,7 +497,7 @@
 
 			$paging['pageEnd'] = ($paging['pageStart'] + $paging['pageCut'] > $paging['totalPages']) ? $paging['totalPages'] : ($paging['pageStart'] + $paging['pageCut']);
 			$paging['pagePrev'] = ($page-1 <= 1) ? 1:($page - 1);
-			$paging['pageNext'] = (($paging['pageStart'] + $paging['pageCut'] + 1) > $paging['totalPages']) ? $paging['totalPages'] : ($paging['pageStart'] + $paging['pageCut'] + 1);
+			$paging['pageNext'] = (($page + 1) > $paging['totalPages']) ? $paging['totalPages'] : ($page + 1);
 
 			return $paging;
 		}		

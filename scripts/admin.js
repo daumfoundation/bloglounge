@@ -51,7 +51,6 @@ $(window).scroll( function() {
 $(window).ready( function() {
 	collectFloatProjectMessage().fadeTo('fast',0.0, function() { $(this).show(); } );
 
-	/* input 배경색변경 */
 	$(".faderInput").each(function() {
 		$(this).focus( function() {
 			$(this).animate({backgroundColor:'#fafafa'}, 400);

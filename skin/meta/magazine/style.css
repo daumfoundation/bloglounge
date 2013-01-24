@@ -65,7 +65,8 @@ body { font:12px Dotum; color:#6d6d6d; background:#ffffff; margin:0; padding:0; 
 
 /* message */
 .search_message_wrap {
-	font-size:14px; font-weight:bold; color:#999;
+	font-size:13px; font-weight:bold; 
+	color:#999;
 	margin-bottom:10px; margin-top:5px;
 	border-bottom:1px solid #ccc;
 	padding-bottom:10px;
@@ -291,6 +292,7 @@ body { font:12px Dotum; color:#6d6d6d; background:#ffffff; margin:0; padding:0; 
 
 	#right_sidebar .rsslist ul { margin:0; padding:0; padding-left:4px; }
 	#right_sidebar .rsslist ul li { margin-bottom:6px; font:11px Dotum; color:#555; }
+
 
 	#right_sidebar .rsslist a { color:#555; text-decoration:none; }
 	#right_sidebar .rsslist a:hover { text-decoration:underline; }

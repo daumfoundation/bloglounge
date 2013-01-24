@@ -50,7 +50,7 @@
 								.magazineFocusTable .mainData ul.item li .data h3 a { color:#4e4e4e; text-decoration:none; }
 								.magazineFocusTable .mainData ul.item li .data h3 a:hover { text-decoration:underline; }
 							
-							.magazineFocusTable .mainData ul.item li .permalink { font-size:11px; margin-bottom:8px; height:12px; overflow:hidden; }
+							.magazineFocusTable .mainData ul.item li .permalink { font-size:11px; margin-bottom:8px; height:12px; line-height:12px; overflow:hidden; }
 								.magazineFocusTable .mainData ul.item li .permalink a { color:#909090; text-decoration:none; }
 								.magazineFocusTable .mainData ul.item li .permalink a:hover { text-decoration:underline; }
 
@@ -263,7 +263,7 @@
 						$tagItem = $tag['feedItems'][$i];
 ?>
 							<li class="title_only">
-								<a href="<?php echo $service['path'];?>/go/<?php echo $feedItem['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($tagItem['title']),60);?></a> <span class="sep">|</span> <span class="feedTitle"><?php echo Feed::get($feedItem['feed'],'title');?></span>
+								<a href="<?php echo $service['path'];?>/go/<?php echo $feedItem['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($tagItem['title']),60);?></a> <span class="sep">|</span> <span class="feedTitle"><?php echo Feed::get($tagItem['feed'],'title');?></span>
 							</li>
 <?php			
 					}

@@ -292,7 +292,7 @@
 ?>
 		<select id="focusDescLength">
 <?php
-			for ($i=20; $i <= 3000; $i+=5) {
+			for ($i=20; $i <= 1000; $i+=5) {
 ?>
 			<option value="<?php echo $i;?>" <?php if ($i == $skinConfig->focusDescLength) {?> selected="selected"<?php } ?>><?php echo $i;?></option>
 <?php 
@@ -360,9 +360,8 @@
 			ob_start();
 ?> 
 		<select id="postDescLength">
-			<option value="0" <?php if ($i == $skinConfig->postDescLength) {?> selected="selected"<?php } ?>><?php echo _t('전부');?></option>
 <?php
-			for ($i=20; $i <= 3000; $i+=5) {
+			for ($i=20; $i <= 1000; $i+=5) {
 ?>
 			<option value="<?php echo $i;?>" <?php if ($i == $skinConfig->postDescLength) {?> selected="selected"<?php } ?>><?php echo $i;?></option>
 <?php 

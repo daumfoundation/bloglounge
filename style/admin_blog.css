@@ -87,10 +87,12 @@ body.entry_view { background:#ffffff; }
 
 	.entrylist .footers	{ }
 		.entrylist .footers .select { float:left; width:56px; text-align:center; padding-top:4px; }
-		.entrylist .footers .action { float:left; padding-top:4px; color:#707070; font-size:12px; padding-left:5px; }
+		.entrylist .footers .action { float:left; color:#707070; font-size:12px; }
 			.entrylist .footers .action select	{ margin-left:5px; margin-right:3px; font-size:12px; }
 			.entrylist .footers .action select optgroup { font-weight:bold; font-style:normal }
 			.entrylist .footers .action select option { font-weight:normal; }
+			.entrylist .footers .action .smallbutton { margin-top:2px; }
+
 		.entrylist .footers .action label { display:inline-block; padding-top:6px; }
 
 		.entrylist .footers .action a { color:#707070; text-decoration:none; }

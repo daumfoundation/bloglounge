@@ -17,7 +17,7 @@ img { border:0; }
 
 	#header .leftmenus  { float:left; padding-left:0; padding-top:37px; padding-right:30px; }
 			#header .leftmenus ul { list-style:none; margin:0; padding:0; }
-			#header .leftmenus ul li { float:left; margin-right:8px; }
+			#header .leftmenus ul li { float:left; margin-right:8px; _width:80px; }
 				#header .leftmenus ul li { background:url("../images/admin/bg_leftmenu_center.gif") repeat-x; height:24px; }
 				#header .leftmenus ul li span { display:block; background:url("../images/admin/bg_leftmenu_left.gif") no-repeat left top; width:100%; height:100%; }
 				#header .leftmenus ul li span span { display:block; background:url("../images/admin/bg_leftmenu_right.gif") no-repeat right top; text-align:center;}
@@ -35,7 +35,7 @@ img { border:0; }
 
 	#header .menus		{ float:left; padding-top:37px; }
 			#header .menus ul { list-style:none; margin:0; padding:0; padding-left:10px; margin-left:10px; }
-			#header .menus ul li { float:left; margin-right:8px; }
+			#header .menus ul li { float:left; margin-right:8px; _width:80px; }
 				#header .menus ul li { background:url("../images/admin/bg_menu_center.gif") repeat-x; height:24px; }
 				#header .menus ul li span { display:block; background:url("../images/admin/bg_menu_left.gif") no-repeat left top; width:100%; height:100%; }
 				#header .menus ul li span span { display:block; background:url("../images/admin/bg_menu_right.gif") no-repeat right top; text-align:center;}

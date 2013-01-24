@@ -33,13 +33,28 @@
 
 ?>
 	<script type="text/javascript">
-		var is_checked = false;
-		function toggleCheckAll(className) {
-			is_checked = !is_checked;
+		function toggleCheckAll(obj, className) {
+			var is_checked = obj.checked;
 			$("."+className).each( function() {
 					this.checked = is_checked;
 			});
+		}		
+		
+		function changeAction() {
+			var list = $("#action_list");
+			var now = $(list.attr('options')[list.attr('selectedIndex')]);						
+			var value = now.val();
+			switch(now.attr('class')) {
+				case 'restore_action':
+					if(value == 'restore') {
+						restoreAllItem('postid');
+					} else if(value == 'delete') {
+						deleteAllItem('postid');
+					}
+				break;
+			}
 		}
+
 		function deleteItem(id) {
 			if(confirm("<?php echo _t('삭제된 글은 복구하실 수 없습니다.\n\n이 글을 삭제하시겠습니까?');?>")) {
 				$.ajax({
@@ -144,6 +159,9 @@
 				 alert('unknown error');
 			  }
 			});
+		}
+
+		function changeAction() {
 		}
 
 	</script>
@@ -285,11 +303,26 @@
 
 	ob_start();
 ?>
+			<select id="action_list" align="absmiddle">
+				<option class="default" value="default"><?php echo _t('어떻게 하시겠습니까?');?></option>
+				<optgroup class="restore" label="<?php echo _t('복원여부');?>">
+					<option class="restore_action" value="restore"><?php echo _t('복원합니다.');?></option>	
+					<option class="restore_action" value="delete"><?php echo _t('삭제합니다.');?></option>
+				</optgroup>		
+			</select>
+
+			<a href="#" class="smallbutton" onclick="changeAction(); return false;"><span class="boldbutton"><?php echo _t('적용');?></span></a>
+<?php
+	$select = ob_get_contents();
+	ob_end_clean();
+
+	ob_start();
+?>
 		<div class="select">
-			<a href="#" onclick="toggleCheckAll('postid'); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_arrow.gif" /></a>
+			<input type="checkbox" onclick="toggleCheckAll(this,'postid');" />
 		</div>
 		<div class="action">
-			<a href="#" onclick="restoreAllItem('postid'); return false;"><?php echo _t('복구');?></a> <span class="sep">|</span> <strong><a href="#" onclick="deleteAllItem('postid'); return false;"><?php echo _t('삭제');?></a></strong>
+			<?php echo _f('<label for="action_list">선택한 글을</label> %1', $select);?>
 		</div>				
 		<div class="clear"></div>
 <?php

@@ -11,33 +11,58 @@
 
 - MySQL  4.1 이상
 
-주의사항
+안내사항
 ===========
 
-IE6에서 Float 버그(?)로 관리자 페이지가 깨지는 문제가 발견되었습니다.  차기버전에서 해결하도록 하겠습니다.
+이번 버전은 그동안 발견된 오류와 새로운기능들을 안정화한 버전입니다.
+
+업그레이드시 하단의 업그레이드법의 정석(?) 대로 설치해주시길 바립니다.
+
+설치법 ( 자세한 정보는 하단의 링크를 참고하세요. )
+
+http://bloglounge.itcanus.net/bloglounge_download/6987
+
+업그레이드법 ( 자세한 정보는 하단의 링크를 참고하세요. )
+
+http://bloglounge.itcanus.net/bloglounge_notice/6981
 
 변경사항
 ===========
-v0.2.2.1
 
-- 버그수정 : pubDate 가 없는 RSS 중복 수집 문제 해결
+- IE6 호환 : 관리자 로그인시 스크립트 에러, 관리자페이지 상단메뉴 에러 수정
 
-- 버그수정 : RSS에 태그명에 & 가 있을시 RSS에러가 생기는 문제 해결
+- 추가 : /lib/config.php ADMIN_MENU_CLICK_VIEW 추가 
+       
+true 시 관리자페이지 상단메뉴 클릭하여 메뉴 이동,  false 시 마우스 오버시 메뉴이동 ( 기본 false )
 
-- 버그수정 : 검색결과 하단 페이지 이동 문제 해결
+- 추가 : 리스트에 보여지는 글만 저장하는 옵션 추가 ( 관리자/설정 )  최대 1000자의 본문만 저장하는 기능 
+       
+http://bloglounge.itcanus.net/bloglounge_qna/17381/
 
-v0.2.2
+- 수정 : 관리자페이지 디자인/스킨설정에서 포커스, 글 본문 갯수 최대 3000자에서 1000자로 변경
 
-- 관리자 : 이미지형태의 상단탭, 이미지(배경)+텍스트형태로, 인터페이스 변경 ( 클릭 -> 마우스오버 )
+- 오류 : 분류갯수 오류 수정 ( 글, 블로그 삭제시 숫자오류 )
 
-- 관리자 : 이미지형태의 버튼, 일부를 제외하고 이미지(배경) + 텍스트형태로
+- 오류 : 스킨 다음 클릭시 현페이지에서 다음페이지가 아닌,  + 5페이지로 이동하는 문제 수정
 
-- 스킨 : 매거진(Magazine) 스킨 IE6 지원(호환), 디자인 일부 변경 ( 하단 페이징, 일부 여백들.. )
+- 오류 : 간혹 글의 썸네일이 겹쳐지는 문제 해결
 
-- 코드 : htmlspecialchars_decode 관련에러 수정 ( 비지원 하위 PHP(4)  코드 수정 )
+http://bloglounge.itcanus.net/?mid=bloglounge_qna&document_srl=17724&rnd=17883
 
-- 그외수정 : 그외 자잘한 버그들을 수정하고, 관리자 페이지 CSS 등 일부 사항들이 변경되었습니다.
+- 오류 : RSS 재출력 개수 오류 수정
 
-(최근글 마지막 업데이트 날짜 제대로 나오지 않던 문제, 태그필터, RSS GUID 중복확인 ... )
+http://bloglounge.itcanus.net/bloglounge_qna/17821
 
-(사용하지않던 Freedom Component 삭제, 블로그 업데이트시 최근 업데이트한 블로그명 하단에 출력 .. )
+- 오류 : 매거진 플러그인 작성자 오류 수정
+
+http://bloglounge.itcanus.net/bloglounge_qna/17771
+
+- 그외 : 세세한 버그수정, 코드수정으로 안정화하였습니다.
+
+- 오류 : PHP4 호환성 추가 ( htmlspecialchars_decode )
+
+http://bloglounge.itcanus.net/bloglounge_qna/17855
+
+- 오류 : 분류설정이 목록보기와, 자세히 보기가 달라.. 제대로 분류변경이 되지 않던 문제 수정
+
+http://bloglounge.itcanus.net/bloglounge_qna/17794

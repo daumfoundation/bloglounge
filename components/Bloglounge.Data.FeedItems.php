@@ -28,7 +28,7 @@
 
 		function getAll($itemId) {
 			global $database, $db;
-			$db->query('SELECT i.*,c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item=i.id) WHERE i.id='.$itemId);
+			$db->query('SELECT i.*,c.category AS category FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item=i.id AND c.custom ="y") WHERE i.id='.$itemId);
 			
 			
 			return $db->fetchArray();
@@ -74,6 +74,16 @@
 			Media::delete($itemId);
 			
 			
+
+			requireComponent('Bloglounge.Data.Category');
+
+			$result = $db->queryAll('SELECT category FROM '.$database['prefix'].'Categoryrelations WHERE item = ' . $itemId,MYSQL_ASSOC);
+			$categoryIds = array();
+			foreach($result as $item) {
+				array_push($categoryIds, $item['category']);
+			}
+
+			$categoryIds = array_unique($categoryIds);
 			
 			$db->execute("DELETE FROM {$database['prefix']}CategoryRelations WHERE item = {$itemId}"); // clear CategoryRelations
 			
@@ -84,6 +94,11 @@
 					requireComponent('Bloglounge.Data.RSSOut');
 					RSSOut::refresh();
 				}
+				
+				foreach($categoryIds as $categoryId) {
+					Category::rebuildCount($categoryId);
+				}
+
 				return true;
 			} else {
 				return false;
@@ -96,6 +111,7 @@
 			$itemIds = array();
 
 			requireComponent('LZ.PHP.Media');
+			requireComponent('Bloglounge.Data.Category');
 
 			$result = $db->queryAll("SELECT id FROM {$database['prefix']}FeedItems WHERE feed='$feedId'");
 			if($result) {
@@ -103,7 +119,18 @@
 					Media::delete($item['id']);
 					array_push($itemIds, $item['id']);			
 				}
-			
+
+				$itemIds = array_unique($itemIds);
+				$categoryIds = array();
+				foreach($itemIds as $itemId) {
+					$result = $db->queryAll('SELECT category FROM '.$database['prefix'].'Categoryrelations WHERE item = ' . $itemId,MYSQL_ASSOC);
+					foreach($result as $item) {
+						array_push($categoryIds, $item['category']);
+					}				
+				}
+
+				$categoryIds = array_unique($categoryIds);
+
 				$itemStr = implode(',', $itemIds);	
 				
 				
@@ -116,6 +143,11 @@
 						requireComponent('Bloglounge.Data.RSSOut');
 						RSSOut::refresh();
 					}
+
+					foreach($categoryIds as $categoryId) {
+						Category::rebuildCount($categoryId);
+					}
+
 					return true;
 				} else {
 					return false;
@@ -165,31 +197,32 @@
 			requireComponent('LZ.PHP.Media');
 			$media = new Media;
 			$media->set('outputPath', $cacheDir.'/'.$division);
+
+			$item['id'] = $itemId; // for uniqueId
 			if (!$result = $media->get($item, Settings::get('thumbnailLimit')))
 				return false;
-			
-			// 1.2 			
-			foreach($result['images'] as $item) {
-				$tFilename = $db->escape(str_replace($cacheDir, '', $item['filename']['fullpath']));
-				$tSource = $db->escape($item['source']);
 
-				if(!empty($tFilename) && $item['width'] > 100 && $item['height'] > 100) {
-					$width = $item['width'];
-					$height = $item['height'];
-					$insertId = $media->add($itemId, $tFilename, $tSource, $width, $height, 'image');
+			foreach($result['movies'] as $m_item) {
+				$tFilename = $db->escape(str_replace($cacheDir, '', $m_item['filename']['fullpath']));
+				$tSource = $db->escape($m_item['source']);
+
+				if(!empty($tFilename)) {
+					$width = $m_item['width'];
+					$height = $m_item['height'];
+					$via = $m_item['via'];
+
+					$insertId = $media->add($itemId, $tFilename, $tSource, $width, $height, 'movie', $via);
 				}
 			}
 
-			foreach($result['movies'] as $item) {
-				$tFilename = $db->escape(str_replace($cacheDir, '', $item['filename']['fullpath']));
-				$tSource = $db->escape($item['source']);
+			foreach($result['images'] as $i_item) {
+				$tFilename = $db->escape(str_replace($cacheDir, '', $i_item['filename']['fullpath']));
+				$tSource = $db->escape($i_item['source']);
 
-				if(!empty($tFilename)) {
-					$width = $item['width'];
-					$height = $item['height'];
-					$via = $item['via'];
-
-					$insertId = $media->add($itemId, $tFilename, $tSource, $width, $height, 'movie', $via);
+				if(!empty($tFilename) && $i_item['width'] > 100 && $i_item['height'] > 100) {
+					$width = $i_item['width'];
+					$height = $i_item['height'];
+					$insertId = $media->add($itemId, $tFilename, $tSource, $width, $height, 'image');
 				}
 			}
 	
@@ -298,6 +331,7 @@
 			} else if ($searchType=='focus'){		
 					$sQuery =  ' WHERE i.focus = "'.$searchKeyword.'"';				
 			} else if ($searchType=='category') {
+				requireComponent('Bloglounge.Data.Category');
 				$category = Category::getByName($searchKeyword);
 				if($category) {
 					$sQuery = ' WHERE c.category = ' . $category['id'];

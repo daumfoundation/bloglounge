@@ -429,6 +429,11 @@
 
 	if(!empty($read)) {
 		$readFeedItem = FeedItem::getAll($read);
+	
+		if(!isset($readFeedItem['category'])) {
+			$readFeedItem['category'] = 0;
+		}
+	
 		if($readFeedItem && ($readFeedItem['visibility']!='d')) {
 			$date = Func::dateToString($readFeedItem['written']);
 			$medias = Media::getMediasByFeedItemId($readFeedItem['id']);
@@ -751,9 +756,6 @@
 			<input type="checkbox" onclick="toggleCheckAll(this,'postid');" />
 		</div>
 		<div class="action">
-			<!--
-			<a href="#" onclick="changeAllVisibility('postid', 'y'); return false;"><?php echo _t('공개');?></a> <span class="sep">|</span> <a href="#" onclick="changeAllVisibility('postid', 'n'); return false;"><?php echo _t('비공개');?></a> <span class="sep">|</span> <strong><a href="#" onclick="deleteAllItem('postid'); return false;"><?php echo _t('삭제');?></a></strong>
-			-->
 			<?php echo _f('<label for="action_list">선택한 글을</label> %1', $select);?>
 		</div>				
 		<div class="clear"></div>

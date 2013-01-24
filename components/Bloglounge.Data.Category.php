@@ -143,6 +143,7 @@
 				return false;			
 			if (!preg_match("/^[0-9]+$/", $id)) 
 				return false;
+
 			$db->execute('DELETE FROM '.$database['prefix'].'CategoryRelations WHERE category ="'.$id.'"');
 	
 			$db->execute('DELETE FROM '.$database['prefix'].'TagRelations WHERE item = "'.$id.'" AND type = "category"');
@@ -164,12 +165,16 @@
 
 			$result = $db->execute('UPDATE '.$database['prefix'].'Categories SET name = "'.$name.'", filter = "'.$filter.'" WHERE id='.$id);	
 			
+			
+			
 			Category::inputFilters($id,$filter);	
 			
 			Category::rebuildFilters($id,$filter);	
 			Category::rebuildCount($id);
+
 			return $result;
 		}
+		
 
 		function move($id, $type = 'up') {
 			global $database, $db;
@@ -261,6 +266,7 @@
 
 			if(empty($category) || !isset($category)) 
 				return false;
+
 		
 	if(is_array($category)) {
 				
@@ -312,13 +318,12 @@
 			if(empty($category) || !isset($category)) 
 				return false;
 		
+	
 			if(is_array($category)) {
 				
-					$categoryId = $category['id'];
+				$categoryId = $category['id'];
 			
-			}			
-			
-			else if(!preg_match("/^[0-9]+$/", $category)) { 
+			} else if(!preg_match("/^[0-9]+$/", $category)) { 
 				return false;
 			
 			} else {
@@ -328,12 +333,16 @@
 				$category = Category::getAll($category);
 	
 			}
+
 			if($category) {
 				$count = 0;
 				if($result = $db->queryCell('SELECT count(DISTINCT cr.item) AS count FROM '.$database['prefix'].'CategoryRelations cr LEFT JOIN '.$database['prefix'].'FeedItems fi ON (fi.id = cr.item) WHERE cr.category = ' . $categoryId . ' AND fi.visibility = "y"')) {
 					$count = $result;
 				} 		
+				
+				
 				$countOnLogin = $count;
+
 				if($result = $db->queryCell('SELECT count(DISTINCT cr.item) AS count FROM '.$database['prefix'].'CategoryRelations cr LEFT JOIN '.$database['prefix'].'FeedItems fi ON (fi.id = cr.item) WHERE cr.category = ' . $categoryId . ' AND fi.visibility != "d"')) {
 					$countOnLogin = $result;
 				} 

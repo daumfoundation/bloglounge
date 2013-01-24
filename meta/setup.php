@@ -336,7 +336,8 @@
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('cacheThumbnail','y');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailLimit','3');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('feeditemsOnRss','10');
-
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('summarySave','n');	
+						
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postList','10');					
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postTitleLength','40');					
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postDescLength','400');					
@@ -984,6 +985,11 @@
 						$db->execute("DELETE FROM {$prefix}Settings WHERE `name` = 'rankPeriod'");	
 						
 						array_push($checkups, array('success', _t('설정 테이블에 인기글 설정시간 값을 삭제했습니다.')));
+					}
+
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'summarySave'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('summarySave','n')");	
+						array_push($checkups, array('success', _t('설정 테이블에 요약저장 필드를 추가했습니다.')));
 					}
 					
 					$result = '';

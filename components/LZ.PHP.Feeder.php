@@ -1,13 +1,7 @@
 <?php
 	if (!function_exists('htmlspecialchars_decode')) {
-		function htmlspecialchars_decode($str, $options="") {
-			$trans = get_html_translation_table(HTML_SPECIALCHARS, $options);
-			$decode = ARRAY();
-			foreach ($trans AS $char=>$entity) {
-					$decode[$entity] = $char;
-			}
-			$str = strtr($str, $decode);
-			return $str;
+		function htmlspecialchars_decode($str, $options = ENT_COMPAT) {
+			return strtr($str, array_flip(get_html_translation_table(HTML_SPECIALCHARS, $options)));
 		}
 	}
 
@@ -92,8 +86,7 @@
 
 			requireComponent('Bloglounge.Data.FeedItems');
 			FeedItem::deleteByFeedId($feedId);
-
-
+	
 			return ($db->execute('DELETE FROM '.$database['prefix'].'Feeds WHERE id='.$feedId))?true:false;
 		}
 
@@ -542,6 +535,7 @@
 			$item['permalink']=$db->escape($db->lessen(UTF8::correct($item['permalink'])));
 			$item['title']=$db->escape($db->lessen(UTF8::correct($item['title'])));
 			$item['description']=$db->escape($db->lessen(UTF8::correct(trim($item['description'])),65535));
+
 			$enclosureString=$db->escape($db->lessen(UTF8::correct(implode('|',$item['enclosures']))));
 			
 			if ($item['written']>gmmktime()+86400)
@@ -565,6 +559,14 @@
 
 			$affected = 0;
 			$isRebuildData = false;
+
+			$summarySave = Settings::get('summarySave');
+			$description = $item['description'];
+			if(Validator::getBool($summarySave)) { // summarySave
+				$description = func::stripHTML($item['description'].'>');
+				if (substr($description, -1) == '>') $description = substr($description, 0, strlen($description) - 1);
+				$description = $db->lessen(func::htmltrim($description), 1000, '');
+			}
 			
 			if (preg_match("/^[0-9]+$/",$id)) {
 				$baseItem = FeedItem::getFeedItem($id);
@@ -578,13 +580,13 @@
 					Media::delete($id);
 
 					$oldTags = func::array_trim(explode(',', $tags));
-					$db->execute("UPDATE {$database['prefix']}FeedItems SET author = '{$item['author']}', title = '{$item['title']}', description = '{$item['description']}', tags = '$tagString', enclosure = '$enclosureString', written = {$item['written']} WHERE id = $id");
+					$db->execute("UPDATE {$database['prefix']}FeedItems SET author = '{$item['author']}', title = '{$item['title']}', description = '{$description}', tags = '$tagString', enclosure = '$enclosureString', written = {$item['written']} WHERE id = $id");
 				}
 			} else {
 				if ($item['written']==0)
 					$item['written']=gmmktime();
 				if ($item['written']>$deadLine) {
-					$db->execute("INSERT INTO {$database['prefix']}FeedItems (feed, author, permalink, title, description, tags, enclosure, written, feedVisibility) VALUES ($feedId, '{$item['author']}', '{$item['permalink']}', '{$item['title']}', '{$item['description']}', '$tagString', '$enclosureString', {$item['written']},'{$feedVisibility}')");
+					$db->execute("INSERT INTO {$database['prefix']}FeedItems (feed, author, permalink, title, description, tags, enclosure, written, feedVisibility) VALUES ($feedId, '{$item['author']}', '{$item['permalink']}', '{$item['title']}', '{$description}', '$tagString', '$enclosureString', {$item['written']},'{$feedVisibility}')");
 
 					$id =$db->insertId();
 					$db->execute('UPDATE '.$database['prefix'].'Feeds SET feedCount=feedCount+1 WHERE id="'.$feedId.'"');

@@ -54,7 +54,8 @@
 							"&boomDownReactor="+$('#boomDownReactor').val()+
 							"&boomDownReactLimit="+$('#boomDownReactLimit').val() +
 							"&thumbnailLimit="+$('#thumbnailLimit').val()+		
-							"&updateProcess="+$('#updateProcess').val(),				  
+							"&updateProcess="+$('#updateProcess').val()+
+							"&summarySave="+($('#summarySave').attr('checked')?'y':'n'),
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();
@@ -133,6 +134,7 @@
 				$archivePeriod = $config->archivePeriod;
 				$thumbnailLimit = $config->thumbnailLimit;
 				$updateProcess = $config->updateProcess;
+				$summarySave = $config->summarySave;
 ?>	
 
 	<dl class="normal">
@@ -203,7 +205,7 @@
 		</dd>
 	</dl>	
 
-	<dl class="normal last_item">
+	<dl class="normal">
 		<dt></dt>
 		<dd>
 <?php
@@ -225,11 +227,19 @@
 ?>
 
 		</dd>
-	</dl>	
-
-<?php
-	$feeditemsOnRss = $config->feeditemsOnRss;
-?>	
+	</dl>		
+	<dl class="normal ">
+		<dt></dt>
+		<dd>
+			<input type="checkbox" <?php if ($summarySave == 'y') { ?>checked="checked"<?php } ?> name="summarySave" id="summarySave" value="y" /><label for="summarySave">&nbsp;<?php echo _t('수집된 글의 본문을 요약저장합니다.');?></label>
+		</dd>
+	</dl>		
+	<dl class="normal comments last_item">
+		<dt></dt>
+		<dd class="text checkbox_hint">
+			<?php echo _t('이 설정을 선택하면 용량 절약을 위해 본문내용을 최대 1000자만큼만 저장합니다.');?>
+		</dd>
+	</dl>
 	<dl class="normal">
 		<dt><?php echo _t('정책');?></dt>
 		<dd>
@@ -258,19 +268,21 @@
 	<dl class="normal  last_item">
 		<dt></dt>
 		<dd>
-<?php
+<?php	
+			$feeditemsOnRss = $config->feeditemsOnRss;
 			ob_start();
 ?>
 				<select name="feeditemsOnRss" id="feeditemsOnRss">
 					<option value="5" <?php if ($feeditemsOnRss == '5') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 5);?></option>
 					<option value="10" <?php if ($feeditemsOnRss == '10') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 10);?></option>
-					<option value="30" <?php if ($feeditemsOnRss == '15') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 15);?></option>
-					<option value="60" <?php if ($feeditemsOnRss == '20') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 20);?></option>
-					<option value="150" <?php if ($feeditemsOnRss == '25') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 25);?></option>
-					<option value="360" <?php if ($feeditemsOnRss == '30') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 30);?></option>
-					<option value="480" <?php if ($feeditemsOnRss == '35') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 35);?></option>
-					<option value="720" <?php if ($feeditemsOnRss == '40') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 40);?></option>
-					<option value="960" <?php if ($feeditemsOnRss == '45') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 45);?></option>
+					<option value="15" <?php if ($feeditemsOnRss == '15') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 15);?></option>
+					<option value="20" <?php if ($feeditemsOnRss == '20') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 20);?></option>
+					<option value="25" <?php if ($feeditemsOnRss == '25') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 25);?></option>
+					<option value="30" <?php if ($feeditemsOnRss == '30') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 30);?></option>
+					<option value="35" <?php if ($feeditemsOnRss == '35') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 35);?></option>
+					<option value="40" <?php if ($feeditemsOnRss == '40') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 40);?></option>
+					<option value="45" <?php if ($feeditemsOnRss == '45') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 45);?></option>	
+					<option value="50" <?php if ($feeditemsOnRss == '50') { ?>selected="selected"<?php } ?>><?php echo _f('%1개', 50);?></option>
 				</select>					
 <?php
 			$arg = ob_get_contents();

@@ -78,7 +78,7 @@
 				}
 			}
 
-			$medias = $this->detectMediaAndSave( stripslashes($item['description']), $limit );
+			$medias = $this->detectMediaAndSave( stripslashes($item['description']), $item['id'], $limit );
 			if(count($medias['images']) == 0 && count($medias['movies']) == 0) {
 				return false;
 			} 
@@ -89,7 +89,7 @@
 		function add($feeditem, $filename, $source, $width, $height, $type = 'image', $via = '') {
 			global $db, $database;
 
-			$db->execute("INSERT INTO {$database['prefix']}Medias (feeditem, thumbnail,source, width, height, type, via) VALUES ('$feeditem', '$filename', '$source', '$width', '$height', '$type', '$via')");
+			$db->execute("INSERT INTO {$database['prefix']}Medias (feeditem, thumbnail, source, width, height, type, via) VALUES ('$feeditem', '$filename', '$source', '$width', '$height', '$type', '$via')");
 			return $db->insertId();
 		}
 
@@ -216,7 +216,7 @@
 			return array('filename'=>$result, 'source'=>$imageURL, 'width'=>$org_w, 'height'=>$org_h);
 		}
 
-		function detectMediaAndSave($content, $limit = -1) {
+		function detectMediaAndSave($content, $uniqueId, $limit = -1) {
 			$result = array();
 			$result['images'] = array();
 			$result['movies'] = array();
@@ -229,7 +229,7 @@
 					}
 					for($i=0;$i<$limit;$i++) {
 						$item = $images[$i];					
-						$this->set('filename','i_' . md5(mktime() . $i));
+						$this->set('filename','i_' . md5($uniqueId . mktime() . $i));
 						$datas = $this->getThumbnail($item[0]);
 						array_push($result['images'], $datas);
 					}
@@ -238,7 +238,7 @@
 
 			if($movies = $this->detectMovieIMGsrc($content)) {
 				foreach($movies as $movie) {
-					$this->set('filename', 'm_' . md5(mktime() . $movie['url']));
+					$this->set('filename', 'm_' . $uniqueId . md5(mktime() . $movie['url']));
 					$datas = $this->getThumbnail($movie['url']);
 					$datas['via'] = $movie['via'];
 					array_push($result['movies'], $datas);
@@ -270,6 +270,7 @@
 			$xmls = new XMLStruct();
 			if ($xmls->open($response_text)) {
 				$captures = $xmls->selectNode("/itcanus/captures");
+			
 				if(isset($captures['capture'])) {
 					foreach($captures['capture'] as $capture) {
 						foreach( $capture['image'] as $source ) {
@@ -278,6 +279,7 @@
 						}
 				
 					}
+				
 				}
 			
 			}

@@ -66,7 +66,13 @@
 			$(this).mouseover( function() {
 				if(this.id != _nowid) {
 					$(this).addClass('hover');
+<?php
+		if(!ADMIN_MENU_CLICK_VIEW) {
+?>
 					selectAction(this.id.substr(5)); // realtime mouse hover
+<?php
+		}
+?>
 				}
 			}).mouseout( function() {	
 				if(this.id != _nowid) {
@@ -114,7 +120,7 @@
 	<div class="wrap">
 		<div class="leftmenus">
 			<ul>
-				<li id="leftmenu_blogadd"><span><span><a href="/admin/blog/add"><?php echo _t('블로그추가');?></a></span></span></li>
+				<li id="leftmenu_blogadd"><span><span><a href="<?php echo $service['path'];?>/admin/blog/add"><?php echo _t('블로그추가');?></a></span></span></li>
 			</ul>
 		</div>
 

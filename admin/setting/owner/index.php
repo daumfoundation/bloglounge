@@ -88,7 +88,7 @@
 				</dl>			
 			<div class="grayline"></div>
 
-			<span class="normalbutton"><input type="submit" value="<?php echo _t('이 정보를 수정합니다');?>" /></span>
+			<span class="normalbutton"><input type="submit" value="<?php echo _t('수정완료');?>" /></span>
 
 		</form>
 </div>
