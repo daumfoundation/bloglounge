@@ -736,5 +736,16 @@
 			$url = str_replace('%26','&',$url);
 			return $url;
 		}
+
+		function explode_uri($url) {
+			$url = str_replace('?','',$url);
+			$result = array();
+			$list = explode('&',$url);
+			foreacH($list as $item) {
+				$data = explode('=',$item);
+				$result[$data[0]] = $data[1];
+			}
+			return $result;
+		}
 	}
 ?>

@@ -106,7 +106,11 @@ function requireMembership() {
 }
 
 function requireStrictRoute() {
-		if (isset($_SERVER['HTTP_REFERER']) && ($url = parse_url($_SERVER['HTTP_REFERER'])) && ($url['host'] == $_SERVER['HTTP_HOST']))
+		$host = $_SERVER['HTTP_HOST'];
+		$port = strpos($host, ':'); 
+		if ( $port !== false ) $host = substr($host, 0, $port); 
+
+		if (isset($_SERVER['HTTP_REFERER']) && ($url = parse_url($_SERVER['HTTP_REFERER'])) && ($url['host'] == $host))
 				return;
 		header('HTTP/1.1 412 Precondition Failed');
 		header('Content-Type: text/html');

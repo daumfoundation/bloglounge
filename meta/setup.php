@@ -454,7 +454,7 @@
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('countRobotVisit','y');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailLimit','3');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailSize','150');
-					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailType','resize');
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailType','crop');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('feeditemsOnRss','10');
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('summarySave','n');	
 
@@ -463,6 +463,10 @@
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('verifier','');
 
 					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('directView','n');
+
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('saveImages','n');
+
+					INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('addressType','id');
 
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postList','10');	
 					INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postListDivision','1');	
@@ -1205,13 +1209,13 @@
 						array_push($checkups, array('success', _t('그룹 테이블의 피드 개수 필드를 삭제했습니다.')));
 					}	
 
-					if ($db->queryCell("DESC {$prefix}TagRelations `type`", 'Type') != "enum('feed','category','group_category')") { // ncloud 0.1.2
+					if ($db->queryCell("DESC {$prefix}TagRelations `type`", 'Type') != "enum('feed','category','group_category')") {
 						$db->execute("ALTER TABLE {$prefix}TagRelations CHANGE `type` `type` enum('feed','category','group_category') NOT NULL default 'feed'");
 						array_push($checkups, array('success', _t('태그 연관테이블에 그룹 종류 옵션을 추가했습니다.')));
 					}
 
 					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'thumbnailType'")) {
-						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailType','resize')");	
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('thumbnailType','crop')");	
 						array_push($checkups, array('success', _t('설정 테이블에 썸네일 종류 필드를 추가했습니다.')));
 					}	
 					
@@ -1224,7 +1228,25 @@
 						$db->execute("INSERT INTO {$prefix}SkinSettings (`name`,`value`) VALUES ('postListDirection','vertical')");	
 						array_push($checkups, array('success', _t('스킨설정 테이블에 글 목록 방향 필드를 추가했습니다.')));
 					}	
-						
+
+					
+					// v0.3.1
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'saveImages'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('saveImages','n')");						
+						array_push($checkups, array('success', _t('설정 테이블에 이미지 저장 옵션 필드를 추가했습니다.')));
+
+					}
+					
+					if (!$db->exists("SELECT value FROM {$prefix}Settings WHERE `name` = 'addressType'")) {
+						$db->execute("INSERT INTO {$prefix}Settings (`name`,`value`) VALUES ('addressType','id')");						
+						array_push($checkups, array('success', _t('설정 테이블에 주소 방식 필드를 추가했습니다.')));
+
+					}			
+					
+					if(!$db->exists("SHOW INDEX FROM {$prefix}FeedItems WHERE `Key_name` = 'focus'")) {
+						$db->execute("ALTER TABLE {$prefix}FeedItems ADD INDEX ( `focus` )");
+						array_push($checkups, array('success', _t('피드아이템 테이블에 포커스 필드를 인덱스로 추가했습니다.')));
+					}
 
 					$result = '';
 					foreach($checkups as $checkup) {

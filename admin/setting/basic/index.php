@@ -60,13 +60,15 @@
 							"&boomDownReactLimit="+$('#boomDownReactLimit').val() +
 							"&thumbnailLimit="+$('#thumbnailLimit').val()+		
 							"&thumbnailSize="+$('#thumbnailSize').val()+		
-							"&thumbnailType="+($('#thumbnailType').attr('checked')?'resizeBaseWidth':'resize')+		
+							"&thumbnailType="+($('#thumbnailType').attr('checked')?'resizeBaseWidth':'crop')+		
 							"&updateProcess="+$('#updateProcess').val()+
 							"&summarySave="+($('#summarySave').attr('checked')?'y':'n')+
 			 			    "&useVerifier="+($('#useVerifier').attr('checked')?'y':'n')+
 							"&verifierType="+$('#verifierType').val()+
 							"&verifier="+$('#verifier').val()+
-							"&directView="+($('#directView').attr('checked')?'y':'n'),
+							"&saveImages="+($('#saveImages').attr('checked')?'y':'n')+
+							"&directView="+($('#directView').attr('checked')?'y':'n')+						"&addressType="+($('#addressType').val()),
+
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();
@@ -174,7 +176,33 @@
 				$thumbnailType = $config->thumbnailType;
 				$updateProcess = $config->updateProcess;
 				$summarySave = $config->summarySave;
+				$addressType = $config->addressType;
 ?>	
+	<dl class="normal">
+		<dt><?php echo _t('기본');?></dt>
+		<dd>
+<?php
+			ob_start();
+?>
+				<select name="addressType" id="addressType">			
+					<option value="id" <?php if ($addressType == 'id') { ?>selected="selected"<?php } ?>><?php echo _t('숫자 (ID)');?></option>
+					<option value="uri" <?php if ($addressType == 'uri') { ?>selected="selected"<?php } ?>><?php echo _t('도메인 (URL)');?></option>
+				</select>				
+<?php
+			$arg = ob_get_contents();
+			ob_end_clean();
+			echo _f('블로그로 이동되는 주소 체계를 %1 형태로 사용합니다.', $arg);
+?>
+
+		</dd>
+	</dl>	
+
+	<dl class="normal comments last_item">
+		<dt></dt>
+		<dd class="text ">
+			<?php echo _t('숫자를 사용할 경우 /go/1 과 같은 형태로, 도메인을 사용할 경우 /go/http://bloglounge.org 와 같은 형태로 보여집니다.');?>
+		</dd>
+	</dl>
 
 	<dl class="normal">
 		<dt><?php echo _t('수집');?></dt>
@@ -235,6 +263,15 @@
 			<?php echo _t('이 옵션을 지정하지 않으면 저장되는 썸네일의 크기는 너비와 높이가 같은 정사각형으로 저장됩니다.');?>
 		</dd>
 	</dl>
+
+	<dl class="line"></dl>
+
+	<dl class="normal">
+		<dt></dt>
+		<dd>
+			<input type="checkbox" <?php if (Validator::getBool($config->saveImages)) { ?>checked="checked"<?php } ?> name="saveImages" id="saveImages" value="y" /><label for="saveImages">&nbsp;<?php echo _t('본문에 포함된 이미지를 서버에 저장합니다.');?></label>
+		</dd>
+	</dl>	
 
 	<dl class="line"></dl>
 

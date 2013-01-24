@@ -9,12 +9,17 @@
 		$pageCount = isset($exportConfig) && isset($exportConfig['count']) ?  $exportConfig['count'] : 10;
 		$newWindow = isset($exportConfig) && isset($exportConfig['popup']) ?  Validator::getBool($exportConfig['popup']) : true;
 		$categoryView = isset($exportConfig) && isset($exportConfig['category_view']) ?  Validator::getBool($exportConfig['category_view']) : false;
+		$focusView = isset($exportConfig) && isset($exportConfig['focus_view']) ?  ($exportConfig['focus_view'] == 'focus' ? true : false) : false;
 		
-		if($categoryView) {
-			$categoryValue = isset($exportConfig) && isset($exportConfig['category']) ?  $exportConfig['category'] : '';
-			list($posts, $totalFeedItems) = FeedItem::getFeedItems('category', $categoryValue, '', $page, $pageCount);
+		if($focusView) {
+			list($posts, $totalFeedItems) = FeedItem::getFeedItems('focus', 'y', '', $page, $pageCount);
 		} else {
-			list($posts, $totalFeedItems) = FeedItem::getFeedItems('', '', '', $page, $pageCount);
+			if($categoryView) {
+				$categoryValue = isset($exportConfig) && isset($exportConfig['category']) ?  $exportConfig['category'] : '';
+				list($posts, $totalFeedItems) = FeedItem::getFeedItems('category', $categoryValue, '', $page, $pageCount);
+			} else {
+				list($posts, $totalFeedItems) = FeedItem::getFeedItems('', '', '', $page, $pageCount);
+			}
 		}
 		$paging = Func::makePaging($page, $pageCount, $totalFeedItems);
 
@@ -53,17 +58,19 @@
 <?php
 		if($thumbnail) {
 
+			$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$post['id'] : $service['path'].'/go/'.$post['permalink'];
+
 			if(!empty($post['thumbnail'])) {
 ?>
 				<div class="thumbnail">
-					<a href="<?php echo $service['path'].'/go/'.$post['id'];?>" target="<?php echo $newWindow?'_blank':'_parent';?>"><img src="<?php echo $thumbnailFile;?>" alt="thumnail" /></a>
+					<a href="<?php echo $link_url;?>" target="<?php echo $newWindow?'_blank':'_parent';?>"><img src="<?php echo $thumbnailFile;?>" alt="thumnail" /></a>
 				</div>
 <?php
 			}
 		}
 ?>
 				<div class="data">
-					<h3><a href="<?php echo $service['path'].'/go/'.$post['id'];?>" target="<?php echo $newWindow?'_blank':'_parent';?>"><?php echo UTF8::clear($event->on('Text.postTitle', func::stripHTML($post['title'])));?></a></h3>
+					<h3><a href="<?php echo $link_url;?>" target="<?php echo $newWindow?'_blank':'_parent';?>"><?php echo UTF8::clear($event->on('Text.postTitle', func::stripHTML($post['title'])));?></a></h3>
 					<p><?php echo $post_description;?></p>
 				</div>
 				<div class="clear"></div>

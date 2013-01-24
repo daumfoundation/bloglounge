@@ -4,7 +4,11 @@
 	include ROOT . '/lib/link.begin.php';	
 
 	if(isset($accessInfo['action'])) {
-		$id = $accessInfo['action'];
+		$id = $accessInfo['action'];	
+		if(!is_numeric($id)) {
+			$id = FeedItem::getIdByURL($accessInfo['address']);
+		}
+
 		$linker_post = FeedItem::getFeedItem($id);
 		$linker_feed = Feed::getAll($linker_post['feed']);
 		

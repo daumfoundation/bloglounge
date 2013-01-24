@@ -9,4 +9,6 @@
 	include_once(ROOT. '/lib/components/index.php');
 	include_once(ROOT. '/lib/header/index.php');
 	include_once(ROOT. '/lib/functions.php');
+
+	$caches = new Caches;
 ?>

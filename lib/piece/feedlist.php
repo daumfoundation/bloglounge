@@ -81,8 +81,10 @@
 					if ($recents = FeedItem::getRecentFeedItemsByFeed($feed['id'], $skinConfig->feedListRecentFeedList)) {	
 						$sp_feedrecent_rep = '';
 						foreach($recents as $recent) {
+							$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$recent['id'] : $service['path'].'/go/'.$recent['permalink'];
+
 							$s_feedrecent_rep = $skin->parseTag('feeds_recent_url', $recent['permalink'], $src_feedrecent_rep);
-							$s_feedrecent_rep = $skin->parseTag('feeds_recent_linkurl', $service['path'].'/go/'.$recent['id'], $src_feedrecent_rep);
+							$s_feedrecent_rep = $skin->parseTag('feeds_recent_linkurl', $link_url, $src_feedrecent_rep);
 							$s_feedrecent_rep = $skin->parseTag('feeds_recent_title', $recent['title'], $s_feedrecent_rep);
 							$s_feedrecent_rep = $skin->parseTag('feeds_recent_date', date('Y-m-d H:i',$recent['written']), $s_feedrecent_rep);
 							$sp_feedrecent_rep .= $s_feedrecent_rep;

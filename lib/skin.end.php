@@ -16,23 +16,23 @@
 				case 'blogURL':
 					if($accessInfo['controller'] == 'blog') {
 						$qSearch = '/blog/' . $accessInfo['action'];
-					} else {
+					} else if($accessInfo['controller'] == 'search')  {
 						$qSearch = '/search/blogURL/' . func::encode(trim($searchKeyword));
 					}
 				break;
 				case 'tag':
-					$qSearch = '/search/tag/' . func::encode(trim($searchKeyword));
+					if($accessInfo['controller'] == 'search') $qSearch = '/search/tag/' . func::encode(trim($searchKeyword));
 				break;
 				case 'all':
-					$qSearch = '/search/all/' . func::encode(trim($searchKeyword));
+					if($accessInfo['controller'] == 'search')  $qSearch = '/search/all/' . func::encode(trim($searchKeyword));
 				break;
 				case 'keyword':
-					$qSearch = '/search/keyword/' . func::encode(trim($searchKeyword));
+					if($accessInfo['controller'] == 'search')  $qSearch = '/search/keyword/' . func::encode(trim($searchKeyword));
 				break;
 				case 'archive':
 					if($accessInfo['controller'] == 'day') {
 						$qSearch = '/day/' . $accessInfo['action'];						
-					} else {
+					} else if($accessInfo['controller'] == 'search')  {
 						$qSearch = '/search/archive/' . func::encode(trim($searchKeyword));
 					}
 				break;
@@ -44,18 +44,24 @@
 		}
 
 		$add = $service['path'];
-		switch($accessInfo['controller']) {
-			case 'group':
-			case 'category':
-				$add .= '/'. $accessInfo['controller'] .'/' . func::encode(trim($searchKeyword));
-			break;
-			case 'feedlist':
-				$add .= '/feedlist';
-			break;
+		if(!in_array($accessInfo['controller'], array('','read','blog','calling','day','error','export','focus','go','join','login','logout','random','rss','search'))) {
+			switch($accessInfo['controller']) {
+				case 'feedlist':
+					$add .= '/feedlist';
+				break;	
+				case 'group':
+				case 'category':
+				default:
+					$add .='/'. $accessInfo['controller'] .'/' . func::encode(trim($searchKeyword));
+				break;
+			}
 		}
 
-		$s_paging = $skin->parseTag('prev_page', $add.$qSearch.$paging['pageDatas'][$paging['pagePrev']], $src_paging);
-		$s_paging = $skin->parseTag('next_page', $add.$qSearch.$paging['pageDatas'][$paging['pageNext']], $s_paging);
+		$add = func::lastSlashDelete($add);
+
+		$s_paging = $skin->parseTag('prev_page', $event->on('Text.pagingURL',$add.$qSearch.$paging['pageDatas'][$paging['pagePrev']]), $src_paging);
+		$s_paging = $skin->parseTag('next_page', $event->on('Text.pagingURL',$add.$qSearch.$paging['pageDatas'][$paging['pageNext']]), $s_paging);
+
 		$s_paging = $skin->parseTag('more_prev_page', ($paging['pagePrev'] == $page ? 'no_more' : 'more'), $s_paging);
 		$s_paging = $skin->parseTag('more_next_page', ($paging['pageNext'] == $page ? 'no_more' : 'more'), $s_paging);
 
@@ -63,7 +69,7 @@
 		$src_rep_paging = $skin->cutSkinTag('paging_rep');
 		for ($p=$paging['pageStart']; $p < $paging['pageEnd']+1; $p++) { 
 			$sp_paging = $skin->parseTag('page_number', $p, $src_rep_paging);
-			$sp_paging = $skin->parseTag('page_url', $add.$qSearch.$paging['pageDatas'][$p], $sp_paging);
+			$sp_paging = $skin->parseTag('page_url', $event->on('Text.pagingURL',$add.$qSearch.$paging['pageDatas'][$p]), $sp_paging);
 			if ($p == $page) {
 				$sp_paging = $skin->parseTag('page_highlight', 'selected', $sp_paging);
 			} else {
@@ -72,11 +78,9 @@
 			$s_rep_paging .= $sp_paging;
 			$sp_paging = '';
 		}
-
 		if($paging['pageEnd'] < $paging['totalPages']) {
 			$sp_paging = $skin->parseTag('page_number', $paging['totalPages'], $src_rep_paging);
-			$sp_paging = $skin->parseTag('page_url', $add.$qSearch.$paging['pageDatas'][$paging['totalPages']], $sp_paging);
-
+			$sp_paging = $skin->parseTag('page_url', $event->on('Text.pagingURL',$add.$qSearch.$paging['pageDatas'][$paging['totalPages']]), $sp_paging);
 			$sp_paging = $skin->parseTag('page_highlight', 'last', $sp_paging);
 
 			$s_rep_paging .= ('<span class="interword">...</span>' . $sp_paging);

@@ -139,6 +139,8 @@ function printCategoryFocusView($categories, $index, $config) {
 		if($media = Media::getMedia($entry['thumbnailId'])) {
 			$thumbnailFile = Media::getMediaFile($media['thumbnail']);
 		}
+		
+		$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$entry['id'] : $service['path'].'/go/'.$entry['permalink'];
 
 		if(!empty($thumbnailFile)) {
 ?>
@@ -146,7 +148,7 @@ function printCategoryFocusView($categories, $index, $config) {
 				<img src="<?php echo $thumbnailFile;?>" alt="<?php echo _t('미리보기 이미지');?>" />
 			</div>
 			<div class="data">
-				<h3><a href="<?php echo $service['path'];?>/go/<?php echo $entry['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($entry['title']),$config['categoryTitleLength']);?></a></h3>
+				<h3><a href="<?php echo $link_url;?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($entry['title']),$config['categoryTitleLength']);?></a></h3>
 				<div class="desc">
 					<?php echo UTF8::lessenAsByte(func::stripHTML($entry['description']),$config['categoryDescLength']);?>
 				</div>
@@ -155,7 +157,7 @@ function printCategoryFocusView($categories, $index, $config) {
 		} else {
 ?>
 			<div class="data data_full">
-				<h3><a href="<?php echo $service['path'];?>/go/<?php echo $entry['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($entry['title']),$config['categoryTitleLength']);?></a></h3>
+				<h3><a href="<?php echo $link_url;?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($entry['title']),$config['categoryTitleLength']);?></a></h3>
 				<div class="desc">
 					<?php echo UTF8::lessenAsByte(func::stripHTML($entry['description']),$config['categoryDescLength']);?>
 				</div>
@@ -169,8 +171,10 @@ function printCategoryFocusView($categories, $index, $config) {
 		}
 		for($i=1;$i<count($entries);$i++) {
 			$entry = $entries[$i];
+			$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$entry['id'] : $service['path'].'/go/'.$entry['permalink'];
+
 ?>
-		<li class="list"><a href="<?php echo $service['path'];?>/go/<?php echo $entry['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($entry['title']),$config['categoryTitleLength']);?></a></li>
+		<li class="list"><a href="<?php echo $link_url;?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($entry['title']),$config['categoryTitleLength']);?></a></li>
 <?php
 		}
 ?>

@@ -42,7 +42,6 @@
 				$condMessage = true;
 
 			} else if ($searchType=='blogURL') { // 블로그주소
-				
 				$src_condSearchBlogURL = $skin->cutSkinTag('cond_search_blogurl');
 				$searchblog = array();
 				list($searchblog['title'], $searchblog['description'], $searchblog['logo'], $searchblog['feedCount']) = Feed::gets($searchExtraValue, 'title, description, logo, feedCount');

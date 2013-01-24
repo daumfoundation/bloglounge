@@ -114,7 +114,7 @@
 		}
 
 		function getRank($itemId) {
-			global $database, $db;
+			global $database, $db, $caches;
 
 			$rankBy = '';
 			switch (Settings::get('rankBy')) {
@@ -125,10 +125,15 @@
 					$rankBy = 'boomUp-boomDown';
 					break;
 			}
+			
+			$topScore = $caches->get('Bloglounge.Model.Boom:topScore');
+			if($topScore === false) {
+				$rankLife = (mktime() - (Settings::get('rankLife') * 86400));
 
-			$rankLife = (mktime() - (Settings::get('rankLife') * 86400));
-			if (!list($topScore) = $db->pick('SELECT max('.$rankBy.') FROM '.$database['prefix'].'FeedItems WHERE written >= ('.$rankLife.')'))
-				return 0; // if failed, return 0 rank.
+				list($topScore) = $db->pick('SELECT max('.$rankBy.') FROM '.$database['prefix'].'FeedItems WHERE written >= ('.$rankLife.')');
+				$caches->set('Bloglounge.Model.Boom:topScore', $topScore);
+			}
+			
 			if (!$topScore) return 0;
 
 			if (!preg_match("/^[0-9]+$/", $topScore)) 

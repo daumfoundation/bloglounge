@@ -37,6 +37,13 @@
 		case 'export':
 			include_once(ROOT.'/meta/export.php');
 		break;
+		case 'u':
+		case 'user':
+			include_once(ROOT.'/meta/user.php');
+		break;
+		case 'author':
+			include_once(ROOT.'/meta/author.php');
+		break;
 		default:
 			// error or custom page »ðÀÔ
 			include_once(ROOT.'/meta/custom.php');

@@ -182,7 +182,7 @@
 		$media = new Media;
 		foreach($focusImages as $item) {
 			if(!file_exists($path.'/'.$item['id'].'.jpg')) {
-				$media->getThumbnail($item['source'], 350, 160, $path, $item['id'], 'cropCenter'); // cropCenter
+				$media->getThumbnail($item['source'], 350, 160, $path, $item['id'], 'crop');
 			}
 		}
 		
@@ -233,7 +233,10 @@
 			$thumbnailFile = '';
 			if($media = Media::getMedia($feedItem['thumbnailId'])) {
 				$thumbnailFile = Media::getMediaFile($media['thumbnail']);
-			}
+			}			
+			
+			$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$feedItem['id'] : $service['path'].'/go/'.$feedItem['permalink'];
+
 ?>
 							<li>
 <?php
@@ -246,7 +249,7 @@
 			}
 ?>
 								<div class="data <?php echo empty($thumbnailFile)?'data2':'';?>">
-									<h3><a href="<?php echo $service['path'];?>/go/<?php echo $feedItem['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['title']),60);?></a></h3>
+									<h3><a href="<?php echo $link_url;?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['title']),60);?></a></h3>
 									<div class="permalink">
 										<a href="<?php echo $feedItem['permalink'];?>" target="_blank"><?php echo $feedItem['permalink'];?></a>
 									</div>
@@ -261,9 +264,12 @@
 			if(count($tag['feedItems'])>1) {
 					for($i=1;$i<count($tag['feedItems']);$i++) {
 						$tagItem = $tag['feedItems'][$i];
+
+							$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$tagItem['id'] : $service['path'].'/go/'.$tagItem['permalink'];
+
 ?>
 							<li class="title_only">
-								<a href="<?php echo $service['path'];?>/go/<?php echo $tagItem['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($tagItem['title']),60);?></a> <span class="sep">|</span> <span class="feedTitle"><?php echo Feed::get($tagItem['feed'],'title');?></span>
+								<a href="<?php echo $link_url;?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($tagItem['title']),60);?></a> <span class="sep">|</span> <span class="feedTitle"><?php echo Feed::get($tagItem['feed'],'title');?></span>
 							</li>
 <?php			
 					}
@@ -292,14 +298,16 @@
 <?php	
 		$i = 1;		
 		foreach($focusImages as $focusImage) {
+								$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$focusImage['id'] : $service['path'].'/go/'.$focusImage['permalink'];
+
 ?>
 								<div class="focusImage" style="top:<?php echo ($i-1)*160;?>px; background:url('<?php echo $service['path'];?>/cache/thumbnail/m_focus/<?php echo $focusImage['id'];?>.jpg') no-repeat top center;">
-									<a href="<?php echo $service['path'];?>/go/<?php echo $focusImage['id'];?>" target="_blank"><img src="<?php echo $pluginURL;?>/images/empty.gif" alt="" /></a>
+									<a href="<?php echo $link_url;?>" target="_blank"><img src="<?php echo $pluginURL;?>/images/empty.gif" alt="" /></a>
 								</div>
 
 								<div class="focusTitleBG" style="top:<?php echo ($i-1)*160 + 120;?>px;"></div>
 								<div class="focusImageTitle" style="top:<?php echo ($i-1)*160 + 120;?>px;">	
-									<a href="<?php echo $service['path'];?>/go/<?php echo $focusImage['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte($focusImage['title'],60);?></a><br />
+									<a href="<?php echo $link_url;?>" target="_blank"><?php echo UTF8::lessenAsByte($focusImage['title'],60);?></a><br />
 									<span class="blogtitle"><?php echo Feed::get($focusImage['feed'],'title');?></span>
 								</div>
 <?php

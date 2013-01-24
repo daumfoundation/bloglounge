@@ -4,7 +4,8 @@
 	include ROOT . '/lib/begin.php';
 
 	$customData = $event->on('Disp.custom');
-	if(!empty($customData)) { // plugin
+	if($customData === true) { // plugin
+	} else if(!empty($customData)) { // plugin
 		$s_content = $customData;
 		$skin->dress('content', $s_content);
 	} else {

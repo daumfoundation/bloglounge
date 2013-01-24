@@ -4,9 +4,6 @@
 	if (!isset($database['type'])) $database['type'] = 'mysql'; 
 	
 	function requireComponent($name) {
-		if (!ereg('^[[:alnum:]]+[[:alnum:].]+$', $name)) {
-			return false;
-		}
 		include_once(ROOT . '/components/'.$name.'.php');
 	}
 

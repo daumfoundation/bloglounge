@@ -35,10 +35,5 @@
 		$searchKeyword = 'category';
 	}
 
-	$page = !isset($_GET['page']) ? 1 : $_GET['page'];  // global	
-	if (($page < 1) || !is_numeric($page) || !preg_match("/^\d+$/",$page)) {
-		$page = 1;
-	}
-
 	$searchExtraValue = NULL; // global
 ?>

@@ -69,7 +69,7 @@
 			$result['type'] = 'local';
 
 			// use remote api if image functions unavailable
-			$requiredFunctions = array('imagetypes', 	'imagecreatetruecolor', 'imagecopyresampled', 'imagedestroy','getimagesize', 'imagesx', 'imagesy', 'imageinterlace', 'imagecreatefromstring');
+			$requiredFunctions = array('imagetypes', 'imagecreatetruecolor', 'imagecopyresampled', 'imagedestroy','getimagesize', 'imagesx', 'imagesy', 'imageinterlace', 'imagecreatefromstring');
 			foreach ($requiredFunctions as $func) {
 				if (!function_exists($func)) {
 					$result['type'] = 'remote';
@@ -77,7 +77,7 @@
 				}
 			}
 
-			$medias = $this->detectMediaAndSave( stripslashes($item['description']), $item['id'], $thumbnailSize, $limit, $resizeType );
+			$medias = $this->detectMediaAndSave( $item, $item['id'], $thumbnailSize, $limit, $resizeType );
 			if(count($medias['images']) == 0 && count($medias['movies']) == 0) {
 				return false;
 			} 
@@ -137,16 +137,27 @@
 			$y = 0;
 			$org_x = 0;
 			$org_y = 0;
+
+			
 			
 			switch($resizeType) {	
-				case 'crop':
-					if($h > $org_h) {
-						$org_h = round($h * ($org_w / $w));
+				case 'crop': // 지정된 크기에 상관없이 새롭게 영역을 지정해서 크롭, 빈공간 없음
+					$imageDes = imagecreatetruecolor($w, $h);
+
+					if($org_w < $org_h) {
+						$temp = $h;
+						$h = $temp * ($org_h / $org_w);
 					} else {
-						$h = round($org_h * ($w / $org_w));
+						$temp = $w;
+						$w = $temp * ($org_w / $org_h);
 					}
+
+					$x = round(($w_fix / 2) - ($w / 2));
+					$y = round(($h_fix / 2) - ($h / 2));
 				break;
-				case 'cropCenter':
+				case 'cropCenter': // 지정된 크기안에 영역을 지정해서 크롭, 비율에 따라 빈공간 (검은색) 존재
+					$imageDes = imagecreatetruecolor($w, $h);
+
 					if($h > $org_h) {
 						$org_h = round($h * ($org_w / $w));
 					} else {
@@ -160,13 +171,16 @@
 			
 					$x = round(($w_fix / 2) - ($w / 2));
 					$y = round(($h_fix / 2) - ($h / 2));
-					
 				break;
-				case 'resizeBaseWidth':
+				case 'resizeBaseWidth': // 높이 자동 조절
 					$h = $w * ($org_h / $org_w);
+
+					$imageDes = imagecreatetruecolor($w, $h);
 				break;
-				case 'resize':
+				case 'resize': // 지정된 크기에 맞게 높이, 너비 자동 조절 (지정된 크기보다 커지지 않음)
 				default:
+					$imageDes = imagecreatetruecolor($w, $h);
+
 					if($org_w < $org_h) {
 						$temp = $h;
 						$h = $temp * ($org_h / $org_w);
@@ -177,7 +191,6 @@
 				break;
 			}
 
-			$imageDes = imagecreatetruecolor($w, $h);
 
 			if(!imagecopyresampled(
 			  $imageDes, $imageSrc,             // destination, source
@@ -214,13 +227,38 @@
 
 			return array('filename'=>$result, 'source'=>$imageURL, 'width'=>$org_w, 'height'=>$org_h);
 		}
-
+		
+		// content -> string or array(description, enclosure);
 		function detectMediaAndSave($content, $uniqueId, $thumbnailSize, $limit = -1, $resizeType = 'resize') {
 			$result = array();
 			$result['images'] = array();
 			$result['movies'] = array();
+
+			$is_content_array_type = false;
 			
-			if($images = $this->detectIMGsrc($content)) {	
+			if(is_array($content)) {
+				$is_content_array_type = true;
+				$item = $content;
+				$content = stripslashes($content['description']);
+			}
+			
+			if(!$images = $this->detectIMGsrc($content)) {
+				$images = array();
+			}
+			
+			if($is_content_array_type) {
+				foreach($item['enclosures'] as $enclosure) {
+					switch(strtolower($enclosure['type'])) {
+						case 'image/jpeg':
+						case 'image/gif':
+						case 'image/png':
+							array_push($images, array_filter(array($enclosure['url']), array(new ThumbnailFilter, 'filter')));
+						break;
+					}
+				}
+			}
+
+			if(!empty($images)) {	
 				$count = count($images);
 				if($count>0) {		
 					if(($limit<0) || ($limit>$count)) {

@@ -20,6 +20,8 @@
 		}
 
 		function on($event, $input = null) {
+			global $service;
+
 			if (empty($event)) return false;
 			if (!isset($this->case) || !is_array($this->case) || !isset($this->case[$event]) || empty($this->case[$event])) return $input;
 			if (Validator::enum($event, 'Plugin.on,Plugin.off,Plugin.set') && isset($input['plugin']) && !empty($input['plugin'])) { // Plug.on & off & set 이벤트는 연쇄작용 없음

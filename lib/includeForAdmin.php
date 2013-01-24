@@ -11,4 +11,9 @@
 	include_once(ROOT. '/lib/components/admin.php');
 	include_once(ROOT.'/lib/admin.php');
 	include_once(ROOT.'/lib/functions.php');
+
+	$userInformation = getUsers();
+	$is_admin = isset($userInformation['is_admin'])?(($userInformation['is_admin']=='y')?true:false):false;
+
+	$caches = new Caches;
 ?>

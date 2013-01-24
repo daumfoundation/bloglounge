@@ -2,9 +2,6 @@
  $action = $accessInfo['action'];
  if(empty($action)) $action = 'center'; 
  
- $userInformation = getUsers();
- $is_admin = isset($userInformation['is_admin'])?(($userInformation['is_admin']=='y')?true:false):false;
-
  $appMessage = readAppMessage();
  clearAppMessage();
 ?>
@@ -397,7 +394,7 @@
 				</ul>
 			</div>
 			<div id="project_link">
-				<a href="http://bloglounge.itcanus.net/" target="_blank"><?php echo _t("블로그라운지 홈페이지");?></a>
+				<a href="http://bloglounge.org/" target="_blank"><?php echo _t("블로그라운지 홈페이지");?></a>
 			</div>
 			<div class="clear"></div>
 		</div>

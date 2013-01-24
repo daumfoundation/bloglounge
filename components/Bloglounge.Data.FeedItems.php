@@ -161,6 +161,44 @@
 			return ($db->count('SELECT owner FROM '.$database['prefix'].'Feeds WHERE owner="'.$session['id'].'" and id="'.$feedId.'"') != 0) ? true : false;
 		}
 
+		function saveImages($feedId, $itemId, $item) {
+			requireComponent('LZ.PHP.Media');
+			requireComponent('LZ.PHP.HTTPRequest');
+
+			$http = new HTTPRequest;
+
+			list($thumbnailLimit, $thumbnailSize, $thumbnailType) = Settings::gets('thumbnailLimit, thumbnailSize, thumbnailType');
+			if($thumbnailLimit == 0) return false;
+
+			if (!$images = Media::detectIMGsrc($item['description']))
+				return false;
+
+			$i = 1;
+			$description = $item['description'];
+
+			foreach($images as $image) {
+				$path = ROOT . '/cache/images/' . $feedId;
+				if (!is_dir($path)) {
+					mkdir($path);
+					@chmod($path, 0777);
+				}
+
+				$newImageURL = $path . '/i_' . $itemId . '_' . $i;
+				$imageURL = $image[0];
+
+				if (preg_match("/\"(.+)\"/", stripslashes($imageURL), $matches))
+					$imageURL = $matches[1];
+
+				if($http->download($imageURL, $newImageURL)) {
+					$description = str_replace($imageURL,('/cache/images/' . $feedId . '/i_' . $itemId . '_' . $i),$description);			
+				}
+
+				$i ++;
+			}
+
+			return $description;
+		}
+
 		function setThumbnail($itemId, $thumbnailId) {
 			global $database, $db;
 			if(empty($itemId) || empty($thumbnailId)) {
@@ -289,28 +327,16 @@
 			return FeedItem::getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount, $viewDelete, $owner);
 		}
 
-		function getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount, $viewDelete = false, $owner = 0) {
+		function getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount, $viewDelete = false, $owner = 0, $customQuery = '') {
 			global $db, $database;
 			
-			$sQuery = FeedItem::getFeedItemsQuery($searchType, $searchKeyword, $searchExtraValue,$viewDelete,$owner);
-			
+			$sQuery = FeedItem::getFeedItemsQuery($searchType, $searchKeyword, $searchExtraValue,$viewDelete,$owner) . $customQuery;
+
 			$pageStart = ($page-1) * $pageCount; // 처음페이지 번호
-
 			
-
-			if($searchType != 'category') {
+			$sQuery = ' LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) ' . $sQuery;
 		
-				$categoryQuery = ' AND c.custom ="y" ';
-		
-			} else {
-				$categoryQuery = '';
-			}
-
-			$feedList = $db->queryAll('SELECT i.id, i.feed, i.author, i.permalink, i.title, i.description, i.tags, i.written, i.click, i.thumbnailId, i.visibility, i.feedVisibility, i.boomUp, i.boomDown,  c.category AS category,  i.focus FROM '.$database['prefix'].'FeedItems i LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id '.$categoryQuery.') '. $sQuery.' ORDER BY i.written DESC LIMIT '.$pageStart.','.$pageCount);
-			
-			if($searchType == 'category') {
-				$sQuery = ' LEFT JOIN '.$database['prefix'].'CategoryRelations c ON (c.item = i.id) ' . $sQuery;
-			}
+			$feedList = $db->queryAll('SELECT i.id, i.feed, i.author, i.permalink, i.title, i.description, i.tags, i.written, i.click, i.thumbnailId, i.visibility, i.feedVisibility, i.boomUp, i.boomDown,  c.category AS category, i.focus FROM '.$database['prefix'].'FeedItems i '.$sQuery.' GROUP BY i.id ORDER BY i.written DESC LIMIT '.$pageStart.','.$pageCount);
 
 
 			$feedItemCount = FeedItem::getFeedItemCount($sQuery);
@@ -322,11 +348,22 @@
 
 			$sQuery = '';
 
-			if ($searchType=='tag' && !Validator::is_empty($searchKeyword)) {		
-				if (!list($tagId) = $db->pick('SELECT id FROM '.$database['prefix'].'Tags WHERE name="'.$db->escape($searchKeyword).'"')) {
+			if (($searchType=='tag' || $searchType=='tag+group_category') && !Validator::is_empty($searchKeyword)) {		
+				$tagIds = array();
+				$tags = explode(',',$searchKeyword);
+
+				if($tagResult = $db->queryAll('SELECT id FROM '.$database['prefix'].'Tags WHERE name IN ('.Func::implode_string(',',$tags).')')) {
+					foreach($tagResult as $tagItem) array_push($tagIds, $tagItem['id']);
+				}
+
+				if (empty($tagIds)) {
 					return array(null,0);
 				} else {
-					$sQuery = ' LEFT JOIN '.$database['prefix'].'TagRelations r ON (r.item = i.id AND r.type = "feed") WHERE r.tag="'.$tagId.'"';
+					if($searchType == 'tag') {
+						$sQuery = ' LEFT JOIN '.$database['prefix'].'TagRelations r ON (r.item = i.id AND (r.type = "feed")) WHERE r.tag IN ('.implode(',',$tagIds).')';
+					} else if($searchType == 'tag+group_category') {
+						$sQuery = ' LEFT JOIN '.$database['prefix'].'TagRelations r ON (r.item = i.id AND (r.type = "feed" || r.type = "group_category")) WHERE r.tag IN ('.implode(',',$tagIds).')';
+					}
 				}
 
 			} else if ($searchType=='blogURL' && !Validator::is_empty($searchKeyword)){		
@@ -335,9 +372,30 @@
 				if(empty($searchFeedId)) {
 					$searchFeedId = Feed::blogURL2Id('http://'.str_replace('http://', '', $searchKeyword));
 				} 
-
-				$sQuery = ' WHERE i.feed = '.$searchFeedId;
+				if(!empty($searchFeedId)) {
+					$sQuery = ' WHERE i.feed = '.$searchFeedId;
+				} else {
+					$sQuery = ' WHERE 1=0 ';
+				}
 				
+			} else if ($searchType=='user' && !Validator::is_empty($searchKeyword)){		
+				$searchKeyword = UTF8::bring($searchKeyword);
+				$searchFeedId = $searchExtraValue;
+				if(empty($searchFeedId)) {
+					$searchFeedId = Feed::getIdListByOwner(User::getByloginId($searchKeyword));
+				} 
+				if(!empty($searchFeedId)) {
+					$sQuery = ' WHERE i.feed IN ('.implode(",",$searchFeedId).')';
+				} else {
+					$sQuery = ' WHERE 1=0 ';
+				}
+			} else if ($searchType=='author' && !Validator::is_empty($searchKeyword)){		
+				$searchKeyword = UTF8::bring($searchKeyword);
+				if(!empty($searchKeyword)) {
+					$sQuery = ' WHERE i.author = "' . $searchKeyword . '"';
+				} else {
+					$sQuery = ' WHERE 1=0 ';
+				}
 			} else if ($searchType=='title+description' && !Validator::is_empty($searchKeyword)){		
 					$searchKeyword = UTF8::bring($searchKeyword);
 					$keyword = $db->escape($searchKeyword);
@@ -473,9 +531,12 @@
 				}
 			}
 
-			if(strpos($sQuery, 'Feeds f') === false ) {
+			if($viewDelete) {
+				if(strpos($sQuery, 'Feeds f') === false ) {
 				$bQuery = ' LEFT JOIN '.$database['prefix'].'Feeds f ON (f.id = i.feed) ' . $bQuery;
+				}
 			}
+
 			if (strpos($sQuery, 'WHERE') !== false) {
 				$sQuery = str_replace('WHERE ', $bQuery.' AND (', $sQuery);
 				$sQuery .= ')';

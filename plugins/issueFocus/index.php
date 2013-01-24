@@ -152,6 +152,9 @@
 			if($media = Media::getMedia($feedItem['thumbnailId'])) {
 				$thumbnailFile = Media::getMediaFile($media['thumbnail']);
 			}
+
+			$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$feedItem['id'] : $service['path'].'/go/'.$feedItem['permalink'];
+
 ?>
 			<li>
 <?php
@@ -164,7 +167,7 @@
 			}
 ?>
 				<div class="data <?php echo empty($thumbnailFile)?'data2':'';?>">
-					<h3><a href="<?php echo $service['path'];?>/go/<?php echo $feedItem['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['title']),$config['issueTitleLength']);?></a></h3>
+					<h3><a href="<?php echo $link_url;?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['title']),$config['issueTitleLength']);?></a></h3>
 					<div class="desc">
 						<?php echo UTF8::lessenAsByte(func::htmltrim(func::stripHTML($feedItem['description'])),$config['issueDescLength']);?>
 					</div>
@@ -197,7 +200,10 @@
 			$thumbnailFile = '';
 			if($media = Media::getMedia($feedItem['thumbnailId'])) {
 				$thumbnailFile = Media::getMediaFile($media['thumbnail']);
-			}
+			}		
+			
+			$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$feedItem['id'] : $service['path'].'/go/'.$feedItem['permalink'];
+
 ?>
 			<li>
 <?php
@@ -210,7 +216,7 @@
 			}
 ?>
 				<div class="data <?php echo empty($thumbnailFile)?'data2':'';?>">
-					<h3><a href="<?php echo $service['path'];?>/go/<?php echo $feedItem['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['title']),60);?></a></h3>
+					<h3><a href="<?php echo $link_url;?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['title']),60);?></a></h3>
 					<div class="desc">
 						<?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['description']),$config['issueDescLength']);?>
 					</div>

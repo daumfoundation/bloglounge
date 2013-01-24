@@ -97,7 +97,8 @@
 
 			if ($result) {
 				while ($item = $db->fetch()) {
-					$xml->startGroup('item');
+					$xml->startGroup('item');		
+					$item->description = str_replace('/cache/images',$myURL.'/cache/images',$item->description);
 					$xml->write('title', htmlspecialcharS($item->title));
 					$xml->write('link', htmlspecialchars($item->permalink));
 					$xml->write('description', htmlspecialchars($item->description));

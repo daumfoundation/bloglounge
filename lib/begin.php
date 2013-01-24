@@ -1,8 +1,8 @@
 <?php
-	// 카운터는 하루에 한번만
 	$config = new Settings();
 	$skinConfig = new SkinSettings();
 
+	// 카운터는 하루에 한번만
 	if (!isset($_COOKIE['visited'])) {
 		requireComponent('Bloglounge.Data.Stats');
 		Stats::visit($config->countRobotVisit);

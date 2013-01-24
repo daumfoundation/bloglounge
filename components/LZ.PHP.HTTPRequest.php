@@ -223,5 +223,25 @@ echo $this->content;
 			}
 			return $this->responseText;
 		}
+
+		function download($url, $to) {
+
+			if (!isset($url)) {
+				return false;
+			}
+
+			$this->responseText = '';
+			$this->HTTPRequest('GET', $url);
+			if (!$this->send()) {
+				return false;
+			}
+
+			$fp = fopen($to,'w+');
+			fwrite($fp,$this->responseText);
+			fclose($fp);
+
+			return true;
+
+		}
 	}
 ?>

@@ -3,19 +3,23 @@
 	include ROOT . '/lib/include.php';
 	
 	$searchFeedId = $accessInfo['action'];
-	$searchType = 'blogURL';
+	$searchType = 'user';
 	if(is_numeric($searchFeedId)) {
-		$searchKeyword = 'http://'.str_replace('http://', '', Feed::get($searchFeedId, 'blogURL'));	
+		$user = User::getById($searchFeedId);
+		$searchKeyword = $user['loginid'];	
 		$searchExtraValue = $searchFeedId;
 	} else {
-		$searchKeyword = 'http://'.str_replace('http://', '', $accessInfo['address']);
-		$searchExtraValue = Feed::blogURL2Id('http://'.str_replace('http://', '', $searchKeyword));
+		$searchKeyword = $searchFeedId;	
+		$user = User::getByloginId($searchKeyword);
+		$searchExtraValue = Feed::getIdListByOwner($user['id']);
 	}
 
 	include ROOT . '/lib/begin.php';
 
+	$customQuery = $event->on('Query.feedItems', '');
+
 	$pageCount = $skinConfig->postList; // 페이지갯수
-	list($posts, $totalFeedItems) = FeedItem::getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount);
+	list($posts, $totalFeedItems) = FeedItem::getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount, false, 0, $customQuery);
 	$paging = Func::makePaging($page, $pageCount, $totalFeedItems);
 
 	include ROOT . '/lib/piece/message.php';

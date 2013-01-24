@@ -1,4 +1,5 @@
 <?php
+	requireComponent('Bloglounge.Data.Caches');
 	requireComponent('Bloglounge.Data.Tags');	
 	requireComponent('Bloglounge.Data.FeedItems');	
 	requireComponent('Bloglounge.Data.SkinSettings');

@@ -66,8 +66,9 @@
 			}
 
 			$sp_post = $skin->parseTag('post_id', $post['id'], $sp_post);
-
-			$sp_post = $skin->parseTag('post_url',  $service['path'].'/go/'.$post['id'], $sp_post);	
+			
+			$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$post['id'] : $service['path'].'/go/'.htmlspecialchars($post['permalink']);
+			$sp_post = $skin->parseTag('post_url',  $event->on('Text.postURL',$link_url), $sp_post);	
 			$sp_post = $skin->parseTag('post_permalink',  htmlspecialchars($post['permalink']), $sp_post);
 
 			$sp_post = $skin->parseTag('post_visibility', (($post['visibility'] == 'n' || $post['feedVisibility'] == 'n') ? 'hidden' : 'visible' ), $sp_post);
@@ -81,6 +82,7 @@
 			$sp_post = $skin->parseTag('post_view', $post['click'], $sp_post);
 
 			$post_description = $event->on('Text.postDescription', $post['description']);
+			$post_description = str_replace('/cache/images/',$service['path'] . '/cache/images/', $post_description);
 
 			$sp_post = $skin->parseTag('post_description', $post_description, $sp_post);
 			$sp_post = $skin->parseTag('post_blogname', UTF8::clear(Feed::get($post['feed'], 'title')), $sp_post);

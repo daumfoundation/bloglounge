@@ -98,14 +98,19 @@
 		}
 	}
 
-	$page = 1;
-	if(isset($_GET['page'])) {
-		$page = $_GET['page'];
+	$page = !isset($_GET['page']) ? 1 : $_GET['page'];  // global	
+	if (($page < 1) || !is_numeric($page) || !preg_match("/^\d+$/",$page)) {
+		$page = 1;
 	}
 
 	$i = strpos($request_uri, '?');
 	if($i !== false) {
 		$request_uri = substr($request_uri, 0 , $i);
+	}
+
+	$urls = array();
+	foreach($_GET as $k=>$v) {
+		$urls[$k] = $v;
 	}
 
 	$accessInfo = array(
@@ -115,9 +120,13 @@
 		'value'		=> $value,
 		'pass'		=> $pass,
 		'page'		=> $page,
+		'url'		=> $urls,
 		'subpath' =>  rtrim($request_uri, '/'),
 		'position' => $_SERVER["SCRIPT_NAME"],
-		'path'	   => $path
+		'path'	   => $path,
+		'address'	=> ''
 	);
-
+	if(strpos($accessInfo['subpath'],'http://')!==false) {
+		$accessInfo['address'] = urldecode(str_replace('/'.$controller.'/','',$accessInfo['subpath']));
+	}
 ?>

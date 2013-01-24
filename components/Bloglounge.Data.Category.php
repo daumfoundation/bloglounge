@@ -64,8 +64,6 @@
 
 			$result = $db->execute('UPDATE '.$database['prefix'].'Categories SET name = "'.$name.'", filter = "'.$filter.'" WHERE id='.$id);	
 			
-			
-			
 			Category::inputFilters($id,$filter);	
 			
 			Category::rebuildFilters($id,$filter);	
@@ -166,7 +164,7 @@
 				array_push($tagIds, $taglist[0]);
 			}
 				
-			if(!$db->query('SELECT item FROM '.$database['prefix'].'TagRelations WHERE tag IN ('. implode(',', $tagIds) .') AND type = "category"')) return false;
+			if(!$db->query('SELECT item FROM '.$database['prefix'].'TagRelations WHERE tag IN ('. implode(',', $tagIds) .') AND (type = "category")')) return false;
 			
 			$categoryIds = array();	
 			while ($categorylist = $db->fetchRow()) { 
@@ -200,7 +198,7 @@
 			
 				$delTagStr = implode(', ', $delTags);
 			
-				if(!$db->query('SELECT item FROM '.$database['prefix'].'TagRelations WHERE tag IN ('.$delTagStr.') AND type = "category"')) return false;
+				if(!$db->query('SELECT item FROM '.$database['prefix'].'TagRelations WHERE tag IN ('.$delTagStr.') AND (type = "category")')) return false;
 			
 				$delCategories = array();
 		
@@ -278,29 +276,32 @@
 					array_push($tagInsertChunk, "('$tag')");
 				}
 			}
-			
-			
+
 			
 			$tagInsertStr = implode(',', $tagInsertChunk); // ('tag'),('tag')...
 			$tagStr = implode(',', $tagChunk); // 'tag','tag',...
 
 			$db->execute("INSERT IGNORE INTO {$database['prefix']}Tags (name) VALUES $tagInsertStr");
-
+			
 			$tagIdList = array();
+
 			if (!$db->query("SELECT id FROM {$database['prefix']}Tags WHERE name IN ($tagStr)")) return;
 			while ($taglist = $db->fetchRow()) { 
-					array_push($tagIdList, $taglist[0]); 
+				array_push($tagIdList, $taglist[0]); 
 			}
+
 			$db->free();
 
 			$relationList = array();
+
 			foreach ($tagIdList as $tagId) {
 				array_push($relationList, "('$itemId', '$tagId', UNIX_TIMESTAMP(),'category')");
 			}
 			$relationStr = implode(',', $relationList); // ('itemId','tagId'),('itemId','tagId')...
 
 			$db->execute("INSERT IGNORE INTO {$database['prefix']}TagRelations (item, tag, linked, type) VALUES $relationStr");
-		
+
+
 		}
 		
 		
@@ -331,9 +332,40 @@
 			if($category) {
 				
 				$db->execute('DELETE FROM '.$database['prefix'].'CategoryRelations WHERE category ="'.$category['id'].'" AND custom = "n"');
-	
-				$tags = $db->queryAll('SELECT DISTINCT t2.item, t2.tag FROM '.$database['prefix'].'TagRelations t1 LEFT JOIN '.$database['prefix'].'TagRelations t2 ON (t2.tag = t1.tag AND t2.type = "feed") WHERE t1.item = "' . $category['id'] . '" AND t1.type = "category" GROUP BY t2.item');
+
 				
+				$tags = $db->queryAll('SELECT DISTINCT t2.item, t2.tag FROM '.$database['prefix'].'TagRelations t1 LEFT JOIN '.$database['prefix'].'TagRelations t2 ON (t2.tag = t1.tag AND t2.type = "feed") WHERE t1.item = "' . $category['id'] . '" AND t1.type = "category" GROUP BY t2.item');
+
+				// group_category => category
+				$tagList = explode(',',$category['filter']);				
+				if(count($tagList)>0) { 
+					$tagChunk = array();
+					
+					foreach ($tagList as $tag) {
+						if (!Validator::is_empty($tag)) {		
+					
+							$tag = trim($tag);
+							array_push($tagChunk, "'$tag'");
+						}
+					}
+				
+					$tagStr = implode(',', $tagChunk); // 'tag','tag',...
+					$tagIdList = array();		
+
+					if ($db->query("SELECT id FROM {$database['prefix']}Tags WHERE name IN ($tagStr)")) {
+						while ($taglist = $db->fetchRow()) { 
+							array_push($tagIdList, $taglist[0]); 
+						}
+					}
+
+					if(count($tagIdList)>0) {
+						$tags2 = $db->queryAll('SELECT DISTINCT t1.item, t1.tag FROM '.$database['prefix'].'TagRelations t1 WHERE t1.tag IN (' . implode(',',$tagIdList) . ') AND t1.type = "group_category"');
+
+						if(count($tags2)>0) {
+							$tags = array_merge($tags,$tags2);
+						}
+					}
+				}
 				
 				if($tags) {	
 	

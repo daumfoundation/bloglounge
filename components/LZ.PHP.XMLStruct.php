@@ -301,6 +301,28 @@
 				return str_replace('&amp;','&',$n['.attributes'][$name]);
 			else
 				return $default;
+		}	
+		
+		function getAttributes($path, $names) {
+			if(!is_array($names)) return $this->getAttribute($path, $names);
+
+			$n = &$this->selectNode($path);
+			if ($n !== null) {
+				$result = array();
+				$b = 0;
+
+				foreach($names as $name) {
+				 if(isset($n['.attributes'][$name])) {
+					$b ++;
+					array_push($result, str_replace('&amp;','&',$n['.attributes'][$name]));
+				 } else {
+					array_push($result, '');
+				 }
+				}
+				return ($b>0&&count($result)>0)?$result:null;
+			}
+			else
+				return null;
 		}
 
 		function getValue($path) {

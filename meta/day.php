@@ -36,8 +36,10 @@
 
 	include ROOT . '/lib/begin.php';
 
+	$customQuery = $event->on('Query.feedItems', '');
+
 	$pageCount = $skinConfig->postList; // 페이지갯수
-	list($posts, $totalFeedItems) = FeedItem::getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount);
+	list($posts, $totalFeedItems) = FeedItem::getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount, false, 0, $customQuery);
 	$paging = Func::makePaging($page, $pageCount, $totalFeedItems);
 
 	include ROOT . '/lib/piece/message.php';

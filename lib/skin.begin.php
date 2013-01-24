@@ -185,9 +185,11 @@
 				$sp_focus = $skin->dressOn('cond_focus_thumbnail', $src_thumbnail, '', $src_focus_rep);
 				$sp_focus = $skin->parseTag('focus_thumbnail_exist', 'focus_thumbnail_nonexistence', $sp_focus);
 			}
+			
+			$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$item['id'] : $service['path'].'/go/'.$item['permalink'];
 
 			$sp_focus = $skin->parseTag('focus_url', htmlspecialchars($item['permalink']), $sp_focus);
-			$sp_focus = $skin->parseTag('focus_link_url', $servicePath.'/go/'.$item['id'], $sp_focus);
+			$sp_focus = $skin->parseTag('focus_link_url', $link_url, $sp_focus);
 			$sp_focus = $skin->parseTag('focus_title', UTF8::clear(UTF8::lessenAsByte(func::stripHTML($item['title']),$skinConfig->focusTitleLength)), $sp_focus);		
 
 			$sp_focus = $skin->parseTag('focus_description', UTF8::clear(UTF8::lessenAsByte(func::htmltrim(func::stripHTML($item['description'])),$skinConfig->focusDescLength)), $sp_focus);
@@ -230,8 +232,10 @@
 				$sp_booms = $skin->parseTag('boom_thumbnail_exist', 'boom_thumbnail_nonexistence', $sp_booms);
 			}
 
+			$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$item['id'] : $service['path'].'/go/'.$item['permalink'];
+
 			$sp_booms = $skin->parseTag('boom_url', htmlspecialchars($item['permalink']), $sp_booms);		
-			$sp_booms = $skin->parseTag('boom_link_url', $servicePath.'/go/'.$item['id'] , $sp_booms);
+			$sp_booms = $skin->parseTag('boom_link_url', $link_url , $sp_booms);
 			$sp_booms = $skin->parseTag('boom_title', UTF8::clear(UTF8::lessenAsByte(func::stripHTML($item['title']), $skinConfig->boomTitleLength)), $sp_booms);
 
 			$sp_booms = $skin->parseTag('boom_description', UTF8::clear(UTF8::lessenAsByte(func::htmltrim(func::stripHTML($item['description'])),$skinConfig->boomDescLength)), $sp_booms);

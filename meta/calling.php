@@ -1,5 +1,4 @@
 <?php
-	define('ROOT', '../..');
 	include ROOT . '/lib/include.php';
 	
 	// TODO :
@@ -15,7 +14,12 @@
 		default:
 			$feeder->updateNextFeed();
 		break;
-	}
+	}	
+	
+	// 매번 업데이트하는 피드를 업데이트 합니다.
+	if (!$feeder->updateEveryTimeFeed())
+		$response['error'] = 1;
+
 	// Plugins
 	$event->on('Api.calling');
 ?>

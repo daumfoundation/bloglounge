@@ -168,6 +168,31 @@
 			return $ids;
 		}
 
+		function getIdListByOwner($owner) {	
+			global $database, $db;
+			if (empty($owner) || !preg_match("/^[0-9]+$/", $owner)) {
+				return false;
+			}
+			$ids = array();
+			$result = $db->queryAll('SELECT id FROM '.$database['prefix'].'Feeds WHERE owner = ' . $owner);
+			foreach($result as $item)
+				array_push($ids, $item['id']);
+			return $ids;
+		}
+
+		function getIdByUrl($url) {
+			global $database, $db;
+			if (empty($url)) {
+				return false;
+			}
+			$ids = array();
+			$result = $db->queryCell('SELECT id FROM '.$database['prefix'].'Feeds WHERE url = ' . $url);
+			if($result) {
+				return $result;
+			}
+			return false;
+		}
+
 		function getRemoteFeed($url, $depth=0) {
 			global $db;
 			if($depth>3) {
@@ -180,6 +205,7 @@
 				return array(2, null, null);
 			}
 			$feed = array('xmlURL' => $url);
+			
 			$encoding = '';
 			if (preg_match('/^<\?xml[^<]*\s+encoding=["\']?([\w-]+)["\']?/', $xml, $matches))
 				$encoding = $matches[1];
@@ -322,15 +348,26 @@
 					for ($j=1;$tag=$xmls->getValue("/rss/channel/item[$i]/subject[$j]");$j++)
 						if (!empty($tag))
 							array_push($item['tags'],$tag);
-					if ($youtubeTags = $xmls->getValue("/rss/channel/item[$i]/media:category")) { // for Youtube Feed
+					if ($youtubeTags = $xmls->getValue("/rss/channel/item[$i]/media:category")) { // for Youtube,Flickr Feed
 						array_push($item['tags'], ''); // blank. first tag not equals category
-						foreach (explode(' ', $youtubeTags) as $tag)
-							array_push($item['tags'], trim($tag));
+						foreach (explode(' ', $youtubeTags) as $tag) {
+							$tag = trim($tag);
+							if(!empty($tag))
+								array_push($item['tags'], $tag);
+						}
 					}
+
 					$item['enclosures']=array();
-					for ($j=1;$url=$xmls->getAttribute("/rss/channel/item[$i]/enclosure[$j]",'url');$j++)
-						if (!empty($url))
-							array_push($item['enclosures'],$url);
+					for ($j=1;$result=$xmls->getAttributes("/rss/channel/item[$i]/enclosure[$j]",array('url','type'));$j++) {
+						if (!empty($result)) {
+							array_push($item['enclosures'],array('url'=>$result[0],'type'=>$result[1]));
+						}
+					}
+					$flickrContent=$xmls->getAttributes("/rss/channel/item[$i]/media:content[$j]",array('url','type')); // for flickr feed
+					if(!empty($flickrContent)) {
+							array_push($item['enclosures'],array('url'=>$flickrContent[0],'type'=>$flickrContent[1]));
+					}
+
 					if ($xmls->getValue("/rss/channel/item[$i]/pubDate"))
 						$item['written']=Feed::parseDate($xmls->getValue("/rss/channel/item[$i]/pubDate"));
 					elseif ($xmls->getValue("/rss/channel/item[$i]/dc:date"))
@@ -345,15 +382,22 @@
 					}
 					if (!$item['guid']=$xmls->getValue("/rss/channel/item[$i]/guid"))
 						$item['guid'] = $item['permalink'];
-
+					
 					array_push($items, $item);
 				}
 			} elseif ($xmls->doesExist('/feed')){ // atom 0.3
 				for ($i=1;$link=$xmls->getValue("/feed/entry[$i]/id");$i++){
+					$item['enclosures']=array();
+
 					for ($j=1;$rel=$xmls->getAttribute("/feed/entry[$i]/link[$j]",'rel');$j++){
 						if ($rel=='alternate'){
 							$link=$xmls->getAttribute("/feed/entry[$i]/link[$j]",'href');
 							break;
+						} else if($rel=='enclosure') {
+							$result = $xmls->getAttributes("/feed/entry[$i]/link[$j]",array('href','type'));
+							if($result) {
+								array_push($item['enclosures'],array('url'=>$result[0],'type'=>$result[1]));
+							}
 						}
 					}
 					$item=array('permalink'=>rawurldecode($link));
@@ -368,10 +412,6 @@
 					for ($j=1;$tag=$xmls->getAttribute("/feed/entry[$i]/category[$j]", 'term');$j++) {
 						if (!empty($tag)) array_push($item['tags'],trim($tag));
 					}
-					$item['enclosures']=array();
-					for ($j=1;$url=$xmls->getAttribute("/feed/entry[$i]/enclosure[$j]",'url');$j++)
-						if (!empty($url))
-							array_push($item['enclosures'],$url);
 					if (!$item['written']= $xmls->getValue("/feed/entry[$i]/issued")) {
 						if (!$item['written'] = $xmls->getValue("/feed/entry[$i]/published")) {
 							$item['written'] = $xmls->getValue("/feed/entry[$i]/updated");
@@ -449,7 +489,7 @@
 
 			if ($status > 0){
 				$db->execute("UPDATE {$database['prefix']}Feeds SET lastUpdate = ".gmmktime()." WHERE xmlURL = '{$feedURL}'");
-				return array($status, $db->pick('SELECT title FROM '.$database['prefix'].'Feeds WHERE xmlURL = "' . $feedURL . '"'), $feedURL);
+				return array(0, $db->queryCell('SELECT title FROM '.$database['prefix'].'Feeds WHERE xmlURL = "' . $feedURL . '"'), 0);
 			} else{
 				$sQuery = (Validator::getBool($autoUpdate)) ? "title = '{$feed['title']}', description = '{$feed['description']}', " : '';
 				$db->execute("UPDATE {$database['prefix']}Feeds SET blogURL = '{$feed['blogURL']}', $sQuery language = '{$feed['language']}', lastUpdate = ".gmmktime()." WHERE xmlURL = '{$feedURL}'");
@@ -569,7 +609,7 @@
 		}
 
 		function saveFeedItems($feedId,	$feedVisibility, $xml, $callbackName = null){
-			global $database, $db;
+			global $database, $db, $event;
 
 			if (isset($callbackName)) {
 				$callback = array();
@@ -597,6 +637,9 @@
 				}
 				$db->execute('DELETE FROM '.$database['prefix'].'FeedItems WHERE written < '.$deadLine);
 			}
+
+			$event->on('Add.updateFeedItems', array($feedId, $result));
+
 			return true;
 		}
 
@@ -675,8 +718,13 @@
 			$item['author']=$db->escape($db->lessen(UTF8::correct($item['author'])));
 			$item['permalink']=$db->escape($db->lessen(UTF8::correct($item['permalink'])));
 			$item['description']=$db->escape($db->lessen(UTF8::correct(trim($item['description'])),65535));
+			
+			$enclosures = array();
+			foreach($item['enclosures'] as $en) {
+				array_push($enclosures, $en['url']);
+			}
 
-			$enclosureString=$db->escape($db->lessen(UTF8::correct(implode('|',$item['enclosures']))));				
+			$enclosureString=$db->escape($db->lessen(UTF8::correct(implode('|',$enclosures))));				
 
 			$deadLine=0;
 			$feedLife = Settings::get('archivePeriod');
@@ -731,12 +779,16 @@
 				}
 				$isRebuildData = true;
 			}			
-			
-			$item = $event->on('Add.updateFeedItem', array($item, $feedId, $id));
-			if(count($item)==3) {
-				$item = $item[0];
+
+			if(Validator::getBool(Settings::get('saveImages'))) {
+				if($description = FeedItem::saveImages($feedId, $id, $item)) {
+					$db->execute("UPDATE {$database['prefix']}FeedItems SET description = '{$description}' WHERE id = $id");
+				}
 			}
 			
+			$item = $event->on('Add.updateFeedItem', array($feedId, $id, $item));
+			if(count($item)==3) $item = $item[2];
+	
 			$result = false;
 			if($isRebuildData) {
 				requireComponent('Bloglounge.Data.Groups');
