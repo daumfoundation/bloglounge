@@ -26,9 +26,8 @@
 		function send($content = null) {
 			if (empty($this->url))
 				return false;
-			if ($content !== null)
+			if (!is_null($content))
 				$this->content = $content;
-
 			$request = @parse_url($this->url);
 			for ($trial = 0; $trial < 5; $trial++) {
 				unset($this->_response);
@@ -40,15 +39,16 @@
 					$request['path'] = '/';
 				if (!$socket = @fsockopen($request['host'], $request['port'], $errno, $errstr, $this->timeout))
 					return false;
-
+					
 				$path = empty($request['query']) ? $request['path'] : $request['path'] . '?' . $request['query'];
 				fwrite($socket, $this->method . ' ' . $path . " HTTP/1.1\r\n");
 				fwrite($socket, 'Host: ' . $request['host'] . "\r\n");
-				fwrite($socket, "User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; S20 ".BLOGLOUNGE.")\r\n");
-				fwrite($socket, "Accept-Language: ko\r\n");
-				if ($this->eTag !== null)
+				fwrite($socket, "User-Agent: Mozilla/4.0 (compatible; Textcube ".TEXTCUBE_VERSION.")\r\n");
+				if (!is_null($this->referer))
+					fwrite($socket, "Referer: {$this->referer}\r\n");
+				if (!is_null($this->eTag))
 					fwrite($socket, "If-None-Match: {$this->eTag}\r\n");
-				if ($this->lastModified !== null) {
+				if (!is_null($this->lastModified)) {
 					if (is_numeric($this->lastModified))
 						$this->lastModified = Timestamp::getRFC1123GMT($this->lastModified);
 					fwrite($socket, "If-Modified-Since: {$this->lastModified}\r\n");
@@ -57,28 +57,19 @@
 					fwrite($socket, "Content-Type: {$this->contentType}\r\n");
 					fwrite($socket, "Content-Length: " . strlen($this->content) . "\r\n");
 				}
-				if (!empty($this->cookies)) {
-					if(is_array($this->cookies)) {
-						foreach($this->cookies as $key=>$value) {
-							$_tempArray = explode(';', $value, 2);
-							$_tempStr .= $_tempArray[0].'; ';
-						}
-						$this->cookies = $_tempStr;
-					}
-					fwrite($socket, "Cookie: " . $this->cookies . "\r\n");
-				}
-
 				fwrite($socket, "Connection: close\r\n");
 				fwrite($socket, "\r\n");
-				if ($this->content !== false) {
+				if ($this->content !== false)
 					fwrite($socket, $this->content);
-				}
+				if($this->async)
+					return true;
+				
 				for (; $trial < 5; $trial++) {
 					if (!$line = fgets($socket)) {
 						fclose($socket);
 						return false;
 					}
-					if (!ereg('^HTTP/([0-9.]+)[ \t]+([0-9]+)[ \t]+', $line, $match)) {
+					if (!preg_match('@^HTTP/([0-9\.]+)[ \t]+([0-9]+)[ \t]+@', $line, $match)) {
 						fclose($socket);
 						return false;
 					}
@@ -103,27 +94,25 @@
 							case 'transfer-encoding':
 								$this->_response[$header[0]] = trim($header[1]);
 								break;
-							case 'set-cookie':
-								array_push($this->responseCookies, trim($header[1]));
-								break;
 						}
 					}
-					
 					if ($this->_response['status'] != 100)
 						break;
 					unset($this->_response);
 				}
 				if (($this->_response['status'] >= 300) && ($this->_response['status'] <= 302)) {
-					//fclose($socket);
+					fclose($socket);
 					if (empty($this->_response['location']))
 						return false;
+					$this->url = $this->_response['location'];
 					$request['path'] = '/';
 					foreach (parse_url($this->_response['location']) as $key => $value)
 						$request[$key] = $value;
-					break; //continue;
+					continue;
 				}
 				break;
 			}
+			
 			switch ($this->_response['status']) {
 				case 200: // OK
 					break;
@@ -132,13 +121,9 @@
 				case 302: // Found
 				default:
 					fclose($socket);
-					if ((isset($this->_response['location']) && !empty($this->_response['location']))) {
-						$this->url = $this->_response['location'];
-						return $this->send();
-					}
-					return true;
+					return false;
 				case 304: // Not Modified
-					if (($this->eTag === null) && ($this->lastModified === null)) {
+					if (is_null($this->eTag) && is_null($this->lastModified)) {
 						fclose($socket);
 						return false;
 					}
@@ -180,14 +165,13 @@
 							$readBuffer .= fread($socket, $chunkSize + 2 - strlen($readBuffer));
 						$this->responseText .= substr($readBuffer, 0, strlen($readBuffer) - 2);
 					}
-				} else if (!empty($this->_response['content-type'])) {					
-					while (!feof($socket))
-						$this->responseText .= fread($socket, 4096);
 				} else if (!empty($this->_response['content-length'])) {
-					while (strlen($this->responseText) < $this->_response['content-length']) {
+					while (strlen($this->responseText) < $this->_response['content-length'])
 						$this->responseText .= fread($socket, $this->_response['content-length'] - strlen($this->responseText));
-					}
-				} 
+				} else if (!empty($this->_response['content-type'])) {
+					while (!feof($socket))
+						$this->responseText .= fread($socket, 10240);
+				}
 			}
 
 			fclose($socket);
