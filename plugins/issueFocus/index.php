@@ -10,13 +10,17 @@
 		$pluginURL = $event->pluginURL;
 		requireComponent('LZ.PHP.Media');
 
+		if(!isset($config['tabDelay'])) {
+			$config['tabDelay'] = 0;
+		}
+
 		// css
 		ob_start();
 ?>
 <style type="text/css"> 
 		.issueFocus { border:1px solid #dbdbdb; }
-			.issueFocus ul.menu { width:100%; list-style:none; padding:0; margin:0; color:#999999; letter-spacing:2px;background:url("<?php echo $pluginURL;?>/images/bg_dot.gif") repeat-x bottom #fdfdfd; height:28px;  }
-			.issueFocus ul.menu li { float:left; padding:8px; padding-left:10px; padding-right:10px; border-right:1px solid #eee; height:11px; cursor:pointer; }
+			.issueFocus ul.menu { width:100%; list-style:none; padding:0; margin:0; color:#999999; letter-spacing:2px;background:url("<?php echo $pluginURL;?>/images/bg_dot.gif") repeat-x bottom #fbfbfb; height:28px;  }
+			.issueFocus ul.menu li { float:left; padding:8px; padding-left:10px; padding-right:10px; border-right:1px solid #eaeaea; height:11px; cursor:pointer; }
 				.issueFocus ul.menu li.selected {font-weight:bold; color:#0f0f0f; background:#ffffff; border-right:1px solid #dbdbdb; height:12px; }
 		
 			.issueFocus ul.item { list-style:none; padding:10px; padding-bottom:0px; margin:0; display:none; overflow:hidden;  }
@@ -48,19 +52,49 @@
 		ob_start();
 ?>
 <script type="text/javascript"> 
-		function issueFocusMouseOverMenu(id) {			
-			var menu = $("#"+id+"_menu");
-			var item = $("#"+id+"_item");
+		var issueFocusTabIntervalId = 0;
 
-			$('._issueFocus_menu').each( function() {
-				$(this).removeClass('selected');
-			});
-			$('._issueFocus_item').each( function() {
-				$(this).removeClass('viewed');
-			});
+		function issueFocusMouseOverMenu(id) {	
+<?php
+	if($config['tabDelay']>0) {
+?>
+			if(issueFocusTabIntervalId!=0) {
+				clearInterval(issueFocusTabIntervalId);
+				issueFocusTabIntervalId = 0;
+			}
 
-			menu.addClass('selected');
-			item.addClass('viewed');
+			issueFocusTabIntervalId = setInterval( function() {
+<?php
+	}
+?>
+				var menu = $("#"+id+"_menu");
+				var item = $("#"+id+"_item");
+
+				$('._issueFocus_menu').each( function() {
+					$(this).removeClass('selected');
+				});
+				$('._issueFocus_item').each( function() {
+					$(this).removeClass('viewed');
+				});
+
+				menu.addClass('selected');
+				item.addClass('viewed');	
+<?php
+	if($config['tabDelay']>0) {
+?>				
+				clearInterval(issueFocusTabIntervalId);
+				issueFocusTabIntervalId = 0;
+			},<?php echo $config['tabDelay'];?>);
+<?php
+	}
+?>
+		}
+
+		function issueFocusMouseOut() {		
+			if(issueFocusTabIntervalId!=0) {
+				clearInterval(issueFocusTabIntervalId);
+				issueFocusTabIntervalId = 0;
+			}
 		}
 </script>
 <?php
@@ -81,7 +115,7 @@
 		ob_start();
 ?>
 		<div class="issueFocus">
-			<ul class="menu">
+			<ul class="menu" onmouseout="issueFocusMouseOut();">
 <?php
 		// 포커스
 
@@ -132,7 +166,7 @@
 				<div class="data <?php echo empty($thumbnailFile)?'data2':'';?>">
 					<h3><a href="<?php echo $service['path'];?>/go/<?php echo $feedItem['id'];?>" target="_blank"><?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['title']),$config['issueTitleLength']);?></a></h3>
 					<div class="desc">
-						<?php echo UTF8::lessenAsByte(func::stripHTML($feedItem['description']),$config['issueDescLength']);?>
+						<?php echo UTF8::lessenAsByte(func::htmltrim(func::stripHTML($feedItem['description'])),$config['issueDescLength']);?>
 					</div>
 				</div>
 

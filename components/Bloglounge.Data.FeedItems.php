@@ -351,34 +351,34 @@
 			if(empty($owner)) {
 				if($viewDelete) {
 					// 공개된 블로그만 뽑기		
-					//if(!isAdmin()) {
+					if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (f.visibility = "y") ';
-					/*} else {
+					} else {
 						$bQuery = ' WHERE  (i.visibility = "d") ';
-					}*/
+					}
 				} else {
 					// 공개된 블로그만 뽑기		
-				//	if(!isAdmin()) {
+					if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "y") AND (f.visibility = "y") ';
-				/*	} else {
+					} else {
 						$bQuery = ' WHERE  (i.visibility != "d") ';
-					}*/
+					}
 				}
 			} else {		
 				if($viewDelete) {
 					// 공개된 블로그만 뽑기		
-				//	if(!isAdmin()) {
+					if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (f.visibility = "y") AND (f.owner = ' . $owner . ')';
-				/*	} else {
+					} else {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (f.owner = ' . $owner . ')';
-					}*/
+					}
 				} else {
 					// 공개된 블로그만 뽑기		
-				//	if(!isAdmin()) {
+					if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "y") AND (f.visibility = "y") AND (f.owner = ' . $owner . ')';
-				/*	} else {
+					} else {
 						$bQuery = ' WHERE  (i.visibility != "d") AND (f.owner = ' . $owner . ')';
-					}*/
+					}
 				}
 			}
 

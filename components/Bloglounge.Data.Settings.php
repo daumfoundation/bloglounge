@@ -20,35 +20,68 @@
 
 		function gets($names) {
 			global $database, $db;
+		
 			$names = explode(',',$names);
+
 			if (!$data = $db->queryAll('SELECT name, value FROM '.$database['prefix'].'Settings WHERE name IN ('.implode_string(',',$names).')',MYSQL_ASSOC))
 				return false;
+			
+				
 			$result = array();
+			
+				
 			foreach($names as $name) {
+		
 				$result[trim($name)] = '';
+			
 			}
+
 			foreach($data as $item) {
+		
 				$result[$item['name']] = $item['value'];
+	
 			}
+			
+				
 			$data = array();
+		
+				
 			foreach($result as $item) {
+		
 				array_push($data, $item);
+		
 			}
+			
+			
 			return $data;
 		}
 
 		function getAsArray($names) {
 			global $database, $db;
+			
+			
 			$names = explode(',',$names);
+
 			if (!$data = $db->queryAll('SELECT name, value FROM '.$database['prefix'].'Settings WHERE name IN ('.implode_string(',',$names).')',MYSQL_ASSOC))
 				return false;
+		
+				
 			$result = array();
+		
+				
 			foreach($names as $name) {
+	
 				$result[trim($name)] = '';
+
 			}
+
 			foreach($data as $item) {
+		
 				$result[$item['name']] = $item['value'];
+	
 			}
+			
+				
 			return $result;
 		}
 

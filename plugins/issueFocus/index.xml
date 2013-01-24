@@ -2,7 +2,7 @@
 <plugin version="1.0">
 	<information>
 		<name>이슈포커스</name>
-		<version>0.1</version>
+		<version>0.2</version>
 		<description><![CDATA[포커스로 선택된 글과 이슈태그를 보여주는 플러그인입니다.]]></description>
 		<license><![CDATA[ 자유롭게 수정할 수 있으며, 원저자 표시하에 재배포 가능합니다<br /><a href="http://creativecommons.org/licenses/by-nc-sa/2.0/kr/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/2.0/kr/80x15.png" /></a>]]></license>
 		<author link="http://www.itcanus.net/" email="ncloud@daumfoundation.org">ITCanus (ncloud)</author>
@@ -11,7 +11,7 @@
 		<tag name="issue_focus">getIssueFocus</tag>
 	</binding>
 	<config>
-		<window width="520" height="740" />
+		<window height="540" />
 		<fieldset legend="포커스">
 			<field title="사용" name="useFocus" type="checkbox" checked="false" value="사용하기">
 				<caption><![CDATA[포커스로 선택한 글을 보여주는 기능을 사용할지 선택합니다.]]></caption>
@@ -26,6 +26,11 @@
 				<option value="7">7</option>
 				<option value="8">8</option>
 				<caption><![CDATA[포커스 기능을 사용할 경우 몇개의 포커스를 보여줄지 지정합니다.]]></caption>
+			</field>
+		</fieldset>
+		<fieldset legend="효과">
+			<field title="탭 지연시간" name="tabDelay" type="text" value="0">
+				<caption><![CDATA[탭위에 마우스를 올려놓았을시 해당 탭이 열리는 시간을 정합니다. <br />0은 지연시간이 '없음'을 뜻합니다. 1초는 1000입니다. ]]></caption>
 			</field>
 		</fieldset>
 		<fieldset legend="이슈태그">

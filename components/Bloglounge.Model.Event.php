@@ -390,9 +390,8 @@
 
 				$keyname = 'Database_' . $tableName;
 				$value = $pluginName;		
-				$query = "SELECT value FROM {$database['prefix']}ServiceSettings WHERE name='{$keyname}'";
 		
-				$result = ServiceSettings::getAll($keyname);
+				$result = ServiceSettings::get($keyname);
 				if (is_null($result)) {
 					$keyname = $db->escape($db->lessen($keyname, 32));
 					$value = $db->escape($db->lessen($pluginName . '/' . $version , 255));

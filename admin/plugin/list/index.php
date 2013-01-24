@@ -42,6 +42,10 @@
 			$plugin['config'] = 'n';
 		}
 
+		if(!isset($plugin['window']['height']) || $plugin['window']['height']=='auto') {
+			$plugin['window']['height'] = 0;
+		}
+
 		if (!$plugin['status'] = $db->queryCell("SELECT status FROM {$database['prefix']}Plugins WHERE name='{$file}'"))
 			$plugin['status'] = 'off';
 
@@ -73,30 +77,42 @@
 		}
 	}
 ?>
-		function showPluginConfig(pluginName, type, width, height) {
-			try {
-				if (($('#pluginStatus'+pluginName).val() == 'off') && type =='config')
-					return false;
-
-				var isDialogAlreadyExists = ($('#pluginDetail').length==0) ? false : true;
+		function showPluginConfig(pluginName, type, height) {
+			if (($('#pluginStatus'+pluginName).val() == 'off') && type =='config')
+				return false;			
+		
+			if($("#pluginDetail" + pluginName).length==0) {
+				$("#pluginConfigView" + pluginName + " td").append($("<div>").attr('id', 'pluginDetail' + pluginName).css ( {
+					"width":"100%",
+					"height":height+"px"
+				} )).addClass('pluginDetail');
 				
-				if (!isDialogAlreadyExists) {
-						$(document.body).append($("<div>").attr('id', 'pluginDetail').css ( {
-							"width":width+"px",
-							"height":height+"px"
-						} ).addClass('adminModal'));
-						
-						$('<iframe frameborder="0" scrolling="no">').attr('id', 'pluginDetailFrame').css( {
-							"width":width+"px",
-							"height":height+"px"
-						}).addClass('adminModalFrame').appendTo('#pluginDetail'); 
-				}
-				$('#pluginDetailFrame').attr('src', "./"+type+"/?pluginName="+pluginName).css('height', height + 'px');
-				showModal('#pluginDetail',{onShow:fnModalCenter});		
+				$('<iframe frameborder="0" scrolling="no">').attr('id', 'pluginDetailFrame' + pluginName).css( {
+					"width":"100%",
+					"height":height+"px"
+				}).addClass('pluginDetailFrame').appendTo('#pluginDetail' + pluginName); 
 
-			} catch (e) {
-				window.open('./'+type+'/?pluginName='+pluginName, 'pluginDetail', 'width='+width+', height='+height+', scrollbars=1, status=0, resizable=1');
+				$('#pluginDetailFrame' + pluginName).attr('src', "./"+type+"/?pluginName="+pluginName).css('height', height + 'px');
+			} 
+
+			if($("#pluginConfigView" + pluginName).css('display') == 'none') {		
+				$("#pluginConfigView" + pluginName).show();
+			} else {
+				$("#pluginConfigView" + pluginName).hide();
 			}
+		}
+
+		function hidePluginConfig(pluginName) {
+			$("#pluginConfigView" + pluginName).hide();
+			if(typeof(parent)!='undefined')
+				$(parent.window).scrollTop(0);
+			else 
+				$(window).scrollTop(0);
+		}	
+		
+		function resizePluginConfig(pluginName, height) {
+			$("#pluginDetail" + pluginName).height(height);
+			$("#pluginDetailFrame" + pluginName).height(height);
 		}
 
 		function togglePlugin(pluginName) {
@@ -204,7 +220,9 @@
 		
 			// 플러그인 사용
 			ob_start();
-
+?>
+			<a name="link<?php echo $plugin['name'];?>"></a>
+<?php
 		if($plugin['status']=='on') {
 ?>
 			<a href="#" onclick="togglePlugin('<?php echo $plugin['name'];?>'); return false;"><img id="pluginIcon<?php echo $plugin['name'];?>" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_unuse.gif" /></a>
@@ -222,7 +240,7 @@
 
 
 			// 플러그인 이름	
-			array_push($data['datas'], array('class'=>'plugin_name','data'=> '<a href="#" onclick="showPluginConfig(\''.$plugin['name'].'\', \'info\', '.$plugin['window']['width'].', '.$plugin['window']['height'].'); return false;">' . $plugin['title'] . '</a>' ));
+			array_push($data['datas'], array('class'=>'plugin_name','data'=> '<a href="#" onclick="showPluginConfig(\''.$plugin['name'].'\', \'info\', '.$plugin['window']['height'].'); return false;">' . $plugin['title'] . '</a>' ));
 			
 			// 플러그인 설명	
 			array_push($data['datas'], array('class'=>'plugin_desc','data'=> $plugin['description'] ));
@@ -235,7 +253,7 @@
 
 			if($plugin['config'] == 'y') {
 ?>			
-			<a href="#" onclick="showPluginConfig('<?php echo $plugin['name'];?>', 'config', <?php echo $plugin['window']['width'];?>, <?php echo $plugin['window']['height'];?>); return false;"><img id="pluginConfigIcon" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_setting.gif" alt="설정.." /></a>	
+			<a href="#" onclick="showPluginConfig('<?php echo $plugin['name'];?>', 'config', <?php echo $plugin['window']['height'];?>); return false;"><img id="pluginConfigIcon" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_setting.gif" alt="설정.." /></a>	
 <?php
 			}
 ?>			
@@ -245,8 +263,11 @@
 			ob_end_clean();
 
 			array_push($data['datas'], array('class'=>'plugin_config','data'=> $content ));
-			
-			array_push($datas, $data);				
+
+			array_push($datas, $data);	
+
+			// 설정창
+			array_push($datas, array('empty'=>true, 'id'=>'pluginConfigView'.$plugin['name'],'class'=>'plugin_config_view'));
 		}
 
 	} else {

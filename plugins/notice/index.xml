@@ -15,7 +15,7 @@
 		<listener event="Meta.skinEnd">dressNotice</listener>
 	</binding>	
 	<config>
-		<window width="470" height="450" />
+		<window height="auto" />
 		<fieldset legend="기본">
 			<field title="블로그선택" name="blog" type="blog">
 				<caption><![CDATA[공지사항으로 사용할 블로그를 선택해주세요.]]></caption>

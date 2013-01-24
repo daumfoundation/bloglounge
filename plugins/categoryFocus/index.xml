@@ -11,7 +11,7 @@
 		<tag name="category_focus">getCategoryFocus</tag>
 	</binding>	
 	<config>
-		<window width="520" height="580" />
+		<window height="auto" />
 		<fieldset legend="분류">
 			<field title="분류선택" name="categoryType" type="select" value="recent">
 				<option value="recent">상위순</option>

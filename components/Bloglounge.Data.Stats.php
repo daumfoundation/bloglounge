@@ -13,12 +13,12 @@
 			}
 			$db->free();
 			$db->execute('UPDATE '.$database['prefix'].'DailyStatistics SET visits=visits+1 WHERE date="'.date('Ymd', $now).'"');
-			$db->execute('UPDATE '.$database['prefix'].'Settings SET totalVisit=totalVisit+1');
+			$db->execute('UPDATE '.$database['prefix'].'Settings SET value=value+1 WHERE name = "totalVisit"');
 		}
 
 		function getVisits(){
 			global $database, $db;
-			list($total) = $db->pick('SELECT totalVisit FROM '.$database['prefix'].'Settings LIMIt 1');
+			list($total) = $db->pick('SELECT value FROM '.$database['prefix'].'Settings WHERE name = "totalVisit" LIMIT 1');
 			return $total;
 		}
 
@@ -43,7 +43,7 @@
 
 		function resetVisits() {
 			global $database, $db;
-			return $db->execute('UPDATE '.$database['prefix'].'Settings SET totalVisit=0');
+			return $db->execute('UPDATE '.$database['prefix'].'Settings SET value = 0 WHERE name = "totalVisit"');
 		}
 
 		function countFeeds() {
@@ -75,8 +75,7 @@
 			requireComponent('Bloglounge.Model.Users');
 			if (empty($session['id']) || User::get($session['id'], 'is_admin') != 'y') 
 				return false;
-			$settingsId = 1;
-			return $db->execute('UPDATE '.$database['prefix'].'Settings SET totalVisit=0 WHERE id='.$settingsId);
+			return $db->execute('UPDATE '.$database['prefix'].'Settings SET value=0 WHERE name = "totalVisit"');
 		}
 
 		function getTotalClicks() {

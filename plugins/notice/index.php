@@ -172,11 +172,11 @@
 ?>
 
 <?php
-					$desc = UTF8::lessenAsEm(str_replace('&nbsp;','',func::stripHTML($post['description'])),82);
-					if(empty($desc)) {
-						$desc = '<span class="empty">'._t('내용이 비어있거나 HTML로만 작성되어 있습니다.').'</span>';
-					}	
-					$isNew = Func::isNew($post['written'],1);
+			$desc = UTF8::lessenAsEm(str_replace('&nbsp;','',func::stripHTML($post['description'])),82);
+			if(empty($desc)) {
+				$desc = '<span class="empty">'._t('내용이 비어있거나 HTML로만 작성되어 있습니다.').'</span>';
+			}	
+			$isNew = Func::isNew($post['written'],1);
 ?>
 
 			<div class="title"><?php echo UTF8::lessenAsEm(stripcslashes(func::stripHTML($post['title'])), 60);?> <?php echo ($isNew?' <img	src="'.$service['path'].'/images/admin/icon_new.gif" alt="new" align="absmiddle" class="new" />':'');?></div>

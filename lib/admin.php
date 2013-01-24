@@ -100,41 +100,57 @@
 			$i = 1;
 			$first = true;
 			foreach($datas as $data) {
-				$id = isset($data['id'])?$data['id']:'';
-				$class = 'list_item'.$i.' list_item'.($first?' list_first':'');
+				$id = isset($data['id'])?$data['id']:'';		
+				$is_empty = !(!isset($data['empty']) || ($data['empty'] === false));
+				if(!$is_empty) {
+					$class = 'list_item'.$i.' list_item'.($first?' list_first':'');
+				} else {
+					$class = '';
+				}
+
 				$class .= isset($data['class'])?' '.$data['class']:'';		
 				$index = 0;
 ?>					
 				<tr id="<?php echo $id;?>" class="<?php echo $class;?>">
 <?php
-				for($i2=0;$i2<count($data['datas']);$i2++) {
-					$item = $data['datas'][$i2];
-
-					$item_class = isset($item['class'])?$item['class']:'';
-					$item_data = isset($item['data'])?$item['data']:'';
-
-					$width = $headers[$index++]['width'];
-					$style = '';
-					if(!empty($width) && ($width != 'auto')) {
-						$style = ' style="width:' . $width .';"';
-					}
-
-					$colspan = 0;
-					if($i2==count($data['datas'])-1) {
-						$colspan = count($headers) - count($data['datas']);
-						$style = '';
-					}
+				if($is_empty) {			
+						$colspan = count($headers);
 ?>
-					<td class="<?php echo $item_class;?>"<?php echo $colspan==0?'':' colspan="'.($colspan+1).'"';?><?php echo $style;?>>
-						<?php echo $item_data;?>
-					</td>
+						<td colspan="<?php echo $colspan;?>"></td>
 <?php
+				} else {
+					for($i2=0;$i2<count($data['datas']);$i2++) {
+						$item = $data['datas'][$i2];
+
+						$item_id = isset($item['id'])?$item['id']:'';
+						$item_class = isset($item['class'])?$item['class']:'';
+						$item_data = isset($item['data'])?$item['data']:'';
+
+						$width = $headers[$index++]['width'];
+						$style = '';
+						if(!empty($width) && ($width != 'auto')) {
+							$style = ' style="width:' . $width .';"';
+						}
+
+						$colspan = 0;
+						if($i2==count($data['datas'])-1) {
+							$colspan = count($headers) - count($data['datas']);
+							$style = '';
+						}
+?>
+						<td <?php echo !empty($item_id)?' id="'.$item_id.'" ':'';?> <?php echo !empty($item_class)?' class="'.$item_class.'" ':'';?><?php echo $colspan==0?'':' colspan="'.($colspan+1).'"';?><?php echo $style;?>>
+							<?php echo $item_data;?>
+						</td>
+<?php
+					}
 				}
 ?>
 				</tr>
 <?php
-				$i++;		
-				if($i>2) $i=1;
+				if(!$is_empty) {
+					$i++;		
+					if($i>2) $i=1;
+				}
 				
 				$first = false;
 			}

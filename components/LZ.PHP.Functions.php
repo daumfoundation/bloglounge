@@ -378,7 +378,7 @@
 		function array_trim($arr) {
 			$result = array();
 			foreach ($arr as $key=>$value) {
-				if (strlen(func::strtrim($value)) > 0) {
+				if (strlen(func::fulltrim($value)) > 0) {
 					$result[$key] = $value;
 				}
 			}
@@ -429,12 +429,16 @@
 			return (strtolower(substr($a['host'], 0, 4)) == 'www.') ? substr($a['host'], 4) : $a['host'];
 		}
 
-		function strtrim($str) {
+		function fulltrim($str) {
 			$str = preg_replace("/([\r]|[\n]|[\s])+/", '', $str);
 			$str = str_replace('%20', '', $str);
 			$str = str_replace('　', '', $str);
-
+			$str = str_replace('&nbsp;', '', $str);
 			return $str;
+		}
+
+		function htmltrim($str) {
+			return str_replace('&nbsp;','',trim($str));
 		}
 
 		function mkpath($path) {
