@@ -90,7 +90,7 @@
 				<dl>
 					<dt><?php echo _t('탈퇴하기');?></dt>
 					<dd>
-						<input type="checkbox" name="leaveout" value="y" id="leaveout" onclick="if (this.checked == true) {  if(confirm('<?php echo _t('탈퇴한 경우 등록하신 모든 글이 삭제됩니다. 계속하시겠습니까?');?>')) { $('#leaveoutPasswordCheck').show(); $('#leaveoutpassword').focus();} else { this.checked = false; } } else { $('#leaveoutPasswordCheck').hide(); };"/><label for="leaveout"><?php echo _t('이 날개를 탈퇴합니다');?></label>
+						<input type="checkbox" name="leaveout" value="y" id="leaveout" onclick="if (this.checked == true) {  if(confirm('<?php echo _t('탈퇴한 경우 등록하신 모든 글이 삭제됩니다. 계속하시겠습니까?');?>')) { $('#leaveoutPasswordCheck').show(); $('#leaveoutpassword').focus();} else { this.checked = false; } } else { $('#leaveoutPasswordCheck').hide(); };"/><label for="leaveout"><?php echo _t('블로그라운지를 탈퇴합니다');?></label>
 					</dd>
 				</dl>			
 				<dl id="leaveoutPasswordCheck" style="display:none;">

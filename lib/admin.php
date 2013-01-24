@@ -171,7 +171,7 @@
 	
 	function outputPaging($paging, $param = '') {
 			global $accessInfo, $service;
-			$path = $service['path'] . $accessInfo['fullpath'];
+			$path = $service['path'] . $accessInfo['subpath'];
 			$result = '';
 			if($paging['pagePrev'] != $paging['page']) {
 				$result .= '<a href="'.$path.'/?page='.$paging['pagePrev'].$param.'" class="page_prev">'._t('이전').'</a>';

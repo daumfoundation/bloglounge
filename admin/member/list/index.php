@@ -15,6 +15,8 @@
 	
 	if(!empty($read)) {
 		$readUser = User::getAll($read);
+	} else {
+		$readUser = false;
 	}
 
 	// 정보수정

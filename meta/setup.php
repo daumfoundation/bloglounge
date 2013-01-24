@@ -35,10 +35,10 @@
 			$step_text = _t('업그레이드') . ' - ' . _t('세번째 단계') . ' : 3/4';
 			$step_desc = _t('블로그라운지를 새로운 버전으로 업그레이드합니다.');
 
-			if(!file_exists(ROOT.'/config.php')) {
+			/*if(!file_exists(ROOT.'/config.php')) {
 				Header("Location: {$path}/setup/?step=3");
 				exit;
-			}
+			}*/
 		break;
 		case 'install':
 			$step_text = _t('설치') . ' - ' . _t('세번째 단계') . ' : 3/4';
@@ -1131,7 +1131,6 @@
 <?php
 		break;
 		case '2': // ** 두번째 단계
-			$configExist = file_exists(ROOT . '/config.php');
 			$removeLockExist = file_exists(ROOT . '/remove.lock');
 ?>
 			<div id="title">
@@ -1142,7 +1141,7 @@
 			<div class="indesc">
 				<ul id="setupType">
 <?php
-				if(!$configExist) {
+				if(!file_exists(ROOT . '/config.php')) {
 ?>
 					<li>
 						<input type="radio" name="type" value="install" id="install" checked="checked" />&nbsp;<label for="install"><?php echo _t('블로그라운지를 새롭게 설치합니다');?></label><br />
@@ -1152,28 +1151,16 @@
 				} else {
 ?>					<li>
 						<input type="radio" name="type" value="install" id="install" disabled="disabled" />&nbsp;<label for="install"><span class="dontUse"><?php echo _t('블로그라운지를 새롭게 설치합니다');?></span></label><br />
-						<span class="help"><?php echo _t('블로그라운지를 새로 설치하시는 경우 config.php 를 삭제하신 후 계속하실 수 있습니다.');?></span>
+						<span class="help"><?php echo _t('블로그라운지를 새로 설치하시는 경우 설정파일(config.php) 를 삭제하신 후 계속하실 수 있습니다.');?></span>
 					</li>
 <?php
 				}
-
-				if($configExist) {
 ?>
 					<li>
-						<input type="radio" name="type" value="migration" id="migration" checked="checked" />&nbsp;<label for="migration"><?php echo _t('이전 버전의 블로그라운지를 업그레이드 합니다');?></label><br />
+						<input type="radio" name="type" value="migration" id="migration" />&nbsp;<label for="migration"><?php echo _t('이전 버전의 블로그라운지를 업그레이드 합니다');?></label><br />
 						<span class="help"><?php echo _t('이전 버전의 블로그라운지 혹은 날개툴을 덮어 씌우신 경우 이 항목을 선택하세요.');?></span>
 					</li>
 <?php
-				} else {
-?>
-					<li>
-						<input type="radio" name="type" value="migration" id="migration" disabled="disabled"/>&nbsp;<label for="migration"><span class="dontUse"><?php echo _t('이전 버전의 블로그라운지에서 업그레이드 합니다');?></span></label><br />
-						<span class="help"><?php echo _t('현재 설치되어 있는 블로그라운지 혹은 날개툴을 확인할 수 없습니다.');?></span>
-					</li>
-<?php
-				}			
-
-				if($configExist) {
 					if(!$removeLockExist) {
 ?>
 					<li>
@@ -1189,15 +1176,6 @@
 					</li>
 <?php
 					}
-				} else {
-?>
-					<li>
-						<input type="radio" name="type" value="uninstall" id="uninstall" disabled="disabled"/>&nbsp;<label for="uninstall"><span class="dontUse"><?php echo _t('설치되어 있는 블로그라운지를 삭제합니다');?></span></label><br />
-						<span class="help"><?php echo _t('현재 설치되어 있는 블로그라운지를 확인할 수 없습니다.');?></span>
-					</li>
-<?php
-				}			
-
 ?>
 				</ul>
 			</div>
@@ -1223,18 +1201,36 @@
 ?>
 			</div>
 
-			<div id="setupCheck">
-				<?php echo _t('폴더 쓰기 권한을 확인합니다.');?>  &nbsp;
-				<?php if ($iswritable = is_writable(ROOT)) { ?>
-					<span class="sblue"><?php echo _t('성공');?></span>
-				<?php } else { ?>
-					<span class="sopera"><?php echo _t('실패');?></span><br />
-					<?php echo _t('블로그라운지가 설치된 폴더의 권한(퍼미션)을 777 로 설정해주세요.');?> &nbsp;&nbsp<br />
-					<br />
-					<strong class="sblue">?&nbsp;<?php echo _t('권한(퍼미션)을 설정하는 방법을 모르신다면?');?></strong><br />
-					<?php echo _t('퍼미션 설정 방법을 검색 사이트를 통해 찾아보세요');?>
-				<?php  }  ?>
-			</div>
+			<ul id="setupCheck">
+				<li>
+					<h3><?php echo _t('폴더 쓰기 권한을 확인합니다.');?>  &nbsp;
+					<?php if ($iswritable = is_writable(ROOT)) { ?>
+						<span class="sblue"><?php echo _t('성공');?></span></h3>
+					<?php } else { ?>
+						<span class="sopera"><?php echo _t('실패');?></span></h3>
+						<p>
+						<?php echo _t('블로그라운지가 설치된 폴더의 권한(퍼미션)을 777 로 설정해주세요.');?>
+						</p>
+					<?php  }  ?>
+				</li>
+<?php
+		if ($step == 'migration') {
+?>
+				<li>
+					<h3><?php echo _t('설정 파일을 확인합니다.');?> &nbsp;
+					<?php if ($configExists = file_exists(ROOT.'/config.php')) { ?>
+						<span class="sblue"><?php echo _t('성공');?></span></h3>
+					<?php } else { ?>
+						<span class="sopera"><?php echo _t('실패');?></span></h3>
+						<p>
+						<?php echo _t('여기를 클릭하시면 설정파일을 지금 만들 수 있습니다.');?>
+						</p>
+					<?php  }  ?>
+				</li>
+<?php
+		}
+?>
+			</ul>
 
 <!--
 			<div class="incheck">
@@ -1252,10 +1248,14 @@
 		}
 ?>
 
-			<?php if (!$iswritable) { ?>
+<?php	
+		if (!$iswritable) { 
+?>
 			<form action="<?php echo $path;?>/setup/?step=install" method="post">
 			<input type="hidden" name="type" value="<?php echo $step;?>"/>
-			<?php } else if ($step == 'migration') { ?>
+<?php
+		} else if ($step == 'migration') { 
+?>
 			<form action="<?php echo $path;?>/setup/?step=4" method="post">
 			<input type="hidden" name="type" value="<?php echo $step;?>"/>
 			<div id="admininfoInputForm" class="userSetting">
@@ -1274,7 +1274,9 @@
 				 <?php echo _t('예기치 않은 오류로 인해 기존 데이터가 손상될 수 있습니다.');?><br />
  				 <?php echo _t('예전 데이터를 미리 백업하신 뒤 업그레이드를 진행해주세요.');?><br />
 			</div>
-			<?php } else { // install ?>
+<?php
+		} else { // install 
+?>
 			<form action="<?php echo $path;?>/setup/?step=4" method="post">
 			<input type="hidden" name="type" value="<?php echo $step;?>"/>
 			<div id="inputForm">
@@ -1338,7 +1340,9 @@
 					</dl>
 				</div>
 			</div>
-			<?php } ?>
+<?php
+		} 
+?>
 
 			<div class="installButtons">
 				<?php if ($iswritable) { ?><?php echo _t('계속하시려면 "다음" 버튼을 눌러주세요.');?> <?php } else { ?><?php echo _t('권한(퍼미션)을 조정하시고 "다음" 버튼을 눌러 다시 시도해주세요.');?><?php } ?><br />

@@ -289,6 +289,7 @@
 				}
 			}
 
+
 			// boomDownReactor, boomDownReactorLimit : 리액터가 숨기기일때 쿼리에서 제외 파트 추가 ( 특정수만큼 붐다운(비추천)한글은 제외하거나 특정기능..
 			if (($config->boomDownReactor == 'hide') && ($config->boomDownReactLimit > 0)) {
 				$bQuery = ' WHERE (boomDown <= '.$config->boomDownReactLimit.') ';
@@ -318,34 +319,34 @@
 			if(empty($owner)) {
 				if($viewDelete) {
 					// 공개된 블로그만 뽑기		
-					if(!isAdmin()) {
+					//if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (f.visibility = "y") ';
-					} else {
+					/*} else {
 						$bQuery = ' WHERE  (i.visibility = "d") ';
-					}
+					}*/
 				} else {
 					// 공개된 블로그만 뽑기		
-					if(!isAdmin()) {
+				//	if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "y") AND (f.visibility = "y") ';
-					} else {
+				/*	} else {
 						$bQuery = ' WHERE  (i.visibility != "d") ';
-					}
+					}*/
 				}
 			} else {		
 				if($viewDelete) {
 					// 공개된 블로그만 뽑기		
-					if(!isAdmin()) {
+				//	if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (f.visibility = "y") AND (f.owner = ' . $owner . ')';
-					} else {
+				/*	} else {
 						$bQuery = ' WHERE  (i.visibility = "d") AND (f.owner = ' . $owner . ')';
-					}
+					}*/
 				} else {
 					// 공개된 블로그만 뽑기		
-					if(!isAdmin()) {
+				//	if(!isAdmin()) {
 						$bQuery = ' WHERE  (i.visibility = "y") AND (f.visibility = "y") AND (f.owner = ' . $owner . ')';
-					} else {
+				/*	} else {
 						$bQuery = ' WHERE  (i.visibility != "d") AND (f.owner = ' . $owner . ')';
-					}
+					}*/
 				}
 			}
 
@@ -414,7 +415,7 @@
 			}
 
 			$qBoom = '';
-			return $db->queryAll('SELECT i.permalink, i.title, i.description FROM '.$database['prefix'].'FeedItems i '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
+			return $db->queryAll('SELECT i.permalink, i.title, i.description FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE f.visibility = "y"  '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
 		}	
 		
 		// -- 아래형태로 .. 변경 (추천수) - ((오늘 - 글이 들어온 날)날수 * 100000) // 오늘부터 어제.. 그제.. 그끄저께 순으로 높은 값을 줘서.. 순서를 매긴다. 
@@ -424,7 +425,7 @@
 		function getTopFeedItemsByLastest($count, $rankBy = 'boom') {		
 			global $db, $database, $config;	
 
-			$written = $db->queryCell('SELECT written FROM '.$database['prefix'].'FeedItems ORDER BY written ASC');
+			$written = $db->queryCell('SELECT i.written FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE f.visibility = "y" ORDER BY i.written ASC');
 			if(!$written) $written = 0;
 			$written = date('Ymd', $written);
 
@@ -440,7 +441,7 @@
 				break;
 			}
 			$qBoom = '';
-			return $db->queryAll('SELECT i.id, i.permalink, i.title, i.description FROM '.$database['prefix'].'FeedItems i '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
+			return $db->queryAll('SELECT i.id, i.permalink, i.title, i.description FROM '.$database['prefix'].'FeedItems AS i LEFT JOIN '.$database['prefix'].'Feeds AS f ON ( f.id = i.feed ) WHERE f.visibility = "y" '.$qBoom.' ORDER BY ('.$rankBy.') DESC LIMIT 0,'.$count);
 		}
 	}
 ?>

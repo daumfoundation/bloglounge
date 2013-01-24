@@ -85,12 +85,39 @@ body {
 }
 
 #setupCheck {
+	list-style:none;
+	margin:0;
 	margin-top:20px; 
 	border:1px solid #ddd; 
 	background-color:#fafafa; 
-	padding:10px; 
+	padding-top:10px; 
+	padding-bottom:6px;
+	padding-left:0;
+	padding-right:0;
 	font:11px Tahoma; 
 	line-height:180%;
+}
+
+#setupCheck li { 
+	padding-bottom:2px;
+}
+
+#setupCheck h3 { 
+	padding-left:10px;
+	padding-right:10px;
+	font-size:12px;
+}
+
+#setupCheck p { 
+	margin-top:4px;
+	padding-top:4px; padding-bottom:4px;
+	padding-left:10px; padding-right:10px;
+	font:11px Dotum;
+	line-height:15px;
+	border-top:1px solid #ddd;
+	border-bottom:1px solid #ddd; 
+	color:#666;
+	background:url('../images/setup/bg_boxline.gif') repeat-x left 1px #f4f4f4;
 }
 
 #errorBox {
@@ -177,6 +204,18 @@ body {
 	margin-right:0px;
 	line-height:140%;
 }
+
+.pointBox {
+	background:#f4f4f4;
+	border:1px solid #e3e3e3;
+	font:11px Dotum;
+	color:#6d6d6d;
+	padding:5px; padding-left:10px;
+	margin-top:15px;
+}
+
+.pointBox a { color:#6d6d6d; text-decoration:none; }
+.pointBox a:hover { text-decoration:underline; }
 
 .stepTitle {
 	font:14px Dotum;

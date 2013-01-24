@@ -71,7 +71,7 @@
 		'action'	=> $action,
 		'value'		=> $value,
 		'page'		=> $page,
-		'fullpath' =>  rtrim($request_uri, '/'),
+		'subpath' =>  rtrim($request_uri, '/'),
 		'position' => $_SERVER["SCRIPT_NAME"],
 		'path'	   => $path
 	);

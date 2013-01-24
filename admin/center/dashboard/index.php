@@ -12,9 +12,9 @@
 		<!-- notice -->
 		<div id="notice_sidebar" class="sidebar_item">
 <?php
-	list($feedItems, $totalFeedItems) = FeedItem::getFeedItems('blogURL','itcanus.net',Feed::blogURL2Id('http://itcanus.net'),1,10);
+	list($feedItems, $totalFeedItems) = FeedItem::getFeedItems('blogURL','bloglounge.itcanus.net/bloglounge_notice',Feed::blogURL2Id('http://bloglounge.itcanus.net/bloglounge_notice'),1,10);
 	if($totalFeedItems==0) { // 자동등록된 공지사항 피드를 삭제하였을경우 .. 동적으로 읽어 온다.
-		list($status, $feed, $xml) = Feed::getRemoteFeed('http://itcanus.net/rss');
+		list($status, $feed, $xml) = Feed::getRemoteFeed('http://bloglounge.itcanus.net/bloglounge_notice/rss');
 		if($status == 0) {
 			$feedItems = Feed::getFeedItems($xml);
 			$totalFeedItems = count($feedItems);
@@ -23,7 +23,7 @@
 ?>
 		<?php echo drawAdminBoxBegin('notice');?>
 			<div class="title">
-				<a href="http://itcanus.net/" target="_blank">ITcanus 공지사항</a>
+				<a href="http://bloglounge.itcanus.net/" target="_blank">공지사항</a>
 			</div>
 			<div class="line"></div>
 			<div class="data">
@@ -33,6 +33,43 @@
 				foreach($feedItems as $feedItem) {
 ?>
 					<li><span class="date"><?php echo date('y/m/d', $feedItem['written']);?></span> <a href="<?php echo $feedItem['permalink'];?>" title="<?php echo $feedItem['title'];?>" target="_blank"><?php echo $db->lessen($feedItem['title'],13);?></a></li>
+<?php
+				}
+	} else {
+?>
+			<li class="empty">글이 없습니다.</li>
+<?php
+	}
+?>
+				</ul>
+			</div>
+			<?php echo drawAdminBoxEnd();?>
+		</div>
+
+		<!-- new version -->
+		<div id="new_version_sidebar" class="sidebar_item">
+<?php
+	list($feedItems, $totalFeedItems) = FeedItem::getFeedItems('blogURL','bloglounge.itcanus.net/bloglounge_download',Feed::blogURL2Id('http://bloglounge.itcanus.net/bloglounge_download'),1,10);
+	if($totalFeedItems==0) { // 자동등록된 공지사항 피드를 삭제하였을경우 .. 동적으로 읽어 온다.
+		list($status, $feed, $xml) = Feed::getRemoteFeed('http://bloglounge.itcanus.net/bloglounge_download/rss');
+		if($status == 0) {
+			$feedItems = Feed::getFeedItems($xml);
+			$totalFeedItems = count($feedItems);
+		}
+	}
+?>
+		<?php echo drawAdminBoxBegin('new_version');?>
+			<div class="title">
+				<a href="http://bloglounge.itcanus.net/bloglounge_download" target="_blank">다운로드</a>
+			</div>
+			<div class="line"></div>
+			<div class="data">
+				<ul>
+<?php
+	if(count($feedItems)>0) {
+				foreach($feedItems as $feedItem) {
+?>
+					<li><span class="date"><?php echo date('y/m/d', $feedItem['written']);?></span> <a href="<?php echo $feedItem['permalink'];?>" title="<?php echo $feedItem['title'];?>" target="_blank"><?php echo trim(str_replace('블로그라운지','',$db->lessen($feedItem['title'])));?></a></li>
 <?php
 				}
 	} else {
