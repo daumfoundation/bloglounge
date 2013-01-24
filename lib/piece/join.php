@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title><?php echo BLOGLOUNGE;?> :: <?php echo _t('회원가입');?></title>
+<link rel="stylesheet" href="<?php echo $service['path'];?>/style/admin.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo $service['path'];?>/style/join.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo $service['path'];?>/style/box.css" type="text/css" />
 
@@ -193,9 +194,8 @@
 									</table>
 									
 									<div class="buttons">
-										<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_join.gif" alt="<?php echo _t('회원가입');?>" />
-										<a href="<?php echo $service['path'];?>/"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_cancel.gif" alt="<?php echo _t('취소');?>" /></a>
-
+										<span class="normalbutton"><input type="submit" value="<?php echo _t('회원가입');?>" /></span>
+										<a href="<?php echo $service['path'];?>/" class="normalbutton"><span><?php echo _t('취소');?></span></a>
 									</div>	
 							</div>
 

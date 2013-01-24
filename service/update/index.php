@@ -16,13 +16,23 @@
 
 	switch($type) {
 		case 'random':	// 랜덤
-			if (!$feeder->updateRandomFeed())
-				$response['error'] = 1;
+			$result = $feeder->updateRandomFeed();
+			if (!$result[0]) {
+				$response['error'] = 1;			
+				$response['message'] = $result[1];
+			} else {
+				$response['feed'] = $result[1];
+			}
 		break;
 		case 'repeat': // 순차
 		default:
-			if (!$feeder->updateNextFeed())
+			$result = $feeder->updateNextFeed();			
+			if (!$result[0]) {
 				$response['error'] = 1;
+				$response['message'] = $result[1];
+			} else {
+				$response['feed'] = $result[1];
+			}
 		break;
 	}
 

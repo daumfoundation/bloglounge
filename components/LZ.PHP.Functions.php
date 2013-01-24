@@ -222,15 +222,15 @@
 						switch($button) {
 							case 'admin':
 ?>
-								<a href="#" onclick="history.back(); return false();"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_back.gif" alt="<?php echo _t('뒤로');?>" /></a>								
-								<a href="<?php echo $service['path'];?>/admin/"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_admin.gif" alt="<?php echo _t('관리자');?>" /></a>&nbsp;
+								<a href="#" class="normalbutton" onclick="history.back(); return false;"><span><?php echo _t('뒤로');?></span></a>
+								<a href="<?php echo $service['path'];?>/admin/" class="normalbutton"><span class="boldbutton"><?php echo _t('관리자');?></span></a>&nbsp;
 <?php	
 							break;
 							case 'loglout':
 							default:
 ?>
-								<a href="#" onclick="history.back(); return false();"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_back.gif" alt="<?php echo _t('뒤로');?>" /></a>								
-								<a href="<?php echo $service['path'];?>/logout/"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_logout.gif" alt="<?php echo _t('로그아웃');?>" /></a>&nbsp;
+								<a href="#" class="normalbutton" onclick="history.back(); return false;"><span><?php echo _t('뒤로');?></span></a>
+								<a href="<?php echo $service['path'];?>/logout/" class="normalbutton"><span class="boldbutton"><?php echo _t('로그아웃');?></span></a>&nbsp;
 <?php	
 							break;
 						}

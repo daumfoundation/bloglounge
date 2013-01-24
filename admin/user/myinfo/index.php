@@ -104,7 +104,7 @@
 ?>								
 			<div class="grayline"></div>
 
-			<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('이 정보를 수정합니다');?>"/>
+			<span class="normalbutton"><input type="submit" value="<?php echo _t('이 정보를 수정합니다');?>" /></span>
 
 		</form>
 </div>

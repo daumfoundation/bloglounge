@@ -85,8 +85,7 @@
 					<dd class="text"><?php echo nl2br($xmls->getValue('/skin/information/license[lang()]'));?></dd>
 				</dl>	
 				<div class="tools">
-					<!--<a href="<?php echo $service['path'];?>/admin/design/setting#link"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_skin_setting.gif" /></a>-->
-					<a href="#" onclick="saveSkin(''); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_setting_cancel.gif" /></a>
+					<a href="#" class="normalbutton" onclick="saveSkin(''); return false;"><span class="boldbutton"><?php echo _t('스킨설정');?></span></a>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -144,7 +143,7 @@
 					<span class="name">(<?php echo $skinname;?>)</span>
 				</div>
 				<div class="tools">
-					<a href="#" onclick="saveSkin('<?php echo $skinname;?>'); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_apply.gif" /></a>
+					<a href="#" class="normalbutton" onclick="saveSkin('<?php echo $skinname;?>'); return false;"><span class="boldbutton"><?php echo _t('적용');?></span></a>
 				</div>
 			</div>
 		</li>

@@ -1,4 +1,5 @@
 /* project message */
+
 var messageInterval = 0;
 function addMessage(message, type) {
 	if(typeof(type) == 'undefined') {
@@ -36,7 +37,7 @@ function collectDiv(div1, div2) {
 
 function collectFloatProjectMessage() {
 	pm = $("#float_project_message");
-	return pm.css('top', ($(window).height()-28) + $(window).scrollTop() + 'px').css('left', (($(window).width()-pm.width())/2)+'px');
+	return pm.css('top', ($(window).height()-(28)) + $(window).scrollTop() + 'px').css('left', (($(window).width()-pm.width())/2)+'px');
 }
 
 $(window).resize( function() {

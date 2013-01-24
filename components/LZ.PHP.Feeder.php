@@ -1,4 +1,15 @@
 <?php
+	if (!function_exists('htmlspecialchars_decode')) {
+		function htmlspecialchars_decode($str, $options="") {
+			$trans = get_html_translation_table(HTML_SPECIALCHARS, $options);
+			$decode = ARRAY();
+			foreach ($trans AS $char=>$entity) {
+					$decode[$entity] = $char;
+			}
+			$str = strtr($str, $decode);
+			return $str;
+		}
+	}
 
 	Class Feed {
 		var $updated=0;
@@ -363,19 +374,22 @@
 
 			list($feedId, $lastUpdate, $autoUpdate, $feedLogo, $feedVisibility) = $db->pick('SELECT id, lastUpdate, autoUpdate, logo, visibility FROM '.$database['prefix'].'Feeds WHERE xmlURL="'.$feedURL.'"');
 
+		/*	
 			if ($lastUpdate > gmmktime()-300) {
-				//return true;
+				return array(0,_t('업데이트시기가 아닙니다.'));
 			}
+		*/
 	
 			list($status, $feed, $xml)= Feed::getRemoteFeed($feedURL);						
 			if ($status > 0){
 				$db->execute("UPDATE {$database['prefix']}Feeds SET lastUpdate = ".gmmktime()." WHERE xmlURL = '{$feedURL}'");
-				return $status;
+				return array($status, $db->pick('SELECT title FROM '.$database['prefix'].'Feeds WHERE xmlURL = "' . $feedURL . '"'), $feedURL);
 			} else{
 				$feed['logo'] = (empty($feedLogo) || (!empty($feedLogo) && !file_exists(ROOT . '/cache/feedlogo/'.$feedLogo)))? '' : $feedLogo;
 				$sQuery = (Validator::getBool($autoUpdate)) ? "title = '{$feed['title']}', description = '{$feed['description']}', " : '';
 				$db->execute("UPDATE {$database['prefix']}Feeds SET blogURL = '{$feed['blogURL']}', $sQuery language = '{$feed['language']}', lastUpdate = ".gmmktime().", logo='{$feed['logo']}' WHERE xmlURL = '{$feedURL}'");
-				return $this->saveFeedItems($feedId,$feedVisibility,$xml)?0:1;
+				$result = $this->saveFeedItems($feedId,$feedVisibility,$xml)?0:1;
+				return array($result, $feed['title']);
 			}
 		}
 
@@ -416,10 +430,12 @@
 						$notinStr = ' owner NOT IN ('.implode(',', $notin).') AND ';
 				}
 				if ($feedURL = $db->queryCell("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE {$notinStr} lastUpdate < ".(gmmktime()-($updateCycle*60))." ORDER BY lastUpdate ASC LIMIT 1")) {
-					return array($this->updateFeed($feedURL),$feedURL);
+					$result = $this->updateFeed($feedURL);
+					debug_log($result[0]);
+					return array(!$result[0],$result[1],$feedURL);
 				}
 			}
-			return array(1,'No feeds to update');
+			return array(0,_t('모든 블로그가 최신상태입니다.'));
 		}
 
 		function updateRandomFeed(){
@@ -440,7 +456,8 @@
 				}
 
 				if ($feedURL = $db->queryCell("SELECT xmlURL FROM {$database['prefix']}Feeds WHERE {$notinStr} lastUpdate < ".(gmmktime()-($updateCycle*60))." ORDER BY RAND() LIMIT 1")) {
-					return array($this->updateFeed($feedURL),$feedURL);
+					$result = $this->updateFeed($feedURL);
+					return array($result[0],$result[1],$feedURL);
 				}
 			}
 			return array(1,'No feeds to update');
@@ -534,9 +551,16 @@
 			$feedLife = Settings::get('archivePeriod');
 			if ($feedLife > 0) $deadLine=gmmktime()-($feedLife*86400);
 
-			// requireComponent('Bloglounge.Data.FeedItems');
+			requireComponent('Bloglounge.Data.FeedItems');
+
 			$oldTags = null;
+			
 			$id = FeedItem::getIdByURL($item['permalink']);
+			if($id === false && isset($item['guid'])) {
+				$item['guid']=$db->escape($db->lessen(UTF8::correct($item['guid'])));
+				$id = FeedItem::getIdByURL($item['guid']);
+			}
+
 			$item['author'] = Feed::getAuthor($item, $feedId, $id);
 			$item['title'] = Feed::getTitle($item, $feedId, $id);
 
@@ -862,8 +886,8 @@
 
 		function getFeedLastUpdate($filter = '') {
 			global $db, $database;		
-			if (!list($result) = $db->pick('SELECT i.lastUpdate FROM '.$database['prefix'].'Feeds i'.$filter.' ORDER BY i.lastUpdate DESC LIMIT 1'))
-					$result = 0;
+			if (!list($result) = $db->pick('SELECT i.lastUpdate FROM '.$database['prefix'].'Feeds i '.$filter.' ORDER BY i.lastUpdate DESC LIMIT 1'))
+				$result = 0;
 			return $result;
 		}
 

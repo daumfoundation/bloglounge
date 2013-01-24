@@ -20,8 +20,9 @@
 <link rel="shortcut icon" href="<?php echo $service['path'];?>/images/favicon.ico" />
 <script type="text/javascript">
 	var _path = '<?php echo $service['path'];?>';
-	var _now = '<?php echo $action;?>';
-	var _lang = '<?php echo Locale::get();?>';
+	var _lang = '<?php echo Locale::get();?>';	
+	
+	var _nowid = 'menu_<?php echo $action;?>';
 </script>
 <script type="text/javascript" src="<?php echo $service['path'];?>/scripts/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $service['path'];?>/scripts/admin.js"></script>
@@ -35,7 +36,12 @@
 		  type: "POST",
 		  url: _path +'/service/update/?type=' + type,
 		  success: function(msg){
-			 addMessage("<?php echo _t('블로그 업데이트가 완료되었습니다.');?>");
+			 error = $("response error", msg).text();
+			 if(error != 1) {
+				 addMessage("<?php echo _f('블로그 \""+%1+"\"의 업데이트를 완료했습니다.','$("response feed", msg).text()');?>");
+			 } else {
+				 addMessage($("response message", msg));
+			 }
 		  },
 		  error: function(msg) {
 		  }
@@ -43,17 +49,51 @@
 	};
 
 	function menuAction() {
-		$("#header .menus ul li a img").each( function() {
+		$("#header .leftmenus ul li").each( function() {
 			$(this).mouseover( function() {
-				if(this.name != _now) {
-					$(this).attr("src", "<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/" + this.id + "_hover.gif");
+				$(this).addClass('hover');
+			
+			}).mouseout( function() {	
+				$(this).removeClass('hover');
+			});
+		});
+
+		$("#header .leftmenus ul li a").focus( function() {
+			this.blur();
+		});
+
+		$("#header .menus ul li").each( function() {
+			$(this).mouseover( function() {
+				if(this.id != _nowid) {
+					$(this).addClass('hover');
+					selectAction(this.id.substr(5)); // realtime mouse hover
 				}
 			}).mouseout( function() {	
-				if(this.name != _now) {
-					$(this).attr("src", "<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/" + this.id + ".gif");				
+				if(this.id != _nowid) {
+					$(this).removeClass('hover');
 				}
 			});
 		});
+
+		$("#header .menus ul li a").focus( function() {
+			this.blur();
+		});
+	}
+	
+	var lastMenu = null;
+	function selectAction(action) {
+		if("menu_"+action == _nowid) {
+			return true;
+		} else {
+			$("#"+_nowid).removeClass('selected').removeClass('hover');
+			$("#sub"+_nowid).removeClass('viewed')
+
+			_nowid = "menu_" + action;
+			$("#" + _nowid).addClass('selected');
+			$("#sub" + _nowid).addClass('viewed');
+			
+			return false;
+		}
 	}
 
 	$(window).ready( function() {
@@ -72,24 +112,27 @@
 <body>
 	<div id="header">
 	<div class="wrap">
-		<div class="logo">
-			<a href="<?php echo $service['path'];?>/admin"><img src="<?php echo $service['path'];?>/images/admin/logo.gif" alt="<?php echo _t("로고");?>" /></a>
+		<div class="leftmenus">
+			<ul>
+				<li id="leftmenu_blogadd"><span><span><a href="/admin/blog/add"><?php echo _t('블로그추가');?></a></span></span></li>
+			</ul>
 		</div>
+
 		<div class="menus">
 			<ul>
-				<li id="menu_center"><a href="<?php echo $service['path'];?>/admin/"><img id="admin_menu1" name="center" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/admin_menu1<?php echo $action=='center'?'_select':'';?>.gif" alt="<?php echo _t("센터");?>"/></a></li>
-				<li id="menu_blog"><a href="<?php echo $service['path'];?>/admin/blog"><img id="admin_menu2" name="blog" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/admin_menu2<?php echo $action=='blog'?'_select':'';?>.gif" alt="<?php echo _t("블로그");?>"/></a></li>
+				<li id="menu_center" <?php echo $action=='center'?' class="selected"':'';?>><span><span><a href="<?php echo $service['path'];?>/admin" onclick="return selectAction('center');"><?php echo _t('센터');?></a></span></span></li>
+				<li id="menu_blog" <?php echo $action=='blog'?' class="selected"':'';?>><span><span><a href="<?php echo $service['path'];?>/admin/blog" onclick="return selectAction('blog');"><?php echo _t('블로그');?></a></span></span></li>
 <?php
 	if($is_admin) {
 ?>
-				<li id="menu_design"><a href="<?php echo $service['path'];?>/admin/design"><img id="admin_menu3" name="design" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/admin_menu3<?php echo $action=='design'?'_select':'';?>.gif" alt="<?php echo _t("디자인");?>"/></a></li>
-				<li id="menu_plugin"><a href="<?php echo $service['path'];?>/admin/plugin"><img id="admin_menu4" name="plugin" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/admin_menu4<?php echo $action=='plugin'?'_select':'';?>.gif" alt="<?php echo _t("플러그인");?>"/></a></li>
-				<li id="menu_member"><a href="<?php echo $service['path'];?>/admin/member"><img id="admin_menu5" name="member" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/admin_menu5<?php echo $action=='member'?'_select':'';?>.gif" alt="<?php echo _t("회원");?>"/></a></li>
-				<li id="menu_setting"><a href="<?php echo $service['path'];?>/admin/setting"><img id="admin_menu6" name="setting" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/admin_menu6<?php echo $action=='setting'?'_select':'';?>.gif" alt="<?php echo _t("설정");?>"/></a></li>
+				<li id="menu_design" <?php echo $action=='design'?' class="selected"':'';?>><span><span><a href="<?php echo $service['path'];?>/admin/design" onclick="return selectAction('design');"><?php echo _t('디자인');?></a></span></span></li>
+				<li id="menu_plugin" <?php echo $action=='plugin'?' class="selected"':'';?>><span><span><a href="<?php echo $service['path'];?>/admin/plugin" onclick="return selectAction('plugin');"><?php echo _t('플러그인');?></a></span></span></li>
+				<li id="menu_member" <?php echo $action=='member'?' class="selected"':'';?>><span><span><a href="<?php echo $service['path'];?>/admin/member" onclick="return selectAction('member');"><?php echo _t('회원');?></a></span></span></li>
+				<li id="menu_setting" <?php echo $action=='setting'?' class="selected"':'';?>><span><span><a href="<?php echo $service['path'];?>/admin/setting" onclick="return selectAction('setting');"><?php echo _t('설정');?></a></span></span></li>
 <?php
 	} else {
-?>			
-				<li id="menu_user"><a href="<?php echo $service['path'];?>/admin/user"><img id="admin_menu7" name="user" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/admin_menu7<?php echo $action=='user'?'_select':'';?>.gif" alt="<?php echo _t("개인");?>"/></a></li>
+?>				
+				<li id="menu_user" <?php echo $action=='user'?' class="selected"':'';?>><span><span><a href="<?php echo $service['path'];?>/admin/user" onclick="return selectAction('user');"><?php echo _t('개인');?></a></span></span></li>
 <?php
 	}
 ?>
@@ -109,9 +152,32 @@
 		switch($action) {
 			case 'center':
 				if(empty($value)) $value = 'dashboard';
+			break;		
+			case 'blog':
+				if(empty($value)) $value = 'bloglist';
+				else if($value=='list') $value = 'bloglist';
+			break;			
+			case 'design':
+				if(empty($value)) $value = 'meta';
+			break;			
+			case 'plugin':
+				if(empty($value)) $value = 'pluginlist';
+				else if($value=='list') $value = 'pluginlist';
+			break;			
+			case 'member':
+				if(empty($value)) $value = 'memberlist';
+				else if($value=='list') $value = 'memberlist';
+			break;		
+			case 'setting':
+				if(empty($value)) $value = 'basic';
+			break;		
+			case 'user':
+				if(empty($value)) $value = 'myinfo';
+			break;
+		}
 ?>
 			<!-- center -->
-			<ul class="submenu_center">
+			<ul id="submenu_center" class="submenu_center<?php echo $action=='center'?' viewed':'';?>">
 				<li class="lastChild <?php echo $value=='dashboard'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/center/dashboard"><?php echo _t("종합");?></a></span></li>
 				<!--
 				<li class="sep"></li>
@@ -121,26 +187,22 @@
 				func::printPluginMenu('center',$value);
 ?>
 			</ul>
-<?php
-			break;		
-			case 'blog':
-				if(empty($value)) $value = 'list';
-?>
+
 			<!-- blog -->
-			<ul class="submenu_blog">
+			<ul id="submenu_blog" class="submenu_blog<?php echo $action=='blog'?' viewed':'';?>">
 				<li class="<?php echo $value=='add'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/blog/add"><?php echo _t("블로그추가");?></a></span></li>
 				<li class="sep"></li>
-				<li class="<?php echo $value=='list'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/blog/list"><?php echo _t("블로그목록");?></a></span></li>
+				<li class="<?php echo $value=='bloglist'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/blog/list"><?php echo _t("블로그목록");?></a></span></li>
 				<li class="sep"></li>
 				<li class="<?php echo $value=='entrylist'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/blog/entrylist"><?php echo _t("글목록");?></a></span></li>
 				<li class="sep"></li>
 <?php
-	if($is_admin) {
+			if($is_admin) {
 ?>
 				<li class="<?php echo $value=='category'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/blog/category"><?php echo _t("분류");?></a></span></li>
 				<li class="sep"></li>
 <?php
-	}
+			}
 ?>
 				<li class="lastChild <?php echo $value=='trash'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/blog/trash"><?php echo _t("휴지통");?></a></span></li>
 
@@ -148,14 +210,12 @@
 				func::printPluginMenu('blog',$value);
 ?>
 			</ul>
+
 <?php
-				
-			break;			
-			case 'design':
-				if(empty($value)) $value = 'meta';
+	if($is_admin) {
 ?>
-			<!-- blog -->
-			<ul class="submenu_design">
+			<!-- design -->
+			<ul id="submenu_design" class="submenu_design<?php echo $action=='design'?' viewed':'';?>">
 				<li class="<?php echo $value=='meta'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/design/meta"><?php echo _t("메타스킨");?></a></span></li>
 				<li class="sep"></li>
 				<li class="<?php echo $value=='link'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/design/link"><?php echo _t("링크스킨");?></a></span></li>
@@ -169,37 +229,25 @@
 				func::printPluginMenu('design',$value);
 ?>
 			</ul>
-<?php
-			break;			
-			case 'plugin':
-				if(empty($value)) $value = 'list';
-?>
-			<!-- blog -->
-			<ul class="submenu_plugin">
-				<li class="lastChild <?php echo $value=='list'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/plugin/list"><?php echo _t("플러그인 목록");?></a></span></li>
+
+			<!-- plugin -->
+			<ul id="submenu_plugin" class="submenu_plugin<?php echo $action=='plugin'?' viewed':'';?>">
+				<li class="lastChild <?php echo $value=='pluginlist'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/plugin/list"><?php echo _t("플러그인 목록");?></a></span></li>
 <?php
 				func::printPluginMenu('plugin',$value);
 ?>
 			</ul>
-<?php
-			break;			
-			case 'member':
-				if(empty($value)) $value = 'list';
-?>
-			<!-- blog -->
-			<ul class="submenu_member">
-				<li class="lastChild <?php echo $value=='list'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/member/list"><?php echo _t("회원 목록");?></a></span></li>
+
+			<!-- member -->
+			<ul id="submenu_member" class="submenu_member<?php echo $action=='member'?' viewed':'';?>">
+				<li class="lastChild <?php echo $value=='memberlist'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/member/list"><?php echo _t("회원 목록");?></a></span></li>
 <?php
 				func::printPluginMenu('member',$value);
 ?>
 			</ul>
-<?php
-			break;		
-			case 'setting':
-				if(empty($value)) $value = 'basic';
-?>
-			<!-- blog -->
-			<ul class="submenu_setting">
+
+			<!-- setting -->
+			<ul id="submenu_setting" class="submenu_setting<?php echo $action=='setting'?' viewed':'';?>">
 				<li class="<?php echo $value=='basic'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/setting/basic"><?php echo _t("환경설정");?></a></span></li>
 				<li class="sep"></li>	
 				<li class="<?php echo $value=='owner'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/setting/owner"><?php echo _t("관리자설정");?></a></span></li>
@@ -212,20 +260,17 @@
 ?>
 			</ul>
 <?php
-			break;		
-			case 'user':
-				if(empty($value)) $value = 'myinfo';
+} else  {
 ?>
-			<!-- blog -->
-			<ul class="submenu_user">
+			<!-- user -->
+			<ul id="submenu_user" class="submenu_user<?php echo $action=='user'?' viewed':'';?>">
 				<li class="lastChild <?php echo $value=='myinfo'?'selected':'';?>"><span><a href="<?php echo $service['path'];?>/admin/user/myinfo"><?php echo _t("내 정보수정");?></a></span></li>
 <?php
 				func::printPluginMenu('user',$value);
 ?>
 			</ul>
 <?php
-			break;
-		}
+}
 ?>
 	</div> <!-- wrap close -->
 	</div> <!-- submenu close -->
@@ -238,11 +283,12 @@
 				</ul>
 			</div>
 			<div id="project_link">
-				<a href="http://bloglounge.itcanus.net/" target="_blank"><?php echo _t("소개");?></a> <span class="sep">|</span> <a href="http://bloglounge.itcanus.net/download"  target="_blank"><?php echo _t("배포페이지");?></a> <span class="sep">|</span> <a href="http://bloglounge.itcanus.net/qa" target="_blank"><?php echo _t("Q&A");?></a>
+				<a href="http://bloglounge.itcanus.net/" target="_blank"><?php echo _t("블로그라운지");?></a> <span class="sep">|</span> <a href="http://bloglounge.itcanus.net/bloglounge_download"  target="_blank"><?php echo _t("배포페이지");?></a> <span class="sep">|</span> <a href="http://bloglounge.itcanus.net/bloglounge_qna" target="_blank"><?php echo _t("Q&A");?></a>
 			</div>
 			<div class="clear"></div>
 		</div>
 	</div> <!-- submenu2 close -->
+
 <?php
  if($userInformation['is_accepted'] == 'n') {
 ?>

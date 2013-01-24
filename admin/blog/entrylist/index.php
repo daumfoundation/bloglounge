@@ -419,7 +419,7 @@
 					<option value="tag"<?php echo $type=='tag'?' selected="selected"':'';?>><?php echo _t('태그');?></option>
 					<option value="blogURL"<?php echo $type=='blogURL'?' selected="selected"':'';?>><?php echo _t('블로그주소');?></option>
 				</select>
-				<input type="text" class="input faderInput" name="keyword" value="<?php echo $keyword;?>"/> <input type="image" alt="<?php _t('검색');?>" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_search.gif" align="top" /><?php if(!empty($keyword)) {?><a href="<?php echo $service['path'];?>/admin/blog/entrylist"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_search_cancel.gif" alt="<?php echo _t('검색취소');?>" align="top" /></a><?php } ?>
+				<input type="text" class="input faderInput" name="keyword" value="<?php echo $keyword;?>"/> <span class="searchbutton"><input type="submit" value="<?php echo _t('검색');?>" align="bottom" /></span><?php if(!empty($keyword)) {?><a href="<?php echo $service['path'];?>/admin/blog/entrylist" class="searchbutton"><span><?php echo _t('검색취소');?></span></a><?php } ?>
 			</form>
 		</div>
 		<div class="clear"></div>
@@ -479,7 +479,7 @@
 						<?php echo $desc;?>	
 					</div>
 
-					<a href="#" onclick="showEntryView(<?php echo $readFeedItem['id'];?>,800,600); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_preview.gif" alt="<?php echo _t('미리보기..');?>" align="absmiddle" /></a>
+					<a href="#" class="smallbutton" onclick="showEntryView(<?php echo $readFeedItem['id'];?>); return false;"><span><?php echo _t('미리보기');?></span></a>
 
 				</div>
 			</div>
@@ -565,8 +565,8 @@
 					<div class="grayline"></div>
 
 					<p class="button_wrap">
-						<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('이 정보를 수정합니다');?>"/>
-						<a href="#" onclick="deleteItem(<?php echo $readFeedItem['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_delete.gif" alt="<?php echo _t('이 글을 삭제합니다');?>"/></a>
+						<span class="normalbutton"><input type="submit" value="<?php echo _t('수정완료');?>" /></span>
+						<a href="#" class="normalbutton" onclick="deleteItem(<?php echo $readFeedItem['id'];?>); return false;"><span><?php echo _t('삭제');?></span></a>
 					</p>
 				</form>
 			</div>
@@ -676,7 +676,7 @@
 			// 글 블로그
 			ob_start();
 ?>
-					<a href="<?php echo $service['path'];?>/admin/blog/list?read=<?php echo $post['feed'];?>" title="<?php echo _f('\'%1\' 정보보기', stripcslashes(Feed::get($post['feed'], 'title')));?>"><?php echo UTF8::lessenAsEm(stripcslashes(Feed::get($post['feed'], 'title')), 30);?></a> <?php echo $feedvisibility=='n'?_t('비공개'):'';?>
+					<a href="<?php echo $service['path'];?>/admin/blog/list?read=<?php echo $post['feed'];?>" title="<?php echo _f('\'%1\' 정보보기', stripcslashes(Feed::get($post['feed'], 'title')));?>"><?php echo UTF8::lessenAsEm(stripcslashes(Feed::get($post['feed'], 'title')), 30);?></a> <?php echo $feedvisibility=='n'?'<span class="hide">'._t('(비공개)').'</span>':'';?>
 <?php
 
 			$content = ob_get_contents();
@@ -740,7 +740,7 @@
 				</optgroup>
 			</select>
 
-			<a href="#" onclick="changeAction(); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_apply_select.gif" alt="<?php echo _t('적용');?>" align="top" /></a>
+			<a href="#" class="smallbutton" onclick="changeAction(); return false;"><span class="boldbutton"><?php echo _t('적용');?></span></a>
 <?php
 	$select = ob_get_contents();
 	ob_end_clean();
@@ -754,7 +754,7 @@
 			<!--
 			<a href="#" onclick="changeAllVisibility('postid', 'y'); return false;"><?php echo _t('공개');?></a> <span class="sep">|</span> <a href="#" onclick="changeAllVisibility('postid', 'n'); return false;"><?php echo _t('비공개');?></a> <span class="sep">|</span> <strong><a href="#" onclick="deleteAllItem('postid'); return false;"><?php echo _t('삭제');?></a></strong>
 			-->
-			<?php echo _f('선택한 글을 %1', $select);?>
+			<?php echo _f('<label for="action_list">선택한 글을</label> %1', $select);?>
 		</div>				
 		<div class="clear"></div>
 <?php

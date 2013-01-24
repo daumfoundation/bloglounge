@@ -14,7 +14,7 @@
 		<window height="auto" />
 		<fieldset legend="분류">
 			<field title="분류선택" name="categoryType" type="select" value="recent">
-				<option value="recent">상위순</option>
+				<option value="recent">최근순</option>
 				<option value="random">랜덤</option>
 				<option value="custom">직접선택</option>
 				<caption><![CDATA[특정 알고리즘으로 분류를 자동으로 지정하거나,<br /> 직접 분류를 지정할 수 있습니다.]]></caption>

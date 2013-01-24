@@ -461,9 +461,8 @@
 					$tables = explode(',', "{$prefix}FeedItems,{$prefix}Feeds,{$prefix}Settings,{$prefix}Users");
 					$check = $db->doesExistTableArray($prefix, $tables);
 					if ($check['exist'] != count($tables)) {
-						print_r($check);
-						//	Header("Location: {$path}/setup/?step=" . $IV['type'] . "&error=9"); 
-						//	exit;
+						Header("Location: {$path}/setup/?step=" . $IV['type'] . "&error=9"); 
+						exit;
 					}
 					
 					$IV2 = array();

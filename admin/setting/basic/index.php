@@ -121,7 +121,7 @@
 		<div class="clear"></div>
 		
 		<div class="button_wrap">
-			<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('수정완료');?>" />
+			<span class="normalbutton"><input type="submit" value="<?php echo _t('수정완료');?>" /></span>
 		</div>
 		</form>		
 		<iframe id="_hiddenFrame" name="_hiddenFrame" class="hidden" src="about:blank" frameborder="0" width="0" height="0"></iframe>
@@ -366,7 +366,7 @@
 	<br />
 
 	<div class="button_wrap">
-			<a href="#" onclick="saveSettings(); return false;"><img type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('수정완료');?>" /></a>
+			<a href="#" class="normalbutton" onclick="saveSettings(); return false;"><span class="boldbutton"><?php echo _t('수정완료');?></span></a>
 	</div>
 
 	</div>

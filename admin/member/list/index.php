@@ -201,11 +201,11 @@
 					<div class="grayline"></div>
 
 					<p class="button_wrap">
-						<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('이 정보를 수정합니다');?>"/>
+						<span class="normalbutton"><input type="submit" value="<?php echo _t('수정완료');?>" /></span>
 <?php
 					if($readUser['is_admin'] == 'n') {
 ?>
-						<a href="#" onclick="deleteMember(); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_out.gif" alt="<?php echo _t('회원탈퇴');?>"/></a>
+						<a href="#" class="normalbutton" onclick="deleteMember(); return false;"><span class="boldbutton"><?php echo _t('탈퇴');?></span></a>
 <?php
 					}
 ?>

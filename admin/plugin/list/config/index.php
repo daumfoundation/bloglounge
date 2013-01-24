@@ -46,6 +46,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title><?php echo $pluginInfo['title'];?></title>
 <link rel="stylesheet" media="screen" type="text/css" href="<?php echo $service['path'];?>/style/common.css" />
+<link rel="stylesheet" media="screen" type="text/css" href="<?php echo $service['path'];?>/style/admin.css" />
 <link rel="stylesheet" media="screen" type="text/css" href="<?php echo $service['path'];?>/style/admin_plugin.css" />
 <script type="text/javascript" src="<?php echo $service['path'];?>/scripts/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $service['path'];?>/scripts/common.js"></script>
@@ -108,7 +109,7 @@
 	});
 </script>
 </head>
-<body>
+<body class="plugin_body">
 <?php
 		$plugConfig = new XMLStruct;
 		$plugSettings = array();
@@ -315,8 +316,8 @@
 </div>
 
 <div id="plugin_config_button_wrap">
-	<?php if (!is_null($pluginInfo['config'])) { ?><a href="#" onclick="saveConfig(); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('수정완료');?>" /></a>&nbsp;<?php } ?>
-	<a href="#" onclick="parent.hidePluginConfig('<?php echo $pluginName;?>'); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_close.gif" alt="<?php echo _t('닫기');?>" /></a>
+	<?php if (!is_null($pluginInfo['config'])) { ?><a href="#" class="normalbutton" onclick="saveConfig(); return false;"><span class="boldbutton"><?php echo _t('수정완료');?></span></a>&nbsp;<?php } ?>
+	<a href="#" class="normalbutton" onclick="parent.hidePluginConfig('<?php echo $pluginName;?>'); return false;"><span><?php echo _t('닫기');?></span></a>
 </div>	
 
 </body>

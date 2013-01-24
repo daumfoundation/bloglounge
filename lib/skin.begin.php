@@ -2,8 +2,10 @@
 	$skin = new Skin;
 	$skin->load('meta/'.$config->metaskin);
 
+	$servicePath = func::lastSlashDelete($service['path']);
+
 	// 베이스 출력
-	$adminURL = (isLoggedIn() && !isAdmin()) ? $service['path'].'/mypage/' : $service['path'].'/admin/';
+	$adminURL = (isLoggedIn() && !isAdmin()) ? $servicePath.'/mypage' : $service['path'].'/admin';
 
 	$event->on('Meta.skinBegin');
 
@@ -25,16 +27,16 @@
 	// *** 기본 정보
 	$skin->replace('title', $event->on('Text.title', UTF8::clear($config->title)));
 	$skin->replace('description', $event->on('Text.description', UTF8::clear($config->description)));
-	$skin->replace('base_url', empty($service['path'])?'/':$service['path']);
-	$skin->replace('index_url', empty($service['path'])?'':$service['path']);
-	$skin->replace('rss_url', $service['path'].'/rss');
-	$skin->replace('focus_rss_url', $service['path'].'/rss/focus');
+	$skin->replace('base_url', empty($service['path'])?'/':$servicePath.'/');
+	$skin->replace('index_url', $servicePath);
+	$skin->replace('rss_url', $servicePath.'/rss');
+	$skin->replace('focus_rss_url', $servicePath.'/rss/focus');
 
-	$skin->replace('base_domain', $_SERVER['HTTP_HOST'].(($service['path']=='/')?'':$service['path']));
+	$skin->replace('base_domain', $_SERVER['HTTP_HOST'].$servicePath);
 	$skin->replace('bloglounge_name', BLOGLOUNGE);
 	$skin->replace('bloglounge_version', BLOGLOUNGE_NAME);
 
-	$skin->replace('random_blog', $service['path'] . '/random');
+	$skin->replace('random_blog', $service['path'].'/random');
 
 	$skin->replace('position', empty($accessInfo['controller'])?'index':$accessInfo['controller']);
 
@@ -45,7 +47,7 @@
 
 	// *** 로고
 	$s_logo = $skin->cutSkinTag('logo_image');
-	$s_logo = $skin->parseTag('logo_url', $service['path'].'/cache/logo/'.$config->logo, $s_logo);
+	$s_logo = $skin->parseTag('logo_url', $servicePath.'/cache/logo/'.$config->logo, $s_logo);
 	$skin->dress('logo_image', $s_logo);
 
 	if(!empty($config->logo) && file_exists(ROOT.'/cache/logo/'.$config->logo)) {
@@ -61,25 +63,25 @@
 	if (!isLoggedIn()) { // 로그인 되어있지 않은 비회원(손님)
 		$s_guest = $skin->cutSkinTag('guest');
 		$s_guest = $skin->parseTag('join_onclick', 'javascript:return join(this,\'' ._t("회원 가입페이지로 이동하시겠습니까?").'\');', $s_guest);
-		$s_guest = $skin->parseTag('join_url', $service['path'].'/join/', $s_guest);
+		$s_guest = $skin->parseTag('join_url', $servicePath.'/join', $s_guest);
 		$s_guest = $skin->parseTag('login_onclick', 'javascript:return login(this,\'' ._t("로그인 페이지로 이동하시겠습니까?").'\');', $s_guest);
-		$s_guest = $skin->parseTag('login_url', $service['path'].'/login/', $s_guest);
+		$s_guest = $skin->parseTag('login_url', $servicePath.'/login', $s_guest);
 
 		$skin->dress('guest', $s_guest);
 	} else { // 로그인 되어있는 회원
 		$s_member = $skin->cutSkinTag('member');
-		$s_member = $skin->parseTag('logout_url', $service['path'].'/logout/', $s_member);		
+		$s_member = $skin->parseTag('logout_url', $servicePath.'/logout', $s_member);		
 		$s_member = $skin->parseTag('logout_onclick', 'javascript:return logout(this,\'' ._t("로그아웃 하시겠습니까?").'\');', $s_member);
 
 		$s_member = $skin->parseTag('member_name', htmlspecialchars(User::get($session['id'], 'name')), $s_member);
 		$s_member = $skin->parseTag('member_welcome', msg::makeWelcomeMsg($config->welcomePack), $s_member);
 		
-		$s_member = $skin->parseTag('admin_url', $service['path'].'/admin/', $s_member);		
+		$s_member = $skin->parseTag('admin_url', $servicePath.'/admin', $s_member);		
 
 		// 관리자
 		if (!isAdmin()) { 		
 			$s_admin = $skin->cutSkinTag('admin');
-			$s_admin = $skin->parseTag('admin_url', $service['path'].'/admin/', $s_admin);
+			$s_admin = $skin->parseTag('admin_url', $servicePath.'/admin', $s_admin);
 			$s_member = $skin->dressTag('admin', $s_admin, $s_member);
 		} else {
 		}
@@ -94,7 +96,7 @@
 	if(count($categories) > 0) {
 		$sp_category = "<ul>\n";
 			foreach($categories as $category) {
-				$sp_category .= "<li><a href=\"{$service['path']}/category/".func::encode($category['name'])."\">{$category['name']}</a><span class=\"count count_class_{$category['count']}\">({$category['count']})</span>\n";
+				$sp_category .= "<li><a href=\"{$servicePath}/category/".func::encode($category['name'])."\">{$category['name']}</a><span class=\"count count_class_{$category['count']}\">({$category['count']})</span>\n";
 			}
 		$sp_category .= "</ul>\n";
 
@@ -112,7 +114,7 @@
 		$src_feed_rep = $skin->cutSkinTag('feed_rep');
 		foreach($result as $item) {
 			$sp_feed = $skin->parseTag('feed_blogURL', htmlspecialchars($item['blogURL']), $src_feed_rep);
-			$sp_feed = $skin->parseTag('feed_link_url', $service['path'].'/blog/'.$item['id'], $sp_feed);
+			$sp_feed = $skin->parseTag('feed_link_url', $servicePath.'/blog/'.$item['id'], $sp_feed);
 			$sp_feed = $skin->parseTag('feed_title', UTF8::clear(UTF8::lessenAsByte($item['title'],$skinConfig->feedTitleLength)), $sp_feed);
 			$s_feed_rep .= $sp_feed;
 			$sp_feed = '';
@@ -122,7 +124,7 @@
 		$s_feeds = '';
 	}
 	$skin->dress('feed', $s_feeds);
-	$skin->replace('feedlist_url', $service['path'].'/feedlist/');	
+	$skin->replace('feedlist_url', $servicePath.'/feedlist/');	
 
 	// 포커스 : ncloud	
 	
@@ -152,7 +154,7 @@
 			}
 
 			$sp_focus = $skin->parseTag('focus_url', htmlspecialchars($item['permalink']), $sp_focus);
-			$sp_focus = $skin->parseTag('focus_link_url', $service['path'].'/go/'.$item['id'], $sp_focus);
+			$sp_focus = $skin->parseTag('focus_link_url', $servicePath.'/go/'.$item['id'], $sp_focus);
 			$sp_focus = $skin->parseTag('focus_title', UTF8::clear(UTF8::lessenAsByte(func::stripHTML($item['title']),$skinConfig->focusTitleLength)), $sp_focus);		
 
 			$sp_focus = $skin->parseTag('focus_description', UTF8::clear(UTF8::lessenAsByte(func::htmltrim(func::stripHTML($item['description'])),$skinConfig->focusDescLength)), $sp_focus);
@@ -167,7 +169,7 @@
 		$s_focuses = '';
 	}
 	$skin->dress('focus', $s_focuses);
-	$skin->replace('focuslist_url', $service['path'].'/focus/');
+	$skin->replace('focuslist_url', $servicePath.'/focus/');
 
 	// 인기글
 	$src_booms = $skin->cutSkinTag('boom');
@@ -196,7 +198,7 @@
 			}
 
 			$sp_booms = $skin->parseTag('boom_url', htmlspecialchars($item['permalink']), $sp_booms);		
-			$sp_booms = $skin->parseTag('boom_link_url', $service['path'].'/go/'.$item['id'] , $sp_booms);
+			$sp_booms = $skin->parseTag('boom_link_url', $servicePath.'/go/'.$item['id'] , $sp_booms);
 			$sp_booms = $skin->parseTag('boom_title', UTF8::clear(UTF8::lessenAsByte(func::stripHTML($item['title']), $skinConfig->boomTitleLength)), $sp_booms);
 
 			$sp_booms = $skin->parseTag('boom_description', UTF8::clear(UTF8::lessenAsByte(func::htmltrim(func::stripHTML($item['description'])),$skinConfig->boomDescLength)), $sp_booms);
@@ -224,7 +226,7 @@
 	$skin->replace('search_keyword', $searchKeyword);
 	$src_search = $skin->cutSkinTag('search');
 
-	$s_search = '<form action="'.$service['path'].'/" enctype="application/x-www-form-urlencoded" method="get">'.$src_search.'</form>';
+	$s_search = '<form action="'.$servicePath.'/" enctype="application/x-www-form-urlencoded" method="get">'.$src_search.'</form>';
 	$skin->dress('search', $s_search);
 
 	$skin->output = $skin->parseTagWithCondition('search_keyword', Korean::doesHaveFinalConsonant(UTF8::bring($searchKeyword)), '<span class="searchKeyword">"'.$searchKeyword.'"</span>', $skin->output);

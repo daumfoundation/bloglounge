@@ -142,7 +142,7 @@
 		<br />
 
 		<div class="button_wrap">
-				<a href="#" onclick="saveSettings(); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('수정완료');?>" /></a>
+			<a href="#" class="normalbutton" onclick="saveSettings(); return false;"><span class="boldbutton"><?php echo _t('수정완료');?></span></a>
 		</div>
 	</div>
 

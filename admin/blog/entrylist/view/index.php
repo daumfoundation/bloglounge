@@ -16,6 +16,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title></title>
 <link rel="stylesheet" media="screen" type="text/css" href="<?php echo $service['path'];?>/style/common.css" />
+<link rel="stylesheet" media="screen" type="text/css" href="<?php echo $service['path'];?>/style/admin.css" />
 <link rel="stylesheet" media="screen" type="text/css" href="<?php echo $service['path'];?>/style/admin_blog.css" />
 <script type="text/javascript" src="<?php echo $service['path'];?>/scripts/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $service['path'];?>/scripts/common.js"></script>
@@ -33,13 +34,13 @@
 	});
 </script>
 </head>
-<body>
+<body class="entry_view">
 	<div id="entry_preview_wrap">
 		<div id="entry_preview_data">	
 			<?php echo $feed['description'];?>
 		</div>
 		<div id="entry_preview_button_wrap">
-			<a href="#" onclick="parent.hideEntryView('<?php echo $id;?>'); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_close.gif" alt="<?php echo _t('닫기');?>" /></a>
+			<a href="#" class="normalbutton" onclick="parent.hideEntryView('<?php echo $id;?>'); return false;"><span><?php echo _t('닫기');?></span></a>
 		</div>
 	</div>
 </body>

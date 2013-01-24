@@ -137,7 +137,7 @@
 					if(error == "0") {
 						pluginStatus.val('on');
 						pluginItem.addClass('list_use');
-						pluginIcon.attr('src', "<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_unuse.gif");
+						pluginIcon.text('<?php echo _t('해제');?>');
 					} else {
 						alert($("response message", msg).text());
 					}
@@ -164,7 +164,7 @@
 					if(error == "0") {
 						pluginStatus.val('off');
 						pluginItem.removeClass('list_use');
-						pluginIcon.attr('src', "<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_use.gif");
+						pluginIcon.text('<?php echo _t('사용');?>');
 					} else {
 						alert($("response message", msg).text());
 					}
@@ -225,9 +225,9 @@
 <?php
 		if($plugin['status']=='on') {
 ?>
-			<a href="#" onclick="togglePlugin('<?php echo $plugin['name'];?>'); return false;"><img id="pluginIcon<?php echo $plugin['name'];?>" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_unuse.gif" /></a>
+			<a href="#" class="microbutton" onclick="togglePlugin('<?php echo $plugin['name'];?>'); return false;"><span id="pluginIcon<?php echo $plugin['name'];?>"><?php echo _t('해제');?></span></a>
 <?php 	} else { ?>
-			<a href="#" onclick="togglePlugin('<?php echo $plugin['name'];?>'); return false;"><img id="pluginIcon<?php echo $plugin['name'];?>" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_use.gif" /></a>
+			<a href="#" class="microbutton" onclick="togglePlugin('<?php echo $plugin['name'];?>'); return false;"><span id="pluginIcon<?php echo $plugin['name'];?>"><?php echo _t('사용');?></span></a>
 <?php	} 
 			$content = ob_get_contents();
 			ob_end_clean();
@@ -253,7 +253,7 @@
 
 			if($plugin['config'] == 'y') {
 ?>			
-			<a href="#" onclick="showPluginConfig('<?php echo $plugin['name'];?>', 'config', <?php echo $plugin['window']['height'];?>); return false;"><img id="pluginConfigIcon" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_setting.gif" alt="설정.." /></a>	
+			<a href="#" class="microbutton" onclick="showPluginConfig('<?php echo $plugin['name'];?>', 'config', <?php echo $plugin['window']['height'];?>); return false;"><span><?php echo _t('설정');?></span></a>	
 <?php
 			}
 ?>			

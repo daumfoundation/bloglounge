@@ -241,7 +241,7 @@
 					<dt></dt>
 					<dd><?php echo _t('자동분류는 태그로 분류됩니다. 태그는 , 로 다중입력 가능합니다.');?></dd>
 				</dl>
-				<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('수정완료');?>" />
+				<span class="normalbutton"><input type="submit" value="<?php echo _t('수정완료');?>" /></span>
 			</form>
 	
 <?php
@@ -268,7 +268,7 @@
 					<dd><?php echo _t('자동분류는 태그로 분류됩니다. 태그는 , 로 다중입력 가능합니다.');?></dd>
 				</dl>
 
-				<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_add.gif" alt="<?php echo _t('추가');?>" />
+				<span class="normalbutton"><input type="submit" value="<?php echo _t('추가');?>" /></span>
 			</form>
 <?php
 	}

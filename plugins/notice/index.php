@@ -190,7 +190,7 @@
 			// 글 실행
 			ob_start();
 ?>
-			<a href="#" onclick="deleteItem(<?php echo $post['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_delete.gif" alt="삭제" /></a>
+			<a href="#" class="normalbutton" onclick="deleteItem(<?php echo $post['id'];?>); return false;"><span><?php echo _t('삭제');?></span></a>
 <?php
 
 			$content = ob_get_contents();

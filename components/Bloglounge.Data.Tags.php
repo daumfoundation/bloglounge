@@ -15,6 +15,7 @@
 			if (empty($tags)) return false;
 			foreach ($tags as $tag) {
 				if (!Validator::is_empty($tag)) {
+					
 					$tag = trim($tag);
 					array_push($tagChunk, "'$tag'");
 					array_push($tagInsertChunk, "('$tag')");

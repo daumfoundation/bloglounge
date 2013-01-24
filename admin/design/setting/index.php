@@ -477,7 +477,7 @@
 		</dd>
 	</dl>
 	<div class="skin_setting_tools">
-		<a href="#" onclick="saveSkinSettings(); return false;"><img type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('수정완료');?>" /></a>
+		<a href="#" class="normalbutton" onclick="saveSkinSettings(); return false;"><span class="boldbutton"><?php echo _t('수정완료');?></span></a>
 	</div>
 
 </div>

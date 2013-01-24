@@ -13,7 +13,7 @@
 		<div id="notice_sidebar" class="sidebar_item">
 <?php
 	list($feedItems, $totalFeedItems) = FeedItem::getFeedItems('blogURL','bloglounge.itcanus.net/bloglounge_notice',Feed::blogURL2Id('http://bloglounge.itcanus.net/bloglounge_notice'),1,10);
-	if($totalFeedItems==0) { // 자동등록된 공지사항 피드를 삭제하였을경우 .. 동적으로 읽어 온다.
+	if($totalFeedItems==0) { // 등록된 공지사항 피드를 삭제하거나 등록되지 않았을경우 .. 동적으로 읽어 온다.
 		list($status, $feed, $xml) = Feed::getRemoteFeed('http://bloglounge.itcanus.net/bloglounge_notice/rss');
 		if($status == 0) {
 			$feedItems = Feed::getFeedItems($xml);
@@ -149,6 +149,7 @@
 					<li class="empty"><?php echo _t('수집된 글이 없습니다.');?></span>
 <?php
 	}
+
 				if($is_admin) {
 					$feedItemCount = FeedItem::getFeedItemCount('WHERE i.visibility = "y"');
 					$feedItemUpdate = Feed::getFeedLastUpdate('WHERE i.visibility = "y"');
@@ -156,7 +157,6 @@
 					$feedItemCount = FeedItem::getFeedItemCount('WHERE i.visibility = "y" AND i.feed IN ('.implode(',',$feedIds).')');
 					$feedItemUpdate = Feed::getFeedLastUpdate('WHERE i.visibility = "y" AND i.feed IN ('.implode(',',$feedIds).')');
 				}
-				
 				if(!empty($feedItemUpdate)) {
 					$feedItemUpdateText = Func::dateToString($feedItemUpdate);
 				} else {

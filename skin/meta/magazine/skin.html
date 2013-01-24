@@ -67,7 +67,7 @@
 						<div id="main_top">
 							<div class="tab_menu">
 								<ul class="position_[##_position_##]">
-									<li class="position_value_index"><span><span><span><a href="[##_base_url_##]">최신글</a></span></span></span><li>
+									<li class="position_value_index"><span><span><span><a href="[##_base_url_##]">최신글</a></span></span></span></li>
 									<li class="position_value_focus"><span><span><span><a href="[##_base_url_##]focus">포커스</a></span></span></span></li>
 								</ul>
 								<div class="clear"></div>
@@ -145,7 +145,7 @@
 								<div class="search_message_wrap">
 									<div class="message">
 										<div class="empty">검색결과가 없습니다.</div>
-									<d/vi>
+									</div>
 								</div>
 								</s_cond_search_empty>
 								<s_cond_empty>
@@ -186,7 +186,7 @@
 
 													<s_tags>
 														<div class="tags">
-															<img src="./images/post_tag.gif" alt="태그아이콘" align="top" />&nbsp;<s_tags_rep> <a href="[##_tag_link_##]">[##_tag_name_##]</a></s_tags_rep>
+															<img src="./images/post_tag.gif" alt="태그아이콘" align="absmiddle" />&nbsp;<s_tags_rep> <a href="[##_tag_link_##]">[##_tag_name_##]</a></s_tags_rep>
 														</div>
 													</s_tags>
 											</div>
@@ -242,7 +242,11 @@
 									</s_paging_rep>								
 									
 									<div class="prevnext">
-										<a href="[##_prev_page_##]">이전<!--<img src="./images/bt_prev.gif" alt="이전" align="absmiddle" />--></a>&nbsp;|&nbsp;<a href="[##_next_page_##]">다음<!--<img src="./images/bt_next.gif" alt="다음" align="absmiddle" />--></a>
+										<a href="[##_prev_page_##]"><img src="./images/bt_prev.gif" alt="이전" align="absmiddle" />이전<!--<img src="./images/bt_prev.gif" alt="이전" align="absmiddle" />--></a>&nbsp;|&nbsp;<a href="[##_next_page_##]">다음<img src="./images/bt_next.gif" alt="다음" align="absmiddle" /><!--<img src="./images/bt_next.gif" alt="다음" align="absmiddle" />--></a>
+									</div>
+
+									<div class="top">
+										<a href="#"><img src="./images/bt_up.gif" alt="맨위로" align="absmiddle" />맨위로</a>
 									</div>
 								</div>
 							</s_paging>
@@ -310,8 +314,8 @@
 							<div class="rsslist sidebar_item">
 								<h3><img src="./images/title_rss.gif" alt="RSS 구독" /></h3>
 								<ul>
-									<li>최신글 <a href="[##_rss_url_##]" target="_blank" /><img src="./images/bt_rss.gif" alt="RSS" align="top" /></a></li>
-									<li>포커스 <a href="[##_focus_rss_url_##]" target="_blank" /><img src="./images/bt_rss.gif" alt="RSS" align="top"  /></a></li>
+									<li><a href="[##_rss_url_##]" target="_blank" />최신글</a> <a href="[##_rss_url_##]" target="_blank" /><img src="./images/bt_rss.gif" alt="RSS" align="top" /></a></li>
+									<li><a href="[##_focus_rss_url_##]" target="_blank" />포커스</a> <a href="[##_focus_rss_url_##]" target="_blank" /><img src="./images/bt_rss.gif" alt="RSS" align="top"  /></a></li>
 								</ul>
 							</div> <!-- rss list close -->
 							<div class="sidebar_item_shadow">&nbsp;</div>

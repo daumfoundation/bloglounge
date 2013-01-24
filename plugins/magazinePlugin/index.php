@@ -66,7 +66,7 @@
 							.magazineFocusTable .mainData ul.item li.title_only .feedTitle { color:#999; font:11px Dotum; }
 			
 				.magazineFocusTable .focusImageWrap { padding:5px;  }
-				.magazineFocusTable .focusImageWrap .focusImageDataWrap { padding:10px; padding-bottom:6px; background:url("<?php echo $pluginURL;?>/images/bg.gif") repeat-x; }
+				.magazineFocusTable .focusImageWrap .focusImageDataWrap { padding:10px; padding-bottom:0px; background:url("<?php echo $pluginURL;?>/images/bg.gif") repeat-x; }
 				.magazineFocusTable .focusImageWrap .focusImageDatas { float:left; width: 300px; height:164px; position: relative; overflow: hidden; }
 				
 					.magazineFocusTable .focusImageWrap #focusImageData { position:absolute; z-index:98; }

@@ -25,7 +25,8 @@
 				
 				if(isAdmin() || $feed['owner'] == getLoggedId()) {
 					$feeder = new Feed;
-					$feeder->updateFeed($feed['xmlURL']);
+					$result = $feeder->updateFeed($feed['xmlURL']);
+					$response['feed'] = $result[1];
 				} else {
 					$response['error'] = -1;
 					$response['message'] = _t('잘못된 접근입니다.');

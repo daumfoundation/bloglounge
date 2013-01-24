@@ -195,7 +195,7 @@
 					<option value="owner"<?php echo $type=='owner'?' selected="selected"':'';?>><?php echo _t('등록자 아이디');?></option>
 					<option value="ownername"<?php echo $type=='ownername'?' selected="selected"':'';?>><?php echo _t('등록자 별명');?></option>
 				</select>
-				<input type="text" class="input faderInput" name="keyword" value="<?php echo $keyword;?>"/> <input type="image" alt="<?php _t('검색');?>" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_search.gif" align="top" /><?php if(!empty($keyword)) {?><a href="<?php echo $service['path'];?>/admin/blog/list"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_search_cancel.gif" alt="<?php echo _t('검색취소');?>" align="top" /></a><?php } ?>
+				<input type="text" class="input faderInput" name="keyword" value="<?php echo $keyword;?>"/> <span class="searchbutton"><input type="submit" value="<?php echo _t('검색');?>" align="bottom" /></span><?php if(!empty($keyword)) {?><a href="<?php echo $service['path'];?>/admin/blog/entrylist" class="searchbutton"><span><?php echo _t('검색취소');?></span></a><?php } ?>
 			</form>
 		</div>
 		<div class="clear"></div>
@@ -339,8 +339,8 @@
 					<div class="grayline"></div>
 
 					<p class="button_wrap">
-						<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('이 정보를 수정합니다');?>"/>
-						<a href="#" onclick="deleteItem(<?php echo $readFeed['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_delete.gif" alt="<?php echo _t('이 블로그를 삭제합니다');?>"/></a>
+						<span class="normalbutton"><input type="submit" value="<?php echo _t('수정완료');?>" /></span>
+						<a href="#" class="normalbutton" onclick="deleteItem(<?php echo $readFeed['id'];?>); return false;"><span><?php echo _t('삭제');?></span></a>
 					</p>
 
 				</form>
@@ -383,7 +383,7 @@
 			ob_start();
 ?>
 			<div class="ftool">
-				<a href="#" onclick="updateFeed(<?php echo $feed['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_update.gif" alt="<?php echo _t('업데이트');?>" /></a>
+				<a href="#" class="microbutton" onclick="updateFeed(<?php echo $feed['id'];?>); return false;"><span><?php echo _t('업데이트');?></span></a>
 			</div>
 			<div class="ftitle">
 				<a href="<?php echo $service['path'];?>/admin/blog/list?read=<?php echo $feed['id'];?>"><?php echo UTF8::lessenAsEm(stripcslashes($feed['title']), 25);?></a> <?php echo ($isNew?' <img src="'.$service['path'].'/images/admin/icon_new.gif" alt="new" align="absmiddle"/>':'');?>
@@ -422,7 +422,7 @@
 					<a href="#" onclick="changeVisibility(<?php echo $feed['id'];?>, 'n'); return false;"><img id="lockImage<?php echo $feed['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_lock_<?php echo $feed['visibility']=='n'?'on':'off';?>.gif" alt="비공개" /></a><a href="#" onclick="changeVisibility(<?php echo $feed['id'];?>, 'y'); return false;"><img id="unlockImage<?php echo $feed['id'];?>" src="<?php echo $service['path'];?>/images/admin/bt_unlock_<?php echo $feed['visibility']=='y'?'on':'off';?>.gif" alt="공개" /></a>
 				</div>
 				<div class="deletes">				
-					<a href="#" onclick="deleteItem(<?php echo $feed['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_delete.gif" alt="삭제" /></a>
+					<a href="#" onclick="deleteItem(<?php echo $feed['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_delete.gif" alt="<?php echo _t('삭제');?>" /></a>
 				</div>
 				<div class="clear"></div>
 <?php

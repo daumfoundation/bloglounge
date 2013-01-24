@@ -212,7 +212,7 @@
 				return false;
 
 			$configxml = $db->escape(Plugin::getDefaultConfig($pluginName));
-			if ($result = ($db->exists("SELECT name FROM {$database['prefix']}Plugins WHERE name='{$pluginName}'")) ? 
+			if (($db->exists("SELECT name FROM {$database['prefix']}Plugins WHERE name='{$pluginName}'")) ? 
 								$db->execute("UPDATE {$database['prefix']}Plugins SET status='on' WHERE name='{$pluginName}'") :
 								$db->execute("INSERT INTO {$database['prefix']}Plugins (name, settings, status) VALUES ('{$pluginName}', '{$configxml}', 'on')")) {
 				$event->createMap();		
@@ -246,8 +246,10 @@
 			$xmls = new XMLStruct;
 			if (!$xmls->openFile(ROOT . '/plugins/'. $pluginName .'/index.xml'))
 				return '';
-
+			
 			$config = $xmls->selectNode("/plugin/config[lang()]");
+			if(!isset($config['fieldset'])) return '';
+
 			$configSet = array();
 			foreach ($config['fieldset'] as $fieldset) {
 				foreach ($fieldset['field'] as $field) {
@@ -255,8 +257,11 @@
 					$value = (isset($field['.attributes']['value'])) ? $field['.attributes']['value'] : '';
 					$type = $field['.attributes']['type'];
 					$cdata = ($type == 'textarea') ? true : false;
+					
 					if($type=='checkbox') {
+						
 						$value = (isset($field['.attributes']['checked'])&&($field['.attributes']['checked']=='true')) ? true : false;
+	
 					}
 					
 					array_push($configSet, array('name'=>$name, 'type'=>$type, 'value'=>$value, 'isCDATA'=>$cdata));
@@ -291,17 +296,20 @@
 				$resultConfig = array();
 				
 				$configs = $xmls->selectNode("/config");
+
 				foreach ($configs as $config) {
-					foreach ($config as $field) {
-						if(is_array($field)) {
-							$name = isset($field['.attributes']['name'])?$field['.attributes']['name']:'';
-							$value= $field['.value']=='true'?true:($field['.value']=='false'?false:$field['.value']);
-							
-							if (!empty($name)) {
-								$resultConfig[$name] = $value;
+					if(!empty($config)) {
+						foreach ($config as $field) {
+							if(is_array($field)) {
+								$name = isset($field['.attributes']['name'])?$field['.attributes']['name']:'';
+								$value= $field['.value']=='true'?true:($field['.value']=='false'?false:$field['.value']);						
+								if (!empty($name)) {
+									$resultConfig[$name] = $value;
+								}
 							}
 						}
 					}
+				
 				}
 				return $resultConfig;
 			}

@@ -115,7 +115,7 @@
 			<br />
 				<?php echo _t('이 블로그는 이미 등록되어 있어 재등록 하실 수 없습니다.');?>		
 			<br /><br />
-			<a href="#" onclick="history.back(); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_back.gif" alt="<?php echo _t('뒤로');?>" /></a>
+			<a href="#" class="normalbutton" onclick="history.back(); return false;"><span><?php echo _t('뒤로');?></span></a>
 
 		</div>
 <?php
@@ -149,7 +149,8 @@
 
 			<br />			
 
-			<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_add.gif" alt="<?php echo _t('추가');?>" />
+			<span class="normalbutton"><input type="submit" value="<?php echo _t('추가');?>" /></span>
+
 		</form>
 <?php
 		}
@@ -159,7 +160,7 @@
 			<br />
 				<?php echo _t('잘못된 피드이거나 피드주소를 찾을 수 없습니다. 올바른 피드주소를 입력해주세요.');?>
 			<br /><br />
-			<a href="#" onclick="history.back(); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_back.gif" alt="<?php echo _t('뒤로');?>" /></a>
+			<a href="#" class="normalbutton" onclick="history.back(); return false;"><span><?php echo _t('뒤로');?></span></a>
 
 		</div>
 <?php
@@ -180,7 +181,8 @@
 				<dt></dt>
 				<dd><?php echo _t('블로그 주소를 입력하셔도 자동으로 피드주소를 검사합니다.');?></dd>
 			</dl>
-			<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_feed_check.gif" alt="<?php echo _t('피드검사');?>" />
+			<!--<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_feed_check.gif" alt="<?php echo _t('피드검사');?>" />-->
+			<span class="normalbutton"><input type="submit" value="<?php echo _t('피드검사');?>" /></span>
 		</form>	
 	</div>
 <?php
@@ -209,7 +211,7 @@
 				<input type="hidden" name="importType" value="url" />
 				<input type="text" id="importURL" name="importURL" class="input faderInput" />
 
-				<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_import.gif" align="absmiddle"  alt="가져오기" />
+				<span class="normalbutton"><input type="image" align="absmiddle" value="가져오기" /></span>
 
 				<div class="help">
 					<?php echo _t("OPML이 위치한 URL주소를 입력하여 블로그를 추가합니다.");?>
@@ -222,7 +224,7 @@
 				<input type="hidden" name="importType" value="upload" />
 				<input type="file" id="importFile" name="importFile" class="input faderInput" />
 
-				<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_import.gif" align="absmiddle" alt="가져오기" />
+				<span class="normalbutton"><input type="image" align="absmiddle" value="가져오기" /></span>
 
 				<div class="help">
 					<?php echo _t("내 컴퓨터상의 OPML을 업로드하여 블로그를 추가합니다.");?>

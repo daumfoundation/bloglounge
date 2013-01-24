@@ -266,7 +266,7 @@
 					<a href="#" onclick="restoreItem(<?php echo $post['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_restore.gif" alt="복원" /></a>
 				</div>
 				<div class="trash">				
-					<a href="#" onclick="deleteItem(<?php echo $feed['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_delete.gif" alt="삭제" /></a>
+					<a href="#" onclick="deleteItem(<?php echo $feed['id'];?>); return false;"><img src="<?php echo $service['path'];?>/images/admin/bt_delete.gif" alt="<?php echo _t('삭제');?>" /></a>
 				</div>
 				<div class="clear"></div>
 <?php
