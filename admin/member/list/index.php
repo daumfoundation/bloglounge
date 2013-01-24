@@ -22,20 +22,28 @@
 	if ($readUser && (isset($_POST['id']) || !empty($_POST['id']))) {
 		if (preg_match("/^[0-9]+$/", $_POST['id'])) {
 			$isAdmin = (isset($_POST['is_admin'])) ? 'y' : 'n';
-			if (($readUser['is_admin'] == 'y') && ($isAdmin == 'n')) {
-				$countAdmin = User::getAdminCount();
-				if ($countAdmin <= 1) {
-					echo '<script type="text/javascript">alert("'._t('한 명 이상의 관리자는 존재해야 합니다.').'");</script>';
-					$isAdmin = 'y';
+			if($_POST['is_secede'] == '1') { // 탈퇴
+				if($readUser['is_admin'] == 'y') {
+					echo '<script type="text/javascript">alert("'._t('관리자 권한을 가지고 있는 회원은 탈퇴처리할 수 없습니다.').'");</script>';
+				} else {
+					User::delete($_POST['id']); 
 				}
-			}
-			$isAccepted = (isset($_POST['is_accepted'])) ? 'y' : 'n';
-			$passw = (!empty($_POST['password'])) ? Encrypt::hmac($readUser['loginid'], md5(md5($_POST['password']))) : '';
-			$moArr = array("name"=>$_POST['name'], "email"=>$_POST['email'], "password"=>$passw, "plainpassword"=>$_POST['password'], "is_admin"=>$isAdmin, "is_accepted"=>$isAccepted);
-			if (!User::edit($_POST['id'], $moArr, 'plainpassword')) {
-				$msg = _t('회원정보 수정 실패');
 			} else {
-				$msg = _t('회원정보 수정 성공');
+				if (($readUser['is_admin'] == 'y') && ($isAdmin == 'n')) {
+					$countAdmin = User::getAdminCount();
+					if ($countAdmin <= 1) {
+						echo '<script type="text/javascript">alert("'._t('한 명 이상의 관리자는 존재해야 합니다.').'");</script>';
+						$isAdmin = 'y';
+					}
+				}
+				$isAccepted = (isset($_POST['is_accepted'])) ? 'y' : 'n';
+				$passw = (!empty($_POST['password'])) ? Encrypt::hmac($readUser['loginid'], md5(md5($_POST['password']))) : '';
+				$moArr = array("name"=>$_POST['name'], "email"=>$_POST['email'], "password"=>$passw, "plainpassword"=>$_POST['password'], "is_admin"=>$isAdmin, "is_accepted"=>$isAccepted);
+				if (!User::edit($_POST['id'], $moArr, 'plainpassword')) {
+					$msg = _t('회원정보 수정 실패');
+				} else {
+					$msg = _t('회원정보 수정 성공');
+				}
 			}
 		}		
 		
@@ -54,7 +62,19 @@
 <script type="text/javascript">
 <?php
 	if(!empty($read)) {
-?>
+?>		
+		function deleteMember() {
+			if (!confirm('<?php echo _t('탈퇴처리를 한 회원의 글은 모두 삭제되며, 다시 복구 하실 수 없습니다.\n\n탈퇴처리 하시겠습니까?');?>')) {
+				return false;
+			}
+
+			var form = $("#memberForm");
+			$('#is_secede').val('1');
+
+			form.submit();
+			return true;
+		}
+
 		$(window).ready( function() {
 			collectDiv("#read_item1", "#read_item2");
 		});
@@ -128,8 +148,9 @@
 	<div class="read_item read_item2">		
 		<?php echo drawAdminBoxBegin('item_wrap');?>
 			<div id="read_item2" class="item">
-				<form method="post" action="">
+				<form id="memberForm" method="post" action="">
 					<input type="hidden" name="id" value="<?php echo $read;?>"/>
+					<input type="hidden" id="is_secede" name="is_secede" value="0" />
 <?php
 				if ($readUser['is_accepted']=='y') { 
 ?>
@@ -179,7 +200,13 @@
 
 					<p class="button_wrap">
 						<input type="image" src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_modify.gif" alt="<?php echo _t('이 정보를 수정합니다');?>"/>
-						<a href="#"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_out.gif" alt="<?php echo _t('회원탈퇴');?>"/></a>
+<?php
+					if($readUser['is_admin'] == 'n') {
+?>
+						<a href="#" onclick="deleteMember(); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_out.gif" alt="<?php echo _t('회원탈퇴');?>"/></a>
+<?php
+					}
+?>
 					</p>				
 				</form>
 			</div>
@@ -243,11 +270,11 @@
 			if($totalFeeds > 0) {
 				if($totalFeeds == 1) {
 ?>
-					<a href="#"><?php echo $feeds[0]['title'];?></a>
+					<a href="<?php echo $service['path'];?>/admin/blog/list/?read=<?php echo $feeds[0]['id'];?>"><?php echo $feeds[0]['title'];?></a>
 <?php
 				} else {
 ?>
-					<?php echo _f('"%1" 외 %2 개의 블로그', '<a href="#">'.$feeds[0]['title'].'</a>', $totalFeeds-1);?>
+					<?php echo _f('"%1" 외 %2 개의 블로그', '<a href="'.$service['path'].'/admin/blog/list/?read='.$feeds[0]['id'].'">'.$feeds[0]['title'].'</a>', $totalFeeds-1);?>
 <?php
 				}
 			} else {

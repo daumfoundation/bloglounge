@@ -164,19 +164,19 @@ body { font:12px Dotum; color:#6d6d6d; background:#ffffff; }
 				.postlist_wrap .postlist .boom h3 { background:none; }
 				.postlist_wrap .postlist .boom h3 span { display:none; }
 					.postlist_wrap .postlist .boom h3 { cursor:pointer; }
-					.postlist_wrap .postlist .boom h3.isntBoomedUp.boom_rank_5 { background:url(./images/boomOff5.gif) no-repeat; width:54px; height:54px; }
-					.postlist_wrap .postlist .boom h3.isntBoomedUp.boom_rank_4 { background:url(./images/boomOff4.gif) no-repeat; width:54px; height:54px; }
-					.postlist_wrap .postlist .boom h3.isntBoomedUp.boom_rank_3 { background:url(./images/boomOff3.gif) no-repeat; width:54px; height:54px; }
-					.postlist_wrap .postlist .boom h3.isntBoomedUp.boom_rank_2 { background:url(./images/boomOff2.gif) no-repeat; width:54px; height:54px; }
-					.postlist_wrap .postlist .boom h3.isntBoomedUp.boom_rank_1 { background:url(./images/boomOff1.gif) no-repeat; width:54px; height:54px; }				
-					.postlist_wrap .postlist .boom h3.isntBoomedUp.boom_rank_0 { background:url(./images/boomOff0.gif) no-repeat; width:54px; height:54px; }			
+					.postlist_wrap .postlist .boom h3.isntBoomedUp .boom_rank_5 { background:url(./images/boomOff5.gif) no-repeat; width:54px; height:54px; }
+					.postlist_wrap .postlist .boom h3.isntBoomedUp .boom_rank_4 { background:url(./images/boomOff4.gif) no-repeat; width:54px; height:54px; }
+					.postlist_wrap .postlist .boom h3.isntBoomedUp .boom_rank_3 { background:url(./images/boomOff3.gif) no-repeat; width:54px; height:54px; }
+					.postlist_wrap .postlist .boom h3.isntBoomedUp .boom_rank_2 { background:url(./images/boomOff2.gif) no-repeat; width:54px; height:54px; }
+					.postlist_wrap .postlist .boom h3.isntBoomedUp .boom_rank_1 { background:url(./images/boomOff1.gif) no-repeat; width:54px; height:54px; }				
+					.postlist_wrap .postlist .boom h3.isntBoomedUp .boom_rank_0 { background:url(./images/boomOff0.gif) no-repeat; width:54px; height:54px; }			
 					
-					.postlist_wrap .postlist .boom h3.isBoomedUp.boom_rank_5 { background:url(./images/boomOn5.gif) no-repeat; width:54px; height:54px; }
-					.postlist_wrap .postlist .boom h3.isBoomedUp.boom_rank_4 { background:url(./images/boomOn4.gif) no-repeat; width:54px; height:54px; }
-					.postlist_wrap .postlist .boom h3.isBoomedUp.boom_rank_3 { background:url(./images/boomOn3.gif) no-repeat; width:54px; height:54px; }
-					.postlist_wrap .postlist .boom h3.isBoomedUp.boom_rank_2 { background:url(./images/boomOn2.gif) no-repeat; width:54px; height:54px; }
-					.postlist_wrap .postlist .boom h3.isBoomedUp.boom_rank_1 { background:url(./images/boomOn1.gif) no-repeat; width:54px; height:54px; }				
-					.postlist_wrap .postlist .boom h3.isBoomedUp.boom_rank_0 { background:url(./images/boomOn0.gif) no-repeat; width:54px; height:54px; }
+					.postlist_wrap .postlist .boom h3.isBoomedUp .boom_rank_5 { background:url(./images/boomOn5.gif) no-repeat; width:54px; height:54px; }
+					.postlist_wrap .postlist .boom h3.isBoomedUp .boom_rank_4 { background:url(./images/boomOn4.gif) no-repeat; width:54px; height:54px; }
+					.postlist_wrap .postlist .boom h3.isBoomedUp .boom_rank_3 { background:url(./images/boomOn3.gif) no-repeat; width:54px; height:54px; }
+					.postlist_wrap .postlist .boom h3.isBoomedUp .boom_rank_2 { background:url(./images/boomOn2.gif) no-repeat; width:54px; height:54px; }
+					.postlist_wrap .postlist .boom h3.isBoomedUp .boom_rank_1 { background:url(./images/boomOn1.gif) no-repeat; width:54px; height:54px; }				
+					.postlist_wrap .postlist .boom h3.isBoomedUp .boom_rank_0 { background:url(./images/boomOn0.gif) no-repeat; width:54px; height:54px; }
 			
 			/* hidden post */
 				.postlist_wrap ul li.hidden .data h3 { color:#aaa; }

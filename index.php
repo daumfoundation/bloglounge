@@ -1,6 +1,9 @@
 <?php
 	if(!file_exists('./.htaccess')) { // htaccess 
-		$content = "<IfModule mod_rewrite.c>\n
+		$content = "<IfModule mod_url.c>\n
+	CheckURL Off\n
+</IfModule>\n
+<IfModule mod_rewrite.c>\n
    RewriteEngine on\n 
    RewriteCond %{REQUEST_FILENAME} !-d\n
    RewriteCond %{REQUEST_FILENAME} !-f\n

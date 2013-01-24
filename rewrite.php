@@ -29,7 +29,7 @@
 			include_once(ROOT.'/admin/custom/page.php');
 		break;
 		default:
-				// error or custom page »ğÀÔ
+			// error or custom page »ğÀÔ
 			include_once(ROOT.'/meta/custom.php');
 		break;
 	}

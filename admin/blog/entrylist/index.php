@@ -36,19 +36,24 @@
 	$page = isset($_GET['page']) ? $_GET['page'] : 1;
 	if(!isset($page) || empty($page)) $page = 1;
 
+
+
 	$keyword = isset($_GET['keyword']) && !empty($_GET['keyword']) ? $_GET['keyword'] : '';
 	$type = isset($_GET['type']) && !empty($_GET['type']) ? $_GET['type'] : 'title+name';
 
 	$params = '';
 	if(!empty($keyword)) {
 		$params = '&keyword=' . rawurlencode($keyword) . '&type=' . $type;	
-		
+
+		if(!empty($read)) { $page =	FeedItem::getPredictionPage($read, $pageCount, $type,$keyword); }
 		if($is_admin) {
 			list($posts, $totalFeedItems) = FeedItem::getFeedItems($type,$keyword,'',$page,$pageCount);		
 		} else {
 			list($posts, $totalFeedItems) = FeedItem::getFeedItemsByOwner(getLoggedId(), $type,$keyword,'',$page,$pageCount);					
 		}
 	} else {
+
+		if(!empty($read)) { $page =	FeedItem::getPredictionPage($read,$pageCount); }
 		if($is_admin) {
 			list($posts, $totalFeedItems) = FeedItem::getFeedItems('','','',$page,$pageCount);			
 		} else {

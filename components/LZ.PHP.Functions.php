@@ -258,7 +258,7 @@
 
 			$output = 	"<script type='text/javascript'>var _path = '{$service['path']}';</script>\n".						
 					"<script type='text/javascript' src='".$service['path']."/scripts/jquery.js'></script>\n".				
-					"<script type='text/javascript' src='".$service['path']."/scripts/common.js'></script>\n".
+					"<script type='text/javascript' language='javascript' src='".$service['path']."/scripts/common.js'></script>\n".
 					"<!-- \n
 		".BLOGLOUNGE." v".BLOGLOUNGE_VERSION." ".BLOGLOUNGE_NAME."
 		Homepage: ".BLOGLOUNGE_HOMEPAGE."

@@ -764,6 +764,34 @@
 			if (!list($totalFeeds) = $db->pick('SELECT count(i.id) FROM '.$database['prefix'].'Feeds i '.$filter))
 					$totalFeeds = 0;
 			return $totalFeeds;
+		}	
+		
+		function getPredictionPage($id, $pageCount, $searchQuery='', $feedListPageOrder = 'created') {
+			global $db, $database;
+
+			$page = 1;
+
+			$created = Feed::get($id,'created');
+			if(!empty($created)) {	
+				$searchQuery = 'created > ' . $created . (!empty($searchQuery)?' AND '.$searchQuery:'');
+			}			
+
+			if(!isAdmin()) {
+				$sQuery = 'WHERE visibility = "y"';
+			} else {
+				$sQuery = 'WHERE 1=1';
+			}
+
+			if(!empty($searchQuery)) {
+				$sQuery .= ' AND ' . $searchQuery;
+			}
+
+			$count = $db->queryCell('SELECT count(*) as count FROM '.$database['prefix'].'Feeds '.$sQuery.' ORDER BY '.$feedListPageOrder.' DESC');
+			if($count > 0) {
+				$page = ceil(($count + 1) / $pageCount);
+			}
+			
+			return $page;
 		}
 
 		function getFeeds($page, $pageCount = 15, $searchQuery = '', $feedListPageOrder = 'created') {

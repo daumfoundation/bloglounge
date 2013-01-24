@@ -62,13 +62,15 @@
 			$sQuery = ' owner = ' . $id;
 		} else {
 			$sQuery = ' title LIKE "%' . $keyword . '%"';
-		}
-		if($is_admin) {
+		}			
+		if(!empty($read)) { $page = Feed::getPredictionPage($read,$pageCount,$sQuery); }
+		if($is_admin) {			
 			list($feeds, $totalFeeds) = Feed::getFeeds($page,$pageCount,$sQuery);	
-		} else {
+		} else {		
 			list($feeds, $totalFeeds) = Feed::getFeedsByOwner(getLoggedId(), $page, $pageCount,$sQuery);	
 		}
-	} else {
+	} else {		
+		if(!empty($read)) { $page = Feed::getPredictionPage($read,$pageCount); }
 		if($is_admin) {
 			list($feeds, $totalFeeds) = Feed::getFeeds($page,$pageCount);	
 		} else {

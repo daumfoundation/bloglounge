@@ -70,8 +70,8 @@
 					$sp_posts = $skin->parseTag('boomup_count', $item['boomUp'], $sp_posts);		
 					$sp_posts = $skin->parseTag('boomdown_count', $item['boomDown'], $sp_posts);		
 
-					$sp_posts = $skin->parseTag('boomup_onclick', 'javascript: boom(\''.$item['id'].'\',\'up\');', $sp_posts);
-					$sp_posts = $skin->parseTag('boomdown_onclick', 'javascript: boom(\''.$item['id'].'\',\'down\');', $sp_posts);
+					$sp_posts = $skin->parseTag('boomup_onclick', 'boom(\''.$item['id'].'\',\'up\');', $sp_posts);
+					$sp_posts = $skin->parseTag('boomdown_onclick', 'boom(\''.$item['id'].'\',\'down\');', $sp_posts);
 
 					$sp_posts = $skin->parseTag('boomup_id', 'boomUp'.$item['id'], $sp_posts);
 					$sp_posts = $skin->parseTag('boomdown_id', 'boomDown'.$item['id'], $sp_posts);

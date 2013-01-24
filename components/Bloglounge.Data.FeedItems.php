@@ -190,6 +190,27 @@
 
 		/** gets **/
 
+		function getPredictionPage($id, $pageCount, $searchType='', $searchKeyword='',$searchExtraValue='', $viewDelete = false, $owner = 0) {
+			global $db, $database;
+
+			$page = 1;
+
+			$sQuery = FeedItem::getFeedItemsQuery($searchType, $searchKeyword, $searchExtraValue, $viewDelete, $owner);
+			$written = FeedItem::get($id,'written');
+
+			if(!empty($written)) {
+				$sQuery = str_replace('WHERE', 'WHERE (i.written > '.$written.')'.' AND ',$sQuery);
+			}		
+			
+			$count = $db->queryCell('SELECT count(*) as count FROM '.$database['prefix'].'FeedItems i '.$sQuery.' ORDER BY i.written DESC');
+
+			if($count > 0) {
+				$page = ceil(($count + 1) / $pageCount);
+			}
+
+			return $page;
+		}
+
 		function getFeedItemCount($filter='') {
 			global $db, $database;		
 			if (!list($totalFeedItems) = $db->pick('SELECT count(i.id) FROM '.$database['prefix'].'FeedItems i '.$filter))
@@ -202,6 +223,18 @@
 		}
 
 		function getFeedItems($searchType, $searchKeyword, $searchExtraValue, $page, $pageCount, $viewDelete = false, $owner = 0) {
+			global $db, $database, $config;
+			
+			$sQuery = FeedItem::getFeedItemsQuery($searchType, $searchKeyword, $searchExtraValue,$viewDelete,$owner);
+			
+			$pageStart = ($page-1) * $pageCount; // 처음페이지 번호
+			$feedList = $db->queryAll('SELECT i.id, i.feed, i.author, i.permalink, i.title, i.description, i.tags, i.written, i.click, i.thumbnailId, i.visibility, i.boomUp, i.boomDown, i.category, i.focus FROM '.$database['prefix'].'FeedItems i '.$sQuery.' ORDER BY i.written DESC LIMIT '.$pageStart.','.$pageCount);
+
+			$feedItemCount = FeedItem::getFeedItemCount($sQuery);
+			return array($feedList, $feedItemCount);
+		}
+
+		function getFeedItemsQuery($searchType, $searchKeyword, $searchExtraValue,$viewDelete = false,$owner = 0) {	
 			global $db, $database, $config;
 
 			$sQuery = '';
@@ -325,12 +358,8 @@
 			} else {
 				$sQuery .= $bQuery;
 			}
-			
-			$pageStart = ($page-1) * $pageCount; // 처음페이지 번호
-			$feedList = $db->queryAll('SELECT i.id, i.feed, i.author, i.permalink, i.title, i.description, i.tags, i.written, i.click, i.thumbnailId, i.visibility, i.boomUp, i.boomDown, i.category, i.focus FROM '.$database['prefix'].'FeedItems i '.$sQuery.' ORDER BY i.written DESC LIMIT '.$pageStart.','.$pageCount);
 
-			$feedItemCount = FeedItem::getFeedItemCount($sQuery);
-			return array($feedList, $feedItemCount);
+			return $sQuery;
 		}
 
 		function getFeedItem($id) {		
