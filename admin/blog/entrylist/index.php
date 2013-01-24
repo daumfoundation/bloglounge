@@ -15,13 +15,6 @@
 		}
 	}
 
-	if(!empty($msg)) {
-		addAppMessage($msg);
-	}
-
-	include ROOT. '/lib/piece/adminHeader.php';
-
-
 	$read = isset($_GET['read'])?$_GET['read']:0;	
 	if (!preg_match("/^[0-9]+$/", $read)) {
 		$read = 0;
@@ -29,14 +22,21 @@
 
 	// 대표 썸네일 변경
 	if(isset($_GET['thumbnail']) && !empty($read)) {
-		FeedItem::setThumbnail($read, $_GET['thumbnail']);
+		FeedItem::setThumbnail($read, $_GET['thumbnail']);	
+		if(empty($msg)) $msg = _t('대표 썸네일을 변경하였습니다.');
 	}
+
+	if(!empty($msg)) {
+		addAppMessage($msg);
+	}
+
+	include ROOT. '/lib/piece/adminHeader.php';
+
+
 
 	$pageCount = 15; // 페이지갯수
 	$page = isset($_GET['page']) ? $_GET['page'] : 1;
 	if(!isset($page) || empty($page)) $page = 1;
-
-
 
 	$keyword = isset($_GET['keyword']) && !empty($_GET['keyword']) ? $_GET['keyword'] : '';
 	$type = isset($_GET['type']) && !empty($_GET['type']) ? $_GET['type'] : 'title+name';
@@ -120,7 +120,7 @@
 				$.ajax({
 				  type: "POST",
 				  url: _path +'/service/entry/delete.php',
-				  data: 'id=' + id,
+				  data: 'id=' + id + "&admin_mode=true",
 				  dataType: 'xml',
 				  success: function(msg){		
 					error = $("response error", msg).text();
@@ -153,7 +153,7 @@
 				$.ajax({
 				  type: "POST",
 				  url: _path +'/service/entry/delete.php',
-				  data: 'id=' + ids,
+				  data: 'id=' + ids + "&admin_mode=true",
 				  dataType: 'xml',
 				  success: function(msg){		
 					error = $("response error", msg).text();
@@ -379,6 +379,7 @@
 					}
 ?>
 						</select>
+						&nbsp;<a href="<?php echo $service['path'];?>/admin/blog/category"><span class="small">추가/수정</span></a>
 						</dd>
 					</dl>
 

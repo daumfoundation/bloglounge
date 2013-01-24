@@ -20,19 +20,20 @@
 <script type="text/javascript" src="<?php echo $service['path'];?>/scripts/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $service['path'];?>/scripts/common.js"></script>
 </head>
-<body>
+<body style="background:#fafafa;">
 	<div class="modal_title">
-		<?php echo $feed['title'];?>
+		<div class="title"><?php echo $feed['title'];?></div>
+		<div class="close">x</div>
+		<div class="clear"></div>
 	</div>
 	<div class="modal_preview_container">
-		<div class="modal_description" style="height:506px; border-bottom:1px solid #ddd; padding-top:5px; padding-bottom:5px; line-height:18px; font-size:12px; overflow-x:hidden; overflow-y:scroll;">	
+		<div class="modal_description" style="background:#ffffff; height:506px; border-bottom:1px solid #ffffff; padding-top:5px; padding-bottom:5px; line-height:18px; font-size:12px; overflow-x:hidden; overflow-y:scroll;">	
 			<?php echo $feed['description'];?>
 		</div>
 
 		<div class="modalclose_wrap">
 			<a href="#" onclick="parent.hideModal(); return false;"><img src="<?php echo $service['path'];?>/images/admin/<?php echo Locale::get();?>/bt_close.gif" alt="<?php echo _t('닫기');?>" /></a>
 		</div>
-
 	</div>
 </body>
 </html>

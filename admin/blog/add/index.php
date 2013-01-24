@@ -50,6 +50,10 @@
 			$("#opmlImportByFile").hide();
 			$("#opmlImportByURL").show();
 		}
+
+		function onFeedCheck() {
+			addMessage("<?php echo _t('입력하신 피드를 검사중입니다.');?>");
+		}
 	</script>
 <?php
 	}
@@ -165,7 +169,7 @@
 	} else {
 ?>
 	<div class="wrap add_wrap">
-		<form method="get">
+		<form method="get" onsubmit="onFeedCheck();">
 			<dl>
 				<dt><label for="feedAddName"><?php echo _t('피드주소 ');?></label></dt>
 				<dd><input id="feedAddName" name="feedURL" type="text" maxlength="100" class="input faderInput" /></dd>

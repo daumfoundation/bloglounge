@@ -39,8 +39,10 @@
 		$add = $service['path'];
 		switch($accessInfo['controller']) {
 			case 'category':
+				$add .= '/category/' . func::encode(trim($searchKeyword));
+			break;
 			case 'feedlist':
-				$add .= ('/' . $accessInfo['controller']);
+				$add .= '/feedlist';
 			break;
 		}
 

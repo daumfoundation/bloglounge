@@ -98,6 +98,9 @@
 
 		.read_item .item { padding:20px; }
 		.read_item .item h2 { margin:0; padding:0; font-size:12px; font-weight:bold; color:#555; margin-bottom:4px; }
+			.read_item .item a { color:#888; text-decoration:none; }
+			.read_item .item a:hover { text-decoration:underline; }
+
 			.read_item .item .extra { font-size:11px; color:#777; line-height:16px; }
 				.read_item .item .extra a {  color:#999; text-decoration:none; }
 				.read_item .item .extra a:hover { text-decoration:underline; }
@@ -105,6 +108,8 @@
 				.read_item .item .extra .date { color:#999; }
 				.read_item .item .extra .date_text { color:#aaa; }
 				.read_item .item .extra .count { color:#999; }
+
+			.read_item .item .small { font-size:11px; }
 
 			.read_item .item .data  { border-top:1px solid #eee; margin-top:10px;  }
 				.read_item .item .data .thumbnail { border-bottom:1px solid #efefef; padding-top:10px; padding-bottom:10px; }

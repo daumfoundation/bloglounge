@@ -87,6 +87,9 @@ a.modalClose {
 /* modal style */
 
 .modal_title { padding:10px; background:#666; color:#ffffff; font-size:12px; font-weight:bold; }
+	.modal_title .title { float:left; }
+	.modal_title .close { float:right; }
+
 .modal_container { padding:10px; overflow:hidden; }
 
 .modal_preview_container { overflow:hidden;  }
@@ -113,6 +116,6 @@ ul.modal_tabs { list-style:none; margin-bottom:10px; }
 	.modal_description .field .textarea { border:1px solid #ddd; padding:3px; background:#fff; width:300px; }
 
 
-.modalclose_wrap { clear:both; text-align:center; }
+.modalclose_wrap { clear:both; text-align:center; margin-top:10px; }
 
 .modal_empty { font-size:11px; color:#999; text-align:center; }

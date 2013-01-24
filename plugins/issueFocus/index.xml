@@ -11,7 +11,7 @@
 		<tag name="issue_focus">getIssueFocus</tag>
 	</binding>
 	<config>
-		<window width="520" height="720" />
+		<window width="520" height="740" />
 		<fieldset legend="포커스">
 			<field title="사용" name="useFocus" type="checkbox" checked="true" value="사용하기">
 				<caption><![CDATA[포커스로 선택한 글을 보여주는 기능을 사용할지 선택합니다.]]></caption>

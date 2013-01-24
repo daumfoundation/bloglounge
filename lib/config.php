@@ -1,7 +1,7 @@
 <?php	
 	define('BLOGLOUNGE', 'Bloglounge');
 	define('BLOGLOUNGE_NAME', 'flyingbucket');
-	define('BLOGLOUNGE_VERSION', '0.1.3');
+	define('BLOGLOUNGE_VERSION', '0.1.31');
 	define('BLOGLOUNGE_COPYRIGHT', 'Copyright &copy; ITcanus, All Rights reserved. Licensed under the GPL.');
 	define('BLOGLOUNGE_HOMEPAGE', 'http://bloglounge.itcanus.net/');	
 	

@@ -39,11 +39,11 @@
 			});
 		}
 		function deleteItem(id) {
-			if(confirm("<?php echo _t('삭제된 자료는 복구하실 수 없습니다.\n\n이 글을 삭제하시겠습니까?');?>")) {
+			if(confirm("<?php echo _t('삭제된 글은 복구하실 수 없습니다.\n\n이 글을 삭제하시겠습니까?');?>")) {
 				$.ajax({
 				  type: "POST",
 				  url: _path +'/service/entry/remove.php',
-				  data: 'id=' + id,
+				  data: 'id=' + id + "&admin_mode=true",
 				  dataType: 'xml',
 				  success: function(msg){		
 					error = $("response error", msg).text();
@@ -72,11 +72,11 @@
 				return false;
 			}		
 			
-			if(confirm("<?php echo _t('삭제된 자료는 복구하실 수 없습니다.\n\n선택된 모든 글을 삭제하시겠습니까?');?>")) {
+			if(confirm("<?php echo _t('삭제된 글은 복구하실 수 없습니다.\n\n선택된 모든 글을 삭제하시겠습니까?');?>")) {
 				$.ajax({
 				  type: "POST",
 				  url: _path +'/service/entry/remove.php',
-				  data: 'id=' + ids,
+				  data: 'id=' + ids + "&admin_mode=true",
 				  dataType: 'xml',
 				  success: function(msg){		
 					error = $("response error", msg).text();
@@ -97,7 +97,7 @@
 				$.ajax({
 				  type: "POST",
 				  url: _path +'/service/entry/restore.php',
-				  data: 'id=' + id,
+				  data: 'id=' + id + "&admin_mode=true",
 				  dataType: 'xml',
 				  success: function(msg){		
 					error = $("response error", msg).text();
@@ -128,7 +128,7 @@
 			$.ajax({
 			  type: "POST",
 			  url: _path +'/service/entry/restore.php',
-			  data: 'id=' + ids,
+			  data: 'id=' + ids + "&admin_mode=true",
 			  dataType: 'xml',
 			  success: function(msg){		
 				error = $("response error", msg).text();

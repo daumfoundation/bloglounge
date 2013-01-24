@@ -162,13 +162,15 @@
 				}
 			} else { // if query failed (or no article)
 				$s_posts_rep = '';	
+				$src_posts = '';
 			}
+
 			$src_posts = $skin->dressOn('post_rep', $src_post_rep, $s_posts_rep, $src_posts);
 
 	} else {			
-		$s_posts_rep = '';	
+		$src_posts = '';
 	}		
-	
+
 	$skin->dress('postlist', $src_posts);
 
 ?>
