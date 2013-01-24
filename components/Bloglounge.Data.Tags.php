@@ -218,7 +218,7 @@
 
 		function getIssueTags($count) {
 			global $db, $database;
-			$linked = $db->queryCell("SELECT linked FROM {$database['prefix']}TagRelations ORDER BY linked ASC");
+			$linked = $db->queryCell("SELECT linked FROM {$database['prefix']}TagRelations WHERE linked > 0 ORDER BY linked ASC");
 
 			if($linked) {
 				$day = date('Ymd', $linked);

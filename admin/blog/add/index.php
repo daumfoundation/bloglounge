@@ -8,7 +8,7 @@
 		$userInformation = getUsers();
 		if($userInformation['is_accepted'] == 'y') {
 			$visibility = isset($_POST['isVisible']) ? 'y' : 'n';
-			$filter = isset($_POST['filter'])?$_POST['filter']:'';
+			$filter = isset($_POST['useFilter'])?$_POST['filter']:'';
 
 			$id = Feed::add($_POST['feedURL'], $visibility, $filter);	
 
@@ -34,6 +34,8 @@
 				obj.focus();
 				return false;
 			}
+
+			addMessage("<?php echo _t('OPML 파일을 읽고 있습니다. 상황에 따라 시간이 길어질 수 있습니다.');?>");
 			return true;
 		}
 
@@ -140,7 +142,7 @@
 					<p>
 						<input type="checkbox" name="isVisible" id="isVisible" checked="true" /> <label for="isVisible"><?php echo _t('블로그공개');?></label>
 						<div class="help">
-							<?php echo _t('블로그를 외부에 공개합니다. 비공개시 해당블로그의 글도 모두 비공개처리됩니다.');?>
+							<?php echo _t('블로그를 외부에 공개합니다. 비공개시 해당블로그의 글도 모두 비공개 처리됩니다.');?>
 						</div>
 					</p>
 			</div>

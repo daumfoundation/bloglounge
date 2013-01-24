@@ -54,7 +54,7 @@
 			$src_post_rep = $skin->cutSkinTag('post_rep');
 
 			if (count($posts)>0) {
-				$index == 0;
+				$index = 0;
 				foreach($posts as $item) {
 					$index ++;
 					$item = $event->on('Data.post', $item);

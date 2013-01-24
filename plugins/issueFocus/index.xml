@@ -13,10 +13,10 @@
 	<config>
 		<window width="520" height="740" />
 		<fieldset legend="포커스">
-			<field title="사용" name="useFocus" type="checkbox" checked="true" value="사용하기">
+			<field title="사용" name="useFocus" type="checkbox" checked="false" value="사용하기">
 				<caption><![CDATA[포커스로 선택한 글을 보여주는 기능을 사용할지 선택합니다.]]></caption>
 			</field>	
-			<field title="개수" name="focusCount" type="select" value="3">
+			<field title="글개수" name="focusCount" type="select" value="3">
 				<option value="1">1</option>
 				<option value="2">2</option>
 				<option value="3">3</option>
