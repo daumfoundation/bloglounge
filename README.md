@@ -10,3 +10,13 @@
 - PHP 4.3.0 이상
 
 - MySQL  4.1 이상
+
+변동사항
+===========
+- 티스토리수집문제 해결
+
+기존 0.1.4 버전의 티스토리수집문제를 해결한 버전입니다.
+
+0.1.4와 모두 동일하며 하단의 링크를 클릭하여 파일 하나만을 component 디렉토리에 넣으셔도 됩니다.
+
+http://itcanus.net/?module=file&act=procFileDownload&file_srl=32106&sid=9da576a9cf04de7a027e7614ba97e58e
