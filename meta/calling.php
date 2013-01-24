@@ -1,4 +1,14 @@
-<?php
+<?php	
+	// for crontab
+	if(!defined('ROOT')) {
+		ini_set('display_errors','0');
+
+		$root = $_SERVER['PHP_SELF'];
+		$root = substr($root,0,strrpos($root,'/'));
+		define('ROOT',$root . '/..');
+		unset($root);
+	}
+
 	include ROOT . '/lib/include.php';
 	
 	// TODO :

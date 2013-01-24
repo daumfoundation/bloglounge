@@ -10,5 +10,7 @@
 
 	include_once(ROOT. '/lib/components/index.php');	
 	
-	include_once(ROOT.'/lib/functions.php');
+	include_once(ROOT.'/lib/functions.php');	
+	
+	$caches = new Caches;
 ?>

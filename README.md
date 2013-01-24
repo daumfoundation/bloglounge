@@ -29,15 +29,6 @@ http://bloglounge.itcanus.net/bloglounge_notice/6981
 변경사항
 ===========
 
-- 속도 향상
+- 아래 v0.3.1에서 추천 오류가 나던 문제를 수정했습니다.
 
-- 본문내 이미지 저장기능
-
-- 포커스 저장 에러 수정
-
-- 바로보기 기능
-
-- blog, go에 숫자(아이디값)외에 주소형태로도 .. ( ex : go/http://daum.net 기존 : go/1234 )
-
-- iframe export 포커스만 보기 기능 추가
-7. 그 외 자잘한 오류들 수정
+- 기존에 v0.3.1을 설치하셨다면 lib/includeForAjax.php 만 새로 덮어 씌우시면 문제를 해결 하실 수 있습니다.

@@ -48,13 +48,13 @@
 				$response['boom_down_count'] = $boomDown;
 				$response['boom_count'] = $boomCount;
 			} else {
+
 				if (!Boom::up($itemId)) {
 					$response['error'] = 1;
 					$response['message'] = _t('이미 추천한 글입니다.');
 				} else {
 					$response['message'] = 'isBoomedUp';
 	
-						
 					$response['rank'] = Boom::getRank($itemId);		
 					list($boomUp,$boomDown,$boomCount) = Boom::getBoomCount($itemId);
 					$response['boom_up_count'] = $boomUp;
@@ -106,6 +106,5 @@
 			}
 			break;
 	}
-
 	func::printRespond($response);
 ?>
