@@ -336,7 +336,7 @@
 					if (!$item['description']=$xmls->getValue("/rss/channel/item[$i]/content:encoded"))
 						$item['description']=htmlspecialchars_decode($xmls->getValue("/rss/channel/item[$i]/description"));
 					$item['tags']=array();
-					for ($j=1;$tag=$xmls->getValue("/rss/channel/item[$i]/category[$j]");$j++)
+					for ($j=1;$tag=$xmls->getValue("/rss/channel/item[$i]/category[$j]");$j++) {
 						if (!empty($tag)) {
 						//	array_push($item['tags'],$tag);
 							$tags = explode('/', $tag); // allblog, blogkorea types
@@ -344,6 +344,8 @@
 								array_push($item['tags'], trim($tag));
 							}
 						}
+					}
+
 
 					for ($j=1;$tag=$xmls->getValue("/rss/channel/item[$i]/subject[$j]");$j++)
 						if (!empty($tag))
@@ -784,7 +786,9 @@
 
 			if(Validator::getBool(Settings::get('saveImages'))) {
 				if($description = FeedItem::saveImages($feedId, $id, $item)) {
-					$db->execute("UPDATE {$database['prefix']}FeedItems SET description = '{$description}' WHERE id = $id");
+					if (preg_match("/^[0-9]+$/",$id)) {
+						$db->execute("UPDATE {$database['prefix']}FeedItems SET description = '{$description}' WHERE id = $id");
+					}
 				}
 			}
 			
