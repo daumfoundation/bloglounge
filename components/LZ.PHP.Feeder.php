@@ -741,12 +741,14 @@
 
 			$item['author'] = Feed::getAuthor($item, $feedId, $id);
 			$item['title'] = Feed::getTitle($item, $feedId, $id);
+			$item['title'] = html_entity_decode($item['title'],ENT_QUOTES,"UTF-8");
 
 			$affected = 0;
 			$isRebuildData = false;
 
 			$summarySave = Settings::get('summarySave');
 			$description = $item['description'];
+			$description = html_entity_decode($description,ENT_QUOTES,"UTF-8");
 			if(Validator::getBool($summarySave)) { // summarySave
 				$description = func::stripHTML($item['description'].'>');
 				if (substr($description, -1) == '>') $description = substr($description, 0, strlen($description) - 1);
