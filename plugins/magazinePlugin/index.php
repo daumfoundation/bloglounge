@@ -235,7 +235,8 @@
 				$thumbnailFile = Media::getMediaFile($media['thumbnail']);
 			}			
 			
-			$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$feedItem['id'] : $service['path'].'/go/'.$feedItem['permalink'];
+			//$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$feedItem['id'] : $service['path'].'/go/'.$feedItem['permalink'];
+			$link_url = $config->addressType == 'uri' ? $service['path'].'/go/'.$feedItem['permalink'] : $service['path'].'/go/'.$feedItem['id'];
 
 ?>
 							<li>
@@ -265,7 +266,8 @@
 					for($i=1;$i<count($tag['feedItems']);$i++) {
 						$tagItem = $tag['feedItems'][$i];
 
-							$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$tagItem['id'] : $service['path'].'/go/'.$tagItem['permalink'];
+							//$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$tagItem['id'] : $service['path'].'/go/'.$tagItem['permalink'];
+							$link_url = $config->addressType == 'uri' ? $service['path'].'/go/'.$tagItem['permalink'] : $service['path'].'/go/'.$tagItem['id'];
 
 ?>
 							<li class="title_only">
@@ -298,7 +300,8 @@
 <?php	
 		$i = 1;		
 		foreach($focusImages as $focusImage) {
-								$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$focusImage['id'] : $service['path'].'/go/'.$focusImage['permalink'];
+								//$link_url = $config->addressType == 'id' ? $service['path'].'/go/'.$focusImage['id'] : $service['path'].'/go/'.$focusImage['permalink'];
+								$link_url = $config->addressType == 'uri' ? $service['path'].'/go/'.$focusImage['permalink'] : $service['path'].'/go/'.$focusImage['id'];
 
 ?>
 								<div class="focusImage" style="top:<?php echo ($i-1)*160;?>px; background:url('<?php echo $service['path'];?>/cache/thumbnail/m_focus/<?php echo $focusImage['id'];?>.jpg') no-repeat top center;">
