@@ -372,7 +372,7 @@
 						<input type="radio" id="isFilterTitle" name="useFilter" value="title" <?php if ((!empty($readFeed['filter']) || !empty($config->filter)) && $readFeed['filterType']=='title') { ?>checked="checked" <?php } ?> /> <label for="isFilterTitle"><?php echo _t('지정한 단어가 제목에 포함하는 글만 수집합니다.');?></label>		
 					</p>
 					<p class="radio_wrap">
-						<input type="radio" id="isFilterTagTitle" name="useFilter" value="tag" <?php if ((!empty($readFeed['filter']) || !empty($config->filter)) && $readFeed['filterType']=='tag+title') { ?>checked="checked" <?php } ?> /> <label for="isFilterTagTitle"><?php echo _t('지정한 단어가 태그 또는 제목에 포함하는 글만 수집합니다.');?></label>		
+						<input type="radio" id="isFilterTagTitle" name="useFilter" value="tag+title" <?php if ((!empty($readFeed['filter']) || !empty($config->filter)) && $readFeed['filterType']=='tag+title') { ?>checked="checked" <?php } ?> /> <label for="isFilterTagTitle"><?php echo _t('지정한 단어가 태그 또는 제목에 포함하는 글만 수집합니다.');?></label>		
 						<?php if (empty($config->filter)) { ?><div class="checkbox_input"><input type="text" id="feedFilter" name="filter" value="<?php echo htmlspecialchars($readFeed['filter']);?>" class="input faderInput" onfocus="if(document.getElementsByName('useFilter')[0].checked) document.getElementsByName('useFilter')[1].checked=true;" /></div><?php } ?>
 						<div class="help checkbox_help">
 							<?php if (empty($config->filter)) { echo _t('각 단어의 구분은 쉼표(,)로 합니다.'); } else { echo htmlspecialchars($config->filter); echo _t('관리자가 설정한 수집 태그 필터 설정이 우선권을 갖습니다'); } ?>
