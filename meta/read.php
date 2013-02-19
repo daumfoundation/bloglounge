@@ -35,6 +35,8 @@
 		$paging['pageDatas'] = $pageDatas;
 	}
 
+	if($post["visibility"]!="y") $post = array();
+	
 	include ROOT . '/lib/piece/post.php';
 	include ROOT . '/lib/end.php';
 ?>
